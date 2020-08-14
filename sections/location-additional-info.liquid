@@ -1,0 +1,27 @@
+<p><strong> {{ section.settings.heading }} </strong></p>
+<div> {{ section.settings.content }} </div>
+{% schema %}
+  {
+    "name": "Additional Info",
+    "settings": [
+	  {
+        "id": "heading",
+        "type": "text",
+        "label": "Heading",
+        "default": "Other Ways to Buy:"
+      },
+      {
+        "id": "content",
+        "type": "html",
+        "label": "Add custom text below",
+        "default": "<p>Add your text here</p>"
+      }
+	]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

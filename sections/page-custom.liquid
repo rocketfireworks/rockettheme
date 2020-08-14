@@ -1,0 +1,41 @@
+{% schema %}
+  {
+    "name": "Page",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Sidebar options"
+      },
+      {
+        "type": "link_list",
+        "id": "page_link_list",
+        "label": "Choose custom menu",
+      	"info": "This menu won't show dropdown items"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_sidebar_page_collections",
+        "label": "Enable collections"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_page_sidebar_sale",
+        "label": "Enable products"
+      },
+      {
+        "type": "collection",
+        "id": "sidebar_page_sale_collection",
+        "label": "Choose collection"
+      },
+      {
+        "type": "range",
+        "id": "sidebar_page_product_count",
+        "label": "Number of products",
+        "min":       1,
+        "max":        6,
+        "step":       1,
+        "default": 4
+      }
+    ]
+  }
+{% endschema %}

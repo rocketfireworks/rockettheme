@@ -1,0 +1,13 @@
+{% comment %}
+  DO NOT MODIFY THIS FILE DIRECTLY. THIS FILE WILL BE OVERWRITTEN.
+  YOU CAN MODIFY THE LIQUID CODE FOR THIS CUSTOM FIELD HERE:
+  https://customfields.bonify.io/dashboard/rocketfireworks-ca.myshopify.com/pages/configure/172089/edit
+{% endcomment %}
+{% if page.metafields.custom_fields["opening_date"] != blank %}
+  <div class="custom-field custom-field__opening-date custom-field__type--date">
+    <h3 class="custom-field--title">Opening Date</h3>
+    <div class="custom-field--value">  
+      {{ page.metafields.custom_fields["opening_date"] | date: "%m/%d/%Y" }}
+    </div>
+  </div>
+{% endif %}

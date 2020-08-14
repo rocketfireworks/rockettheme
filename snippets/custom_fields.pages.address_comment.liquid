@@ -1,0 +1,13 @@
+{% comment %}
+  DO NOT MODIFY THIS FILE DIRECTLY. THIS FILE WILL BE OVERWRITTEN.
+  YOU CAN MODIFY THE LIQUID CODE FOR THIS CUSTOM FIELD HERE:
+  https://customfields.bonify.io/dashboard/rocketfireworks-ca.myshopify.com/pages/configure/172092/edit
+{% endcomment %}
+{% if page.metafields.custom_fields["address_comment"] != blank %}
+  <div class="custom-field custom-field__address-comment custom-field__type--text">
+    <h3 class="custom-field--title">Address Comment</h3>
+    <div class="custom-field--value">
+      {{ page.metafields.custom_fields["address_comment"] }}
+    </div>
+  </div>
+{% endif %}

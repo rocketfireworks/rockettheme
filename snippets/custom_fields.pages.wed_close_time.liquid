@@ -1,0 +1,13 @@
+{% comment %}
+  DO NOT MODIFY THIS FILE DIRECTLY. THIS FILE WILL BE OVERWRITTEN.
+  YOU CAN MODIFY THE LIQUID CODE FOR THIS CUSTOM FIELD HERE:
+  https://customfields.bonify.io/dashboard/rocketfireworks-ca.myshopify.com/pages/configure/168420/edit
+{% endcomment %}
+{% if page.metafields.custom_fields["wed_close_time"] != blank %}
+  <div class="custom-field custom-field__wed-close-time custom-field__type--number-list">
+    <h3 class="custom-field--title">Wed Close Time</h3>
+    <div class="custom-field--value">  
+      {{ page.metafields.custom_fields["wed_close_time"] }}
+    </div>
+  </div>
+{% endif %}

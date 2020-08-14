@@ -1,0 +1,13 @@
+{% comment %}
+  DO NOT MODIFY THIS FILE DIRECTLY. THIS FILE WILL BE OVERWRITTEN.
+  YOU CAN MODIFY THE LIQUID CODE FOR THIS CUSTOM FIELD HERE:
+  https://customfields.bonify.io/dashboard/rocketfireworks-ca.myshopify.com/globals/configure/192483/edit
+{% endcomment %}
+{% if shop.metafields.custom_fields["subtitle"] != blank %}
+  <div class="custom-field custom-field__subtitle custom-field__type--text">
+    <h3 class="custom-field--title">Subtitle</h3>
+    <div class="custom-field--value">
+      {{ shop.metafields.custom_fields["subtitle"] }}
+    </div>
+  </div>
+{% endif %}

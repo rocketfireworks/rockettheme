@@ -1,0 +1,13 @@
+{% comment %}
+  DO NOT MODIFY THIS FILE DIRECTLY. THIS FILE WILL BE OVERWRITTEN.
+  YOU CAN MODIFY THE LIQUID CODE FOR THIS CUSTOM FIELD HERE:
+  https://customfields.bonify.io/dashboard/rocketfireworks-ca.myshopify.com/pages/configure/194740/edit
+{% endcomment %}
+{% if page.metafields.custom_fields["banner_details"] != blank %}
+  <div class="custom-field custom-field__banner-details custom-field__type--text">
+    <h3 class="custom-field--title">Banner Details</h3>
+    <div class="custom-field--value">
+      {{ page.metafields.custom_fields["banner_details"] }}
+    </div>
+  </div>
+{% endif %}

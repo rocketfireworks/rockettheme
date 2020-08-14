@@ -1,0 +1,13 @@
+{% comment %}
+  DO NOT MODIFY THIS FILE DIRECTLY. THIS FILE WILL BE OVERWRITTEN.
+  YOU CAN MODIFY THE LIQUID CODE FOR THIS CUSTOM FIELD HERE:
+  https://customfields.bonify.io/dashboard/rocketfireworks-ca.myshopify.com/products/configure/158431/edit
+{% endcomment %}
+{% if product.metafields.custom_fields["youtube_embed_code"] != blank %}
+  <div class="custom-field custom-field__youtube-embed-code custom-field__type--url">
+    <h3 class="custom-field--title">YouTube Embed code</h3>
+    <div class="custom-field--value">
+      {{ product.metafields.custom_fields["youtube_embed_code"] }}
+    </div>
+  </div>
+{% endif %}

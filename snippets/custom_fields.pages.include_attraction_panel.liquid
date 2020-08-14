@@ -1,0 +1,17 @@
+{% comment %}
+  DO NOT MODIFY THIS FILE DIRECTLY. THIS FILE WILL BE OVERWRITTEN.
+  YOU CAN MODIFY THE LIQUID CODE FOR THIS CUSTOM FIELD HERE:
+  https://customfields.bonify.io/dashboard/rocketfireworks-ca.myshopify.com/pages/configure/190903/edit
+{% endcomment %}
+{% if page.metafields.custom_fields["include_attraction_panel"] != blank %}
+  <div class="custom-field custom-field__include-attraction-panel custom-field__type--checkbox">
+    <h3 class="custom-field--title">Include Attraction Panel</h3>
+    <div class="custom-field--value">
+      {% if page.metafields.custom_fields["include_attraction_panel"] == 1 %}
+        TRUE
+      {% else %}
+        FALSE
+      {% endif %}
+    </div>
+  </div>
+{% endif %}

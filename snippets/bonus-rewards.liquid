@@ -1,0 +1,68 @@
+{% assign bonusTotal = 0.00 %}
+{% assign level1Bonus = 150.00 %}
+{% assign level2Bonus = 200.00 %}
+{% assign level3Bonus = 300.00 %}
+{% assign level4Bonus = 400.00 %}
+{% assign level5Bonus = 500.00 %}
+{% assign level6Bonus = 600.00 %}
+{% assign level7Bonus = 750.00 %}
+{% assign level8Bonus = 1000.00 %}
+{% assign level9Bonus = 1250.00 %}
+{% assign level10Bonus = 1500.00 %}
+
+{% for item in cart.items %}
+  {% if item.product.tags contains 'FW' or item.product.tags contains 'FWSEQ' %}
+    {% assign bonusTotal1 = bonusTotal1 | plus: item.line_price %}
+  {% endif %}
+{% endfor %}
+
+{% assign bonusTotal = bonusTotal1 | money_without_currency | plus: 0 %}
+
+<script>console.log({{ bonusTotal }});</script>
+
+{% if bonusTotal >= level1Bonus and bonusTotal < level2Bonus %}
+  {% assign currentCartLevel = 'Level 2 Rewards' %}
+  {% assign untilBonus = level2Bonus | minus: bonusTotal %}
+
+{% elsif bonusTotal >= level2Bonus and bonusTotal < level3Bonus %}
+  {% assign currentCartLevel = 'Level 3 Rewards' %}
+  {% assign untilBonus = level3Bonus | minus: bonusTotal %}
+
+{% elsif bonusTotal >= level3Bonus and bonusTotal < level4Bonus %}
+  {% assign currentCartLevel = 'Level 4 Rewards' %}
+  {% assign untilBonus = level4Bonus | minus: bonusTotal %}
+{% elsif bonusTotal >= level4Bonus and bonusTotal < level5Bonus %}
+  {% assign currentCartLevel = 'Level 5 Rewards' %}
+  {% assign untilBonus = level5Bonus | minus: bonusTotal %}
+{% elsif bonusTotal >= level5Bonus and bonusTotal < level6Bonus %}
+  {% assign currentCartLevel = 'Level 6 Rewards' %}
+  {% assign untilBonus = level6Bonus | minus: bonusTotal %}
+{% elsif bonusTotal >= level6Bonus and bonusTotal < level7Bonus %}
+  {% assign currentCartLevel = 'Level 7 Rewards' %}
+  {% assign untilBonus = level7Bonus | minus: bonusTotal %}
+{% elsif bonusTotal >= level7Bonus and bonusTotal < level8Bonus %}
+  {% assign currentCartLevel = 'Level 8 Rewards' %}
+  {% assign untilBonus = level8Bonus | minus: bonusTotal %}
+{% elsif bonusTotal >= level8Bonus and bonusTotal < level9Bonus %}
+  {% assign currentCartLevel = 'Level 9 Rewards' %}
+  {% assign untilBonus = level9Bonus | minus: bonusTotal %}
+{% elsif bonusTotal >= level9Bonus and bonusTotal < level10Bonus %}
+  {% assign currentCartLevel = 'Level 10 Rewards' %}
+  {% assign untilBonus = level10Bonus | minus: bonusTotal %}
+{% endif %}
+
+<script>console.log({{ untilBonus }});</script>
+
+<div class="cartRewardsProgram">
+
+  <p>FW & FWSEQ Total is: {{ bonusTotal1 | money }}</p>
+
+  <p>Bonus Total Used: <span class="bonusTotal">{{ bonusTotal }}</span></p>
+
+  <p>You are <span class="untilBonusNum">{{ untilBonus | plus: 0 }}</span> away from <span class="cartRewardLevel">{{ currentCartLevel }}</span></p>
+
+  <div id="cartrewardsProgress"> 
+  <div id="cartrewardsBar"></div>
+  </div>
+
+</div>

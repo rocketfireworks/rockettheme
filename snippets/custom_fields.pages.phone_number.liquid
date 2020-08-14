@@ -1,0 +1,13 @@
+{% comment %}
+  DO NOT MODIFY THIS FILE DIRECTLY. THIS FILE WILL BE OVERWRITTEN.
+  YOU CAN MODIFY THE LIQUID CODE FOR THIS CUSTOM FIELD HERE:
+  https://customfields.bonify.io/dashboard/rocketfireworks-ca.myshopify.com/pages/configure/160453/edit
+{% endcomment %}
+{% if page.metafields.custom_fields["phone_number"] != blank %}
+  <div class="custom-field custom-field__phone-number custom-field__type--phone">
+    <h3 class="custom-field--title">Phone Number</h3>
+    <div class="custom-field--value">
+      {{ page.metafields.custom_fields["phone_number"] }}
+    </div>
+  </div>
+{% endif %}

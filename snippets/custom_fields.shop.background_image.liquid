@@ -1,0 +1,13 @@
+{% comment %}
+  DO NOT MODIFY THIS FILE DIRECTLY. THIS FILE WILL BE OVERWRITTEN.
+  YOU CAN MODIFY THE LIQUID CODE FOR THIS CUSTOM FIELD HERE:
+  https://customfields.bonify.io/dashboard/rocketfireworks-ca.myshopify.com/globals/configure/192481/edit
+{% endcomment %}
+{% if shop.metafields.custom_fields["background_image"] != blank %}
+  <div class="custom-field custom-field__background-image custom-field__type--url">
+    <h3 class="custom-field--title">Background image</h3>
+    <div class="custom-field--value">
+      {{ shop.metafields.custom_fields["background_image"] }}
+    </div>
+  </div>
+{% endif %}

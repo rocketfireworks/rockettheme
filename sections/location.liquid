@@ -1,0 +1,35 @@
+{% schema %}
+  {
+    "name": "Section name",
+    "settings": []
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+  function getHoursRow (day, openHour, closeHour) {
+    if (openHour > 12) {
+	  openHour = openHour - 12 + " pm";
+    } else {
+	  openHour += " pm";
+	}
+
+    if (closeHour > 12) {
+	  closeHour = closeHour - 12 + " pm";
+    } else {
+	  closeHour += " pm";
+	}
+
+	let htmlFragment = '';
+      if (openHour != blank && closeHour != blank) {
+        htmlFragment = `<div class="custom-field--value">`+
+        day + ":" + openHour - closeHour + 
+        `</div>`
+      }
+	alert(htmlFragment);
+	return htmlFragment;
+
+  }
+{% endjavascript %}

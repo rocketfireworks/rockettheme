@@ -1,0 +1,70 @@
+
+{% if page.metafields.custom_fields["banner_title"] != blank %}
+<div id="banner-container" 
+     style="background-image: url({{ page.metafields.custom_fields["background_image"] }});">
+  <div class="container-narrow">
+    <div>
+      {% if page.metafields.custom_fields["subtitle_before_title"] != blank %}
+        {% if page.metafields.custom_fields["subtitle_before_title"] == 1 %}
+      
+          {% if page.metafields.custom_fields["banner_details"] != blank and page.metafields.custom_fields["details_at_the_beginning"] != blank %}
+      		{% if page.metafields.custom_fields["details_at_the_beginning"] == 1 %}
+              <div class="details">{{ page.metafields.custom_fields["banner_details"] }}</div>
+            {% endif %}
+          {% endif %}
+          {% if page.metafields.custom_fields["banner_subtitle"] != blank %}
+            <div class="banner-subtitle">{{ page.metafields.custom_fields["banner_subtitle"] }}</div>
+          {% endif %}
+          <div class="banner-title">{{ page.metafields.custom_fields["banner_title"] }}</div>
+      
+        {% else %}
+      
+      	  {% if page.metafields.custom_fields["banner_details"] != blank and page.metafields.custom_fields["details_at_the_beginning"] != blank %}
+      		{% if page.metafields.custom_fields["details_at_the_beginning"] == 1 %}
+              <div class="details">{{ page.metafields.custom_fields["banner_details"] }}</div>
+            {% endif %}
+          {% endif %}
+          <div class="banner-title">{{ page.metafields.custom_fields["banner_title"] }}</div>
+          {% if page.metafields.custom_fields["banner_subtitle"] != blank %}
+            <div class="banner-subtitle">{{ page.metafields.custom_fields["banner_subtitle"] }}</div>
+          {% endif %}
+        {% endif %}
+      {% endif %}
+      
+      {% if page.metafields.custom_fields["banner_details"] != blank %}
+      	{% if page.metafields.custom_fields["details_at_the_end"] == blank or page.metafields.custom_fields["details_at_the_end"] != 1 %}
+          {% if page.metafields.custom_fields["details_at_the_beginning"] == blank or page.metafields.custom_fields["details_at_the_beginning"] != 1 %}
+            <div class="details">{{ page.metafields.custom_fields["banner_details"] }}</div>
+          {% endif %}
+        {% endif %}
+      {% endif %}
+      
+      {% if page.metafields.custom_fields["cta_text"] != blank or page.metafields.custom_fields["cta_button_1"] != blank %}
+        <div class="banner-cta">
+          <div>{{ page.metafields.custom_fields["cta_text"] }}</div>
+          <div class="banner-cta-links">
+            {% if page.metafields.custom_fields["cta_button_1"] != blank %}
+            {{ page.metafields.custom_fields["cta_button_1"] | remove: '<p>' | remove: '</p>'}}
+            {% endif %}
+            {% if page.metafields.custom_fields["cta_button_2"] != blank %}
+            {{ page.metafields.custom_fields["cta_button_2"] | remove: '<p>' | remove: '</p>' }}
+            {% endif %}
+            {% if page.metafields.custom_fields["cta_button_3"] != blank %}
+            {{ page.metafields.custom_fields["cta_button_3"] | remove: '<p>' | remove: '</p>' }}
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+      
+      {% if page.metafields.custom_fields["banner_details"] != blank %}
+        {% if page.metafields.custom_fields["details_at_the_end"] != blank %}
+          {% if page.metafields.custom_fields["details_at_the_end"] == 1 %}
+          <div class="details">{{ page.metafields.custom_fields["banner_details"] }}</div>
+          {% endif %}
+        {% endif %}
+      {% endif %}
+      
+    </div>
+  </div>
+</div>
+{% endif %}

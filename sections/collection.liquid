@@ -1,0 +1,253 @@
+{% paginate collection.products by section.settings.pagination_limit %}
+ {% assign img_size = "350x"%}
+{% if section.settings.product_grid_layout == 4 %}
+{% assign grid_item_width = '3' %}
+{% elsif section.settings.product_grid_layout == 3 %}
+{% assign grid_item_width = '4' %}
+{% else %}
+{% assign grid_item_width = '6' %}
+ {% assign img_size = "550x"%}
+{% endif %}
+
+{% assign on_sale = false %}
+{% if product.available and product.compare_at_price > product.price %}
+{% assign on_sale = true %}
+{% endif %}
+
+{% assign sold_out = true %}
+{% if product.available  %}
+{% assign sold_out = false %}
+{% endif %}
+
+<div id="content">
+  <div class="container" data-section-id="{{ section.id }}" data-section-type="collection-page-section" data-reviews-stars="{{section.settings.show_product_reviews_stars}}">
+    {% include 'breadcrumb' %}
+    <div class="catalog_c">
+      
+      <div class="title clearfix">
+        <h1>{{ collection.title | escape }}</h1>
+      </div>
+
+      <div class="row">
+         {% if section.settings.show_collection_sidebar %}
+          <div class="overlapblackbg_sidebar"></div>
+          <div class="col-md-3 col-sm-4 mobile_off_canvas_sidebar">
+          {% include 'sidebar-collection' %}
+          </div>
+        {% endif %}
+         <div class="{% if section.settings.show_collection_sidebar %}col-md-9 col-sm-8{% else %} col-sm-12 {% endif %}">
+          <div class="product_c mobile_pt60">
+            <div class="filter_c">
+              <!-- {% include 'collection-views' %} -->
+              {% include 'collection-sorting' %}
+              <a href="javascript:void(0);" class="visible-xs offcanvas_filter_toggle"><i class="fa fa-filter"></i><small class="filter_text">{{ 'collections.general.filter_button' | t }}</small></a>
+              {% if section.settings.use_infinite_scroll%}
+              {% if paginate.next.url %}
+                <div class="load-more__icon"></div>
+                <div class="js-load-more load-more">
+                  <a href="{{ paginate.next.url }}" data-no-instant class="load-more__btn action_button continue-button">{{ 'collections.general.load_more' | t }}</a>
+                </div>
+              {% endif %}
+             {% else %}   
+              {% if paginate.pages > 1 %}
+              	{% include 'pagination-custom' %}
+              {% endif %}
+            {% endif %}
+            </div>
+            
+            <div class="collection-grid view-grid {% if settings.align_height %} use_align_height {% else %} use_image_height {% endif %}">
+              {% for product in collection.products %}
+              <div class="col-md-{{ grid_item_width }} col-sm-6 col-xs-6 element mb30">
+                {% include 'product-loop' %}
+              </div>
+              {% else %}
+               <p class="no-products">{{ 'collections.general.no_matches' | t }}</p>
+              {% endfor %}
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  jQuery(document).ready(function($){
+
+    // Initialize popup as usual
+    $('.popup-youtube').magnificPopup({
+      //disableOn: 700,
+      type: 'iframe',
+      mainClass: 'mfp-fade',
+      removalDelay: 160,
+      preloader: false,
+      fixedContentPos: false,
+      iframe: {
+        markup: '<div class="mfp-iframe-scaler">'+
+                  '<div class="mfp-close"></div>'+
+                  '<iframe class="mfp-iframe" frameborder="0" allowfullscreen></iframe>'+
+                '</div>', // HTML markup of popup, `mfp-close` will be replaced by the close button
+
+        patterns: {
+          youtube: {
+            index: 'youtube.com/', // String that detects type of video (in this case YouTube). Simply via url.indexOf(index).
+
+            id: 'v=', // String that splits URL in a two parts, second part should be %id%
+            // Or null - full URL will be returned
+            // Or a function that should return %id%, for example:
+            // id: function(url) { return 'parsed id'; }
+
+            src: '//www.youtube.com/embed/%id%?autoplay=1' // URL that will be set as a source for iframe.
+          },
+          vimeo: {
+            index: 'vimeo.com/',
+            id: '/',
+            src: '//player.vimeo.com/video/%id%?autoplay=1'
+          },
+          gmaps: {
+            index: '//maps.google.',
+            src: '%id%&output=embed'
+          }
+
+          // you may add here more sources
+
+        },
+
+        srcAction: 'iframe_src', // Templating object key. First part defines CSS selector, second attribute. "iframe_src" means: find "iframe" and set attribute "src".
+      }
+    });
+    
+  });
+</script>
+
+{% endpaginate %}
+
+{% schema %}
+   {
+    "name": "Collection",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Display options"
+      },
+      {
+        "type": "range",
+        "id": "product_grid_layout",
+        "label": "Products per row",
+        "min":       2,
+        "max":        4,
+        "step":       1,
+        "default": 4
+      },
+      {
+        "type": "range",
+        "id": "pagination_limit",
+        "label": "Products per page",
+         "min":       4,
+        "max":        48,
+        "step":       4,
+        "default": 12
+      },
+	  {
+        "type": "checkbox",
+        "id": "use_infinite_scroll",
+        "label": "Enable infinite scroll",
+        "info": "Eliminates pagination and loads new products as you scroll down the page."
+      },
+	  {
+        "type": "checkbox",
+        "id": "show_featured_image",
+        "label": "Show featured image",
+  		"default": true
+      },		
+      {
+        "type": "checkbox",
+        "id": "show_grid_type",
+        "label": "Show product type"
+      },
+	  {
+        "type": "checkbox",
+        "id": "show_sale_badge",
+        "label": "Show sale badge",
+		"default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "collection_overlay",
+        "label": "Enable product quick view"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_product_reviews_stars",
+        "label": "Show review stars",
+		"info": "Shopify product reviews app must be enabled"
+      }, 
+	  {
+        "type": "header",
+        "content": "Sidebar"
+      },
+	  {
+        "type": "checkbox",
+        "id": "show_collection_sidebar",
+        "label": "Enable"
+      },
+      {
+        "type": "select",
+        "id": "collection_sidebar_filters",
+        "label": "Product filtering method",
+        "options": [
+          {
+            "value": "groups",
+            "label": "Group filtering"
+          },
+          {
+            "value": "simple-tags",
+            "label": "Simple tag list"
+          },
+          {
+            "value": "none",
+            "label": "No filtering"
+          }
+        ],
+        "default": "simple-tags",
+        "info": "[Learn more on group filtering](https:\/\/support.milehighthemes.com\/hc\/en-us\/articles\/360020145033-How-do-I-setup-group-filtering-on-my-collection-pages-)"
+      },
+      {
+        "type": "text",
+        "id": "group_array",
+        "label": "Group titles (comma separated list)",
+        "info": "e.g. Brand,Product,etc."
+      },
+      {
+        "type": "link_list",
+        "id": "collection_link_list",
+        "label": "Custom menu"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_sidebar_collections",
+        "label": "Show all collections"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_sidebar_vendors",
+        "label": "Show all vendors"
+      },
+      {
+        "type": "collection",
+        "id": "sidebar_collection_sale_collection",
+        "label": "Featured products collection"
+      },
+      {
+        "type": "range",
+        "id": "sidebar_collection_product_count",
+        "label": "Number of products",
+         "min":       1,
+        "max":        6,
+        "step":       1,
+        "default": 4
+      }
+    ]
+  }
+{% endschema %}

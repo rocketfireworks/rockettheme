@@ -1,0 +1,143 @@
+{% section "location" %}
+<div id="content">
+  <div class="custom-container rte">
+    <div class="container-narrow">
+      <div class="page_content">
+        <div class="row">
+          <div class="{% if section.settings.page_link_list != blank or section.settings.show_sidebar_page_collections or section.settings.show_page_sidebar_sale %}col-md-9 col-md-push-3 col-sm-8 col-sm-push-4{% else %}col-sm-12{% endif %}">
+            <div class="location">
+              <div class="location-info">
+                <h1>{{ page.title | escape }}</h1>
+
+                {% if page.metafields.custom_fields["is_closed"] == 1 %}
+                <p class="closed">Currently Closed</p>
+                {% endif %}
+
+                {% if page.metafields.custom_fields["open_status"] != blank %}
+                {% if page.metafields.custom_fields["open_status"] == "Open" %}
+                {% else %}
+                <div class="custom-field--value open-status">
+                  {{ page.metafields.custom_fields["open_status"] }}
+                </div>
+                {% endif %}
+                {% endif %}
+
+                {% if page.metafields.custom_fields["opening_date"] != blank} %}
+                <div class="custom-field--value announcement">  
+                  <i class="far fa-clock"></i> Reopens {{ page.metafields.custom_fields["opening_date"] | date: "%a %B %d, %Y" }}
+                </div>
+                {% endif %}
+
+                {% if page.metafields.custom_fields["announcement"] != blank} %}
+                <div class="custom-field--value announcement">  
+                  {{ page.metafields.custom_fields["announcement"] }}
+                </div>
+                {% endif %}
+
+                {% if page.metafields.custom_fields["is_seasonal"] != blank %}
+                <div class="custom-field--value seasonal">
+                  {% if page.metafields.custom_fields["is_seasonal"] == 1 %}
+                  Open Seasonally
+                  {% else %}
+                  Open Year-Round!
+                  {% endif %}
+                </div>
+                {% endif %}
+
+                {% if page.metafields.custom_fields["address"] != blank} %}
+                <div class="custom-field--value basic-info">
+                  <div class="address"><i class="fas fa-map-marker-alt"></i>{{ page.metafields.custom_fields["address"] }}</div>
+                  {% if page.metafields.custom_fields["address_comment"] != blank} %}
+                  <div class="custom-field--value comment">
+                    {{ page.metafields.custom_fields["address_comment"] }}
+                  </div>
+                  {% endif %}
+                </div>
+                {% endif %}
+
+                {% if page.metafields.custom_fields["phone_number"] != blank} %}
+                <div class="custom-field--value basic-info">  
+                  <i class="fas fa-phone-alt"></i><a href="tel:{{ page.metafields.custom_fields["phone_number"] }}">{{ page.metafields.custom_fields["phone_number"] }}</a>
+                </div>
+                {% endif %}
+
+
+
+                {% if page.metafields.custom_fields["custom_hours"] != blank %}
+                <h2>Store Hours</h2>
+                <div id="customHours">
+                  {{ page.metafields.custom_fields["custom_hours"] }}
+                </div>
+                {% else %}
+                {% if page.metafields.custom_fields["open_status"] == "Open" %}
+                <h2>Store Hours</h2>
+                <div id="hours"></div>
+                {% endif %}
+                {% endif %}
+
+                <h2>Additional Information</h2>
+                {% if page.metafields.custom_fields["additional_info"] != blank} %}
+                <div class="custom-field--value">
+                  {{ page.metafields.custom_fields["additional_info"] }}
+                </div>
+                {% endif %}
+                {% section 'location-additional-info' %}
+              </div>
+              <div class="location-image">
+                {{ page.content }}
+              </div>
+            </div>
+          </div>
+          {% if section.settings.page_link_list != blank or section.settings.show_sidebar_page_collections or section.settings.show_page_sidebar_sale %}
+            {% include 'sidebar-page' %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  {% include 'attraction-panel' with shop.custom_fields %}
+  </div>
+</div>
+
+<script>    
+// Prepare data based on Liquid fields
+let hours = new Set();  
+hours.add({label: 'Monday', open: field({{page.metafields.custom_fields['mon_open_time']}}), close: field({{page.metafields.custom_fields['mon_close_time']}}) });
+hours.add({label: 'Tuesday', open: field({{page.metafields.custom_fields['tues_open_time']}}), close: field({{page.metafields.custom_fields['tues_close_time']}}) });
+hours.add({label: 'Wednesday', open: field({{page.metafields.custom_fields['wed_open_time']}}), close: field({{page.metafields.custom_fields['wed_close_time']}}) });
+hours.add({label: 'Thursday', open: field({{page.metafields.custom_fields['thu_open_time']}}), close: field({{page.metafields.custom_fields['thu_close_time']}}) });
+hours.add({label: 'Friday', open: field({{page.metafields.custom_fields['fri_open_time']}}), close: field({{page.metafields.custom_fields['fri_close_time']}}) });
+hours.add({label: 'Saturday', open: field({{page.metafields.custom_fields['sat_open_time']}}), close: field({{page.metafields.custom_fields['sat_close_time']}}) });
+hours.add({label: 'Sunday', open: field({{page.metafields.custom_fields['sun_open_time']}}), close: field({{page.metafields.custom_fields['sun_close_time']}}) });
+
+  
+// Render HTML for store hours into the DOM 
+hours.forEach(hour => {  
+  let hourRow = getHoursRow(hour.label, hour.open, hour.close);
+  let hoursDiv = document.querySelector('#hours');
+  if (notNil(hoursDiv)) {
+    document.querySelector('#hours').innerHTML += hourRow;
+  }
+});
+
+  
+// Generates one HTML-formatted "Store Hours" row for the specified day
+function getHoursRow (day, openHourInputString, closeHourInputString) {
+  // Process input data
+  openHour = parseInt(openHourInputString);
+  openHourOutputString = `${openHour%12}${openHour>12 ? 'pm' : 'am'}`;
+  
+  closeHour = parseInt(closeHourInputString);
+  closeHourOutputString = `${closeHour%12}${closeHour>12 ? 'pm' : 'am'}`;
+
+  // Generate output HTML
+  let htmlFragment;
+  if (isEmpty(day) || isEmpty(openHourInputString) || isEmpty(closeHourInputString)) {
+    htmlFragment = '';
+  } else {
+    htmlFragment = `<div class="custom-field--value">${day} <span>${openHourOutputString} - ${closeHourOutputString}</span></div>`;
+  }
+  
+  // Return output HTML
+  return htmlFragment;
+}
+</script>

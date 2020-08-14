@@ -1,0 +1,811 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "ShowTime",
+    "theme_author": "Mile High Themes",
+    "theme_version": "6.2.2",
+    "theme_documentation_url": "https:\/\/support.milehighthemes.com\/hc\/en-us\/articles\/360020084974-ShowTime-theme-documentation",
+    "theme_support_url": "https:\/\/support.milehighthemes.com\/hc\/en-us\/requests\/new"
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Top bar"
+      },
+      {
+        "type": "color",
+        "id": "promo_bar_bg_color",
+        "label": "Background",
+        "default": "#37bbec"
+      },
+      {
+        "type": "color",
+        "id": "promo_bar_text_color",
+        "label": "Text",
+        "default": "#ffffff"
+      },
+      {
+        "type": "header",
+        "content": "Header"
+      },
+      {
+        "type": "color",
+        "id": "header_bg_color",
+        "label": "Background",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "header_logo_color",
+        "label": "Logo text",
+        "default": "#282727",
+        "info": "If no logo image is specified."
+      },
+      {
+        "type": "color",
+        "id": "header_text_color",
+        "label": "Regular text",
+        "default": "#898989"
+      },
+      {
+        "type": "color",
+        "id": "header_top_link_color",
+        "label": "Header top links",
+        "default": "#898989"
+      },
+      {
+        "type": "color",
+        "id": "header_border_color",
+        "label": "Border",
+        "default": "#ecefef"
+      },
+      {
+        "type": "header",
+        "content": "Main menu"
+      },
+      {
+        "type": "color",
+        "id": "nav_bg_color",
+        "label": "Background",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "nav_bg_color_mobile",
+        "label": "Mobile background",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "nav_text_color",
+        "label": "Parent links and headings",
+        "default": "#282727"
+      },
+      {
+        "type": "color",
+        "id": "nav_parent_hover",
+        "label": "Parent links and headings hover",
+        "default": "#37bbec"
+      },
+      {
+        "type": "header",
+        "content": "Body"
+      },
+      {
+        "type": "color",
+        "id": "primary_color",
+        "label": "Primary content",
+        "default": "#37bbec",
+        "info": "Used for buttons, most links, icons, and other main colors on the site."
+      },
+      {
+        "type": "color",
+        "id": "secondary_color",
+        "label": "Secondary content",
+        "default": "#fbcf00",
+        "info": "Used for secondary buttons and some other elements."
+      },
+      {
+        "type": "color",
+        "id": "heading_text_color",
+        "label": "Headings",
+        "default": "#282727"
+      },
+      {
+        "type": "color",
+        "id": "body_text_color",
+        "label": "Body text",
+        "default": "#898989"
+      },
+      {
+        "type": "color",
+        "id": "link_hover_color",
+        "label": "Link hover",
+        "default": "#2a6496",
+        "info": "Used for hover state on most links and buttons."
+      },
+      {
+        "type": "color",
+        "id": "button_text_color",
+        "label": "Button text",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "regular_price_color",
+        "label": "Price",
+        "default": "#282827"
+      },
+      {
+        "type": "color",
+        "id": "compare_price_color",
+        "label": "Compare price",
+        "default": "#cccccc"
+      },
+      {
+        "type": "header",
+        "content": "Background"
+      },
+      {
+        "type": "color",
+        "id": "body_background_color",
+        "label": "Background",
+        "default": "#f3f6f6"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_bg_image",
+        "label": "Use background image"
+      },
+      {
+        "type": "image",
+        "id": "bg_image.png",
+        "label": "Image"
+      },
+      {
+        "type": "select",
+        "id": "bg_repeat",
+        "label": "Repeat",
+        "options": [
+          {
+            "value": "no-repeat",
+            "label": "None"
+          },
+          {
+            "value": "repeat-x",
+            "label": "Horizontally"
+          },
+          {
+            "value": "repeat-y",
+            "label": "Vertically"
+          },
+          {
+            "value": "repeat",
+            "label": "Both"
+          }
+        ],
+        "default": "repeat"
+      },
+      {
+        "type": "checkbox",
+        "id": "bg_fixed",
+        "label": "Fixed position"
+      },
+      {
+        "type": "checkbox",
+        "id": "bg_stretched",
+        "label": "Stretch to fill all space"
+      },
+      {
+        "type": "color",
+        "id": "content_heading_color",
+        "label": "Content heading text",
+        "info": "[Learn more](https:\/\/support.milehighthemes.com\/hc\/en-us\/articles\/360020083754-Understanding-heading-and-text-color-options)",
+        "default": "#282727"
+      },
+      {
+        "type": "color",
+        "id": "content_text_color",
+        "label": "Content text",
+        "info": "[Learn more](https:\/\/support.milehighthemes.com\/hc\/en-us\/articles\/360020083754-Understanding-heading-and-text-color-options)",
+        "default": "#898989"
+      },
+      {
+        "type": "color",
+        "id": "content_link_color",
+        "label": "Content links",
+        "info": "[Learn more](https:\/\/support.milehighthemes.com\/hc\/en-us\/articles\/360020083754-Understanding-heading-and-text-color-options)",
+        "default": "#898989"
+      },
+      {
+        "type": "header",
+        "content": "Footer"
+      },
+      {
+        "type": "color",
+        "id": "footer_bg_color",
+        "label": "Background",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "footer_heading_color",
+        "label": "Heading text",
+        "default": "#282727"
+      },
+      {
+        "type": "color",
+        "id": "footer_text_color",
+        "label": "Regular text",
+        "default": "#898989"
+      },
+      {
+        "type": "color",
+        "id": "footer_link_color",
+        "label": "Links",
+        "default": "#37bbec"
+      },
+      {
+        "type": "color",
+        "id": "footer_border_color",
+        "label": "Border",
+        "default": "#ecefef"
+      },
+      {
+        "type": "color",
+        "id": "footer_social_color",
+        "label": "Social media icons",
+        "default": "#d7dbdb"
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "font_picker",
+        "id": "base_font_value",
+        "label": "Body text",
+        "default": "lato_n4"
+      },
+      {
+        "type": "range",
+        "id": "body_text_size",
+        "label": "Body text size",
+        "default": 14,
+        "min": 12,
+        "max": 36,
+        "step": 1,
+        "unit": "px"
+      },
+      {
+        "type": "font_picker",
+        "id": "header_font_value",
+        "label": "Heading text",
+        "default": "lato_n4"
+      },
+      {
+        "type": "header",
+        "content": "Main menu"
+      },
+      {
+        "type": "select",
+        "id": "nav_text_weight",
+        "label": "Font weight",
+        "options": [
+          {
+            "value": "300",
+            "label": "Light"
+          },
+          {
+            "value": "400",
+            "label": "Regular"
+          },
+          {
+            "value": "600",
+            "label": "Bold"
+          },
+          {
+            "value": "700",
+            "label": "Bolder"
+          },
+          {
+            "value": "900",
+            "label": "Extra bold"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "nav_text_transform",
+        "label": "Text style",
+        "options": [
+          {
+            "value": "none",
+            "label": "Normal"
+          },
+          {
+            "value": "lowercase",
+            "label": "Lowercase"
+          },
+          {
+            "value": "uppercase",
+            "label": "Uppercase"
+          }
+        ]
+      },
+      {
+        "type": "range",
+        "id": "nav_text_size",
+        "label": "Link size",
+        "default": 14,
+        "min": 12,
+        "max": 20,
+        "step": 1,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "nav_header_size",
+        "label": "Mega menu heading size",
+        "default": 14,
+        "min": 12,
+        "max": 20,
+        "step": 1,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "nav_link_size",
+        "label": "Drop down link size",
+        "default": 14,
+        "min": 12,
+        "max": 20,
+        "step": 1,
+        "unit": "px"
+      },
+      {
+        "type": "header",
+        "content": "Content headings",
+        "info": "Affects content created using Shopify's rich text editor (product descriptions, page content, etc.)."
+      },
+      {
+        "type": "range",
+        "id": "header_size_1",
+        "label": "h1",
+        "default": 24,
+        "min": 12,
+        "max": 36,
+        "step": 1,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "header_size_2",
+        "label": "h2",
+        "default": 20,
+        "min": 12,
+        "max": 36,
+        "step": 1,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "header_size_3",
+        "label": "h3",
+        "default": 18,
+        "min": 12,
+        "max": 36,
+        "step": 1,
+        "unit": "px"
+      }
+    ]
+  },
+  {
+    "name": "Favicon",
+    "settings": [
+      {
+        "type": "image",
+        "id": "favicon.png",
+        "label": "Icon",
+        "info": "32 x 32px",
+        "max-width": 32,
+        "max-height": 32
+      }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "select",
+        "id": "cart_type",
+        "label": "Cart type",
+        "options": [
+          {
+            "value": "modal",
+            "label": "Modal"
+          },
+          {
+            "value": "page",
+            "label": "Page"
+          }
+        ],
+        "default": "modal",
+        "info": "You must choose Page above to enable the sidebar and shipping calculator."
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_terms_and_conditions",
+        "label": "Enable terms and conditions",
+        "default": false
+      },
+      {
+        "type": "richtext",
+        "id": "terms_and_conditions_text",
+        "label": "Terms and conditions text"
+      },
+      {
+        "type": "checkbox",
+        "id": "limit_purchase_quantities",
+        "label": "Limit purchase quantities",
+        "info": "If enabled, a popup will alert the customer if they attempt to add more than available quantities to cart.",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_notes",
+        "label": "Enable order notes"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_currency_disclaimer",
+        "label": "Show currency disclaimer",
+        "info": "Only applicable when currency conversion is enabled in General Settings"
+      },
+      {
+        "type": "header",
+        "content": "Sidebar options"
+      },
+      {
+        "type": "link_list",
+        "id": "cart_link_list",
+        "label": "Choose menu"
+      },
+      {
+        "type": "header",
+        "content": "Shipping rate calculator"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_shipping_calculator",
+        "label": "Enable"
+      },
+      {
+        "type": "text",
+        "id": "shipping_calculator_default_country",
+        "label": "Default country selection",
+        "default": "United States",
+        "info": "Enter full country name"
+      }
+    ]
+  },
+  {
+    "name": "Search",
+    "settings": [
+      {
+        "type": "select",
+        "id": "search_type_query",
+        "label": "Search",
+        "options": [
+          {
+            "value": "search_products_only",
+            "label": "Products only"
+          },
+          {
+            "value": "search_everything",
+            "label": "Everything"
+          }
+        ],
+        "default": "search_products_only"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_live_search",
+        "label": "Enable live search"
+      },
+      {
+        "type": "checkbox",
+        "id": "use_infinite_scroll",
+        "label": "Enable infinite scroll",
+        "info": "[Learn more](https:\/\/support.milehighthemes.com\/hc\/en-us\/articles\/360020277573-What-s-new-in-ShowTime-6-0-video-)"
+      }
+    ]
+  },
+  {
+    "name": "Free products",
+    "settings": [
+      {
+        "type": "text",
+        "id": "custom_price0_text",
+        "label": "\"Free\" text (for $0 products)"
+      },
+      {
+        "type": "checkbox",
+        "id": "hide_price0_box_and_button",
+        "label": "Hide cart button"
+      }
+    ]
+  },
+  {
+    "name": "Product grid",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "align_height",
+        "label": "Align height of product images"
+      },
+      {
+        "type": "range",
+        "id": "collection_height",
+        "label": "Product image height",
+        "min": 200,
+        "max": 400,
+        "step": 10,
+        "default": 300,
+        "unit": "px"
+      }
+    ]
+  },
+  {
+    "name": "Quick view",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_product_swatches",
+        "label": "Enable swatches in quick view"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_smart_checkout",
+        "label": "Show dynamic checkout button in quick view",
+        "info": "Lets customers check out directly using a familiar payment method. [Learn more](https:\/\/help.shopify.com\/manual\/using-themes\/change-the-layout\/dynamic-checkout)",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "product_reviews",
+        "label": "Show review stars",
+        "info": "Shopify product reviews app must be enabled"
+      }
+    ]
+  },
+  {
+    "name": "Social media",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Social sharing image"
+      },
+      {
+        "type": "image_picker",
+        "id": "share_image",
+        "label": "Image",
+        "info": "Shown when sharing a link on social media. [Learn more](https:\/\/help.shopify.com\/manual\/using-themes\/troubleshooting\/showing-social-media-thumbnail-images\/) about image thumbnails."
+      },
+      {
+        "type": "header",
+        "content": "Social accounts"
+      },
+      {
+        "type": "text",
+        "id": "twitter_link",
+        "label": "Twitter",
+        "info": "https:\/\/twitter.com\/shopify"
+      },
+      {
+        "type": "text",
+        "id": "facebook_link",
+        "label": "Facebook",
+        "info": "https:\/\/facebook.com\/shopify"
+      },
+      {
+        "type": "text",
+        "id": "pinterest_link",
+        "label": "Pinterest",
+        "info": "http:\/\/www.pinterest.com\/shopify\/"
+      },
+      {
+        "type": "text",
+        "id": "instagram_link",
+        "label": "Instagram",
+        "info": "http:\/\/instagram.com\/shopify"
+      },
+      {
+        "type": "text",
+        "id": "tumblr_link",
+        "label": "Tumblr",
+        "info": "http:\/\/www.tumblr.com\/tagged\/shopify"
+      },
+      {
+        "type": "text",
+        "id": "youtube_link",
+        "label": "YouTube",
+        "info": "https:\/\/www.youtube.com\/user\/shopify"
+      },
+      {
+        "type": "text",
+        "id": "vimeo_link",
+        "label": "Vimeo",
+        "info": "http:\/\/vimeo.com\/shopify"
+      }
+    ]
+  },
+  {
+    "name": "Popup",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_entry_popup",
+        "label": "Enable",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "popup_delay",
+        "label": "Delay until popup appears",
+        "min": 0,
+        "max": 30,
+        "step": 5,
+        "unit": "sec",
+        "default": 5
+      },
+      {
+        "type": "select",
+        "id": "popup_return",
+        "label": "Amount of time before the popup re-appears for the user",
+        "options": [
+          {
+            "value": "use_test_popup",
+            "label": "No delay (for testing)"
+          },
+          {
+            "value": "7",
+            "label": "1 week"
+          },
+          {
+            "value": "14",
+            "label": "2 weeks"
+          },
+          {
+            "value": "30",
+            "label": "1 month"
+          },
+          {
+            "value": "60",
+            "label": "2 months"
+          },
+          {
+            "value": "90",
+            "label": "3 months"
+          },
+          {
+            "value": "2000",
+            "label": "Never"
+          }
+        ],
+        "default": "7"
+      },
+      {
+        "type": "text",
+        "id": "entry_popup_heading",
+        "label": "Heading text"
+      },
+      {
+        "type": "richtext",
+        "id": "entry_popup_text",
+        "label": "Text"
+      },
+      {
+        "type": "range",
+        "id": "popup_heading_size",
+        "label": "Heading size",
+        "default": 24,
+        "min": 12,
+        "max": 36,
+        "step": 1,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "popup_text_size",
+        "label": "Text size",
+        "default": 18,
+        "min": 12,
+        "max": 36,
+        "step": 1,
+        "unit": "px"
+      },
+      {
+        "type": "image_picker",
+        "id": "popup_logo",
+        "label": "Image"
+      },
+      {
+        "type": "select",
+        "id": "popup_image_position",
+        "label": "Image position",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ],
+        "default": "right"
+      },
+      {
+        "type": "checkbox",
+        "id": "entry_popup_newsletter",
+        "label": "Enable newsletter in popup",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "entry_popup_social",
+        "label": "Enable social icons in popup",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Currency",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "[Currency setup instructions](https:\/\/support.milehighthemes.com\/hc\/en-us\/articles\/360020081254-How-do-I-configure-currency-conversion-settings-)."
+      },
+      {
+        "type": "checkbox",
+        "id": "show_multiple_currencies",
+        "label": "Enable currency conversion",
+        "default": true,
+        "info": "Orders will always be processed in your store's default currency."
+      },
+      {
+        "type": "select",
+        "id": "currency_format",
+        "label": "Format",
+        "options": [
+          {
+            "value": "money_format",
+            "label": "Without currency ($10.00)"
+          },
+          {
+            "value": "money_with_currency_format",
+            "label": "With currency ($10.00 CAD)"
+          }
+        ],
+        "default": "money_with_currency_format"
+      },
+      {
+        "type": "text",
+        "id": "supported_currencies",
+        "label": "Supported currencies",
+        "default": "USD CAD INR GBP AUD EUR JPY",
+        "info": "Use the country's ISO [currency code](http:\/\/www.xe.com\/iso4217.php). Separate your currency codes with a space."
+      },
+      {
+        "type": "text",
+        "id": "default_currency",
+        "label": "Default currency",
+        "default": "USD"
+      }
+    ]
+  }
+]
