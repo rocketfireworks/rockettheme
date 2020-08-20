@@ -1,0 +1,93 @@
+
+<div id="herobanner" style="background-image:url({{ section.settings.image |img_url: 'master' }});">
+  <div class="herobanner-container">
+    <div class="herobanner-title">
+      <div class="herobanner-title-item">
+        <div class="herobanner-title-before">{{ section.settings.text }}</div>
+      </div>
+      <div class="herobanner-title-item">
+        <h1 class="herobanner-title-heading">{{ section.settings.title }} </h1>
+      </div>
+    </div>
+    <p class="herobanner-subtitle"> {{ section.settings.subtitle }} </p>
+    {% for block in section.blocks %}
+    <div class="herobanner-button">
+      <a href="{{ block.settings.link }}" style="color: {{ block.settings.color }}; background-color: {{ block.settings.background_color }};">{{ block.settings.linktext }}</a>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Hero banner",
+  "max_blocks": 2,
+  "settings": [
+    {
+      "id": "title",
+      "type": "text",
+      "label": "Title",
+      "default": "Title"
+    },
+    {
+      "id": "subtitle",
+      "type": "text",
+      "label": "Subtitle",
+      "default": "Subtitle"
+    },
+    {
+      "id": "text",
+      "type": "text",
+      "label": "Text before title",
+      "default": "Text before title"
+    },
+    {
+      "id": "image",
+      "type": "image_picker",
+      "label": "Hero banner image"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "select",
+      "name": "CTA Button",
+      "settings": [
+        {
+          "id": "link",
+          "type": "url",
+          "label": "Button link"
+        },
+        {
+          "id": "linktext",
+          "type": "text",
+          "label": "Button text",
+          "default": "Click here"
+        },
+        {
+          "type": "color",
+          "id": "color",
+          "label": "Text color",
+          "default": "#16142c"
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": "Background color",
+          "default": "#3cc0df"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Banner",
+      "category": "Image"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}
