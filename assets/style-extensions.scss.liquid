@@ -139,6 +139,96 @@ Homepage Hero Banner Template
   }
 }
 /*------------------------------------------------------------------
+Homepage CTA Tile
+-------------------------------------------------------------------*/
+.ctatile {
+  margin: 30px auto;
+  .ctatile-container {
+    box-shadow: 0 3px 3px #d1d7d7;
+    background-color: #f7f7f7;
+    margin: 10px;
+    font-size: 16px;
+    @media (max-width: 1300px) {
+      font-size: 14px;
+    }
+    .ctatile-content {
+      padding: 0.8em 1.2em;
+      display: grid;
+      grid-template-columns: auto auto;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .ctatile-title {
+      font-size: 1.3em;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #16142c;
+      margin-bottom: 0.3em;
+    }
+    .ctatile-tagline {
+      font-size: 0.8em;
+      font-weight: 600;
+      color: #16142c;
+    }
+
+    .ctatile-button {
+      justify-self: end;
+      a {
+        color: #16142c;
+        border: 2px solid #5bb3c8;
+        padding: 0.4em 1.5em;
+        font-size: 1em;
+        font-weight: 700;
+        text-align: center;
+        text-transform: uppercase;
+        text-decoration: none;
+        transition: all 0.3s;
+      }
+    }
+  }
+}
+/*------------------------------------------------------------------
+Homepage CTA Block
+-------------------------------------------------------------------*/
+.ctablock {
+  margin: 30px auto;
+  .ctablock-container {
+    box-shadow: 0 3px 3px #d1d7d7;
+    background-color: #f7f7f7;
+    margin: 10px;
+    font-size: 16px;
+    a {
+      text-decoration: none;
+    }
+    @media (max-width: 1300px) {
+      font-size: 14px;
+    }
+    .ctablock-content {
+      padding: 0.8em 1.2em;
+    }
+    .ctablock-title {
+      font-size: 1.3em;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #16142c;
+      margin-bottom: 0.3em;
+    }
+    .ctablock-title-icon {
+      font-size: 0.8em;
+      border: 2px solid #5bb3c8;
+      padding: 2px 8px;
+      margin-right: 4px;
+    }
+    .ctablock-tagline {
+      font-size: 0.8em;
+      font-weight: 600;
+      color: #16142c;
+    }
+  }
+}
+
+
+/*------------------------------------------------------------------
 Custom Page Template
 -------------------------------------------------------------------*/
 
