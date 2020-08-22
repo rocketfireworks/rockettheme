@@ -14,7 +14,7 @@
                 {% endif %}
                 <div class="ctatile-content">
                   <div>
-                    <h2 class="ctatile-title">{{ block.settings.title }}</h2>
+                    <h2 class="ctatile-title">{{ block.settings.heading }}</h2>
                     <p class="ctatile-tagline">{{ block.settings.tagline }}</p>
                   </div>
                   <div class="ctatile-button">
@@ -29,14 +29,14 @@
 </div>
 {% schema %}
 {
-  "name": "CTA Tile",
+  "name": "CTA Tile Group",
   "max_blocks": 3,
   "settings": [
   ],
   "blocks": [
     {
       "type": "select",
-      "name": "Tile",
+      "name": "CTA Tile",
       "settings": [
         {
           "id": "image",
@@ -50,16 +50,16 @@
           "default": "Image Title"
         },
         {
-          "id": "title",
+          "id": "heading",
           "type": "text",
-          "label": "Title",
-          "default": "Title"
+          "label": "Heading",
+          "default": "Heading goes here"
         },
         {
           "id": "tagline",
           "type": "text",
           "label": "Tagline",
-          "default": "Tagline"
+          "default": "Tagline goes here"
         },
         {
           "id": "link",
@@ -77,14 +77,69 @@
   ],
   "presets": [
     {
-      "name": "CTA Tile",
+      "name": "CTA Tile Group",
       "category": "Image"
     }
   ]
 }
 {% endschema %}
 
-{% stylesheet %}
+{% stylesheet 'scss' %}
+.ctatile {
+  margin: 30px auto;
+  .ctatile-container {
+    box-shadow: 0 3px 3px #d1d7d7;
+    background-color: #f7f7f7;
+    margin: 10px;
+    font-size: 16px;
+    @media (max-width: 1300px) {
+      font-size: 14px;
+    }
+    .ctatile-image {
+      max-height: 20em;
+      width: auto;
+      overflow: hidden;
+      img {
+        object-fit: cover;
+      }
+    }
+    .ctatile-content {
+      padding: 0.8em 1.2em;
+      display: grid;
+      grid-template-columns: auto auto;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .ctatile-title {
+      font-size: 1.3em;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #16142c;
+      margin-bottom: 0.3em;
+    }
+    .ctatile-tagline {
+      font-size: 0.8em;
+      font-weight: 600;
+      color: #16142c;
+    }
+
+    .ctatile-button {
+      justify-self: end;
+      a {
+        color: #16142c;
+        border: 2px solid #5bb3c8;
+        padding: 0.4em 1.5em;
+        font-size: 1em;
+        font-weight: 700;
+        text-align: center;
+        text-transform: uppercase;
+        text-decoration: none;
+        transition: all 0.3s;
+      }
+    }
+  }
+}
+
 {% endstylesheet %}
 
 {% javascript %}
