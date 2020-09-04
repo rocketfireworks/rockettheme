@@ -1,5 +1,5 @@
 
-<div class="herobanner">
+<div id="herobanner">
   <div class="herobanner-container">
     <div class="herobanner-title">
       <div class="herobanner-title-item">
@@ -10,17 +10,17 @@
       </div>
     </div>
     <p class="herobanner-subtitle"> {{ section.settings.subtitle }} </p>
-    {% for block in section.blocks %}
     <div class="herobanner-button">
-      <a href="{{ block.settings.link }}" style="color: {{ block.settings.color }}; background-color: {{ block.settings.background_color }};">{{ block.settings.linktext }}</a>
+      {% for block in section.blocks %}
+        <a href="{{ block.settings.link }}" style="color: {{ block.settings.color }}; background-color: {{ block.settings.background_color }};">{{ block.settings.linktext }}</a>
+      {% endfor %}
     </div>
-    {% endfor %}
   </div>
 </div>
 <style>
   #shopify-section-{{section.id}}
   {% if section.settings.image %}
-    .herobanner {
+    #herobanner {
       background-image: url({{ section.settings.image |img_url: 'master' }});
     }
   {% endif %}
@@ -94,7 +94,7 @@
 }
 {% endschema %}
 {% stylesheet 'scss' %}
-.herobanner {
+#herobanner {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
