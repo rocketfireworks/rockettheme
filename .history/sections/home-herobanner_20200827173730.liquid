@@ -1,0 +1,100 @@
+
+<div id="herobanner">
+  <div class="herobanner-container">
+    <div class="herobanner-title">
+      <div class="herobanner-title-item">
+        <div class="herobanner-title-before">{{ section.settings.text }}</div>
+      </div>
+      <div class="herobanner-title-item">
+        <h1 class="herobanner-title-heading">{{ section.settings.heading }} </h1>
+      </div>
+    </div>
+    <p class="herobanner-subtitle"> {{ section.settings.subtitle }} </p>
+    <div class="herobanner-button">
+      {% for block in section.blocks %}
+        <a href="{{ block.settings.link }}" style="color: {{ block.settings.color }}; background-color: {{ block.settings.background_color }};">{{ block.settings.linktext }}</a>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+<style>
+  #shopify-section-{{section.id}}
+  {% if section.settings.image %}
+    #herobanner {
+      background-image: url({{ section.settings.image |img_url: 'master' }});
+    }
+  {% endif %}
+</style>
+{% schema %}
+{
+  "name": "Hero Banner",
+  "max_blocks": 2,
+  "settings": [
+    {
+      "id": "heading",
+      "type": "text",
+      "label": "Heading",
+      "default": "Heading goes here"
+    },
+    {
+      "id": "subtitle",
+      "type": "text",
+      "label": "Subtitle",
+      "default": "Subtitle goes here"
+    },
+    {
+      "id": "text",
+      "type": "text",
+      "label": "Heading Prefix",
+      "default": "Heading Prefix"
+    },
+    {
+      "id": "image",
+      "type": "image_picker",
+      "label": "Hero Banner Image"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "select",
+      "name": "CTA Button",
+      "settings": [
+        {
+          "id": "link",
+          "type": "url",
+          "label": "Button link"
+        },
+        {
+          "id": "linktext",
+          "type": "text",
+          "label": "Button text",
+          "default": "Click here"
+        },
+        {
+          "type": "color",
+          "id": "color",
+          "label": "Text color",
+          "default": "#16142c"
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": "Background color",
+          "default": "#3cc0df"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Banner",
+      "category": "Image"
+    }
+  ]
+}
+{% endschema %}
+{% stylesheet 'scss' %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

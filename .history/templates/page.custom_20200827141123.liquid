@@ -1,0 +1,35 @@
+{% section "page-custom" %}
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+  var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+  (function(){
+  var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+  s1.async=true;
+  s1.src='https://embed.tawk.to/5f368e234c7806354da663ae/default';
+  s1.charset='UTF-8';
+  s1.setAttribute('crossorigin','*');
+  s0.parentNode.insertBefore(s1,s0);
+  })();
+  </script>
+  <!--End of Tawk.to Script-->
+<div id="content">
+  <div class="custom-container rte">
+    <div class="custom-title clearfix container-narrow">
+      <h1>{{ page.title | escape }}</h1>
+    </div>
+    <div class="page_content">
+      <div class="row">
+        <div class="{% if section.settings.page_link_list != blank or section.settings.show_sidebar_page_collections or section.settings.show_page_sidebar_sale %}col-md-9 col-md-push-3 col-sm-8 col-sm-push-4{% else %}col-sm-12{% endif %}">
+        {% include 'page-banner' with page.custom_fields %}
+        <div class="container-narrow">
+
+        </div>
+          {{ page.content }}
+        {% if section.settings.page_link_list != blank or section.settings.show_sidebar_page_collections or section.settings.show_page_sidebar_sale %}
+          {% include 'sidebar-page' %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% include 'attraction-panel' with shop.custom_fields %}
+</div>
