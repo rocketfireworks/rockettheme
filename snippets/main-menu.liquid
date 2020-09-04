@@ -53,7 +53,7 @@
       <div class="mobileMainLinkContainer">
 
         <!--Mobile Marker-->
-        <a href="#" class="visible-ms visible-xs account-icon-mobile mobileMenuMarker navbar-cart"><i class="fa fa-map-marker"></i></a>
+        <a href="/pages/store-locations" class="visible-ms visible-xs account-icon-mobile mobileMenuMarker navbar-cart"><i class="fa fa-map-marker"></i></a>
 
         <!--Mobile Account-->
         {% if shop.customer_accounts_enabled %}
@@ -206,9 +206,9 @@
     {% endfor %}
       
       <div class="specialLinkContainer">
-        <a class="specialMobileLink visible-ms visible-xs"><i class="fa fa-star"></i> Free Stuff</li>
-        <a class="specialMobileLink visible-ms visible-xs"><i class="fa fa-map-marker"></i> Locations</li>
-        <a class="specialMobileLink visible-ms visible-xs"><i class="fa fa-phone"></i> 888.502.5278</li>
+        <a href="/pages/free-fireworks" class="specialMobileLink visible-ms visible-xs"><i class="fa fa-star"></i> Free Stuff</li>
+        <a href="/pages/fireworks-delivery" class="specialMobileLink visible-ms visible-xs"><i class="fa fa-map-marker"></i> Locations</li>
+        <a href="tel:888.502.5278" class="specialMobileLink visible-ms visible-xs"><i class="fa fa-phone"></i> 888.502.5278</li>
       </div>
       
       <div class="mobileSignInBtn">
@@ -216,7 +216,7 @@
       </div>
 
       <div class="mobileMenuQuickLinks">
-        <a href="">Contact Us</a> | <a href="">FAQs</a> | <a href="#">Order Info</a>
+        <a href="/pages/contact-info">Contact Us</a> | <a href="/pages/shipping-faq-online-orders">FAQs</a> | <a href="/pages/fireworks-delivery">Order Info</a>
       </div>
       </ul>
       
@@ -236,19 +236,17 @@
       <li class="navPages-item">
         <a class="navPages-action topNavA" href="#">Fireworks</a>
         <div class="navPage-subMenu clearfix">
-            <div class="mmAD">
-                <a href="#"><img src="{{ '50offBogo.png' | asset_url }}" alt="Shop Firework Deals"></a>
-            </div>
+          <div class="mmLinksContainer">
             <div class="mmKickers">
                 <div class="mmkicker">
-                    <a href="#">
+                    <a href="/collections/packages">
                         <img src="{{ 'f-mm-packages.png' | asset_url }}" alt="Firework Packages">
                         <span class="mmkicker-name">PACKAGES <span>Shop Now</span></span>
                     </a>
 
                 </div>
                 <div class="mmkicker">
-                     <a href="#">
+                     <a href="/collections/cake-bundles">
                         <img src="{{ 'f-mm-cakebundles.png' | asset_url }}" alt="Cake Bundles">
                         <span class="mmkicker-name">CAKE BUNDLES <span>Shop Now</span></span>
                     </a>
@@ -258,89 +256,91 @@
             <div class="mmLinks">
                 <ul class="navPage-subMenu-list">
                     <li class="navPage-subMenu-item">
-                        <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ '50bobofireworkmenu.png' | asset_url }}" alt="Firework 50% Off and BOGO Deals"><span>50% Off & BOGO Deals</span></a>
+                        <a class="navPage-subMenu-action navPages-action" href="/collections/50-off-47-bogo-deals"><img src="{{ '50bobofireworkmenu.png' | asset_url }}" alt="Firework 50% Off and BOGO Deals"><span>50% Off & BOGO Deals</span></a>
                     </li>
                     <li class="navPage-subMenu-item">
-                        <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'f-mm-vertical-cakes.png' | asset_url }}" alt="Firework Vertical Cakes"><span>Vertical Cakes</span></a>
+                        <a class="navPage-subMenu-action navPages-action" href="/collections/vertical-cakes"><img src="{{ 'f-mm-vertical-cakes.png' | asset_url }}" alt="Firework Vertical Cakes"><span>Vertical Cakes</span></a>
                     </li>
                     <li class="navPage-subMenu-item">
-                        <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'f-mm-fanned-cakes.png' | asset_url }}" alt="Firework Fanned Cakes"><span>Fanned Cakes</span></a>
+                        <a class="navPage-subMenu-action navPages-action" href="/collections/fanned-cakes"><img src="{{ 'f-mm-fanned-cakes.png' | asset_url }}" alt="Firework Fanned Cakes"><span>Fanned Cakes</span></a>
                     </li>
                     <li class="navPage-subMenu-item">
-                        <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'f-mm-pro-series-cakes.png' | asset_url }}" alt="Firework Pro Series"><span>Pro Series Cakes</span></a>
+                        <a class="navPage-subMenu-action navPages-action" href="/collections/pro-pyro-series-cakes"><img src="{{ 'f-mm-pro-series-cakes.png' | asset_url }}" alt="Firework Pro Series"><span>Pro Series Cakes</span></a>
                     </li>
                     <li class="navPage-subMenu-item">
-                      <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'f-mm-best-finales.png' | asset_url }}" alt="Firework Best Finales"><span>Best Finales</span></a>
+                      <a class="navPage-subMenu-action navPages-action" href="/collections/"><img src="{{ 'f-mm-best-finales.png' | asset_url }}" alt="Firework Best Finales"><span>Best Finales</span></a>
                     </li>
                     <li class="navPage-subMenu-item">
-                      <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'f-mm-mortar-shells.png' | asset_url }}" alt="Firework Mortar Shells"><span>Mortar Shells</span></a>
+                      <a class="navPage-subMenu-action navPages-action" href="/collections/mortar-shells"><img src="{{ 'f-mm-mortar-shells.png' | asset_url }}" alt="Firework Mortar Shells"><span>Mortar Shells</span></a>
                   </li>
                 </ul>
                 <ul class="navPage-subMenu-list">
                   <li class="navPage-subMenu-item">
-                    <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'f-mm-sound-shells.png' | asset_url }}" alt="Firework Sound Shells"><span>Sound Shells</span></a>
+                    <a class="navPage-subMenu-action navPages-action" href="/collections/sound-shells"><img src="{{ 'f-mm-sound-shells.png' | asset_url }}" alt="Firework Sound Shells"><span>Sound Shells</span></a>
                   </li>
                   <li class="navPage-subMenu-item">
-                      <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'f-mm-sparklers.png' | asset_url }}" alt="Firework Sparklers"><span>Sparklers</span></a>
+                      <a class="navPage-subMenu-action navPages-action" href="/collections/sparklers"><img src="{{ 'f-mm-sparklers.png' | asset_url }}" alt="Firework Sparklers"><span>Sparklers</span></a>
                   </li>
                   <li class="navPage-subMenu-item">
-                      <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'f-mm-roman-candles.png' | asset_url }}" alt="Firework Roman Candles"><span>Roman Candles</span></a>
+                      <a class="navPage-subMenu-action navPages-action" href="/collections/roman-candles"><img src="{{ 'f-mm-roman-candles.png' | asset_url }}" alt="Firework Roman Candles"><span>Roman Candles</span></a>
                   </li>
                   <li class="navPage-subMenu-item">
-                      <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'f-mm-barrages.png' | asset_url }}" alt="Firework Barrages"><span>Barrages</span></a>
+                      <a class="navPage-subMenu-action navPages-action" href="/collections/barrages"><img src="{{ 'f-mm-barrages.png' | asset_url }}" alt="Firework Barrages"><span>Barrages</span></a>
                   </li>
                   <li class="navPage-subMenu-item">
-                    <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'f-mm-fountains-wheels.png' | asset_url }}" alt="Firework Fountains & Wheels"><span>Fountains & Wheels</span></a>
+                    <a class="navPage-subMenu-action navPages-action" href="/collections/fountains-wheels"><img src="{{ 'f-mm-fountains-wheels.png' | asset_url }}" alt="Firework Fountains & Wheels"><span>Fountains & Wheels</span></a>
                   </li>
                   <li class="navPage-subMenu-item">
-                    <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'f-mm-novelties.png' | asset_url }}" alt="Firework Novelties"><span>Novelties</span></a>
+                    <a class="navPage-subMenu-action navPages-action" href="/collections/novelties"><img src="{{ 'f-mm-novelties.png' | asset_url }}" alt="Firework Novelties"><span>Novelties</span></a>
                   </li>
                 </ul>
                 <ul class="navPage-subMenu-list">
                   <li class="navPage-subMenu-item">
-                    <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'f-mm-firing-systems.png' | asset_url }}" alt="Firework Firing Systems"><span>Firing Systems</span></a>
+                    <a class="navPage-subMenu-action navPages-action" href="/collections/firing-systems"><img src="{{ 'f-mm-firing-systems.png' | asset_url }}" alt="Firework Firing Systems"><span>Firing Systems</span></a>
                   </li>
                   <li class="navPage-subMenu-item">
-                      <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'f-mm-wedding.png' | asset_url }}" alt="Firework Wedding Fireworks Kits"><span>Wedding Fireworks Kits</span></a>
+                      <a class="navPage-subMenu-action navPages-action" href="/collections/weddings-events"><img src="{{ 'f-mm-wedding.png' | asset_url }}" alt="Firework Wedding Fireworks Kits"><span>Wedding Fireworks Kits</span></a>
                   </li>
                   <li class="navPage-subMenu-item">
-                      <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'f-mm-professional-display.png' | asset_url }}" alt="Firework Professional Displays"><span>Professional Displays</span></a>
+                      <a class="navPage-subMenu-action navPages-action" href="/pages/professional-fireworks-displays-toronto-canada"><img src="{{ 'f-mm-professional-display.png' | asset_url }}" alt="Firework Professional Displays"><span>Professional Displays</span></a>
                   </li>
                   <li class="navPage-subMenu-item">
-                      <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'f-mm-firework-safety.png' | asset_url }}" alt="Firework Fireworks Safety"><span>Fireworks Safety</span></a>
+                      <a class="navPage-subMenu-action navPages-action" href="/pages/family-fireworks-safety"><img src="{{ 'f-mm-firework-safety.png' | asset_url }}" alt="Firework Fireworks Safety"><span>Fireworks Safety</span></a>
                   </li>
                   <li class="navPage-subMenu-item">
-                    <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'f-mm-firework-faqs.png' | asset_url }}" alt="Fireworks FAQ"><span>Fireworks FAQ</span></a>
+                    <a class="navPage-subMenu-action navPages-action" href="/pages/fireworks-faq"><img src="{{ 'f-mm-firework-faqs.png' | asset_url }}" alt="Fireworks FAQ"><span>Fireworks FAQ</span></a>
                   </li>
                   <li class="navPage-subMenu-item">
-                    <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'f-mm-ontario-retail-outlets.png' | asset_url }}" alt="Firework Ontario Retail Outlets"><span>Ontario Retail Outlets</span></a>
+                    <a class="navPage-subMenu-action navPages-action" href="/pages/store-locations"><img src="{{ 'f-mm-ontario-retail-outlets.png' | asset_url }}" alt="Firework Ontario Retail Outlets"><span>Ontario Retail Outlets</span></a>
                   </li>
                 </ul>
                 <ul class="navPage-subMenu-list desk-only">
                     <li class="navPage-subMenu-item shopAll">
-                        <a class="navPage-subMenu-action navPages-action" href="#">> Shop All Fireworks</a>
+                        <a class="navPage-subMenu-action navPages-action" href="/collections">> Shop All Fireworks</a>
                     </li>
                 </ul>
             </div>
+          </div>
+          <div class="mmAD">
+              <a href="#"><img src="{{ '50offBogo.png' | asset_url }}" alt="Shop Firework Deals"></a>
+          </div>
         </div>
       </li>
 
       <li class="navPages-item">
         <a class="navPages-action topNavA" href="#">Kits &amp; Bundles</a>
         <div class="navPage-subMenu clearfix">
-            <div class="mmAD">
-                <a href="#"><img src="{{ 'firestorm6pack.png' | asset_url }}" alt="Shop Kits & Bundles"></a>
-            </div>
+          <div class="mmLinksContainer">
             <div class="mmKickers">
                 <div class="mmkicker">
-                    <a href="#">
+                    <a href="/collections/packages">
                         <img src="{{ 'kb-mm-packages.png' | asset_url }}" alt="Kit & Bundles Packages">
                         <span class="mmkicker-name">PACKAGES <span>Shop Now</span></span>
                     </a>
 
                 </div>
                 <div class="mmkicker">
-                     <a href="#">
+                     <a href="/collections/cake-bundles">
                         <img src="{{ 'kb-mm-cake-bundles.png' | asset_url }}" alt="Kit & Bundles Cake Bundles">
                         <span class="mmkicker-name">CAKE BUNDLES <span>Shop Now</span></span>
                     </a>
@@ -353,13 +353,13 @@
                         <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'kb-mm-judgement-day.png' | asset_url }}" alt="Kits & Bundles Judgement Day Finale"><span>Judgement Day Finale</span></a>
                     </li>
                     <li class="navPage-subMenu-item">
-                        <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'kb-mm-diwalia-anar.png' | asset_url }}" alt="Kits & Bundles Diwali Anar Pack"><span>Diwali Anar Pack</span></a>
+                        <a class="navPage-subMenu-action navPages-action" href="/products/jumbo-diwali-anar-pack"><img src="{{ 'kb-mm-diwalia-anar.png' | asset_url }}" alt="Kits & Bundles Diwali Anar Pack"><span>Diwali Anar Pack</span></a>
                     </li>
                     <li class="navPage-subMenu-item">
-                        <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'kb-mm-gender-reveal-kit.png' | asset_url }}" alt="Kits & Bundles Gender Reveal Kit"><span>Gender Reveal Kit</span></a>
+                        <a class="navPage-subMenu-action navPages-action" href="/collections/gender-reveal-kit"><img src="{{ 'kb-mm-gender-reveal-kit.png' | asset_url }}" alt="Kits & Bundles Gender Reveal Kit"><span>Gender Reveal Kit</span></a>
                     </li>
                     <li class="navPage-subMenu-item">
-                        <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'kb-mm-custom-package.png' | asset_url }}" alt="Kits & Bundles Custom Package Request"><span>Custom Package Request</span></a>
+                        <a class="navPage-subMenu-action navPages-action" href="/pages/custompacks"><img src="{{ 'kb-mm-custom-package.png' | asset_url }}" alt="Kits & Bundles Custom Package Request"><span>Custom Package Request</span></a>
                     </li>
                 </ul>
                 <ul class="navPage-subMenu-list">
@@ -367,7 +367,7 @@
                     <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'kb-mm-heroes-villiains.png' | asset_url }}" alt="Kits & Bundles Heroes & Villains 9-Cake Set"><span>Heroes & Villains 9-Cake Set</span></a>
                   </li>
                   <li class="navPage-subMenu-item">
-                      <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'kb-mm-firestorm.png' | asset_url }}" alt="Kits & Bundles Firestorm 6 Pack"><span>Firestorm 6 Pack</span></a>
+                      <a class="navPage-subMenu-action navPages-action" href="/products/firestorm"><img src="{{ 'kb-mm-firestorm.png' | asset_url }}" alt="Kits & Bundles Firestorm 6 Pack"><span>Firestorm 6 Pack</span></a>
                   </li>
                   <li class="navPage-subMenu-item">
                       <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'kb-mm-diy-wedding-kit.png' | asset_url }}" alt="Kits & Bundles DIY Wedding Kit"><span>DIY Wedding Kit</span></a>
@@ -375,13 +375,13 @@
                 </ul>
                 <ul class="navPage-subMenu-list">
                   <li class="navPage-subMenu-item">
-                    <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'kb-mm-pyrocan-pro.png' | asset_url }}" alt="Kits & Bundles Pyrocan Pro Set"><span>Pyrocan Pro Set</span></a>
+                    <a class="navPage-subMenu-action navPages-action" href="/products/pyrocan-pro-set"><img src="{{ 'kb-mm-pyrocan-pro.png' | asset_url }}" alt="Kits & Bundles Pyrocan Pro Set"><span>Pyrocan Pro Set</span></a>
                   </li>
                   <li class="navPage-subMenu-item">
-                      <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'kb-mm-firefly.png' | asset_url }}" alt="Kits & Bundles Firefly Bundle Pro"><span>Firefly Bundle Pro</span></a>
+                      <a class="navPage-subMenu-action navPages-action" href="/products/firefly-bundle-pro"><img src="{{ 'kb-mm-firefly.png' | asset_url }}" alt="Kits & Bundles Firefly Bundle Pro"><span>Firefly Bundle Pro</span></a>
                   </li>
                   <li class="navPage-subMenu-item">
-                      <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'kb-mm-party-bulk-buys.png' | asset_url }}" alt="Kits & Bundles Party Bulk Buys"><span>Party Bulk Buys</span></a>
+                      <a class="navPage-subMenu-action navPages-action" href="/collections/bulk-buys"><img src="{{ 'kb-mm-party-bulk-buys.png' | asset_url }}" alt="Kits & Bundles Party Bulk Buys"><span>Party Bulk Buys</span></a>
                   </li>
                 </ul>
                 <ul class="navPage-subMenu-list desk-only">
@@ -390,18 +390,20 @@
                     </li>
                 </ul>
             </div>
+          </div>
+          <div class="mmAD">
+              <a href="#"><img src="{{ 'firestorm6pack.png' | asset_url }}" alt="Shop Kits & Bundles"></a>
+          </div>
         </div>
       </li>
 
       <li class="navPages-item">
         <a class="navPages-action topNavA" href="#">Specials</a>
         <div class="navPage-subMenu clearfix">
-            <div class="mmAD">
-                <a href="#"><img src="{{ 'freefireworks.png' | asset_url }}" alt="Shop Specials"></a>
-            </div>
+          <div class="mmLinksContainer">
             <div class="mmKickers">
                 <div class="mmkicker">
-                    <a href="#">
+                    <a href="/collections/50-off-47-bogo-deals">
                         <img src="{{ 's-mm-bogo.png' | asset_url }}" alt="Special 50% Off & BOGO Deals">
                         <span class="mmkicker-name">50% OFF & BOGO DEALS <span>Shop Now</span></span>
                     </a>
@@ -418,26 +420,26 @@
             <div class="mmLinks">
                 <ul class="navPage-subMenu-list">
                     <li class="navPage-subMenu-item">
-                        <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 's-mm-bonus-rewards.png' | asset_url }}" alt="Bonus Rewards: Free Fireworks"><span>Bonus Rewards: Free Fireworks</span></a>
+                        <a class="navPage-subMenu-action navPages-action" href="/pages/free-fireworks"><img src="{{ 's-mm-bonus-rewards.png' | asset_url }}" alt="Bonus Rewards: Free Fireworks"><span>Bonus Rewards: Free Fireworks</span></a>
                     </li>
                     <li class="navPage-subMenu-item">
-                        <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 's-mm-50-off-flying-eco.png' | asset_url }}" alt="Special 50% Off: Flying Eco Lanterns (20-Pack)"><span>50% Off: Flying Eco Lanterns (20-Pack)</span></a>
+                        <a class="navPage-subMenu-action navPages-action" href="/products/flying-lanterns-20pk"><img src="{{ 's-mm-50-off-flying-eco.png' | asset_url }}" alt="Special 50% Off: Flying Eco Lanterns (20-Pack)"><span>50% Off: Flying Eco Lanterns (20-Pack)</span></a>
                     </li>
                 </ul>
                 <ul class="navPage-subMenu-list">
                   <li class="navPage-subMenu-item">
-                    <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 's-mm-background-hero.png' | asset_url }}" alt="Special Backyard Hero: Save $100"><span>Backyard Hero: Save $100</span></a>
+                    <a class="navPage-subMenu-action navPages-action" href="/products/backyard-hero"><img src="{{ 's-mm-background-hero.png' | asset_url }}" alt="Special Backyard Hero: Save $100"><span>Backyard Hero: Save $100</span></a>
                   </li>
                   <li class="navPage-subMenu-item">
-                      <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 's-mm-18-piece-roman.png' | asset_url }}" alt="Special 18-Piece Roman Candle Blowout"><span>18-Piece Roman Candle Blowout</span></a>
+                      <a class="navPage-subMenu-action navPages-action" href="/products/roman-candle-blowout"><img src="{{ 's-mm-18-piece-roman.png' | asset_url }}" alt="Special 18-Piece Roman Candle Blowout"><span>18-Piece Roman Candle Blowout</span></a>
                   </li>
                 </ul>
                 <ul class="navPage-subMenu-list">
                   <li class="navPage-subMenu-item">
-                    <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 's-mm-50-off-air-bombs.png' | asset_url }}" alt="Special 50% Off Air Bombs: Bulk 20-Pack"><span>50% Off Air Bombs: Bulk 20-Pack</span></a>
+                    <a class="navPage-subMenu-action navPages-action" href="/products/air-bomb-bulk"><img src="{{ 's-mm-50-off-air-bombs.png' | asset_url }}" alt="Special 50% Off Air Bombs: Bulk 20-Pack"><span>50% Off Air Bombs: Bulk 20-Pack</span></a>
                   </li>
                   <li class="navPage-subMenu-item">
-                      <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 's-mm-wedding-sparklers.png' | asset_url }}" alt="Special Wedding Sparklers: Case of 288"><span>Wedding Sparklers: Case of 288</span></a>
+                      <a class="navPage-subMenu-action navPages-action" href="/products/70cm-sparklers-bulk"><img src="{{ 's-mm-wedding-sparklers.png' | asset_url }}" alt="Special Wedding Sparklers: Case of 288"><span>Wedding Sparklers: Case of 288</span></a>
                   </li>
                 </ul>
                 <ul class="navPage-subMenu-list desk-only">
@@ -446,25 +448,27 @@
                     </li>
                 </ul>
             </div>
+          </div>
+          <div class="mmAD">
+              <a href="#"><img src="{{ 'freefireworks.png' | asset_url }}" alt="Shop Specials"></a>
+          </div>
         </div>
       </li>
 
       <li class="navPages-item">
         <a class="navPages-action topNavA" href="#">Smoke FX</a>
         <div class="navPage-subMenu clearfix">
-            <div class="mmAD">
-                <a href="#"><img src="{{ 'smokemix.png' | asset_url }}" alt="Shop Specials"></a>
-            </div>
+          <div class="mmLinksContainer">
             <div class="mmKickers">
                 <div class="mmkicker">
-                    <a href="#">
+                    <a href="/products/camouflage-10pack">
                         <img src="{{ 'sf-mm-camo.png' | asset_url }}" alt="Smoke FX Camouflage 10-Pack">
                         <span class="mmkicker-name">CAMOUFLAGE 10-PACK <span>Shop Now</span></span>
                     </a>
 
                 </div>
                 <div class="mmkicker">
-                     <a href="#">
+                     <a href="/products/gender-reveal-smoke">
                         <img src="{{ 'sf-mm-gender.png' | asset_url }}" alt="Smoke FX Gender Reveal Smoke">
                         <span class="mmkicker-name">GENDER REVEAL SMOKE <span>Shop Now</span></span>
                     </a>
@@ -474,7 +478,7 @@
             <div class="mmLinks">
                 <ul class="navPage-subMenu-list">
                     <li class="navPage-subMenu-item">
-                        <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'sf-mm-eg25-micro-smoke.png' | asset_url }}" alt="Smoke FX EG25 Micro Smoke: Mix 5"><span>EG25 Micro Smoke: Mix 5</span></a>
+                        <a class="navPage-subMenu-action navPages-action" href="/products/eg25-6pack"><img src="{{ 'sf-mm-eg25-micro-smoke.png' | asset_url }}" alt="Smoke FX EG25 Micro Smoke: Mix 5"><span>EG25 Micro Smoke: Mix 5</span></a>
                     </li>
                     <li class="navPage-subMenu-item">
                         <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'sf-mm-eg18-assult-smoke.png' | asset_url }}" alt="Smoke FX EG18 Assault Smoke"><span>EG18 Assault Smoke</span></a>
@@ -483,15 +487,15 @@
                         <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'sf-mm-cm75-cloudmaker.png' | asset_url }}" alt="Smoke FX CM75 Cloudmaker Smoke"><span>CM75 Cloudmaker Smoke</span></a>
                     </li>
                     <li class="navPage-subMenu-item">
-                        <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'safetyicon.png' | asset_url }}" alt="Smoke FX Safety Info & MSDS"><span>Safety Info & MSDS</span></a>
+                        <a class="navPage-subMenu-action navPages-action" href="/pages/smoke-grenade-safety"><img src="{{ 'safetyicon.png' | asset_url }}" alt="Smoke FX Safety Info & MSDS"><span>Safety Info & MSDS</span></a>
                     </li>
                 </ul>
                 <ul class="navPage-subMenu-list">
                   <li class="navPage-subMenu-item">
-                    <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'sf-mm-wp40-smoke.png' | asset_url }}" alt="Smoke FX WP40 Smoke"><span>WP40 Smoke</span></a>
+                    <a class="navPage-subMenu-action navPages-action" href="/products/wp40-wirepull-smoke-grenade"><img src="{{ 'sf-mm-wp40-smoke.png' | asset_url }}" alt="Smoke FX WP40 Smoke"><span>WP40 Smoke</span></a>
                   </li>
                   <li class="navPage-subMenu-item">
-                      <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'sf-mm-eg18x-military.png' | asset_url }}" alt="Smoke FX EG18X Military Grade Smoke"><span>EG18X Military Grade Smoke</span></a>
+                      <a class="navPage-subMenu-action navPages-action" href="/products/eg18x-military-smoke-grenade"><img src="{{ 'sf-mm-eg18x-military.png' | asset_url }}" alt="Smoke FX EG18X Military Grade Smoke"><span>EG18X Military Grade Smoke</span></a>
                   </li>
                   <li class="navPage-subMenu-item">
                       <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'sf-mm-sd75-max.png' | asset_url }}" alt="Smoke FX SD75 Max Output Smoke"><span>SD75 Max Output Smoke</span></a>
@@ -502,7 +506,7 @@
                     <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'sf-mm-smoke-burst.png' | asset_url }}" alt="Smoke FX Burst Smoke (Twin Vent)"><span>Burst Smoke (Twin Vent)</span></a>
                   </li>
                   <li class="navPage-subMenu-item">
-                      <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'sf-mm-eg-sample-pack.png' | asset_url }}" alt="Smoke FX EG Sample Pack: 8 PCS"><span>EG Sample Pack: 8 PCS</span></a>
+                      <a class="navPage-subMenu-action navPages-action" href="/products/smoke-grenade-sample-pack"><img src="{{ 'sf-mm-eg-sample-pack.png' | asset_url }}" alt="Smoke FX EG Sample Pack: 8 PCS"><span>EG Sample Pack: 8 PCS</span></a>
                   </li>
                   <li class="navPage-subMenu-item">
                       <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'sf-mm-discount-tactical.png' | asset_url }}" alt="Smoke FX Discount Tactical Gear"><span>Discount Tactical Gear</span></a>
@@ -510,29 +514,31 @@
                 </ul>
                 <ul class="navPage-subMenu-list desk-only">
                     <li class="navPage-subMenu-item shopAll">
-                        <a class="navPage-subMenu-action navPages-action" href="#">> Shop All Smoke FX</a>
+                        <a class="navPage-subMenu-action navPages-action" href="/collections/smoke-fx">> Shop All Smoke FX</a>
                     </li>
                 </ul>
             </div>
+          </div>
+          <div class="mmAD">
+              <a href="#"><img src="{{ 'smokemix.png' | asset_url }}" alt="Shop Specials"></a>
+          </div>
         </div>
       </li>
 
       <li class="navPages-item">
         <a class="navPages-action topNavA" href="/collections/events-themes">Events & Themes</a>
         <div class="navPage-subMenu clearfix">
-            <div class="mmAD">
-                <a href="#"><img src="{{ 'sparkular.png' | asset_url }}" alt="Shop Events & Themems"></a>
-            </div>
+          <div class="mmLinksContainer">
             <div class="mmKickers">
                 <div class="mmkicker">
-                    <a href="#">
+                    <a href="/pages/professional-fireworks-displays-toronto-canada">
                         <img src="{{ 'et-mm-professional.png' | asset_url }}" alt="Events & Themes ProfessionaL Fireworks Displays">
                         <span class="mmkicker-name">PROFESSIONAL FIREWORKS<br/> DISPLAYS <span>Shop Now</span></span>
                     </a>
 
                 </div>
                 <div class="mmkicker">
-                     <a href="#">
+                     <a href="/collections/gender-reveal-kit">
                         <img src="{{ 'et-mm-gender.png' | asset_url }}" alt="Events & GENDER REVEAL PARTY">
                         <span class="mmkicker-name">GENDER REVEAL SMOKE <span>Shop Now</span></span>
                     </a>
@@ -542,43 +548,47 @@
             <div class="mmLinks">
                 <ul class="navPage-subMenu-list">
                     <li class="navPage-subMenu-item">
-                        <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'et-mm-wedding.png' | asset_url }}" alt="Events & Themes Wedding & Events"><span>Wedding & Events</span></a>
+                        <a class="navPage-subMenu-action navPages-action" href="/collections/weddings-events"><img src="{{ 'et-mm-wedding.png' | asset_url }}" alt="Events & Themes Wedding & Events"><span>Wedding & Events</span></a>
                     </li>
                     <li class="navPage-subMenu-item">
-                        <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'et-mm-glow-led.png' | asset_url }}" alt="Events & Themes Glow & LED"><span>Glow & LED</span></a>
+                        <a class="navPage-subMenu-action navPages-action" href="/collections/glow-l-e-d"><img src="{{ 'et-mm-glow-led.png' | asset_url }}" alt="Events & Themes Glow & LED"><span>Glow & LED</span></a>
                     </li>
                     <li class="navPage-subMenu-item">
-                        <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'et-mm-diwali-fireworks.png' | asset_url }}" alt="Events & Themes Diwali Fireworks"><span>Diwali Fireworks</span></a>
+                        <a class="navPage-subMenu-action navPages-action" href="/collections/diwali-specials"><img src="{{ 'et-mm-diwali-fireworks.png' | asset_url }}" alt="Events & Themes Diwali Fireworks"><span>Diwali Fireworks</span></a>
                     </li>
                 </ul>
                 <ul class="navPage-subMenu-list">
                   <li class="navPage-subMenu-item">
-                    <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'et-mm-sparklers.png' | asset_url }}" alt="Events & Themes Sparklers"><span>Sparklers</span></a>
+                    <a class="navPage-subMenu-action navPages-action" href="/collections/sparklers"><img src="{{ 'et-mm-sparklers.png' | asset_url }}" alt="Events & Themes Sparklers"><span>Sparklers</span></a>
                   </li>
                   <li class="navPage-subMenu-item">
-                      <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'et-mm-flying-lanterns.png' | asset_url }}" alt="Events & Themes Flying Lanterns"><span>Flying Lanterns</span></a>
+                      <a class="navPage-subMenu-action navPages-action" href="/collections/flying-lanterns"><img src="{{ 'et-mm-flying-lanterns.png' | asset_url }}" alt="Events & Themes Flying Lanterns"><span>Flying Lanterns</span></a>
                   </li>
                   <li class="navPage-subMenu-item">
-                      <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'et-mm-cake-bottle-fountains.png' | asset_url }}" alt="Events & Themes Cake/Bottle Fountains"><span>Cake/Bottle Fountains</span></a>
+                      <a class="navPage-subMenu-action navPages-action" href="/collections/cake-bottle-fountains"><img src="{{ 'et-mm-cake-bottle-fountains.png' | asset_url }}" alt="Events & Themes Cake/Bottle Fountains"><span>Cake/Bottle Fountains</span></a>
                   </li>
                 </ul>
                 <ul class="navPage-subMenu-list">
                   <li class="navPage-subMenu-item">
-                    <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'et-mm-nightclub.png' | asset_url }}" alt="Events & Themes Nightclub & Bar Products"><span>Nightclub & Bar Products</span></a>
+                    <a class="navPage-subMenu-action navPages-action" href="/collections/nightclub-bar-products"><img src="{{ 'et-mm-nightclub.png' | asset_url }}" alt="Events & Themes Nightclub & Bar Products"><span>Nightclub & Bar Products</span></a>
                   </li>
                   <li class="navPage-subMenu-item">
                       <a class="navPage-subMenu-action navPages-action" href="/collections/confetti"><img src="{{ 'et-mm-confetti.png' | asset_url }}" alt="Events & Themes Confetti"><span>Confetti</span></a>
                   </li>
                   <li class="navPage-subMenu-item">
-                      <a class="navPage-subMenu-action navPages-action" href="#"><img src="{{ 'et-mm-party-bulk-buy.png' | asset_url }}" alt="Events & Themes Party Bulk Buys"><span>Party Bulk Buys</span></a>
+                      <a class="navPage-subMenu-action navPages-action" href="/collections/bulk-buys"><img src="{{ 'et-mm-party-bulk-buy.png' | asset_url }}" alt="Events & Themes Party Bulk Buys"><span>Party Bulk Buys</span></a>
                   </li>
                 </ul>
                 <ul class="navPage-subMenu-list desk-only">
                     <li class="navPage-subMenu-item shopAll">
-                        <a class="navPage-subMenu-action navPages-action" href="#">> Shop All Events & Themes</a>
+                        <a class="navPage-subMenu-action navPages-action" href="/collections/weddings-events">> Shop All Events & Themes</a>
                     </li>
                 </ul>
             </div>
+          </div>
+          <div class="mmAD">
+              <a href="#"><img src="{{ 'sparkular.png' | asset_url }}" alt="Shop Events & Themems"></a>
+          </div>
         </div>
       </li>
 

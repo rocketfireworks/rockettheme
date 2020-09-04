@@ -711,27 +711,30 @@ padding-top: 20px;
 
 .navPages .navPages-list .navPages-item .navPages-action.topNavA {
     font-size: 16px !important;
-    padding:15px 20px;
+    padding:15px 20px 10px;
     margin:0 2px;
     font-weight:bold;
 }
 .navPages {
     max-width: none;
 }
-.topNavA{
-    padding:15px 16px;
-    margin:0 4px;
+.topNavA {
+    padding: 15px 16px 7px;
+    margin: 0 4px;
     color:#16142C;
+    border-bottom: 7px solid #eae8e8;
 }
 .topNavA:hover,
 .topNavA:focus{
-    border-bottom:7px solid #3DBFDE;
+    color:#16142C;
+    text-decoration: none;
+    border-bottom: 7px solid #3DBFDE;
 }
 .navPage-subMenu .navPages-action{
     font-size:20px;
     font-weight:500;
     line-height:20px;
-    padding:10px 0;
+    padding:5px 0;
     color:#000;
     text-transform:none;
     border:0;
@@ -741,21 +744,19 @@ padding-top: 20px;
 .navPage-subMenu{
     background-color:#fff;
     padding:0!important;
-    width:99%;
+    width: 80%;
     left:0;
     box-shadow: 0px 3px 8px rgb(100,100,100);
 }
 .navPage-subMenu-item{
-    width:100%;
+    width: 100%;
 }
 .navPages .navPage-subMenu-list{
-    width:33.333%;
-    max-width:100%;
-    float:left;
+    flex: 1;
 }
 .navPages .navPage-subMenu-list:last-child{
-    width:100%;
-    text-align:center;
+    flex: 0 0 100%;
+    text-align: center;
 }
 .navPages-list{
     position:relative;
@@ -769,9 +770,9 @@ padding-top: 20px;
 }
 .navPage-subMenu-item.shopAll .navPages-action{
     color:#3DBFDE;
-    text-transform:uppercase;
-    font-weight:600;
-    margin-top: 20px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin: 10px 0;
 }
 .navPage-subMenu .navPages-action span{
     display:inline-block;
@@ -782,16 +783,22 @@ padding-top: 20px;
 .navPage-subMenu .navPages-action img{
     vertical-align:middle;
 }
-.mmKickers{
-    width:68%;
-    float:left;
-    padding:10px 25px;
+.navPage-subMenu {
+    display: flex;
 }
-.mmkicker{
-    width:50%;
-    float:left;
-    border-bottom:2px solid #d9d9d9;
-    padding:0 8px 10px;
+.navPage-subMenu .mmLinksContainer {
+  flex-basis: 65%;
+}
+
+.mmKickers {
+    padding: 10px 1.5%;
+    display: flex;
+}
+.mmkicker {
+    flex-basis: 50%;
+    border-bottom: 2px solid #d9d9d9;
+    padding-left: 10px;
+    padding-right: 5px;
 }
 .mmkicker:hover a .mmkicker-name, 
 .mmkicker:hover a .mmkicker-name span{
@@ -802,33 +809,34 @@ padding-top: 20px;
     border-right:2px solid #d9d9d9;
 }
 .mmkicker-name{
-    font-size:17px;
-    display:inline-block;
-    vertical-align:middle;
-    padding-left:15px;
-    line-height:23px;
+    font-size: 16px;
+    display: inline-block;
+    vertical-align: middle;
+    padding-left: 5px;
+    line-height: 20px;
     color:#16142C;
     font-weight: bold;
 }
 .mmkicker-name span{
     color:#16142C;
-    display:block;
-    font-size:12px;
+    display: block;
+    font-size: 12px;
     font-style: italic;
     text-decoration: underline;
     font-weight: 300;
 }
 .mmAD{
-    width:30%;
-    float:right;
+    flex-basis: 35%;
 }
 .mmAD img{
-    max-width:none;
+    max-width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 .mmLinks{
-    width:68%;
-    float:left;
     padding:0 3%;
+    display: flex;
+    flex-wrap: wrap;
 }
 .navPages-item.last .topNavA:after{
     content:none;
@@ -843,35 +851,28 @@ padding-top: 20px;
 .navPage-subMenu-item.shopAll{
     text-align: left;
 }
-/* .mmLinks ul:first-child li:nth-child(1),  
-.mmLinks ul:first-child li:nth-child(2) {
-    display:none;
-} */
-.navPages-action{
-    
-}
-.mmKickers{
-    padding-left:15px;
-    padding-right:15px;
-}
 .mmkicker img{
-    height:95px;
+    height: 55px;
 }
 .navPage-subMenu .navPage-subMenu-action.navPages-action{
-    font-size:15px;
+    font-size: 14px;
 }
 .mmLinks{
     padding:0 1.5%;
 }
 .navPage-subMenu .navPages-action img{
-    height:50px;
+    height: 40px;
 }
 .mmAD img{
     /* max-height:386px; */
 }
 .navPage-subMenu {
-    display: none;
     outline: 0;
+    visibility: hidden;
+    opacity: 0;
+    transition-property: all;
+    transition-duration: 0.3s;
+    transition-delay: 0.3s;
 }
 .navPages{
     padding:15px;
@@ -896,9 +897,18 @@ padding-top: 20px;
     z-index: 999;
 }
 
-
-
-
+/* Mobile Menu */
+.wsmenu-list li > .wsmenu-submenu, .wsmenu-list li > .megamenu, .wsmenu .wsmenu-list {
+    background-color: #eae8e8;
+}
+.mega_menu_simple_container .wsmenu-submenu > li > a {
+    color: #16142c !important;
+}
+.mega_menu_simple_container .wsmenu-submenu > li > a:hover, .mega_menu_simple_container .wsmenu-submenu > li > a:focus {
+    color: #107fa8 !important;
+    text-decoration: none;
+}
+/*  */
 .owl-theme .owl-nav [class*=owl-], .owl-theme .owl-nav [class*=owl-]:hover{
     background: #fff;
     color:#16142C;
@@ -1002,13 +1012,13 @@ padding-top: 20px;
 }
 
 
-@media (min-width: 1026px) and (min-width: 551px){
+@media (min-width: 768px) and (min-width: 551px){
     .navPages-item {
         float: left;
     }
 }
 
-@media (min-width: 1026px){
+@media (min-width: 768px){
     .navPages ul li, .navPages ol li {
         margin: 0px;
         padding: 0px;
@@ -1019,7 +1029,7 @@ padding-top: 20px;
     }
 }
 
-@media (max-width: 1030px){
+@media (max-width: 768px){
     .mobileMenuHeader{
         display: block;
     }
@@ -1029,7 +1039,7 @@ padding-top: 20px;
     }
 }
 
-@media (max-width: 980px) {
+@media (max-width: 768px) {
     .mmAD, .mmKickers {
         display: none;
     }
@@ -1038,14 +1048,14 @@ padding-top: 20px;
     }
 }
 
-@media (min-width: 1025px) {
+@media (min-width: 768px) {
     .navPages-item:hover .navPage-subMenu{
-        display:block;
+        visibility: visible;
+        opacity: 1;
     }
     .navPage-subMenu{
         position: absolute;
         text-align: left;
-        
     }
 }
 
@@ -1130,11 +1140,6 @@ padding-top: 20px;
         margin: 0 auto;
         padding: 10px 0;
     }
-    
-    /* #header .navbar-toggle, #header .navbar-cart {
-        padding-top: 0px !important;
-        padding-bottom: 15px !important; 
-    } */
 
     .mobileMenuContainer{
         float: left;
@@ -1272,6 +1277,12 @@ padding-top: 20px;
         font-weight: bold;
         padding-left: 17px;
         margin: 20px 0;
+    }
+    .mobileSignInBtn {
+        padding-left: 17px;
+    }
+    .mobileMenuQuickLinks {
+        padding-left: 17px;
     }
 } 
     
