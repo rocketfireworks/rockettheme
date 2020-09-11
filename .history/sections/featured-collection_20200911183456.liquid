@@ -17,7 +17,7 @@
           {% if section.settings.featured_collection != blank and collections[section.settings.featured_collection].handle == section.settings.featured_collection and collections[section.settings.featured_collection].products_count > 0 %}
           {% if section.settings.show_link_to_collection %}
             <div>
-              <a href="{{ collections[section.settings.featured_collection].url }}" title="Go to {{ collections[section.settings.featured_collection].title }} collection" class= "shopify-show-collection-badge"><i class="fa fa-chevron-right"></i> View collection</a>
+              <a href="{{ collections[section.settings.featured_collection].url }}" title="Go to {{ collections[section.settings.featured_collection].title }} collection">> View collection</a>
             </div>
             <div class="clearfix"></div> 
           {% endif %}
