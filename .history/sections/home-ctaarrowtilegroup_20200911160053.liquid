@@ -1,0 +1,139 @@
+{% assign blockCount =  section.blocks | size %}
+<div class="ctaarrowtile container gallery_container" data-count= "{{blockCount}}" data-section-id="{{ section.id }}" data-section-type="featured-images-section">
+    <div class="row">
+      {% if blockCount >= 1 %}
+        {% for block in section.blocks %}
+          <div class="{% if blockCount == 3 %}col-sm-4{% elsif blockCount == 2 or blockCount > 3 %}col-sm-6{% elsif blockCount == 1 %}col-sm-12{% endif %}">
+            <div class="ctaarrowtile-container">
+              <a href="{{ block.settings.link }}">
+                {% if block.settings.image %}
+                <div class="ctaarrowtile-image">
+                  <img src="{{block.settings.image | img_url:'master'}}"  alt="{% if block.settings.image.alt != blank %} {{block.settings.image.alt}} {% else %}{{ block.settings.image_title | strip_html }} {% endif %}">
+                </div>
+                {% else if %}
+                  {{ "collection-1" | placeholder_svg_tag: 'placeholder-svg' }}
+                {% endif %}
+                <div class="ctaarrowtile-content">
+                  <h2 class="ctaarrowtile-title">
+                    <span class="ctaarrowtile-title-icon"><i class="fas fa-chevron-right"></i></span>
+                    {{ block.settings.heading }}
+                  </h2>
+                  <p class="ctaarrowtile-tagline">{{ block.settings.tagline }}</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+</div>
+{% schema %}
+{
+  "name": "CTA ArrowTile Group",
+  "max_blocks": 3,
+  "settings": [
+  ],
+  "blocks": [
+    {
+      "type": "select",
+      "name": "CTA ArrowTile",
+      "settings": [
+        {
+          "id": "image",
+          "type": "image_picker",
+          "label": "Tile image"
+        },
+        {
+          "id": "image_title",
+          "type": "text",
+          "label": "Image Title",
+          "default": "Image Title"
+        },
+        {
+          "id": "heading",
+          "type": "text",
+          "label": "Heading",
+          "default": "Heading goes here"
+        },
+        {
+          "id": "tagline",
+          "type": "text",
+          "label": "Tagline",
+          "default": "Tagline goes here"
+        },
+        {
+          "id": "link",
+          "type": "url",
+          "label": "Button link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "CTA ArrowTile Group",
+      "category": "Image"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet 'scss' %}
+.ctaarrowtile {
+  margin: 30px auto;
+  .ctaarrowtile-container {
+    box-shadow: 0 3px 3px #d1d7d7;
+    background-color: #f7f7f7;
+    margin: 10px;
+    font-size: 16px;
+    a {
+      text-decoration: none;
+    }
+    @media (max-width: 1300px) {
+      font-size: 14px;
+    }
+    .ctaarrowtile-image {
+      display: flex;
+      height: 29em;
+      width: auto;
+      overflow: hidden;
+      img {
+        object-fit: cover;
+      }
+      @media (max-width: 768px) {
+        height: 24em;
+      }
+      @media (max-width: 992px) {
+        height: 24em;
+      }
+    }
+    .placeholder-svg {
+      height: 29em;
+    }
+    .ctaarrowtile-content {
+      padding: 0.8em 1.2em;
+    }
+    .ctaarrowtile-title {
+      font-size: 1.3em;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #16142c;
+      margin-bottom: 0.3em;
+    }
+    .ctaarrowtile-title-icon {
+      font-size: 0.8em;
+      border: 2px solid #5bb3c8;
+      padding: 2px 8px;
+      margin-right: 4px;
+    }
+    .ctaarrowtile-tagline {
+      font-size: 0.8em;
+      font-weight: 600;
+      color: #16142c;
+    }
+  }
+}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

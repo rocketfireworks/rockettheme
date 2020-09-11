@@ -1,0 +1,94 @@
+{% if page.metafields.custom_fields["include_attraction_panel"] != blank %}
+  {% if page.metafields.custom_fields["include_attraction_panel"] == 1 %}
+    <div id="apanel">
+      <div class="apanel-background" style="background-image: url('{{ shop.metafields.custom_fields['background_image'] }}');">
+        <div>
+          <div class="apanel-intro">
+            {% if shop.metafields.custom_fields["title"] != blank %}
+            <h2 class="apanel-title">{{ shop.metafields.custom_fields["title"] }}</h2>
+            {% endif %}
+
+            {% if shop.metafields.custom_fields["subtitle"] != blank %}
+            <p class="apanel-subtitle">{{ shop.metafields.custom_fields["subtitle"] }}</p>
+            {% endif %}
+
+            {% if shop.metafields.custom_fields["details"] != blank %}
+            <p class="apanel-details">{{ shop.metafields.custom_fields["details"] }}</p>
+            {% endif %}
+          </div>
+          <div class="container-narrow apanel-columns apanel-buttons">
+            {% if shop.metafields.custom_fields["button_1"] != blank %}
+              <a href="{{ shop.metafields.custom_fields["button_1_link"] }}" class="apanel-button">
+                <img class="apanel-button-icon" src="{{ shop.metafields.custom_fields["button_1_icon"] }}" alt="">
+          		<div class="apanel-button-text">
+                  {{ shop.metafields.custom_fields["button_1"] }}
+            	</div>
+              </a>
+            {% endif %}
+            {% if shop.metafields.custom_fields["button_2"] != blank %}
+              <a href="{{ shop.metafields.custom_fields["button_2_link"] }}" class="apanel-button">
+                <img class="apanel-button-icon" src="{{ shop.metafields.custom_fields["button_2_icon"] }}" alt="">
+          		<div class="apanel-button-text">
+          	      {{ shop.metafields.custom_fields["button_2"] }}
+          		</div>
+              </a>
+            {% endif %}
+            {% if shop.metafields.custom_fields["button_3"] != blank %}
+              <a href="{{ shop.metafields.custom_fields["button_3_link"] }}" class="apanel-button">
+                <img class="apanel-button-icon" src="{{ shop.metafields.custom_fields["button_3_icon"] }}" alt="">
+          		<div class="apanel-button-text">
+                	{{ shop.metafields.custom_fields["button_3"] }}
+          		</div>
+              </a>
+            {% endif %}
+          </div>
+        </div>
+        
+        <div class="container-narrow apanel-columns apanel-content">
+          <div>
+            {% if shop.metafields.custom_fields["panel_1_title"] != blank %}
+            {{ shop.metafields.custom_fields["panel_1_title"] }}
+            {% endif %}
+            
+            {% if shop.metafields.custom_fields["panel_1_title"] != blank %}
+            {{ shop.metafields.custom_fields["panel_1_content"] }}
+            {% endif %}
+          </div>
+          <div>
+            {% if shop.metafields.custom_fields["panel_2_title"] != blank %}
+            {{ shop.metafields.custom_fields["panel_2_title"] }}
+            {% endif %}
+            {% if shop.metafields.custom_fields["panel_2_content"] != blank %}
+            {{ shop.metafields.custom_fields["panel_2_content"] }}
+            {% endif %}
+          </div>
+          <div>
+            {% if shop.metafields.custom_fields["panel_3_title"] != blank %}
+            {{ shop.metafields.custom_fields["panel_3_title"] }}
+            {% endif %}
+            {% if shop.metafields.custom_fields["panel_3_content"] != blank %}
+            {{ shop.metafields.custom_fields["panel_3_content"] }}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="apanel-box">
+          <div class="apanel-box-img">
+            <img src="{{ shop.metafields.custom_fields["professional_display_image"] }}" alt="wedding with fireworks">
+          </div>
+          <div class="apanel-box-content">
+            <h3><i class="fas fa-chevron-right"></i>Professional Displays</h3>
+            {{ shop.metafields.custom_fields["professional_display_content"] }}
+            <div class="apanel-link-as-button">
+            {{ shop.metafields.custom_fields["professional_display_button"] }}
+            </div>
+          </div>
+        </div>
+      
+      {% if shop.metafields.custom_fields["end_line"] != blank %}
+      <p class="apanel-end"><em>{{ shop.metafields.custom_fields["end_line"] }}</em></p>
+      {% endif %}
+    </div>
+  {% endif %}
+{% endif %}
