@@ -19,7 +19,7 @@
     <div class="hed_right">
       <div class="header-contact">
         <ul>
-          <li><a href="tel:{{ section.settings.header_phone | escape }}">{{ section.settings.header_phone | escape }}</a></li>
+          <li><a href="tel:{{ section.settings.header_phone | escape }}"><span class="fa fa-phone"></span>{{ section.settings.header_phone | escape }}</a></li>
           <li><a href="#"><i class="fa fa-user"></i></a></li>
           <li><a href="javascript:void(0);" data-href="/cart" class=" navbar-cart cart-popup"><div class="cart-icon"><span class="count{% if cart.item_count < 1 %} hidden{% endif %}">{{ cart.item_count }}</span><i class="fa fa-shopping-cart"></i></div></a>
             <div class="dropdown-grid-wrapper hidden">
@@ -65,8 +65,8 @@
       </div>
       <div class="header-contact">
         <ul>
-          <li><a href="tel:{{ section.settings.header_phone | escape }}">{{ section.settings.header_phone | escape }}</a></li>
-          <li><a href="{{ section.settings.header_location | escape }}"><i class="fa fa-map-marker"></i></a></li>
+          <li>
+            <p>Order & Help Hotline</p><a href="tel:{{ section.settings.header_phone | escape }}"><span class="fa fa-phone"></span>{{ section.settings.header_phone | escape }}</a></li>
           <li><a href="#"><i class="fa fa-user"></i></a></li>
           <li><a href="javascript:void(0);" data-href="/cart" class=" navbar-cart cart-popup"><div class="cart-icon"><span class="count{% if cart.item_count < 1 %} hidden{% endif %}">{{ cart.item_count }}</span><i class="fa fa-shopping-cart"></i></div></a>
           <div class="dropdown-grid-wrapper hidden">
