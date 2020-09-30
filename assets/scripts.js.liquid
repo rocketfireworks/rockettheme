@@ -2466,9 +2466,10 @@ var initOwlCarousel = function (sectionId){
       dots:false,
       autoplay:true,
       autoplaySpeed:1000,
-      autoplayTimeout:4000,
+      autoplayTimeout:30000,
       autoplayHoverPause:true,
-      loop:false,
+      rewind:true,
+      slideBy:"page",
       navText: [
         "<i class='fa fa-chevron-left'></i>",
         "<i class='fa fa-chevron-right'></i>"
@@ -2491,8 +2492,6 @@ var initOwlCarousel = function (sectionId){
     })
   }
 };
-
-        
         
         // theme.LogoSection
 theme.LogoSection = (function() {
