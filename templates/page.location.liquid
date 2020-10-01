@@ -5,87 +5,88 @@
       <div class="page_content">
         <div class="row">
           <div class="{% if section.settings.page_link_list != blank or section.settings.show_sidebar_page_collections or section.settings.show_page_sidebar_sale %}col-md-9 col-md-push-3 col-sm-8 col-sm-push-4{% else %}col-sm-12{% endif %}">
-            <div class="location">
-              <div class="location-info">
-                <h1>{{ page.title | escape }}</h1>
-
-                {% if page.metafields.custom_fields["is_closed"] == 1 %}
-                <p class="closed">Currently Closed</p>
-                {% endif %}
-
-                {% if page.metafields.custom_fields["open_status"] != blank %}
-                {% if page.metafields.custom_fields["open_status"] == "Open" %}
-                {% else %}
-                <div class="custom-field--value open-status">
-                  {{ page.metafields.custom_fields["open_status"] }}
-                </div>
-                {% endif %}
-                {% endif %}
-
-                {% if page.metafields.custom_fields["opening_date"] != blank} %}
-                <div class="custom-field--value announcement">  
-                  <i class="far fa-clock"></i> Reopens {{ page.metafields.custom_fields["opening_date"] | date: "%a %B %d, %Y" }}
-                </div>
-                {% endif %}
-
-                {% if page.metafields.custom_fields["announcement"] != blank} %}
-                <div class="custom-field--value announcement">  
-                  {{ page.metafields.custom_fields["announcement"] }}
-                </div>
-                {% endif %}
-
-                {% if page.metafields.custom_fields["is_seasonal"] != blank %}
-                <div class="custom-field--value seasonal">
-                  {% if page.metafields.custom_fields["is_seasonal"] == 1 %}
-                  Open Seasonally
-                  {% else %}
-                  Open Year-Round!
+            <div class="location-page">
+              <h1>{{ page.title | escape }}</h1>
+                <div class="location-info">
+                  {% if page.metafields.custom_fields["is_closed"] == 1 %}
+                  <p class="closed">Currently Closed</p>
                   {% endif %}
-                </div>
-                {% endif %}
-
-                {% if page.metafields.custom_fields["address"] != blank} %}
-                <div class="custom-field--value basic-info">
-                  <div class="address"><i class="fas fa-map-marker-alt"></i>{{ page.metafields.custom_fields["address"] }}</div>
-                  {% if page.metafields.custom_fields["address_comment"] != blank} %}
-                  <div class="custom-field--value comment">
-                    {{ page.metafields.custom_fields["address_comment"] }}
+  
+                  {% if page.metafields.custom_fields["open_status"] != blank %}
+                  {% if page.metafields.custom_fields["open_status"] == "Open" %}
+                  {% else %}
+                  <div class="custom-field--value open-status">
+                    {{ page.metafields.custom_fields["open_status"] }}
                   </div>
                   {% endif %}
+                  {% endif %}
+  
+                  {% if page.metafields.custom_fields["opening_date"] != blank} %}
+                  <div class="custom-field--value announcement">  
+                    <i class="far fa-clock"></i> Reopens {{ page.metafields.custom_fields["opening_date"] | date: "%a %B %d, %Y" }}
+                  </div>
+                  {% endif %}
+  
+                  {% if page.metafields.custom_fields["announcement"] != blank} %}
+                  <div class="custom-field--value announcement">  
+                    {{ page.metafields.custom_fields["announcement"] }}
+                  </div>
+                  {% endif %}
+  
+                  {% if page.metafields.custom_fields["is_seasonal"] != blank %}
+                  <div class="custom-field--value seasonal">
+                    {% if page.metafields.custom_fields["is_seasonal"] == 1 %}
+                    Open Seasonally
+                    {% else %}
+                    Open Year-Round!
+                    {% endif %}
+                  </div>
+                  {% endif %}
+  
+                  {% if page.metafields.custom_fields["address"] != blank} %}
+                  <div class="custom-field--value basic-info">
+                    <div class="address"><i class="fas fa-map-marker-alt"></i>{{ page.metafields.custom_fields["address"] }}</div>
+                    {% if page.metafields.custom_fields["address_comment"] != blank} %}
+                    <div class="custom-field--value comment">
+                      {{ page.metafields.custom_fields["address_comment"] }}
+                    </div>
+                    {% endif %}
+                  </div>
+                  {% endif %}
+  
+                  {% if page.metafields.custom_fields["phone_number"] != blank} %}
+                  <div class="custom-field--value basic-info">  
+                    <i class="fas fa-phone-alt"></i><a href="tel:{{ page.metafields.custom_fields["phone_number"] }}">{{ page.metafields.custom_fields["phone_number"] }}</a>
+                  </div>
+                  {% endif %}
+  
+                  {% if page.metafields.custom_fields["custom_hours"] != blank %}
+                  <h2>Store Hours</h2>
+                  <div id="customHours">
+                    {{ page.metafields.custom_fields["custom_hours"] }}
+                  </div>
+                  {% else %}
+                  {% if page.metafields.custom_fields["open_status"] == "Open" %}
+                  <h2>Store Hours</h2>
+                  <div id="hours"></div>
+                  {% endif %}
+                  {% endif %}
+  
+                  <h2>Additional Information</h2>
+                  {% if page.metafields.custom_fields["additional_info"] != blank} %}
+                  <div class="custom-field--value">
+                    {{ page.metafields.custom_fields["additional_info"] }}
+                  </div>
+                  {% endif %}
+                  {% section 'location-additional-info' %}
                 </div>
-                {% endif %}
-
-                {% if page.metafields.custom_fields["phone_number"] != blank} %}
-                <div class="custom-field--value basic-info">  
-                  <i class="fas fa-phone-alt"></i><a href="tel:{{ page.metafields.custom_fields["phone_number"] }}">{{ page.metafields.custom_fields["phone_number"] }}</a>
+  
+                <div class="location-image">
+                  <img src="{{ page.metafields.custom_fields["store_image"] }}" alt="{{ page.title | escape }}" title="{{ page.title | escape }}" width="100%" height="" />
                 </div>
-                {% endif %}
-
-
-
-                {% if page.metafields.custom_fields["custom_hours"] != blank %}
-                <h2>Store Hours</h2>
-                <div id="customHours">
-                  {{ page.metafields.custom_fields["custom_hours"] }}
-                </div>
-                {% else %}
-                {% if page.metafields.custom_fields["open_status"] == "Open" %}
-                <h2>Store Hours</h2>
-                <div id="hours"></div>
-                {% endif %}
-                {% endif %}
-
-                <h2>Additional Information</h2>
-                {% if page.metafields.custom_fields["additional_info"] != blank} %}
-                <div class="custom-field--value">
-                  {{ page.metafields.custom_fields["additional_info"] }}
-                </div>
-                {% endif %}
-                {% section 'location-additional-info' %}
-              </div>
-              <div class="location-image">
-                {{ page.content }}
-              </div>
+                
+                <div class="location-map">{{ page.metafields.custom_fields["google_map_embed"] }}</div>
+                
             </div>
           </div>
           {% if section.settings.page_link_list != blank or section.settings.show_sidebar_page_collections or section.settings.show_page_sidebar_sale %}
