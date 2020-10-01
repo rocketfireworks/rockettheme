@@ -84,8 +84,6 @@
 		{% if section.settings.show_header_phone or section.settings.show_header_email %}
         padding-top: {{top_menu_padding}};
 		padding-bottom: {{navbar_padding}};
-		{% else %}
-        padding-top: {{top_menu_padding_plus10}};
 		{% endif %}
 	{% else %}
 		{% if section.settings.show_header_phone or section.settings.show_header_email %}
@@ -148,7 +146,6 @@
 #header .hed_right .header-contact {
 	clear:both;
 	float:right;
-	margin-top:10px;
 }
 @media (max-width: 989px) {
 	#header .hed_right ul li {
@@ -156,13 +153,6 @@
 	}
 }
 
-@media (max-width: 767px) {
-	#header .hed_right, #header .hed_right .header-contact {
-		padding:0;
-		float:none;
-		text-align: center;
-	}
-}
 @media  (min-width: 768px) and (max-width: 800px) {
 }
 {% endif %}
@@ -180,7 +170,7 @@
     font-size: 22px;
     line-height: 20px;
     {% if section.settings.logo != blank %}
-    padding:0 15px 0 0;
+    padding:0;
     {% else %}
     padding:20px 10px 15px 0;
     {% endif %}
@@ -497,7 +487,7 @@ figure.effect-chico:hover img {
       {
         "type": "url",
         "id": "header_location",
-        "label": "Store location",
+        "label": "Store location"
       },
       {
         "type": "text",

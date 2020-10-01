@@ -1,16 +1,16 @@
 {% if template == 'cart' %}
 
 <div class="header_top cartPageHeader">
-  <div class="container">
+  <div class="header_top_container">
     <div class="quickSecureMessage">
       <p>QUICK & SECURE CHECKOUT</p>
     </div>
-    <div class="top_menu hidden-ms hidden-xs">
+    <div class="top_menu">
       {% if section.settings.logo != blank %}
-      <a class="navbar-brand" href="/" style="max-width:{{section.settings.logo_max_width | plus: 15  | append: "px"}}">
+      <a class="navbar-brand" href="/" style="max-width:{{section.settings.logo_max_width | append: "px"}}">
         <img src="{{ section.settings.logo | img_url: logo_scale_width }}" 
-             alt="{% if  section.settings.logo.alt != blank %} {{ section.settings.logo.alt}} {% else %}{{ shop.name }} {%endif %}"               
-             class="img-responsive"  />
+              alt="{% if  section.settings.logo.alt != blank %} {{ section.settings.logo.alt}} {% else %}{{ shop.name }} {%endif %}"               
+              class="img-responsive"  />
       </a>
       {% else %}
         <a class="navbar-brand text-logo" href="/">{{ shop.name }}</a>
@@ -38,13 +38,13 @@
 {% else %}
 
 <div class="header_top">
-  <div class="container">
+  <div class="header_top_container">
     <div class="top_menu hidden-ms hidden-xs">
       {% if section.settings.logo != blank %}
-      <a class="navbar-brand" href="/" style="max-width:{{section.settings.logo_max_width | plus: 15  | append: "px"}}">
+      <a class="navbar-brand" href="/" style="max-width:{{section.settings.logo_max_width | append: "px"}}">
         <img src="{{ section.settings.logo | img_url: logo_scale_width }}" 
-             alt="{% if  section.settings.logo.alt != blank %} {{ section.settings.logo.alt}} {% else %}{{ shop.name }} {%endif %}"               
-             class="img-responsive"  />
+              alt="{% if  section.settings.logo.alt != blank %} {{ section.settings.logo.alt}} {% else %}{{ shop.name }} {%endif %}"               
+              class="img-responsive"  />
       </a>
       {% else %}
         <a class="navbar-brand text-logo" href="/">{{ shop.name }}</a>
