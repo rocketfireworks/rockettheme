@@ -255,9 +255,9 @@ Location Page
     grid-column: 1 / 3;
     grid-row: 1 / 2;
   }
-  .location-info {
+  .location-general {
     grid-column: 1 / 2;
-    grid-row: 2 / 4;
+    grid-row: 2 / 3;
     a {
       color: #16142C;
       &:hover {
@@ -267,6 +267,10 @@ Location Page
     i {
       width: 18px;
     }
+  }
+  .location-info {
+    grid-column: 1 / 2;
+    grid-row: 3 / 4;
   }
   .location-image {
     grid-column: 2 / 3;
@@ -289,12 +293,17 @@ Location Page
       grid-column: 1 / 3;
       width: 60%;
     }
-    .location-info {
+    .location-general {
       grid-row: 3 / 4;
       grid-column: 1 / 3;
+      width: 100%;
     }
     .location-map {
       grid-row: 4 / 5;
+      grid-column: 1 / 3;
+    }
+    .location-info {
+      grid-row: 5 / 6;
       grid-column: 1 / 3;
     }
   }
