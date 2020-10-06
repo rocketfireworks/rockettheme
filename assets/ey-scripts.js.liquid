@@ -447,14 +447,21 @@ function newBonusRewards_load(bonusTotal){
     }
 }
 function showSubMenu() {
-  $('.herobanner-overlay').css('opacity','0.7');
-  $(this).children('.navPage-subMenu').css('visibility', 'visible');
-  $(this).children('.navPage-subMenu').css('opacity', '1');
+  let that = $(this);
+  $('.herobanner-overlay').removeClass('hidden');
+  setTimeout(function () {
+    $('.herobanner-overlay').removeClass('visuallyhidden');
+    that.children('.navPage-subMenu').css('visibility', 'visible');
+    that.children('.navPage-subMenu').css('opacity', '1');
+  }, 300);
 }
 function hideSubMenu() {
-  $('.herobanner-overlay').css('opacity','0');
   $(this).children('.navPage-subMenu').css('visibility', 'hidden');
   $(this).children('.navPage-subMenu').css('opacity', '0');
+  $('.herobanner-overlay').addClass('visuallyhidden');
+  setTimeout(function () {
+    $('.herobanner-overlay').addClass('hidden');
+}, 300);
 }
 $('.navPages-item').mouseenter(showSubMenu);
 $('.navPages-item').focusin(showSubMenu);
