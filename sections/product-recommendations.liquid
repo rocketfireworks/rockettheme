@@ -2,19 +2,17 @@
  {% assign img_size = "350x"%}
 <div id="content" class="recommendation_content" data-section-id="{{ section.id }}" data-section-type="product-recommendations">
   <div class="container">  
-    <div class="h_row_4">
-      <div class="clearfix">
-        <h3>{{ section.settings.related_products_title}} &nbsp;</h3>
-      </div>
-      <div class="carosel product_c">
-        <div class="row"> 
-          <div id="featured-products-section-{{ section.id }}" data-product-id="{{ product.id }}" data-limit="12" class="product-recommendations owl-carousel owl-theme {% if settings.align_height %} use_align_height {% else %} use_image_height {% endif %}">
-              {%- if recommendations.products_count > 0 -%}
-              {%- for product in recommendations.products -%}
-              {% include 'product-loop' %}
-              {%- endfor -%}
-              {%- endif -%}         
-          </div>
+    <div class="clearfix">
+      <h3>{{ section.settings.related_products_title}} &nbsp;</h3>
+    </div>
+    <div class="carosel product_c">
+      <div class="row"> 
+        <div id="featured-products-section-{{ section.id }}" data-product-id="{{ product.id }}" data-limit="12" class="product-recommendations owl-carousel owl-theme {% if settings.align_height %} use_align_height {% else %} use_image_height {% endif %}">
+            {%- if recommendations.products_count > 0 -%}
+            {%- for product in recommendations.products -%}
+            {% include 'product-loop' %}
+            {%- endfor -%}
+            {%- endif -%}         
         </div>
       </div>
     </div>
