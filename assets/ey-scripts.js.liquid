@@ -446,23 +446,26 @@ function newBonusRewards_load(bonusTotal){
       }
     }
 }
+
 function showSubMenu() {
   let that = $(this);
   $('.herobanner-overlay').removeClass('hidden');
-  setTimeout(function () {
+  // setTimeout(function () {
     $('.herobanner-overlay').removeClass('visuallyhidden');
     that.children('.navPage-subMenu').css('visibility', 'visible');
     that.children('.navPage-subMenu').css('opacity', '1');
-  }, 300);
+  // }, 300);
 }
+
 function hideSubMenu() {
   $(this).children('.navPage-subMenu').css('visibility', 'hidden');
   $(this).children('.navPage-subMenu').css('opacity', '0');
   $('.herobanner-overlay').addClass('visuallyhidden');
-  setTimeout(function () {
+  // setTimeout(function () {
     $('.herobanner-overlay').addClass('hidden');
-}, 300);
+  // }, 300);
 }
+
 $('.navPages-item').mouseenter(showSubMenu);
 $('.navPages-item').focusin(showSubMenu);
 $('.navPages-item').mouseleave(hideSubMenu);
