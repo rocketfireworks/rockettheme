@@ -11,23 +11,6 @@
     <div class="container" data-section-id="{{ section.id }}" data-section-type="product-page-section" data-reviews-stars="{% if section.settings.product_reviews or section.settings.show_product_reviews_stars %}true{% else %}false{% endif%}">
       <div class="product-json">{{ product | json }}</div> 
       <input id="product-handle" type="hidden" value="{{product.handle}}"/> <!--  using for JS -->
-      {% include 'breadcrumb' %}
-      <div class="title clearfix">
-        
-        <div class="title_right">
-          <div class="next-prev">
-            {% if collection %}            
-            {% if collection.previous_product %}
-            <a href="{{ collection.previous_product }}"><i class="fa fa-angle-double-left"></i> {{ 'products.general.previous_product' | t }}</a>
-            {% endif %}
-            {% if collection.next_product %}
-            {% if collection.previous_product %} | {% endif %}
-            <a href="{{ collection.next_product }}">{{ 'products.general.next_product' | t }} <i class="fa fa-angle-double-right"></i></a>
-            {% endif %}
-            {% endif %}
-          </div>
-        </div>
-      </div>
       <div class="pro_main_c">
         <div class="row swatch-product-id-{{product.id}}">
           <div class="col-lg-6 col-md-7 col-sm-6">
