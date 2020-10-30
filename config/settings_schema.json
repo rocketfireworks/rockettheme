@@ -47,13 +47,13 @@
         "type": "color",
         "id": "header_text_color",
         "label": "Regular text",
-        "default": "#898989"
+        "default": "#16142c"
       },
       {
         "type": "color",
         "id": "header_top_link_color",
         "label": "Header top links",
-        "default": "#898989"
+        "default": "#16142c"
       },
       {
         "type": "color",
@@ -210,14 +210,14 @@
         "id": "content_text_color",
         "label": "Content text",
         "info": "[Learn more](https:\/\/support.milehighthemes.com\/hc\/en-us\/articles\/360020083754-Understanding-heading-and-text-color-options)",
-        "default": "#898989"
+        "default": "#16142c"
       },
       {
         "type": "color",
         "id": "content_link_color",
         "label": "Content links",
         "info": "[Learn more](https:\/\/support.milehighthemes.com\/hc\/en-us\/articles\/360020083754-Understanding-heading-and-text-color-options)",
-        "default": "#898989"
+        "default": "#16142c"
       },
       {
         "type": "header",
@@ -239,7 +239,7 @@
         "type": "color",
         "id": "footer_text_color",
         "label": "Regular text",
-        "default": "#898989"
+        "default": "#16142c"
       },
       {
         "type": "color",
