@@ -28,22 +28,26 @@
 
              {% form 'product', product %}
 
-
                 <div class="desc_blk">
-                  <h1 >{{ product.title | escape }}</h1>
 
+                  <h1>{{ product.title | escape }}</h1>
+                
                   {% if section.settings.show_product_sku or section.settings.show_product_vendor or section.settings.show_product_quantity  %}
                   <div class="prod_sku_vend">
+                    
                     {% if section.settings.show_product_sku %}
                     <div class="variant-sku">{{'products.general.product_sku' | t }}: {{ product.variants[0].sku }}</div>
                     {% endif %}
+                
                     {% if section.settings.show_product_vendor %}
-                    <div class="product-vendor">{{'products.general.product_vendor' | t }}:  {{ product.vendor | link_to_vendor }}</div>
+                    <div class="product-vendor">{{'products.general.product_vendor' | t }}: {{ product.vendor | link_to_vendor }}</div>
                     {% endif %}
-                     {% if section.settings.show_product_quantity %}
+                
+                    {% if section.settings.show_product_quantity %}
                     <div id="variant-inventory">
                     </div>
                     {% endif %}
+                
                   </div>
                   {% endif %}
 
@@ -69,6 +73,13 @@
                       {% endif %}
                     </div>
                    
+                    {% unless product.price_max == 0 and settings.hide_price0_box_and_button %} 
+                    <div class="qty product-page-qty"> <span class="productPGQtyLable">Quantity</span><a class="minus_btn" ></a>
+                      <input type="text" id="quantity" name="quantity" class="txtbox" value="1" min="1">
+                      <a class="plus_btn" ></a>             
+                    </div>
+                    {% endunless %}
+                    
                   </div>
                   {% endif %}
 				  	
