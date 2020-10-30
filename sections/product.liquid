@@ -312,25 +312,19 @@
                         <input type="submit" name="add" class="btn_c" id="addToCart" value="{{ 'products.product.add_to_cart' | t }}">
                       {% endif %}
                     {% endunless %}
-                  <div class="maximum-in-stock-error">{{ 'products.product.maximum_quantity_error' | t }}</div>
+                  
+                  <div class="share">
+                    <div class="social-sharing">
+                      <ul>
+                        {% include 'social-sharing' %}
+                      </ul>
+                    </div>
+                  </div>
                   </div>
                   {% endif %}
 
                   <!-- bottom cart section end -->
 
-                  <!-- <div class="review_row clearfix">
-                    {% if section.settings.product_reviews %}
-                    <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
-                    {% endif %}
-
-                    <div class="share">
-                      <div class="social-sharing">
-                        <ul>
-                          {% include 'social-sharing' %}
-                        </ul>
-                      </div>
-                    </div>
-                  </div> -->
 
                   {% if section.settings.enable_description_enhancements%}
                   {% if descriptionSecondPart != blank %}
