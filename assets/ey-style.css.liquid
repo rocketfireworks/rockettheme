@@ -506,7 +506,8 @@
 .rte.description-first-part,
 .rte.main-product-description-product,
 #content .pro_main_c .desc_blk .desc_blk_bot {
-  padding: 15px 0px;
+  padding: 10px 0px;
+  display: flex;
 }
 
 .swatch {
@@ -566,7 +567,6 @@
 .template-product input#addToCart.btn_c {
   float: none;
   display: block;
-  margin-top: 30px;
   background: #3dbfde;
   border-radius: 0;
   text-transform: uppercase;
@@ -593,6 +593,8 @@
   display: inline-flex;
   align-items: center;
   overflow: initial;
+  margin: 0;
+  margin-left: 20px;
 }
 
 #content .pro_main_c .desc_blk .desc_blk_bot .price {
@@ -632,7 +634,7 @@
 .product-page-qty .productPGQtyLable {
   color: #16142c;
   padding-right: 10px;
-  font-size: 18px;
+  font-size: 0;
   font-weight: bold;
   margin: 0.5em 0;
 }
@@ -649,20 +651,24 @@
 #content .pro_main_c .desc_blk .desc_blk_bot .minus_btn,
 #content .pro_main_c .desc_blk .desc_blk_bot .plus_btn {
   float: none;
-  width: 3.125em;
-  height: 3.125em;
-  border: 1px solid #d7dbdb;
-  border-right: none;
+  width: 1.5em;
+  height: 2em;
+  border: 1px solid #ffffffff;
   border-radius: 0;
-  background: url(minus.png) no-repeat center center;
   cursor: pointer;
-  background-color: #eae8e8;
+  padding: 10px 20px;
 }
 
+#content .pro_main_c .desc_blk .desc_blk_bot .minus_btn:hover,
+#content .pro_main_c .desc_blk .desc_blk_bot .plus_btn:hover {
+  /* background-color: #eae8e8; */
+  border: 1px solid #d7dbdb;
+}
 #content .pro_main_c .desc_blk .desc_blk_bot .txtbox {
   float: none;
-  width: 75px;
-  height: 3.125em;
+  width: 2em;
+  height: 2em;
+  border: none;
 }
 
 .rte.main-product-description-product {
@@ -739,6 +745,35 @@
   height: auto;
   max-height: 250px;
   margin: 0 auto;
+}
+
+#content .pro_main_c .desc_blk .review_row {
+  padding: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#content .pro_main_c .desc_blk .review_row div.share, #content .tag_c div.share {
+  float: none;
+}
+
+#content .pro_main_c .desc_blk .review_row div.share div.social-sharing, #content .tag_c div.share div.social-sharing {
+  float: none;
+}
+
+#content .pro_main_c ul.start_list, span.spr-badge {
+  float: none;
+  margin: 0;
+}
+
+#content .product_reviews .spr-badge-caption {
+  color: #16142c;
+}
+
+#content .pro_main_c .desc_blk .review_row div.share div.social-sharing ul li a, 
+#content .tag_c div.share div.social-sharing ul li a {
+  background: #333;
 }
 
 /* Mega Menu */

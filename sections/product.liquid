@@ -34,7 +34,7 @@
                 
                   {% if section.settings.show_product_sku or section.settings.show_product_vendor or section.settings.show_product_quantity  %}
                   <div class="prod_sku_vend">
-                    
+
                     {% if section.settings.show_product_sku %}
                     <div class="variant-sku">{{'products.general.product_sku' | t }}: {{ product.variants[0].sku }}</div>
                     {% endif %}
@@ -48,6 +48,12 @@
                     </div>
                     {% endif %}
                 
+                  </div>
+                  {% endif %}
+                
+                  {% if section.settings.product_reviews %}
+                  <div class="product-reviews">
+                    <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
                   </div>
                   {% endif %}
 
@@ -296,12 +302,6 @@
                   {% if section.settings.show_product_cart_postion == "bottom" %} 
                             
                   <div class="desc_blk_bot clearfix">
-                    {% unless product.price_max == 0 and settings.hide_price0_box_and_button %} 
-                    <div class="qty product-page-qty"> <span class="productPGQtyLable">Quantity</span><a class="minus_btn" ></a>
-                      <input type="text" id="quantity" name="quantity" class="txtbox" value="1" min="1">
-                      <a class="plus_btn" ></a>             
-                    </div>
-                    {% endunless %}
                    {% unless product.price_max == 0 and settings.hide_price0_box_and_button %} 
                      {% if section.settings.show_smart_checkout%}
                       <div class="product_payments_btns">
