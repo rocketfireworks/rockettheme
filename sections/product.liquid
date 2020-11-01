@@ -59,7 +59,7 @@
 
                   {% if section.settings.show_product_cart_postion == "bottom" %} 
                             
-                  <div class="desc_blk_bot clearfix">
+                  <div class="desc_blk_bot">
                      
                     <div class="price  {% if section.settings.show_smart_checkout %} smart_checkout_price_pos {% endif %}">
                       {% unless product.price_max == 0 and settings.custom_price0_text != blank %} 
@@ -89,6 +89,8 @@
                   </div>
                   {% endif %}
 				  	
+                  <div class="maximum-in-stock-error">{{ 'products.product.maximum_quantity_error' | t }}</div>
+                  
                   {% if descriptionSecondPart != blank %}
                   <div class="rte description-first-part">
                     {{ descriptionFirstPart }}
