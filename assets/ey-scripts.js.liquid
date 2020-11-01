@@ -470,3 +470,20 @@ $('.navPages-item').mouseenter(showSubMenu);
 $('.navPages-item').focusin(showSubMenu);
 $('.navPages-item').mouseleave(hideSubMenu);
 $('.navPages-item').focusout(hideSubMenu);
+
+// SHOW/HIDE SHARE SOCIAL ICONS
+let shareButton = $('.share-button');
+let shareIconContainer = $('.social-sharing');
+
+shareButton.on('mouseover', showSocial);
+shareIconContainer.on('mouseover', showSocial);
+shareButton.on('mouseleave', hideSocial);
+shareIconContainer.on('mouseleave', hideSocial);
+
+function showSocial() {
+  shareIconContainer.css('display', 'block');
+}
+
+function hideSocial() {
+  shareIconContainer.css('display', 'none');
+}

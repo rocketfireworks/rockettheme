@@ -301,7 +301,7 @@
                   {% endif %}
                   {% if section.settings.show_product_cart_postion == "bottom" %} 
                             
-                  <div class="desc_blk_bot clearfix">
+                  <div class="desc_blk_bot">
                    {% unless product.price_max == 0 and settings.hide_price0_box_and_button %} 
                      {% if section.settings.show_smart_checkout%}
                       <div class="product_payments_btns">
@@ -314,6 +314,7 @@
                     {% endunless %}
                   
                   <div class="share">
+                    <div class="share-button"><i class="fas fa-share-alt"></i></div>
                     <div class="social-sharing">
                       <ul>
                         {% include 'social-sharing' %}
