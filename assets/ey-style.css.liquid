@@ -1,9 +1,6 @@
 #content {
   background: #fff;
 }
-#content.recommendation_content {
-  padding-top: 10px;
-}
 
 /*===== Toni's Edits ======*/
 
@@ -269,10 +266,11 @@
 
 .eyFloatingCart .cart_menu ul li,
 .template-cart #content .cart_tbl .title_row ul li {
-  border-bottom: 1px solid #707070;
-  color: #707070;
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 14px;
+}
+
+.eyFloatingCart .cart_menu ul li:last-child {
+  text-align: right;
 }
 
 .template-cart .line_items_separator {
@@ -291,8 +289,12 @@
 .template-cart #content .cart_tbl ul li .minus_btn,
 .template-cart #content .cart_tbl ul li .plus_btn,
 .template-cart #content .cart_tbl ul li .txtbox {
-  border-radius: 0;
-  border: 1px solid #707070;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.eyFloatingCart .cart_menu ul li .txtbox {
+  border: 1px solid #d7dbdb;
 }
 
 .eyFloatingCart .cart_menu .total_row ul,
@@ -659,7 +661,7 @@
   border: 1px solid #ffffffff;
   border-radius: 0;
   cursor: pointer;
-  padding: 10px 20px;
+  padding: 10px 15px;
 }
 
 #content .pro_main_c .desc_blk .desc_blk_bot .minus_btn:hover,
@@ -669,7 +671,7 @@
 }
 #content .pro_main_c .desc_blk .desc_blk_bot .txtbox {
   float: none;
-  width: 2em;
+  width: 3em;
   height: 2em;
   border: none;
 }
@@ -812,11 +814,11 @@
 #content .desc_blk_bot .share .social-sharing ul li a {
   background: #16142c;
   color: #eae8e8;
-  font-size: 1.3333em;
+  font-size: 1.2em;
   display: block;
-  width: 1.8em;
-  height: 1.8em;
-  line-height: 1.8em;
+  width: 1.5em;
+  height: 1.5em;
+  line-height: 1.5em;
   margin-right: 4px;
   border-radius: 50%;
   text-align: center;
@@ -1582,7 +1584,6 @@
 
   .template-product input#addToCart.btn_c {
     max-width: unset;
-    margin-top: 20px;
   }
 
   .swatch .header {
@@ -1776,7 +1777,6 @@
   }
   .total_row {
     width: 100% !important;
-    padding-right: 20px !important;
   }
 }
 @media (max-width: 350px) {

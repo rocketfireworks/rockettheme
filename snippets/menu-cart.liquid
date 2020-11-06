@@ -67,12 +67,10 @@
           <span class="price money">{{ item.original_line_price | money }}</span>
           {% endif %}
         </li>
-        
-        <hr class="line_items_separator">
       </ul>
       {% endfor %}
     </div>
-    <div class="total_row clearfix">
+    <div class="total_row">
       <ul>
         <li>
           {%- if cart.cart_level_discount_applications != blank -%}
