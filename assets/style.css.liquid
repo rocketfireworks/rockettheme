@@ -318,7 +318,7 @@ Header
   position:relative;
   -webkit-box-shadow: 0 2px 2px rgba(11, 25, 28, .12);
   -moz-box-shadow: 0 2px 2px rgba(11, 25, 28, .12);
-  box-shadow: 0 2px 2px rgba(11, 25, 28, .12);
+  box-shadow: 0px 4px 10px rgb(11 25 28 / 0.3);
 }
 
 #header .header_bot .container {
@@ -9081,9 +9081,6 @@ a.item-name{
  display: none; 
 }
 @media (max-width: 480px){
-  #header .mobile-portrait-search{
-    margin: 0 -10px;
-  }
 }
 @media (max-width: 560px){
   .visible-mobile-xs{
@@ -9099,8 +9096,6 @@ a.item-name{
   }
   .mobile-landscape-search{
    float: right; 
-   margin-right: 3px; 
-   margin-top: -3px;  
   }
 }
 
@@ -9464,7 +9459,6 @@ img.lazyloaded ~ .spinner-cube {
   position: relative !important;
   left: 0;
   top: 0;
-  max-height: {{settings.collection_height}}px !important;
   width: 100%;
   object-fit: contain;
   backface-visibility: hidden;
