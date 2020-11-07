@@ -297,8 +297,8 @@ jQuery(document).ready(function() {
       if(cart.items.length){
 
         var toAppend = [],
-            tableHeader = '<ul><li>{{ 'cart.general.photo' | t }}</li>'+
-        '<li>{{ 'cart.general.name' | t }}</li>'+
+            tableHeader = '<ul><li>{{ 'cart.general.name' | t }}</li>'+
+        '<li class="photo-column-header">{{ 'cart.general.photo' | t }}</li>'+
         '<li>{{ 'cart.general.price' | t }}</li>'+
         '<li>{{ 'cart.general.quantity' | t }}</li>'+
         '<li>{{ 'cart.general.total' | t }}</li></ul>';

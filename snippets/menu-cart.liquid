@@ -6,8 +6,8 @@
   <form action="/cart" method="post" novalidate>
     <div class="cart_row">
       <ul>
-        <li>{{ 'cart.general.photo' | t }}</li>
         <li>{{ 'cart.general.name' | t }}</li>
+        <li class="photo-column-header">{{ 'cart.general.photo' | t }}</li>
         <li>{{ 'cart.general.price' | t }}</li>
         <li>{{ 'cart.general.quantity' | t }}</li>
         <li>{{ 'cart.general.total' | t }}</li>
@@ -112,7 +112,7 @@
       {% if template == 'cart' %}
       <button type="submit" name="checkout" value="{{ 'cart.general.checkout' | t }}" class="btn_c">{{ 'cart.general.checkout' | t }}</button>
       {%endif%}
-      <a href="/cart" class="btn_c floatCCartBtn">view cart &amp; Checkout</a>
+      <a href="/cart" class="btn_c floatCCartBtn">Continue to Checkout</a>
       <a href="javascript:void(0)" class="info_btn"><span class="fa fa-chevron-left"></span>{{ 'cart.general.continue_browsing' | t }}</a>
     </div>
     <div id="additional-checkout-block" class="text-right additional-checkout-buttons">
