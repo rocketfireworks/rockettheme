@@ -1661,7 +1661,7 @@ transform: translate(-50%,-50%);
   -webkit-transition: all 0.5s;
   -o-transition: all 0.5s;
   background:#ffffff;
-  margin: 0;
+  margin: 0 10px;
 }
 #content .product_c .view-grid .main_box:hover {
   /*-moz-transform: scale(1.1);
@@ -3666,7 +3666,6 @@ Collection / Product
 }
 #content .pro_main_c .desc_blk .desc_blk_bot a.btn_c, input#addToCart.btn_c, .add-address .btn_c {
   margin:0;
-  float:right;
 }
 .add-address a.btn_c {
   max-width:250px;
@@ -6412,7 +6411,10 @@ Responsive Styles
   #content .collection-list .main_box .box_1 .product-details a.info_btn {
     display: none;
   }
-
+  #content .desc_blk_bot input#addToCart.btn_c {
+    float: none;
+    margin-right: auto;
+  }
   #call-to-action .f_top .ftop_blk {
     padding:20px 35px 20px 0;
   }
@@ -6503,9 +6505,6 @@ Responsive Styles
 }
 
 @media (min-width: 480px) and (max-width: 768px) {
-  .desc_blk_bot input#addToCart.btn_c {
-    float: right;
-  }
   #call-to-action .f_top .ftop_blk {
     padding:20px 35px 20px 0;
     border-right:none;
@@ -7263,10 +7262,6 @@ Responsive Styles
     float:none;
     clear:both;
     padding-top:10px;
-  }
-  .desc_blk_bot input#addToCart.btn_c {
-    float: none;
-    margin: 0 auto;
   }
   a.spr-summary-actions-newreview, .spr-button, .spr-button-primary, .spr-container button, .spr-container .btn, .spr-container .btn-primary {
     margin: 20px auto 0;
