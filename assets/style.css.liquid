@@ -3053,6 +3053,7 @@ Cart
   width:100%;
   margin:0;
   padding:0;
+  border-bottom:1px solid #efefef;
 }
 #content .cart_tbl .title_row ul {
   margin:0;
@@ -3066,9 +3067,10 @@ Cart
   font-weight:700;
 }
 #content .cart_tbl ul {
+  display:table-row;
+  border-bottom:1px solid #efefef;
   margin:0;
   padding:0;
-  display:table-row;
   width:100%;
 }
 #content .cart_tbl ul li {
@@ -3076,7 +3078,6 @@ Cart
   padding:15px 0;
   display:table-cell;
   overflow:hidden;
-  border-bottom:1px solid #efefef;
   vertical-align:middle;
 }
 #content .cart_tbl ul li:nth-child(1) {
@@ -3101,6 +3102,7 @@ Cart
   margin:0;
   padding:0;
   width:100%;
+  border-collapse: collapse;
 }
 #content .cart_tbl ul li .thumb {
   width:80px;
@@ -3280,7 +3282,6 @@ Cart
 }
 #content .cart_btn button.next_btn {
   max-width:200px;
-  height:40px;
   background:{{ settings.primary_color }};
   text-align:center;
   border:none;
@@ -6186,20 +6187,12 @@ Responsive Styles
 }
 
 @media (min-width: 790px) and (max-width: 991px) {
-  #content .cart_tbl ul li .minus_btn {
-    width:20px;
-    height:20px;
-    margin-top:5px;
-  }
-  #content .cart_tbl ul li .plus_btn {
-    width:20px;
-    height:20px;
-    margin-top:5px;
-  }
+  #content .cart_tbl ul li .minus_btn,
+  #content .cart_tbl ul li .plus_btn,
   #content .cart_tbl ul li .txtbox {
-    width:30px;
-    height:20px;
-    margin-top:5px;
+    width:1.875em;
+    height:1.25em;
+    padding:0 5px;
   }
   #content .cart_tbl ul li .thumb {
     width: 60px;
@@ -6301,16 +6294,12 @@ Responsive Styles
     width:50px;
     height:auto;
   }
-  #content .cart_tbl ul li .minus_btn {
-    width:20px;
-    height:20px;
-  }
-  #content .cart_tbl ul li .plus_btn {
-    width:20px;
-    height:20px;
-  }
+  #content .cart_tbl ul li .minus_btn,
+  #content .cart_tbl ul li .plus_btn,
   #content .cart_tbl ul li .txtbox {
-    height:20px;
+    width: 1.875em;
+    height: 1.25em;
+    padding:0 5px;
   }
   #content .cart_tbl ul li h5 {
     line-height:20px;
