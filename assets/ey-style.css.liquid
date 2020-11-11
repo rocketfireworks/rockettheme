@@ -708,24 +708,34 @@
   border-top: solid #eae8e8 10px !important;
 }
 
+#content .main_box .price {
+  position: absolute;
+  right: 0;
+  top: 0;
+  background: #3dbfde;
+  padding: 3px 6px;
+  font-size: 14px;
+  z-index: 4;
+  font-weight: bold;
+}
+
 #content .main_box .box_1 .bulkDeals,
 #content .main_box .box_1 .staffPick,
 #content .main_box .box_1 .swatchBadge {
   color: #fff;
   border-radius: 0px;
   display: block;
-  font-size: 12px;
   position: absolute;
   right: 0;
+  bottom: 0;
   text-align: center;
   text-transform: uppercase;
-  top: 0;
   z-index: 3;
-  height: 35px;
+  height: 26px;
   width: auto;
   font-weight: bold;
-  padding: 5px;
-  line-height: 25px;
+  padding: 3px 6px;
+  line-height: 22px;
 }
 
 #content .main_box .box_1 .bulkDeals {
@@ -1165,7 +1175,6 @@
   background: #3dbfde;
 }
 
-#content .main_box .desc .price,
 #content .main_box .productVideoIcon {
   width: 49%;
   display: inline-block;
@@ -1814,4 +1823,47 @@
 
 .cart_tbl .photo-column-header {
   visibility: hidden;
+}
+.card-price {
+	display: inline-block;
+  width: auto;
+	height: 26px;
+	background-color: #3dbfde;
+	-webkit-border-radius: 3px 4px 4px 3px;
+	-moz-border-radius: 3px 4px 4px 3px;
+	border-radius: 3px 4px 4px 3px;
+	border-left: 1px solid #3dbfde;
+	/* This makes room for the triangle */
+	margin-left: 15px;
+	position: relative;
+	font-weight: 300;
+	font-size: 22px;
+	line-height: 22px;
+}
+
+/* Makes the triangle */
+.card-price:before {
+	content: "";
+	position: absolute;
+  display: block;
+  top: -2px;
+  left: -14px;
+	width: 0;
+	height: 0;
+	border-top: 15px solid transparent;
+	border-bottom: 14px solid transparent;
+	border-right: 15px solid #3dbfde;
+}
+
+/* Makes the circle */
+.card-price:after {
+	content: "";
+	background-color: white;
+	border-radius: 50%;
+	width: 4px;
+	height: 4px;
+	display: block;
+	position: absolute;
+	left: -6px;
+	top: 11px;
 }

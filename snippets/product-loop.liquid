@@ -32,6 +32,15 @@
 <div class="main_box{% if section.settings.collection_overlay %} quick-view-overlay {% endif %}">
   <div>
     <div class="box_1">
+      
+      <div class="price card-price">
+        {% unless product.price_max == 0 and settings.custom_price0_text != blank %}
+          {% if product.price_varies %}{{ 'products.product.price_from' | t }}{% endif %} 
+          <span class="money">{{ product.price | money }}</span>
+          {% if on_sale %}<span class="compare-price money">{{ product.compare_at_price | money }}</span>{% endif %}
+          {% else %}<span>{{settings.custom_price0_text }}</span> 
+        {% endunless %}	
+      </div>
       {% if bulk_deals %}
       <div class="bulkDeals"><i class="fa fa-dollar-sign"></i> Bulk Deals</div>
       {% endif %}
@@ -71,15 +80,6 @@
       <p>{{ product.type }}</p>
       {% endif %}    
 
-        <div class="price">
-          {% unless product.price_max == 0 and settings.custom_price0_text != blank %}
-            {% if product.price_varies %}{{ 'products.product.price_from' | t }}{% endif %} 
-            <span class="money">{{ product.price | money }}</span>
-            {% if on_sale %}<span class="compare-price money">{{ product.compare_at_price | money }}</span>{% endif %}
-        {% else %}  
-            <span>{{settings.custom_price0_text }}</span> 
-          {% endunless %}	
-            </div>
 
           {% if product.tags contains 'video_available' %}
           <span class="productVideoIcon"><a class="popup-youtube" href="{{ product.metafields.custom_fields["youtube_embed_code"] }}"><img src="{{ 'video-icon2.png' | asset_url }}"> View Video</a></span>
