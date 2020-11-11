@@ -224,7 +224,7 @@
       {% unless collection.handle == 'frontpage' %}
       <li {% if current_url contains collection.handle %}class="active"{% endif %}>
         {% capture collection_title %}{{ collection.title | escape }}{% endcapture %}
-        <a href="{{ collection.url }}" title="{{ collection_title }}">{{ collection_title }}</a>
+        <a href="{{ collection.url }}" title="{{ collection_title }}"> {% if current_url contains collection.handle %}<span class="fa fa-chevron-right"></span>{% endif %} {{ collection_title }}</a>
       </li>
       {% endunless %}
       {% endfor %}
