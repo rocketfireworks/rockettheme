@@ -31,31 +31,34 @@
                 <div class="desc_blk">
 
                   <h1>{{ product.title | escape }}</h1>
-                
-                  {% if section.settings.show_product_sku or section.settings.show_product_vendor or section.settings.show_product_quantity  %}
-                  <div class="prod_sku_vend">
 
-                    {% if section.settings.show_product_sku %}
-                    <div class="variant-sku">{{'products.general.product_sku' | t }}: {{ product.variants[0].sku }}</div>
-                    {% endif %}
-                
-                    {% if section.settings.show_product_vendor %}
-                    <div class="product-vendor">{{'products.general.product_vendor' | t }}: {{ product.vendor | link_to_vendor }}</div>
-                    {% endif %}
-                
-                    {% if section.settings.show_product_quantity %}
-                    <div id="variant-inventory">
+                  <div class="prod_sku_container">
+                    {% if section.settings.show_product_sku or section.settings.show_product_vendor or section.settings.show_product_quantity  %}
+                    <div class="prod_sku_vend">
+
+                      {% if section.settings.show_product_sku %}
+                      <div class="variant-sku">{{'products.general.product_sku' | t }}: {{ product.variants[0].sku }}</div>
+                      {% endif %}
+                  
+                      {% if section.settings.show_product_vendor %}
+                      <div class="product-vendor">{{'products.general.product_vendor' | t }}: {{ product.vendor | link_to_vendor }}</div>
+                      {% endif %}
+                  
+                      {% if section.settings.show_product_quantity %}
+                      <div id="variant-inventory">
+                      </div>
+                      {% endif %}
+                  
                     </div>
                     {% endif %}
-                
+                  
+                    {% if section.settings.product_reviews %}
+                    <div class="shopify-product-reviews">
+                      {{product.reviews_count}}
+                      <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+                    </div>
+                    {% endif %}
                   </div>
-                  {% endif %}
-                
-                  {% if section.settings.product_reviews %}
-                  <div class="product-reviews">
-                    <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
-                  </div>
-                  {% endif %}
 
                   {% if section.settings.show_product_cart_postion == "bottom" %} 
                             
@@ -87,9 +90,9 @@
                     {% endunless %}
                     
                   </div>
-                  {% endif %}
-				  	
+
                   <div class="maximum-in-stock-error">{{ 'products.product.maximum_quantity_error' | t }}</div>
+                  {% endif %}
                   
                   {% if descriptionSecondPart != blank %}
                   <div class="rte description-first-part">
@@ -167,15 +170,21 @@
                       </div>
                     </div>
                   </div>
-                  <div class="desc_blk_bot clearfix">
-                     {% unless product.price_max == 0 and settings.hide_price0_box_and_button %} 
-                    <div class="qty product-page-qty"><span class="productPGQtyLable">Quantity</span> <a class="minus_btn" ></a>
-                      
-                      <input type="text" id="quantity" name="quantity" class="txtbox" value="1" min="1">
-                      <a class="plus_btn" ></a> 
-                     </div>
-                    {% endunless %}
-                   <div class="price  {% if section.settings.show_smart_checkout %} smart_checkout_price_pos {% endif %}">
+                  
+                  {% unless product.price_max == 0 and settings.hide_price0_box_and_button %} 
+                  {% if section.settings.show_smart_checkout%}
+                  <div class="product_payments_btns">
+                  <input type="submit" name="add" class="btn_c" id="addToCart" value="{{ 'products.product.add_to_cart' | t }}">
+                  {{ form | payment_button }}
+                  </div>
+                  {% else %}
+                    <input type="submit" name="add" class="btn_c" id="addToCart" value="{{ 'products.product.add_to_cart' | t }}">
+                  {% endif %}
+                  {% endunless %}
+
+                  <div class="desc_blk_bot">
+
+                    <div class="price  {% if section.settings.show_smart_checkout %} smart_checkout_price_pos {% endif %}">
                       {% unless product.price_max == 0 and settings.custom_price0_text != blank %} 
                        <span id="productPrice"  class="money">
                        	  {{ product.selected_or_first_available_variant.price | money }}
@@ -194,18 +203,16 @@
                       {% endif %}
                     </div>
                     
-                    {% unless product.price_max == 0 and settings.hide_price0_box_and_button %} 
-                    {% if section.settings.show_smart_checkout%}
-                    <div class="product_payments_btns">
-                    <input type="submit" name="add" class="btn_c" id="addToCart" value="{{ 'products.product.add_to_cart' | t }}">
-                    {{ form | payment_button }}
-                    </div>
-                    {% else %}
-                      <input type="submit" name="add" class="btn_c" id="addToCart" value="{{ 'products.product.add_to_cart' | t }}">
-                    {% endif %}
+                     {% unless product.price_max == 0 and settings.hide_price0_box_and_button %} 
+                    <div class="qty product-page-qty"><span class="productPGQtyLable">Quantity</span> <a class="minus_btn" ></a>
+                      
+                      <input type="text" id="quantity" name="quantity" class="txtbox" value="1" min="1">
+                      <a class="plus_btn" ></a> 
+                     </div>
                     {% endunless %}
-                  <div class="maximum-in-stock-error">{{ 'products.product.maximum_quantity_error' | t }}</div>
                   </div>
+                  
+                  <div class="maximum-in-stock-error">{{ 'products.product.maximum_quantity_error' | t }}</div>
                   {% endif %}
 
                   <!-- cart section end -->
@@ -503,11 +510,11 @@
         "options": [
           {
             "value": "top",
-            "label": "Above product description"
+            "label": "Above product price"
           },
           {
             "value": "bottom",
-            "label": "Below product description"
+            "label": "Below product price"
           }
         ],
         "default": "bottom"
