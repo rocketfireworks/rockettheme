@@ -2,9 +2,6 @@
 
 <div class="header_top cartPageHeader">
   <div class="header_top_container">
-    <div class="quickSecureMessage">
-      <p>QUICK & SECURE CHECKOUT</p>
-    </div>
     <div class="top_menu">
       {% if section.settings.logo != blank %}
       <a class="navbar-brand" href="/" style="max-width:{{section.settings.logo_max_width | append: "px"}}">
@@ -16,21 +13,26 @@
         <a class="navbar-brand text-logo" href="/">{{ shop.name }}</a>
       {% endif %}
     </div>
+    <div class="quickSecureMessage">
+      <p>QUICK & SECURE CHECKOUT</p>
+    </div>
     <div class="hed_right">
       <div class="header-contact">
         <ul>
-          <li><a href="tel:{{ section.settings.header_phone | escape }}"><span class="fa fa-phone"></span>{{ section.settings.header_phone | escape }}</a></li>
+          <li>
+            <p>Order & Help Hotline</p><a href="tel:{{ section.settings.header_phone | escape }}"><span class="fa fa-phone"></span>{{ section.settings.header_phone | escape }}</a></li>
           <li><a href="#"><i class="fa fa-user"></i></a></li>
           <li><a href="javascript:void(0);" data-href="/cart" class=" navbar-cart cart-popup"><div class="cart-icon"><span class="count{% if cart.item_count < 1 %} hidden{% endif %}">{{ cart.item_count }}</span><i class="fa fa-shopping-cart"></i></div></a>
-            <div class="dropdown-grid-wrapper hidden">
-              <div class="dropdown-menu no-padding col-xs-12 col-sm-9 col-md-7" role="menu">
-                {% include 'menu-cart' %}
-              </div>
+          <div class="dropdown-grid-wrapper hidden">
+            <div class="dropdown-menu no-padding col-xs-12 col-sm-9 col-md-7" role="menu">
+              {% include 'menu-cart' %}
             </div>
-          </li>
+          </div>
+        </li>
         </ul>
       </div>
     </div>
+
   </div>
 </div>
 
