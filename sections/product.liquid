@@ -32,6 +32,15 @@
 
                   <h1>{{ product.title | escape }}</h1>
 
+                  <div class="share">
+                    <div class="share-button"><i class="fas fa-share-alt"></i></div>
+                    <div class="social-sharing">
+                      <ul>
+                        {% include 'social-sharing' %}
+                      </ul>
+                    </div>
+                  </div>
+
                   <div class="prod_sku_container">
                     {% if section.settings.show_product_sku or section.settings.show_product_vendor or section.settings.show_product_quantity  %}
                     <div class="prod_sku_vend">
@@ -321,15 +330,6 @@
                         <input type="submit" name="add" class="btn_c" id="addToCart" value="{{ 'products.product.add_to_cart' | t }}">
                       {% endif %}
                     {% endunless %}
-                  
-                  <div class="share">
-                    <div class="share-button"><i class="fas fa-share-alt"></i></div>
-                    <div class="social-sharing">
-                      <ul>
-                        {% include 'social-sharing' %}
-                      </ul>
-                    </div>
-                  </div>
                   </div>
                   {% endif %}
 
