@@ -37,12 +37,7 @@
           </div>
           {% else %}
 
-          {% comment %} This is value for slider max-height {% endcomment %}
-          {% if section.settings.enable_images_limit%}
-            {% assign max_img_height =  section.settings.images_limit_height %}
-          {% else %}
-            {% assign max_img_height = 250 %}
-          {% endif %}
+          {% assign max_img_height = 250 %}
 
           {% assign product_img_width = image.width %}
           {% assign product_img_height = image.height %}
