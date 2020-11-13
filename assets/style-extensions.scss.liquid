@@ -1765,3 +1765,87 @@ Ancillary Page Banner
   margin-top: -54px;
   font-weight: bold;
 }
+
+
+/* PRODUCT COUPON BANNER */
+.product-coupon {
+  position: relative;
+  font-size: 16px;
+  .coupon-image {
+    width: 100%;
+    min-height: 200px;
+  }
+  .coupon-content {
+    position: absolute;
+    width: 50%;
+    top: 0;
+    padding: 3em 5.25em;
+    max-height: 100%;
+    .coupon-title {
+      color: #ffda53;
+      text-transform: uppercase;
+      font-size: 3.85em;
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: 5px;
+    }
+    .coupon-subtitle {
+      color: #ffffff;
+      font-size: 1.625em;
+      font-weight: 600;
+      line-height: 1;
+    }
+    .coupon-button {
+      display: flex;
+      flex-wrap: wrap;
+      font-size: 1.4em;
+      a {
+        color: #000;
+        background-color: #3dbfde;
+        border: 1px solid #3dbfde;
+        padding: 0.5em 2em;
+        margin: 0.5em 0;
+        font-weight: 700;
+        text-transform: uppercase;
+        text-align: center;
+        transition: all 0.3s;
+        &:focus, &:hover {
+          text-decoration: none;
+        }
+      }
+    }
+    @media (max-width: 1300px) {
+      font-size: 15px;
+    }
+    @media (max-width: 1200px) {
+      font-size: 12px;
+      .coupon-title {
+        font-size: 3.6em;
+      }
+      .coupon-subtitle {
+        font-size: 1.6em;
+        line-height: 1.1;
+        white-space: nowrap;
+      }
+    }
+    @media (max-width: 991px) {
+      font-size: 10px;
+      .coupon-title {
+        font-size: 3.4em;
+      }
+      .coupon-subtitle {
+        font-size: 1.4em;
+        line-height: 1.2;
+      }
+      .coupon-button {
+        font-size: 1.2em;
+      }
+    }
+    @media (max-width: 736px) {
+      width: 100%;
+      // background-image: linear-gradient(to right, #16142cbb , #16142cff);
+      background-image: linear-gradient(to right, rgba(22, 20, 44, 0.733) , rgba(22, 20, 44, 0.4));
+      // background-color: #16142cbb;
+    }
+  }
+}

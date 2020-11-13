@@ -1,0 +1,60 @@
+{% if section.settings.show_coupon%}
+<div id="content" data-section-id="{{ section.id }}" data-section-type="product-coupon">
+  <div class="container">  
+    <div class="mb30">
+        <div class="product-coupon">
+          {% if section.settings.coupon_image %}
+          <img src="{{ section.settings.coupon_image |img_url: 'master' }}" class="coupon-image" alt="{{section.settings.coupon_title}}">
+          {% endif %}
+          <div class="coupon-content">
+            <div class="coupon-title">{{ section.settings.coupon_title | remove: '<p>'  | remove: '</p>'  }}</div>
+            <div class="coupon-subtitle">{{ section.settings.coupon_subtitle | remove: '<p>'  | remove: '</p>' }}</div>
+            <div class="coupon-button">
+                <a href="{{ section.settings.coupon_link }}">{{ section.settings.coupon_linktext }}</a>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Coupon",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_coupon",
+      "label": "Show coupon",
+      "default": true
+    },
+    {
+      "type": "richtext",
+      "id": "coupon_title",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "coupon_subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "id": "coupon_image",
+      "type": "image_picker",
+      "label": "Coupon Image"
+    },
+    {
+      "id": "coupon_link",
+      "type": "url",
+      "label": "Button link"
+    },
+    {
+      "id": "coupon_linktext",
+      "type": "text",
+      "label": "Button text",
+      "default": "Click here"
+    }
+  ]
+}
+{% endschema %}
