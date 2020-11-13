@@ -503,6 +503,10 @@
   box-shadow: none;
 }
 
+#content .pro_main_c .desc_blk {
+  padding-right: 0;
+}
+
 #content .pro_main_c .desc_blk .desc_blk_bot {
   background: #fff;
 }
@@ -628,6 +632,11 @@
   color: #16142c;
 }
 
+.variant-sku {
+  position: absolute;
+  right: 0;
+}
+
 .desc_blk h1 {
   padding-bottom: 5px;
   font-size: 2.125em;
@@ -647,6 +656,10 @@
 
 .template-product .pl10 {
   padding-left: 0px;
+}
+
+.template-product .product_c {
+  margin-top:5px;
 }
 
 .template-index figure.effect-chico:hover img {
@@ -728,8 +741,8 @@
   border-radius: 0px;
   display: block;
   position: absolute;
-  right: 0;
-  bottom: 0;
+  left: -3px;
+  bottom: -4px;
   text-align: center;
   text-transform: uppercase;
   z-index: 3;
@@ -804,7 +817,7 @@
 }
 
 #content .desc_blk .share .share-button {
-  padding: 5px 10px;
+  padding: 5px 0 5px 10px;
   line-height: 2.125em;
   cursor: pointer;
 }
@@ -813,10 +826,16 @@
   display: none;
   position: absolute;
   right: 0;
+  z-index: 1;
+  background-color: #ffffff;
+  border-top: 1px solid #ecefef;
+  box-shadow: 0px 3px 3px #d1d7d7;
 }
 
 #content .desc_blk .share .social-sharing ul {
   white-space: nowrap;
+  margin: 0;
+  padding: 5px 10px;
 }
 
 #content .desc_blk .share .social-sharing ul li {
@@ -830,7 +849,7 @@
   width: 1.7em;
   height: 1.7em;
   line-height: 1.7em;
-  margin-right: 4px;
+  margin: 4px;
   border-radius: 50%;
   border: 1px solid #16142c;
   text-align: center;
@@ -842,6 +861,8 @@
 
 
 #content .desc_blk .share .social-sharing ul li a:hover {
+  color: #ffffff;
+  border: 1px solid {{ settings.primary_color }};
   background: {{ settings.primary_color }};
   transition: all 0.3s;
   -moz-transition: all 0.3s;
