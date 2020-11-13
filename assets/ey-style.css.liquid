@@ -2,12 +2,17 @@
   background: #fff;
 }
 #content .recommendation_content {
-  padding-top: 15px;
+  padding-top: 10px;
 }
-
+.template-product #content {
+  padding-top: 14px;
+}
 /*===== Toni's Edits ======*/
 
 /*Header*/
+.promo-bar {
+  padding: 6px 0;
+}
 .promo-bar a {
   border-bottom: 0px;
   font-size: 16px;
@@ -35,7 +40,6 @@
 .headerSearchDesktop {
   display: inline-block;
   max-width: 525px;
-  height: 50px;
   width: calc(63% - 300px);
 }
 
@@ -75,10 +79,7 @@
 }
 
 #header .header_top {
-  padding: 15px 50px;
-}
-#header .header_top.cartPageHeader {
-  padding: 15px 50px;
+  padding: 8px 50px;
 }
 #header .header_top_container {
   max-width: 1270px;
@@ -94,7 +95,7 @@
   font-size: 17px;
   line-height: 23px;
   font-weight: bold;
-  padding: 15px 0;
+  padding: 10px 0;
   position: absolute;
   right: 0;
 }
@@ -504,6 +505,7 @@
 }
 
 #content .pro_main_c .desc_blk {
+  padding-top: 10px;
   padding-right: 0;
 }
 
@@ -514,7 +516,7 @@
 .rte.description-first-part,
 .rte.main-product-description-product,
 #content .pro_main_c .desc_blk .desc_blk_bot {
-  padding: 10px 0px;
+  padding: 10px 0 0;
   display: flex;
 }
 
@@ -632,13 +634,16 @@
   color: #16142c;
 }
 
+#variant-inventory {
+  padding-bottom: 0;
+}
+
 .variant-sku {
   position: absolute;
   right: 0;
 }
 
 .desc_blk h1 {
-  padding-bottom: 5px;
   font-size: 2.125em;
   font-weight: bold;
   color: #16142c;
@@ -877,8 +882,8 @@
 }
 
 .navPages .navPages-list .navPages-item .navPages-action.topNavA {
-  font-size: 16px !important;
-  padding: 15px 20px 10px;
+  font-size: 16px;
+  padding: 10px 20px 5px;
   margin: 0 2px;
   font-weight: bold;
 }
@@ -1119,6 +1124,10 @@
 }
 .owl-theme .owl-nav {
   top: -50px;
+}
+
+#content .main_box .desc h5 {
+  @include line-clamp(2, 1);
 }
 
 #content .main_box .desc h5 a {
