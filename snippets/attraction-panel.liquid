@@ -1,5 +1,5 @@
-{% if page.metafields.custom_fields["include_attraction_panel"] != blank %}
-  {% if page.metafields.custom_fields["include_attraction_panel"] == 1 %}
+{% if page.metafields.custom_fields["include_attraction_panel"] != blank or product.metafields.custom_fields["include_p_attraction_panel"] != blank %}
+  {% if page.metafields.custom_fields["include_attraction_panel"] == 1 or product.metafields.custom_fields["include_p_attraction_panel"] == 1 %}
     <div id="apanel">
       <div class="apanel-background" style="background-image: url({{ shop.metafields.custom_fields['background_image'] }});">
         <div>
