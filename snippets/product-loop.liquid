@@ -52,7 +52,7 @@
       {% endif %}
       <div class="product-image">
         
-        <a href="{{ product.url | within: collection }}">
+        <a href="{{ product.url | within: collection }}" class="product-image-link">
           <noscript>
           <img  src="{{ product.featured_image.src | product_img_url: "300x"}}" srcset="{{ product.featured_image.src | product_img_url: img_size}} 1x, {{ product.featured_image.src | product_img_url: img_size, scale: 2}} 2x, {{ product.featured_image.src | product_img_url: img_size, scale: 3}} 3x" alt="{{ product.featured_image.alt | escape }}">
           </noscript>
