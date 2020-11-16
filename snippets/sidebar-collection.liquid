@@ -176,7 +176,7 @@
    {% assign firstLevelMenu = linklists[section.settings.collection_link_list]%}
         {% if firstLevelMenu.links != blank  %}
   <div class="side_box side_box_1 red5 collection_custom_menu">
-    <h5><a href="#" class="tgl_btn">{{ 'collections.sidebar.widget_menu_title' | t }}</a></h5>
+    <h5><a href="#" class="tgl_btn"></a>{{ 'collections.sidebar.widget_menu_title' | t }}</a></h5>
     <ul class="tgl_c">
     {% for link in firstLevelMenu.links %}
             {%- assign child_id = forloop.index -%}
@@ -218,7 +218,7 @@
 
   {% if section.settings.show_sidebar_collections %}
   <div class="side_box side_box_1 red5">
-    <h5><a href="#" class="tgl_btn">{{ 'collections.sidebar.widget_collection_title' | t }}</a></h5>
+    <h5>{{ 'collections.sidebar.widget_collection_title' | t }}</h5>
     <ul class="tgl_c">
       {% for collection in collections %}
       {% unless collection.handle == 'frontpage' %}
