@@ -1687,16 +1687,26 @@ Ancillary Page Banner
 .product-coupon {
   position: relative;
   font-size: 16px;
-  .coupon-image {
-    width: 100%;
-    min-height: 200px;
+  .coupon-img {
+    display: flex;
+    justify-content: center;
+    img {
+      object-fit: contain;
+      width: 100%;
+      min-height: 200px;
+    }
   }
-  .coupon-content {
+  .coupon-overlay {
     position: absolute;
     width: 50%;
-    top: 0;
-    padding: 3em 5.25em;
+    top: 50%;
+    transform: translateY(-50%);
     max-height: 100%;
+    display: flex;
+    align-items: center;
+  }
+  .coupon-content {
+    padding: 0 5.25em;
     .coupon-title {
       color: #ffda53;
       text-transform: uppercase;
@@ -1707,9 +1717,9 @@ Ancillary Page Banner
     }
     .coupon-subtitle {
       color: #ffffff;
-      font-size: 1.625em;
+      font-size: 1.825em;
       font-weight: 600;
-      line-height: 1;
+      line-height: 1.2;
     }
     .coupon-button {
       display: flex;
@@ -1735,33 +1745,38 @@ Ancillary Page Banner
     }
     @media (max-width: 1200px) {
       font-size: 12px;
-      .coupon-title {
-        font-size: 3.6em;
-      }
       .coupon-subtitle {
-        font-size: 1.6em;
-        line-height: 1.1;
-        white-space: nowrap;
+        font-size: 1.8em;
       }
     }
     @media (max-width: 991px) {
       font-size: 10px;
       .coupon-title {
-        font-size: 3.4em;
+        font-size: 3.7em;
       }
       .coupon-subtitle {
-        font-size: 1.4em;
-        line-height: 1.2;
+        font-size: 1.7em;
       }
       .coupon-button {
         font-size: 1.2em;
+        a {
+          padding: 0.4em 1.8em;
+        }
       }
     }
-    @media (max-width: 736px) {
-      width: 100%;
-      // background-image: linear-gradient(to right, #16142cbb , #16142cff);
+  }
+  @media (max-width: 736px) {
+    .coupon-img {
+      overflow: hidden;
+      img {
+        height: 200px;
+        width: auto;
+      }
+    }
+    .coupon-overlay {
       background-image: linear-gradient(to right, rgba(22, 20, 44, 0.733) , rgba(22, 20, 44, 0.4));
-      // background-color: #16142cbb;
+      height: 200px;
+      width: 100%;
     }
   }
 }
