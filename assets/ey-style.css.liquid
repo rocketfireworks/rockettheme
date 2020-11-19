@@ -185,8 +185,6 @@ select {
 #shopify-section-footer .f_mid .row > div:nth-of-type(4) {
   padding: 27px 0;
 }
-@media (max-width: 480px) {
-}
 @media (max-width: 768px) {
 }
 
@@ -511,7 +509,7 @@ select {
 }
 
 #content .pro_main_c .desc_blk {
-  padding-top: 10px;
+  margin-top: 10px;
   padding-right: 0;
 }
 
@@ -537,6 +535,8 @@ select {
 
 .prod_sku_vend {
   padding: 0;
+  display: flex;
+  justify-content: space-between;
 }
 
 .rte.description-first-part p,
@@ -612,7 +612,7 @@ select {
   align-items: center;
   overflow: initial;
   margin: 0;
-  margin-left: 20px;
+  margin-left: 10px;
 }
 
 #content .pro_main_c .desc_blk .desc_blk_bot .price {
@@ -621,9 +621,8 @@ select {
 }
 
 #content .pro_main_c .desc_blk .desc_blk_bot .price span#comparePrice {
-  color: #16142c;
-  font-size: 24px;
-  font-weight: bold;
+  color: #777;
+  font-size: 16px;
 }
 
 .price #productPrice {
@@ -640,13 +639,9 @@ select {
   color: #16142c;
 }
 
+.variant-sku,
 #variant-inventory {
   padding-bottom: 0;
-}
-
-.variant-sku {
-  position: absolute;
-  right: 0;
 }
 
 .desc_blk h1 {
@@ -686,7 +681,6 @@ select {
   border: 1px solid #ffffffff;
   border-radius: 0;
   cursor: pointer;
-  padding: 10px 15px;
 }
 
 #content .pro_main_c .desc_blk .desc_blk_bot .minus_btn:hover,
@@ -739,14 +733,14 @@ select {
   border-top: solid #eae8e8 10px !important;
 }
 
-#content .main_box .price {
-  position: absolute;
-  right: -15px;
-  top: -5px;
-  padding: 3px 6px;
+#content .main_box .desc .price {
   font-size: 14px;
-  z-index: 4;
-  font-weight: bold;
+  font-weight: 700;
+}
+
+#content .main_box .price {
+  font-size: 14px;
+  font-weight: 700;
 }
 
 #content .main_box .box_1 .bulkDeals,
@@ -1546,10 +1540,6 @@ select {
     width: 60px;
   }
 
-  #content .pro_main_c .desc_blk .desc_blk_bot .qty {
-    width: 100%;
-  }
-
   .wsmenu {
     top: 120px;
   }
@@ -1597,6 +1587,15 @@ select {
   }
 }
 
+@media (max-width: 480px) {
+  #content .pro_main_c .desc_blk .desc_blk_bot {
+    flex-direction: column;
+  }
+  #content .pro_main_c .desc_blk .desc_blk_bot .qty {
+    margin: 0 auto;
+  }
+}
+
 @media (max-width: 425px) {
   #header #nav .navbar .navbar-nav > li > a.dropdown-toggle > span.icons > i,
   #header #nav .navbar .navbar-nav > li > a.dropdown-toggle > div.cart-icon > i,
@@ -1627,10 +1626,6 @@ select {
   #content .pro_main_c .desc_blk .desc_blk_bot .txtbox {
     height: 40px;
     width: 60px;
-  }
-
-  #content .pro_main_c .desc_blk .desc_blk_bot .qty {
-    width: 100%;
   }
 
   .template-product input#addToCart.btn_c {
@@ -1866,6 +1861,11 @@ select {
   visibility: hidden;
 }
 .card-price {
+  position: absolute;
+  right: -15px;
+  top: -5px;
+  padding: 3px 6px;
+  z-index: 4;
 	display: inline-block;
   width: auto;
 	height: 26px;
@@ -1876,10 +1876,6 @@ select {
 	border-left: 1px solid #62D3EE;
 	/* This makes room for the triangle */
 	margin-left: 15px;
-	position: relative;
-	font-weight: 300;
-	font-size: 22px;
-	line-height: 22px;
 }
 
 /* Makes the triangle */
