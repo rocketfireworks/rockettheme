@@ -1,3 +1,9 @@
+select {
+  padding: 6px 12px;
+  font-size: 14px;
+  color: #555;
+  border: 1px solid #ccc;
+}
 #content {
   background: #fff;
 }
@@ -712,6 +718,10 @@
 
 #content .main_box {
   box-shadow: none;
+}
+
+.collection-grid .main_box:hover {
+  transform: scale(1.08);
 }
 
 #content .filter_c span {
@@ -1877,11 +1887,11 @@
 	content: "";
 	position: absolute;
   display: block;
-  top: -2px;
+  top: -1px;
   left: -14px;
 	width: 0;
 	height: 0;
-	border-top: 14px solid transparent;
+	border-top: 13px solid transparent;
 	border-bottom: 14px solid transparent;
 	border-right: 15px solid #62D3EE;
 }

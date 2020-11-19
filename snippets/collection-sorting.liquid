@@ -1,6 +1,6 @@
 <span>{{ 'collections.sorting.title' | t }}:</span>
 <div class="select_box sel_2">
-  <select name="sortBy" id="sortBy" class="form-control" data-sort="{{ collection.sort_by | default: collection.default_sort_by }}">
+  <select name="sortBy" id="sortBy" data-sort="{{ collection.sort_by | default: collection.default_sort_by }}">
     <option value="manual">{{ 'collections.sorting.featured' | t }}</option>
     <option value="best-selling">{{ 'collections.sorting.best_selling' | t }}</option>
     <option value="title-ascending">{{ 'collections.sorting.az' | t }}</option>
