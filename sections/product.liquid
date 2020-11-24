@@ -44,10 +44,6 @@
                   {% if section.settings.show_product_sku or section.settings.show_product_vendor or section.settings.show_product_quantity  %}
                   <div class="prod_sku_vend">
 
-                    {% if section.settings.show_product_sku %}
-                    <div class="variant-sku">{{'products.general.product_sku' | t }}: {{ product.variants[0].sku }}</div>
-                    {% endif %}
-                
                     {% if section.settings.show_product_vendor %}
                     <div class="product-vendor">{{'products.general.product_vendor' | t }}: {{ product.vendor | link_to_vendor }}</div>
                     {% endif %}
@@ -57,6 +53,10 @@
                     </div>
                     {% endif %}
                 
+                    {% if section.settings.show_product_sku %}
+                    <div class="variant-sku">{{'products.general.product_sku' | t }}: {{ product.variants[0].sku }}</div>
+                    {% endif %}
+
                   </div>
                   {% endif %}
                 

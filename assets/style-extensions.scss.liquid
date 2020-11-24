@@ -1782,6 +1782,31 @@ Ancillary Page Banner
 }
 
 /*------------------------------------------------------------------
+SEARCH RESULT
+-------------------------------------------------------------------*/
+.template-search .title h1 {
+  font-size: 18px;
+  font-weight: 600;
+  .search-term {
+    color: #107fa8;
+  }
+}
+
+.search-result-list {
+  clear: both;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  &>div {
+    flex-basis: 50%;
+    position: relative;
+    .main-box {
+    }
+  }
+}
+
+
+/*------------------------------------------------------------------
 MIXINS
 -------------------------------------------------------------------*/
 @mixin line-clamp($numLines : 1, $lineHeight: 1) {

@@ -1,0 +1,8 @@
+{% if item.object_type == 'page' %}
+<div class="search-result-page clearfix">
+  <div class="page-details">
+    <h2><a href="{{ item.url }}">{{ item.title | escape }}</a></h2>
+    <p>{{ item.content | strip_html | truncate: 200 }}</p>
+  </div>
+</div>
+{% endif %}
