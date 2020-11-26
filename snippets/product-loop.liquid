@@ -48,7 +48,13 @@
       <div class="staffPick"><i class="fa fa-star"></i> Staff Pick</div>
       {% endif %}
       {% if colors_available %}
-      <div class="swatchBadge"><img src="{{ 'morecolorsicon.png' | asset_url }}" /> More Colors</div>
+      
+      {% if product.variants.size > 1 %}
+      {% for option in product.options %}
+      {% include 'swatch' with option %}
+      {% endfor %}
+      {% endif %}
+
       {% endif %}
       <div class="product-image">
         
@@ -90,11 +96,6 @@
           <div class="clearfix"></div> 	
       {% endif %}
 
-      <!-- {% if product.variants.size > 1 %}
-      {% for option in product.options %}
-      {% include 'swatch' with option %}
-      {% endfor %}
-      {% endif %} -->
     </div>
   </div>
   <div class="proListAddToCart">
