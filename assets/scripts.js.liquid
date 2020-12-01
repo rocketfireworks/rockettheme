@@ -1852,9 +1852,12 @@ $container.find('#carousel').flexslider({
     
     if($("#carousel").length){
      var controlNav = false;
-    }
-    else{
-      var controlNav = "thumbnails";
+    } else {
+      if ($(".product_images").find('iframe') && $(".product_images .slides").children().length <= 2) {
+      var controlNav = false;
+      } else {
+        var controlNav = "thumbnails";
+      }
     }
    
   if ( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){ 
