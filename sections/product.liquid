@@ -63,10 +63,7 @@
 
           </div>
           <div class="product-description">
-            {% if section.settings.show_product_cart_postion == "bottom" %} 
-                      
             <div class="desc_blk_bot">
-                
               <div class="price{% if section.settings.show_smart_checkout %} smart_checkout_price_pos {% endif %}">
                 {% if product.selected_or_first_available_variant.price < product.selected_or_first_available_variant.compare_at_price %}
                 <div id="comparePrice" class="money">
@@ -83,7 +80,6 @@
                   {{settings.custom_price0_text }}
                 </span>                    
                 {% endunless %}
-
               </div>
               
               {% unless product.price_max == 0 and settings.hide_price0_box_and_button %} 
@@ -96,7 +92,6 @@
             </div>
 
             <div class="maximum-in-stock-error">{{ 'products.product.maximum_quantity_error' | t }}</div>
-            {% endif %}
             
             {% if descriptionSecondPart != blank %}
             <div class="rte description-first-part">
@@ -117,136 +112,21 @@
             </div>
             {% endif %} 
           {% endif %}
-            <!-- variations section  -->
 
-            {% if section.settings.show_product_cart_postion == "top" %}
-            <div class="variations mt15">
+            <div class="variations">
               <div class="row">
                 <div class="col-sm-12">
                   {% unless product.options.size == 1 and product.variants[0].title contains 'Default' %}
                     {% for option in product.options_with_values %}
-                  <div class="selector-wrapper main-product-select">
-                  
-                      <label {% if option.name == 'default' %}class="hidden" {% endif %} for="product-select-{{ option.name }}">
-                          {{ option.name }}
-                      </label>
-                      <select class="single-option-selector" id="SingleOptionSelector-{{ forloop.index0 }}">
-                        {% for value in option.values %}
-                          <option {% if option.selected_value == value %}selected{% endif %}>{{value}}</option>
-                        {% endfor %}
-                      </select>
-                    
-                    </div>  
-                  {% endfor %}
-                  {% endunless %}
-                  <select name="id" id="product-select-{{ product.id }}" class="product-variants form-control hidden">
-                      {% for variant in product.variants %}
-                    {% if variant.available %}
-                    <option {% if section.settings.show_product_quantity %} 
-                            data-inventory_management="{{variant.inventory_management}}" 
-                            data-inventory_policy="{{variant.inventory_policy}}"
-                            data-inventory_quantity="{{variant.inventory_quantity}}"
-                            {% endif %}       
-                            {% if variant == product.selected_or_first_available_variant %} selected="selected" {% endif %} data-sku="{{ variant.sku }}" value="{{ variant.id }}">{{ variant.title | escape }} - {{ variant.price | money_with_currency }}</option>
-                    {% else %}
-                    <option 
-                            {% if section.settings.show_product_quantity %} 
-                            data-inventory_management="{{variant.inventory_management}}" 
-                            data-inventory_policy="{{variant.inventory_policy}}"
-                            data-inventory_quantity="{{variant.inventory_quantity}}"
-                            {% endif %}                           
-                            disabled="disabled"
-                            value="{{ variant.id }}">
-                      
-                      {{ variant.title | escape }} - {{ 'products.product.sold_out' | t }}
-                    </option>
-                    {% endif %}
-                    {% endfor %}
-                  </select>
-                  
-                  {% if section.settings.show_product_swatches %}
-                  {% if product.variants.size > 1 %}
-                  {% for option in product.options %}
-                  {% include 'swatch' with option %}
-                  {% endfor %}
-                  {% endif %}
-                  {% endif %}
-                </div>
-              </div>
-            </div>
-            
-            {% unless product.price_max == 0 and settings.hide_price0_box_and_button %} 
-            {% if section.settings.show_smart_checkout%}
-            <div class="product_payments_btns">
-            <input type="submit" name="add" class="btn_c" id="addToCart" value="{{ 'products.product.add_to_cart' | t }}">
-            {{ form | payment_button }}
-            </div>
-            {% else %}
-              <input type="submit" name="add" class="btn_c" id="addToCart" value="{{ 'products.product.add_to_cart' | t }}">
-            {% endif %}
-            {% endunless %}
-
-            <div class="desc_blk_bot">
-
-              <div class="price  {% if section.settings.show_smart_checkout %} smart_checkout_price_pos {% endif %}">
-                {% unless product.price_max == 0 and settings.custom_price0_text != blank %} 
-                  <span id="productPrice"  class="money">
-                    {{ product.selected_or_first_available_variant.price | money }}
-                  </span> 
-                {% else %}  
-                <span>
-                  {{settings.custom_price0_text }}
-                </span>                    
-                {% endunless %}
-                
-
-                {% if product.selected_or_first_available_variant.price < product.selected_or_first_available_variant.compare_at_price %}
-                <span id="comparePrice" class="money">
-                  {{ product.selected_or_first_available_variant.compare_at_price | money }}
-                </span>
-                {% endif %}
-              </div>
-              
-                {% unless product.price_max == 0 and settings.hide_price0_box_and_button %} 
-              <div class="qty product-page-qty"><span class="productPGQtyLable">Quantity</span> <a class="minus_btn" ></a>
-                
-                <input type="text" id="quantity" name="quantity" class="txtbox" value="1" min="1">
-                <a class="plus_btn" ></a> 
-                </div>
-              {% endunless %}
-            </div>
-            
-            <div class="maximum-in-stock-error">{{ 'products.product.maximum_quantity_error' | t }}</div>
-            {% endif %}
-
-            <!-- cart section end -->
-
-            <!-- product variant sku, vendor --> 
-
-            
-
-            <!-- end product variant sku, vendor --> 
-
-
-            <!-- bottom variations section  -->
-
-            {% if section.settings.show_product_cart_postion == "bottom" %}
-            <div class="variations pl10">
-              <div class="row">
-                <div class="col-sm-12">
-                    {% unless product.options.size == 1 and product.variants[0].title contains 'Default' %}
-                    {% for option in product.options_with_values %}
-                  <div class="selector-wrapper main-product-select">
-                  
-                      <label {% if option.name == 'default' %}class="hidden" {% endif %} for="product-select-{{ option.name }}">
-                          {{ option.name }}
-                      </label>
-                      <select class="single-option-selector" id="SingleOptionSelector-{{ forloop.index0 }}">
-                        {% for value in option.values %}
-                          <option {% if option.selected_value == value %}selected{% endif %}>{{value}}</option>
-                        {% endfor %}
-                      </select>
-                    
+                    <div class="selector-wrapper main-product-select">
+                    <label {% if option.name == 'default' %}class="hidden" {% endif %} for="product-select-{{ option.name }}">
+                        {{ option.name }}
+                    </label>
+                    <select class="single-option-selector" id="SingleOptionSelector-{{ forloop.index0 }}">
+                      {% for value in option.values %}
+                        <option {% if option.selected_value == value %}selected{% endif %}>{{value}}</option>
+                      {% endfor %}
+                    </select>
                     </div>  
                   {% endfor %}
                   {% endunless %}
@@ -255,21 +135,21 @@
                     {% for variant in product.variants %}
                     {% if variant.available %}
                     <option 
-                            {% if section.settings.show_product_quantity %} 
-                            data-inventory_management="{{variant.inventory_management}}" 
-                            data-inventory_policy="{{variant.inventory_policy}}"
-                            data-inventory_quantity="{{variant.inventory_quantity}}"
-                            {% endif %}       
-                            {% if variant == product.selected_or_first_available_variant %} selected="selected" {% endif %} data-sku="{{ variant.sku }}" value="{{ variant.id }}">{{ variant.title | escape }} - {{ variant.price | money_with_currency }}</option>
+                      {% if section.settings.show_product_quantity %} 
+                      data-inventory_management="{{variant.inventory_management}}" 
+                      data-inventory_policy="{{variant.inventory_policy}}"
+                      data-inventory_quantity="{{variant.inventory_quantity}}"
+                      {% endif %}       
+                      {% if variant == product.selected_or_first_available_variant %} selected="selected" {% endif %} data-sku="{{ variant.sku }}" value="{{ variant.id }}">{{ variant.title | escape }} - {{ variant.price | money_with_currency }}</option>
                     {% else %}
                     <option 
-                            {% if section.settings.show_product_quantity %} 
-                            data-inventory_management="{{variant.inventory_management}}" 
-                            data-inventory_policy="{{variant.inventory_policy}}"
-                            data-inventory_quantity="{{variant.inventory_quantity}}"
-                            {% endif %}                           
-                            disabled="disabled"
-                            value="{{ variant.id }}">
+                      {% if section.settings.show_product_quantity %} 
+                      data-inventory_management="{{variant.inventory_management}}" 
+                      data-inventory_policy="{{variant.inventory_policy}}"
+                      data-inventory_quantity="{{variant.inventory_quantity}}"
+                      {% endif %}                           
+                      disabled="disabled"
+                      value="{{ variant.id }}">
                       
                       {{ variant.title | escape }} - {{ 'products.product.sold_out' | t }}
                     </option>
@@ -287,9 +167,6 @@
                 </div>
               </div>
             </div>
-            {% endif %}
-
-            <!-- bottom variations section end  -->
 
             <!-- product tags -->
 
@@ -312,7 +189,6 @@
             <!-- end product tags -->
 
             {% endif %}
-            {% if section.settings.show_product_cart_postion == "bottom" %} 
                       
             <div class="desc_blk_bot">
               {% unless product.price_max == 0 and settings.hide_price0_box_and_button %} 
@@ -326,10 +202,6 @@
                 {% endif %}
               {% endunless %}
             </div>
-            {% endif %}
-
-            <!-- bottom cart section end -->
-
 
             {% if section.settings.enable_description_enhancements%}
             {% if descriptionSecondPart != blank %}
@@ -496,23 +368,6 @@
     "name": "Product",
     "settings": [
       {
-        "type": "select",
-        "id": "show_product_cart_postion",
-        "label": "Cart button location",
-        "options": [
-          {
-            "value": "top",
-            "label": "Above product price"
-          },
-          {
-            "value": "bottom",
-            "label": "Below product price"
-          }
-        ],
-        "default": "bottom"
-      },
-	  
-	  {
         "type": "checkbox",
         "id": "show_smart_checkout",
         "label": "Show dynamic checkout button",
