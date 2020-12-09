@@ -13,11 +13,40 @@
     </noscript>
     <div class="product_gallery {% if product-images == blank %}product_images{% endif %}"
       id="product-{{ product.id }}-gallery">
+
+
+      {% assign videoCount = 0 %}
+      {% assign imageCount = 0 %}
+      {% assign thumbnailItems = '' %}
+
+      {% for media in product.media %}
+      {% case media.media_type %}
+        {% when 'image' %}
+        {% assign imageCount = imageCount | plus:1 %}
+
+        {% when 'external_video' %}
+        {% assign videoCount = videoCount | plus:1 %}
+
+        {% when 'video' %}
+        {% assign videoCount = videoCount | plus:1 %}
+      {% endcase %}
+
+      {% assign thumbnail = media | product_img_url: '150x' %}
+      {% assign thumbnailFor = media.id %}
+      {% assign thumbnailItems = thumbnailItems | append:"<li><img src=" | append: thumbnail | append: " data-id-for="| append: thumbnailFor | append:"></li>" %}
+      {% endfor %}
+
+      {% if videoCount != 1 and imageCount != 1 %}
+        <ul class="product_nav">
+          {{ thumbnailItems }}
+        </ul>
+      {% endif %}
+
       <ul class="product_slides">
         
         {% for media in product.media %}
         {% if media.media_type == 'external_video' %}
-        <li data-thumb="{{ media | img_url: '150x', scale: 2 }}" data-title="{{ product.title | escape }}" class="video_slide">
+        <li data-thumb="{{ media | img_url: '150x' }}" data-title="{{ product.title | escape }}" class="video_slide">
         {% assign video = media.alt | split: 'src="' %}
         {% assign video = video[1] | split: '"' | first %}
 
@@ -37,7 +66,7 @@
 
         {% for media in product.media %}
         {% if media.media_type == 'video' %}
-        <li data-thumb="{{ media | img_url: '150x', scale: 2 }}" data-title="{{ product.title | escape }}" class="video_slide">
+        <li data-thumb="{{ media | img_url: '150x' }}" data-title="{{ product.title | escape }}" class="video_slide">
           <div class="video-container">
             <div>{{ media | video_tag: controls: true  }}</div>
           </div>
@@ -45,13 +74,14 @@
         {% endif %}
         {% endfor %}
 
-        
-        {% for image in product.images %}
-        <li data-thumb="{{ image | product_img_url: '150x', scale: 2 }}"
-          {% if image.alt contains 'youtube' or image.alt contains 'vimeo' %}data-title="{{ product.title | escape }}"
-          class="video_slide" {% else %}data-title="{{ image.alt | escape }}" {% endif %}>
-          {% if image.alt contains 'youtube' or image.alt contains 'vimeo' %}
-          {% assign video = image.alt | split: 'src="' %}
+        {% for media in product.media %}
+        {% if media.media_type == 'image' %}
+
+        <li data-thumb="{{ media | product_img_url: '150x' }}"
+          {% if media.alt contains 'youtube' or media.alt contains 'vimeo' %}data-title="{{ product.title | escape }}"
+          class="video_slide" {% else %}data-title="{{ media.alt | escape }}" {% endif %}>
+          {% if media.alt contains 'youtube' or media.alt contains 'vimeo' %}
+          {% assign video = media.alt | split: 'src="' %}
           {% assign video = video[1] | split: '"' | first %}
 
           {% if video contains '?' %}
@@ -60,27 +90,34 @@
           {% assign video = video | append: '?autoplay=1' %}
           {% endif %}
 
-          <div class="video-container {% if image.alt contains 'vimeo' %}vimeo{% else %}youtube{% endif %}">
+          <div class="video-container {% if media.alt contains 'vimeo' %}vimeo{% else %}youtube{% endif %}">
             <div>
               <a href="{{ video | strip_html | replace: '/embed/', '/watch?v=' | remove: '?feature=player_detailpage&amp;autoplay=1' }}"
                 title="{{ product.title | escape }}" class="mfp-iframe">
-                {{ image.alt }}
+                {{ media.alt }}
               </a>
             </div>
           </div>
           {% else %}
 
-          {%- assign img_url = image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
-          <a class="slide-image-link" href="{{ image | product_img_url: '1400x' }}" title="{{ image.alt | escape }}">
-            <img src="{{ image | img_url: '300x' }}" alt="{{ image.alt | escape }}" data-index="{{ forloop.index0 }}"
-              data-image-id="{{ image.id }}"
-              class="{% if featured_image.id == image.id %}featured_image lazypreload{% endif %}"
+          {%- assign img_url = media | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+          <a class="slide-image-link" 
+            href="{{ media | product_img_url: '1400x' }}" 
+            title="{{ media.alt | escape }}" 
+            target="_blank" rel="noopener noreferrer">
+            <img src="{{ media | img_url: '300x' }}" 
+              alt="{{ media.alt | escape }}" 
+              data-index="{{ forloop.index0 }}"
+              data-image-id="{{ media.id }}"
+              class="{% if featured_image.id == media.id %}featured_image lazypreload{% endif %}"
               data-src="{{ img_url }}" data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
-              data-aspectratio="{{ image.aspect_ratio }}" data-sizes="auto"
+              data-aspectratio="{{ media.aspect_ratio }}" 
+              data-sizes="auto"
               sizes="0" />
           </a>
           {% endif %}
         </li>
+        {% endif %}
         {% endfor %}
       </ul>
     </div>
@@ -90,7 +127,7 @@
       <ul class="slides">
         {% for image in product.images %}
         <li data-image-id="{{ image.id }}">
-          <img src="{{ image | product_img_url: '150x', scale: 2  }}" />
+          <img src="{{ image | product_img_url: '150x' }}" />
         </li>
         {% endfor %}
       </ul>

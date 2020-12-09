@@ -1840,21 +1840,6 @@ theme.ProductPageSection = (function() {
         }
    
      /*PRODUCT SLIDER*/
-
-    function makeThumbnails() {
-      var productSlideControl = '';
-      $('.product_slides li').each(function() {
-        var thumbSrc = $(this).data('thumb');
-        productSlideControl += `<li><img src='${thumbSrc}'/></li>`;
-      })
-      var thumbnails = `
-        <ul class="product_nav">
-          ${productSlideControl}
-        </ul>
-      `;
-      return thumbnails;
-    }
-
     function initFirstSlide() {
       var firstSlide = $('.product_slides li').first();
       var firstSlideNav = $('.product_nav li').first();
@@ -1863,31 +1848,27 @@ theme.ProductPageSection = (function() {
     }
 
     function setActiveSlide(thumb) {
+      // Set active thumbnail
       $('.product_nav li').removeClass('product-active-nav');
       thumb.addClass('product-active-nav');
-      var activeImageSrc = thumb.find('img').attr('src');
+      // Set active image
+      var selectedThumb = thumb.find('img').data('id-for');
       $('.product_slides li').each(function() {
-        var thumbSrc = $(this).data('thumb');
         $(this).removeClass('product-active-slide');
-        if (activeImageSrc === thumbSrc) {
+        var imageId = $(this).find('img').data('image-id');
+        if (selectedThumb === imageId) {
           $(this).addClass('product-active-slide');
         }
       })
     }
 
-    if (($(".product_images").find('.video-container').length === 1) && ($(".product_images .product_slides").children().length <= 2)) {
-      initFirstSlide();
-    } else if ($(".product_images .product_slides").children().length === 1) {
-      initFirstSlide();
-    } else {
-      $('.product_gallery').prepend(makeThumbnails());
-      initFirstSlide();
+    initFirstSlide();
 
-      $('.product_nav li').on('click', function() {
-        setActiveSlide($(this));
-      });
-    }
-    /* END PRODUCT FLEXSLIDER*/
+    $('.product_nav li').on('mouseover', function() {
+      setActiveSlide($(this));
+    });
+    
+    /* END PRODUCT SLIDER*/
     
     selectCallback = function (variant, selector) {
   
