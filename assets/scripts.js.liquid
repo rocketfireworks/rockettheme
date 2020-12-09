@@ -1855,8 +1855,8 @@ theme.ProductPageSection = (function() {
       var selectedThumb = thumb.find('img').data('id-for');
       $('.product_slides li').each(function() {
         $(this).removeClass('product-active-slide');
-        var imageId = $(this).find('img').data('image-id');
-        if (selectedThumb === imageId) {
+        var mediaId = $(this).find('.media').data('media-id');
+        if (selectedThumb === mediaId) {
           $(this).addClass('product-active-slide');
         }
       })
@@ -1867,7 +1867,7 @@ theme.ProductPageSection = (function() {
     $('.product_nav li').on('mouseover', function() {
       setActiveSlide($(this));
     });
-    
+
     /* END PRODUCT SLIDER*/
     
     selectCallback = function (variant, selector) {

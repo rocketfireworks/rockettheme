@@ -1994,11 +1994,21 @@ PRODUCT
     padding-right: 10px;
 
     li {
+      position: relative;
       cursor: pointer;
       overflow: initial;
       width: 80px;
       opacity: .7;
       margin: 5px;
+
+      i {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 1.5em;
+        color: #eae8e8;
+      }
 
       img {
         border: 1px solid #ccc;
@@ -2007,7 +2017,6 @@ PRODUCT
       &.product-active-nav {
         opacity: 1;
         img {
-          cursor: initial;
           border: 2px solid #fbcf00;
         }
       }
