@@ -65,9 +65,7 @@
 
         </li>
         {% endif %}
-        {% endfor %}
 
-        {% for media in product.media %}
         {% if media.media_type == 'video' %}
         <li data-thumb="{{ media | img_url: '150x' }}" data-title="{{ product.title | escape }}" class="video_slide">
           <div class="video-container">
@@ -75,9 +73,7 @@
           </div>
         </li>
         {% endif %}
-        {% endfor %}
-
-        {% for media in product.media %}
+        
         {% if media.media_type == 'image' %}
 
         <li data-thumb="{{ media | product_img_url: '150x' }}"
