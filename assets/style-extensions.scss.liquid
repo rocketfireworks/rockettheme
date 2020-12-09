@@ -1959,14 +1959,17 @@ PRODUCT
     }
     .video-container {
       opacity: 1;
-      max-height: 320px;
+      height: 320px;
+      margin: 0 auto;
+
+      &.youtube {
+        max-width: calc(320/9*16px);
+      }
 
       div {
         position: relative;
-        padding-top: 49.271981%;
-        @media (max-width: 991px) {
-          padding-top: 44.271981%;
-        }
+        height: 100%;
+        padding-top: 0;
       }
 
       iframe {
