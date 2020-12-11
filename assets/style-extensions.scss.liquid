@@ -2055,6 +2055,9 @@ PRODUCT
       a {
         display: flex;
         height: 320px;
+        @media (max-width: 480px) {
+          height: 220px;
+        }
         img {
           object-fit: contain;
           width: 100%;
@@ -2079,7 +2082,9 @@ PRODUCT
       iframe {
         border-radius: 4px;
       }
-      
+      @media (max-width: 480px) {
+        height: 220px;
+      }
     }
     @media (max-width: 991px) {
       grid-column-start: 1;
