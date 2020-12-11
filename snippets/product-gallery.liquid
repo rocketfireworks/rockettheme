@@ -18,9 +18,10 @@
       {% assign videoCount = 0 %}
       {% assign imageCount = 0 %}
       {% assign thumbnailItems = '' %}
+      {% assign icon = "<i class='fas fa-play'></i>" %}
+      {% assign playVideo = "<div class='video-text'>Play Video</div>" %}
 
       {% for media in product.media %}
-        {% assign icon = "<i class='fas fa-play'></i>" %}
         {% assign thumbnail = media | img_url: '150x' %}
         {% assign thumbnailFor = media.id %}
         
@@ -31,16 +32,16 @@
 
           {% when 'external_video' %}
           {% assign videoCount = videoCount | plus:1 %}
-          {% assign thumbnailItems = thumbnailItems | append:"<li>" | append: icon | append: "<img src=" | append: thumbnail | append: " data-id-for="| append: thumbnailFor | append:"></li>" %}
+          {% assign thumbnailItems = thumbnailItems | append:"<li>" | append: icon | append: "<img src=" | append: thumbnail | append: " data-id-for="| append: thumbnailFor | append:">" | append: playVideo | append: "</li>" %}
 
           {% when 'video' %}
           {% assign videoCount = videoCount | plus:1 %}
-          {% assign thumbnailItems = thumbnailItems | append:"<li>" | append: icon | append: "<img src=" | append: thumbnail | append: " data-id-for="| append: thumbnailFor | append:"></li>" %}
+          {% assign thumbnailItems = thumbnailItems | append:"<li>" | append: icon | append: "<img src=" | append: thumbnail | append: " data-id-for="| append: thumbnailFor | append:">" | append: playVideo | append: "</li>" %}
         {% endcase %}
       {% endfor %}
 
-      {% if videoCount > 1 or imageCount > 1 %}
-        <ul class="product_nav">
+      {% if videoCount > 1 or imageCount > 1 or videoCount == 1 and imageCount == 1 %}
+        <ul class="product_nav" data-video-count="{{ videoCount }}" data-image-count= "{{ imageCount }}">
           {{ thumbnailItems }}
         </ul>
       {% endif %}
@@ -73,7 +74,7 @@
           </div>
         </li>
         {% endif %}
-        
+
         {% if media.media_type == 'image' %}
 
         <li data-thumb="{{ media | product_img_url: '150x' }}"
