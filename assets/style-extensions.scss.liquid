@@ -8,6 +8,21 @@ Contact Page
 FAQ Page
 -------------------------------------------------------------------*/
 
+/*------------------------------------------------------------------
+MIXINS
+-------------------------------------------------------------------*/
+@mixin line-clamp($numLines : 1, $lineHeight: 1) {
+  overflow: hidden;
+  text-overflow: -o-ellipsis-lastline;
+  text-overflow: ellipsis;
+  white-space: initial;
+  display: block;
+  /* autoprefixer: off */
+  display: -webkit-box;
+  -webkit-line-clamp: $numLines;
+  -webkit-box-orient: vertical;
+  max-height: $numLines * $lineHeight + unquote('em');
+}
 
 /*------------------------------------------------------------------
 General
@@ -2214,22 +2229,6 @@ PRODUCT CAROUSEL
   @media (max-width: 991px) {
     font-size: 0.9em;
   }
-}
-
-/*------------------------------------------------------------------
-MIXINS
--------------------------------------------------------------------*/
-@mixin line-clamp($numLines : 1, $lineHeight: 1) {
-  overflow: hidden;
-  text-overflow: -o-ellipsis-lastline;
-  text-overflow: ellipsis;
-  white-space: initial;
-  display: block;
-  /* autoprefixer: off */
-  display: -webkit-box;
-  -webkit-line-clamp: $numLines;
-  -webkit-box-orient: vertical;
-  max-height: $numLines * $lineHeight + unquote('em');
 }
 
 #content .main_box .desc h5 a {
