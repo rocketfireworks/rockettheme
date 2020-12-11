@@ -2132,6 +2132,63 @@ PRODUCT
   }
 }
 
+/* PRODUCT SUMMARY */
+.product-summary-container {
+  .product-summary {
+    display: none;
+  }
+
+  input#addToCart.btn_c {
+    float: none;
+    display: block;
+    margin-right: 0;
+    margin-left: auto;
+    background: #3dbfde;
+    border-radius: 0;
+    text-transform: uppercase;
+    color: #16142c;
+    font-size: 21px;
+    max-width: 325px;
+    height: 50px;
+    width: 100%;
+  }
+  @media (max-width: 560px) {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    width: 100%;
+    background-color: #fff;
+    box-shadow: 0px -2px 4px #ccc;
+    .product-summary {
+      padding: 5px 10px;
+      align-items: center;
+      justify-content: space-between;
+      .product-summary-image {
+        display: inline-block;
+        vertical-align: middle;
+        width: 20%;
+      }
+      .product-summary-title {
+        display: inline-block;
+        vertical-align: middle;
+        font-size: 1.8em;
+        font-weight: bold;
+        text-transform: uppercase;
+        color: #16142c;
+      }
+      .product-summary-price {
+        color: #c94344;
+        font-size: 1.5em;
+        font-weight: bold;
+      }
+    }
+    input#addToCart.btn_c {
+      max-width: initial;
+    }
+  }
+}
+
 /*------------------------------------------------------------------
 PRODUCT CAROUSEL
 -------------------------------------------------------------------*/

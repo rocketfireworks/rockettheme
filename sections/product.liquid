@@ -194,7 +194,28 @@
 
             {% endif %}
                       
-            <div class="desc_blk_bot">
+            <div class="desc_blk_bot product-summary-container">
+              <div class="product-summary">
+                <div>
+                  <img 
+                  alt="{{ product.title | escape }}" 
+                  src="{{ product.featured_image | img_url: '700x' }}"
+                  srcset="{{ product.featured_image | img_url: '700x' }} 1x, {{ product.featured_image | img_url: '700x', scale: 2 }} 2x, {{ product.featured_image | img_url: '700x', scale: 3 }} 3x" 
+                  class="product-summary-image"
+                  />
+                <div class="product-summary-title">{{ product.title }}</div>
+                </div>
+
+                {% unless product.price_max == 0 and settings.custom_price0_text != blank %} 
+                  <span class="product-summary-price">
+                    {{ product.selected_or_first_available_variant.price | money }} 
+                  </span> 
+                {% else %}  
+                  <span>
+                    {{settings.custom_price0_text }}
+                  </span>                    
+                {% endunless %}
+              </div>
               {% unless product.price_max == 0 and settings.hide_price0_box_and_button %} 
                 {% if section.settings.show_smart_checkout%}
                 <div class="product_payments_btns">

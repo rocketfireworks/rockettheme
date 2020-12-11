@@ -1870,6 +1870,18 @@ theme.ProductPageSection = (function() {
 
     /* END PRODUCT SLIDER*/
     
+    /* SHOW PRODUCT SUMMARY */
+    $(document).scroll(function () {
+      var y = $(this).scrollTop();
+      if (y > 600) {
+        $('.product-summary').css('display', 'flex');
+      } else {
+        $('.product-summary').css('display', 'none');
+      }
+  
+  });
+    /* END SHOW PRODUCT SUMMARY */
+
     selectCallback = function (variant, selector) {
   
       if(variant && changeUrl && isFeaturedProduct != true){
