@@ -2176,14 +2176,16 @@ PRODUCT
     width: 100%;
     .product-summary {
       padding: 5px 10px;
+      height: 30px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       background-color: #fff;
       box-shadow: 0px -2px 4px #ccc;
-      transition: opacity 200ms;
+      transition: opacity 200ms, height 300ms;
       &.visible {
         opacity: 1;
+        height: 70px;
       }
       .product-title-container {
         display: flex;
@@ -2191,6 +2193,7 @@ PRODUCT
       }
       .product-summary-image {
         width: 20%;
+        align-self: end;
       }
       .product-summary-title {
         margin: 0 5px;
@@ -2201,7 +2204,7 @@ PRODUCT
         @include line-clamp(1, 1.2);
       }
       .product-summary-price {
-        padding-top: 3px;
+        padding-top: 4px;
         color: #c94344;
         font-size: 1.5em;
         font-weight: bold;
