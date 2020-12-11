@@ -125,7 +125,7 @@ Swatches
   -webkit-border-radius:2px;
   -moz-border-radius:2px;
   border-radius:2px;
-  box-shadow: 2px 2px 4px #aaa;
+  box-shadow: 1px 1px 3px #ccc;
   /* To give width and height */
   float:left;
   /* Color swatches contain no text so they need to have a width. */
@@ -134,9 +134,10 @@ Swatches
   /* No extra spacing between them */
   margin:0;
   /* The border when the button is not selected */
-  border:#ddd 1px solid;
+  border:1.5px solid #ddd;
   /* Background color */
   background-color:#ddd;
+  background-size: cover;
   /* Styling text */
   font-size:13px;
   text-align:center;
@@ -154,7 +155,7 @@ Swatches
 /* Styling selected swatch */
 /* Slightly raised */
 .swatch input:checked + label {
-  border:1px solid {{ settings.primary_color }};
+  border:1.5px solid {{ settings.primary_color }};
   background-color:{{ settings.primary_color }};
   color:{{ settings.button_text_color }};
 } 
