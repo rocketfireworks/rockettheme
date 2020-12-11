@@ -1874,9 +1874,9 @@ theme.ProductPageSection = (function() {
     $(document).scroll(function () {
       var y = $(this).scrollTop();
       if (y > 600) {
-        $('.product-summary').css('display', 'flex');
+        $('.product-summary').addClass('visible');
       } else {
-        $('.product-summary').css('display', 'none');
+        $('.product-summary').removeClass('visible');
       }
   
   });

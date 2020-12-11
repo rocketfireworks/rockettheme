@@ -2150,7 +2150,8 @@ PRODUCT
 /* PRODUCT SUMMARY */
 .product-summary-container {
   .product-summary {
-    display: none;
+    opacity: 0;
+    pointer-events: none;
   }
 
   input#addToCart.btn_c {
@@ -2173,26 +2174,34 @@ PRODUCT
     left: 0;
     z-index: 100;
     width: 100%;
-    background-color: #fff;
-    box-shadow: 0px -2px 4px #ccc;
     .product-summary {
       padding: 5px 10px;
+      display: flex;
       align-items: center;
       justify-content: space-between;
+      background-color: #fff;
+      box-shadow: 0px -2px 4px #ccc;
+      transition: opacity 200ms;
+      &.visible {
+        opacity: 1;
+      }
+      .product-title-container {
+        display: flex;
+        align-items: center;
+      }
       .product-summary-image {
-        display: inline-block;
-        vertical-align: middle;
         width: 20%;
       }
       .product-summary-title {
-        display: inline-block;
-        vertical-align: middle;
-        font-size: 1.8em;
+        margin: 0 5px;
+        font-size: 1.5em;
         font-weight: bold;
         text-transform: uppercase;
         color: #16142c;
+        @include line-clamp(1, 1.2);
       }
       .product-summary-price {
+        padding-top: 3px;
         color: #c94344;
         font-size: 1.5em;
         font-weight: bold;
