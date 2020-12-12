@@ -1873,13 +1873,12 @@ theme.ProductPageSection = (function() {
     /* SHOW PRODUCT SUMMARY */
     $(document).scroll(function () {
       var y = $(this).scrollTop();
-      if (y > 600) {
+      if (y > 350) {
         $('.product-summary').addClass('visible');
       } else {
         $('.product-summary').removeClass('visible');
       }
-  
-  });
+    });
     /* END SHOW PRODUCT SUMMARY */
 
     selectCallback = function (variant, selector) {
