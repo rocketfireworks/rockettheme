@@ -51,32 +51,32 @@
             </div>
 
             <div class="product-price-qty">
-                <div class="price{% if section.settings.show_smart_checkout %} smart_checkout_price_pos {% endif %}">
-                  {% if product.selected_or_first_available_variant.price < product.selected_or_first_available_variant.compare_at_price %}
-                  <div id="comparePrice" class="money">
-                    {{ product.selected_or_first_available_variant.compare_at_price | money }}
-                  </div>
-                  {% endif %}
+              <div class="price{% if section.settings.show_smart_checkout %} smart_checkout_price_pos {% endif %}">
+                {% if product.selected_or_first_available_variant.price < product.selected_or_first_available_variant.compare_at_price %}
+                <div id="comparePrice" class="money">
+                  {{ product.selected_or_first_available_variant.compare_at_price | money }}
+                </div>
+                {% endif %}
 
-                  {% unless product.price_max == 0 and settings.custom_price0_text != blank %} 
-                    <span id="productPrice"  class="money">
-                      {{ product.selected_or_first_available_variant.price | money }} 
-                    </span> 
-                  {% else %}  
-                  <span>
-                    {{settings.custom_price0_text }}
-                  </span>                    
-                  {% endunless %}
-                </div>
-                
-                {% unless product.price_max == 0 and settings.hide_price0_box_and_button %} 
-                <div class="qty product-page-qty"> <span class="productPGQtyLable">Quantity</span><a class="minus_btn" ></a>
+                {% unless product.price_max == 0 and settings.custom_price0_text != blank %} 
+                  <span id="productPrice"  class="money">
+                    {{ product.selected_or_first_available_variant.price | money }} 
+                  </span> 
+                {% else %}  
+                <span>
+                  {{settings.custom_price0_text }}
+                </span>                    
+                {% endunless %}
+              </div>
+              
+              <div class="qty product-page-qty">
+                {% unless product.price_max == 0 and settings.hide_price0_box_and_button %} <span class="productPGQtyLable">Quantity</span><a class="minus_btn" ></a>
                   <input type="text" id="quantity" name="quantity" class="txtbox" value="1" min="1">
-                  <a class="plus_btn" ></a>             
-                </div>
+                  <a class="plus_btn" ></a>
                 {% endunless %}
 
                 <div class="maximum-in-stock-error">{{ 'products.product.maximum_quantity_error' | t }}</div>
+              </div>
             </div>
           </div>
           

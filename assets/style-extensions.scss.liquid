@@ -1867,10 +1867,10 @@ PRODUCT
       }
     }
     .qty {
+      position: relative;
       display: inline-flex;
       align-items: center;
       overflow: initial;
-      margin-left: 10px;
     }
     .minus_btn,
     .plus_btn {
@@ -1900,6 +1900,17 @@ PRODUCT
       padding: 0 5px;
       font-weight: 900;
       display: block;
+    }
+    .maximum-in-stock-error {
+      right: 0;
+      transform: translateX(102%);
+      position: absolute;
+      width: max-content;
+      background-color: #ffda57;
+      color: black;
+      box-shadow: 1px 1px 3px #ccc;
+      padding: 4px 10px;
+      margin-bottom: 0;
     }
   }
   .product-description {
@@ -1935,13 +1946,15 @@ PRODUCT
             font-size: 1.8em;
           }
         }
-        .qty {
-          margin-bottom: 10px;
-        }
         .maximum-in-stock-error {
           position: absolute;
+          transform: initial;
           width: max-content;
-          bottom: -17px;
+          bottom: -32px;
+          background-color: #ffda57;
+          color: black;
+          box-shadow: 1px 1px 3px #ccc;
+          padding: 4px 10px;
         }
       }
     }
