@@ -1847,25 +1847,72 @@ theme.ProductPageSection = (function() {
       firstSlideNav.addClass('product-active-nav');
     }
 
-    function setActiveSlide(thumb) {
-      // Set active thumbnail
-      $('.product_nav li').removeClass('product-active-nav');
-      thumb.addClass('product-active-nav');
-      // Set active image
-      var selectedThumb = thumb.find('img').data('id-for');
+    function getSelectedThumbId (thumb) {
+      return thumb.find('img').data('id-for');
+    }
+
+    function getSelectedMediaLi (id) {
+      var selectedMediaLi;
       $('.product_slides li').each(function() {
-        $(this).removeClass('product-active-slide');
         var mediaId = $(this).find('.media').data('media-id');
-        if (selectedThumb === mediaId) {
-          $(this).addClass('product-active-slide');
+        if (mediaId === id) {
+          selectedMediaLi = $(this);
         }
       })
+      return selectedMediaLi;
+    }
+
+    function setSelectedMediaLi (id) {
+      getSelectedMediaLi(id).addClass('product-active-slide');
+    }
+
+    function setActiveSlide(thumb) {
+      // Remove current active class
+      $('.product_nav li').removeClass('product-active-nav');
+      $('.product_slides li').removeClass('product-active-slide');
+
+      // Set active thumbnail
+      thumb.addClass('product-active-nav');
+
+      // Set active image
+      var selectedThumbId = getSelectedThumbId(thumb);
+      setSelectedMediaLi(selectedThumbId);
+    }
+
+    function videoPlayer(iframe, func, args) {
+      if (iframe) {
+        // Frame exists, 
+        iframe.contentWindow.postMessage(JSON.stringify({
+          "event": "command",
+          "func": func,
+          "args": args || [],
+        }), "*");
+      }
     }
 
     initFirstSlide();
 
     $('.product_nav li').on('mouseover', function() {
       setActiveSlide($(this));
+    });
+    
+    $('.product_nav li').on('click', function(e) {
+      e.preventDefault();
+      var selectedVideoId = getSelectedThumbId($(this));
+      var selectedVideo = getSelectedMediaLi(selectedVideoId).find('iframe');
+      var icon = $(this).find('i');
+      // selectedVideo.playVideo();
+      if (selectedVideo.hasClass('playing')) {
+        videoPlayer(selectedVideo[0], "pauseVideo");
+        selectedVideo.removeClass('playing');
+        icon.removeClass('fa-pause');
+        icon.addClass('fa-play');
+      } else {
+        videoPlayer(selectedVideo[0], "playVideo");
+        selectedVideo.addClass('playing');
+        icon.removeClass('fa-play');
+        icon.addClass('fa-pause');
+      }
     });
 
     /* END PRODUCT SLIDER*/
