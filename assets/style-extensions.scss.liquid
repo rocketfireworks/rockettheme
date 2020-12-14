@@ -2265,3 +2265,12 @@ PRODUCT CAROUSEL
 #content .main_box .desc h5 a {
   @include line-clamp(2, 1.2);
 }
+
+// Fix theme quickview overlay
+// Now quickview only shows when product image is hovered
+#content .main_box:hover .overlay {
+  opacity: 0;
+}
+#content .main_box .product-image-container:hover .overlay {
+  opacity: 1;
+}

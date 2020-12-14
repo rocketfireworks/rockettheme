@@ -56,29 +56,32 @@
       {% endif %}
 
       {% endif %}
-      <div class="product-image">
-        
-        <a href="{{ product.url | within: collection }}" class="product-image-link">
-          <noscript>
-          <img  src="{{ product.featured_image.src | product_img_url: "300x"}}" srcset="{{ product.featured_image.src | product_img_url: img_size}} 1x, {{ product.featured_image.src | product_img_url: img_size, scale: 2}} 2x, {{ product.featured_image.src | product_img_url: img_size, scale: 3}} 3x" alt="{{ product.featured_image.alt | escape }}">
-          </noscript>
-          <img class="lazyload"
-              src="{{ product.featured_image.src | product_img_url: "300x"}}"
-              data-srcset="{{ product.featured_image.src | product_img_url: img_size}} 1x, {{ product.featured_image.src | product_img_url: img_size, scale: 2}} 2x, {{ product.featured_image.src | product_img_url: img_size, scale: 3}} 3x"
-              alt="{{ product.featured_image.alt | escape }}"
-        style="{% if max_img_width == '0px' %} width: auto; {% else %} max-width: {{max_img_width}} {% endif %}"/>  
-          
-          <div class="spinner-cube">
-            <div class="loadFacebookG"></div>
-          </div>	
-          
-        </a>
-      </div>
-      {% if section.settings.collection_overlay %}
-        <div class="overlay">
-          {% include 'product-quick-view-btn' qvp:product %}
+
+      <div class="product-image-container">
+        <div class="product-image">
+          <a href="{{ product.url | within: collection }}" class="product-image-link">
+            <noscript>
+            <img  src="{{ product.featured_image.src | product_img_url: "300x"}}" srcset="{{ product.featured_image.src | product_img_url: img_size}} 1x, {{ product.featured_image.src | product_img_url: img_size, scale: 2}} 2x, {{ product.featured_image.src | product_img_url: img_size, scale: 3}} 3x" alt="{{ product.featured_image.alt | escape }}">
+            </noscript>
+            <img class="lazyload"
+                src="{{ product.featured_image.src | product_img_url: "300x"}}"
+                data-srcset="{{ product.featured_image.src | product_img_url: img_size}} 1x, {{ product.featured_image.src | product_img_url: img_size, scale: 2}} 2x, {{ product.featured_image.src | product_img_url: img_size, scale: 3}} 3x"
+                alt="{{ product.featured_image.alt | escape }}"
+          style="{% if max_img_width == '0px' %} width: auto; {% else %} max-width: {{max_img_width}} {% endif %}"/>  
+            
+            <div class="spinner-cube">
+              <div class="loadFacebookG"></div>
+            </div>	
+          </a>
         </div>
-      {% endif %}
+
+        {% if section.settings.collection_overlay %}
+          <div class="overlay">
+            {% include 'product-quick-view-btn' qvp:product %}
+          </div>
+        {% endif %}
+      </div>
+
     </div>
     <div class="desc">
       <h5><a href="{{ product.url | within: collection }}">{{ product.title | escape }}</a></h5>
