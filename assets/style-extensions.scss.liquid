@@ -2289,6 +2289,77 @@ PRODUCT CAROUSEL
   opacity: 1;
 }
 
+// Price tag
+.card-price {
+  position: absolute;
+  right: -9px;
+  top: -5px;
+  padding: 3px 6px;
+  z-index: 4;
+	display: inline-block;
+  width: auto;
+	height: 26px;
+	background-color: #62D3EE;
+	-webkit-border-radius: 3px 4px 4px 3px;
+	-moz-border-radius: 3px 4px 4px 3px;
+	border-radius: 3px 4px 4px 3px;
+	border-left: 1px solid #62D3EE;
+	/* This makes room for the triangle */
+	margin-left: 15px;
+}
+
+/* Makes the triangle */
+.card-price:before {
+	content: "";
+	position: absolute;
+  display: block;
+  top: -1px;
+  left: -14px;
+	width: 0;
+	height: 0;
+	border-top: 13px solid transparent;
+	border-bottom: 14px solid transparent;
+	border-right: 15px solid #62D3EE;
+}
+
+/* Makes the circle */
+.card-price:after {
+	content: "";
+	background-color: white;
+	border-radius: 50%;
+	width: 4px;
+	height: 4px;
+	display: block;
+	position: absolute;
+	left: -6px;
+	top: 11px;
+}
+
+#content {
+  // Remove owl carousel overflow hidden
+  .featured-products {
+    .owl-carousel .owl-stage-outer {
+      overflow: visible;
+    }
+  }
+  // Set sale style on carousel
+  .main_box .box_1 {
+    .card-price.on-sale {
+      background-color: #c94344;
+      &:before {
+        border-right: 15px solid #c94344;
+      }
+    }
+    .compare-price {
+      position: absolute;
+      text-decoration: line-through;
+      top: -20px;
+    }
+    .sale-price {
+      color: #fff;
+    }
+  }
+}
 
 /*----------------
 Swatches

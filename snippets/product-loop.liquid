@@ -33,10 +33,15 @@
   <div>
     <div class="box_1">
       
-      <div class="price card-price">
+      <div class="price card-price{% if product.selected_or_first_available_variant.price < product.selected_or_first_available_variant.compare_at_price %} on-sale{% endif %}">
+        {% if product.selected_or_first_available_variant.price < product.selected_or_first_available_variant.compare_at_price %}
+        <div class="money compare-price">
+          {{ product.selected_or_first_available_variant.compare_at_price | money }}
+        </div>
+        {% endif %}
         {% unless product.price_max == 0 and settings.custom_price0_text != blank %}
           {% if product.price_varies %}{{ 'products.product.price_from' | t }}{% endif %} 
-          <span class="money">{{ product.price | money }}</span>
+          <span class="money{% if product.selected_or_first_available_variant.price < product.selected_or_first_available_variant.compare_at_price %} sale-price{% endif %}">{{ product.price | money }}</span>
           {% if on_sale %}<span class="compare-price money">{{ product.compare_at_price | money }}</span>{% endif %}
           {% else %}<span>{{settings.custom_price0_text }}</span> 
         {% endunless %}	
