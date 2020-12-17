@@ -1839,7 +1839,47 @@ theme.ProductPageSection = (function() {
           return;
         }
    
-     /*PRODUCT SLIDER*/
+    /* ADD YOUTUBE IFRAME API */
+    var tag = document.createElement('script');
+    tag.id = 'iframe-api';
+    tag.src = 'https://www.youtube.com/iframe_api';
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    var player;
+    window.onYouTubeIframeAPIReady = function () {
+      player = new YT.Player('player', {
+          events: {
+            'onStateChange': onPlayerStateChange
+          }
+      });
+    }
+
+    function onPlayerStateChange(e) {
+      updatePlayerIcon(e.data);
+    }
+
+    function updatePlayerIcon(playerState) {
+      /* Player Status
+      * -1 – unstarted
+      * 0 – ended
+      * 1 – playing
+      * 2 – paused
+      * 3 – buffering
+      * 5 – video cued
+      */
+      var icon = $('.product_nav').find('i');
+      if (playerState == 1 || playerState == 3) {
+        icon.removeClass('fa-play');
+        icon.addClass('fa-pause');
+      } else {
+        icon.removeClass('fa-pause');
+        icon.addClass('fa-play');
+      }
+    }
+    /* END YOUTUBE IFRAME API */
+
+    /*PRODUCT SLIDER*/
     function initFirstSlide() {
       var firstSlide = $('.product_slides li').first();
       var firstSlideNav = $('.product_nav li').first();
@@ -1899,19 +1939,13 @@ theme.ProductPageSection = (function() {
     $('.product_nav li').on('click', function(e) {
       e.preventDefault();
       var selectedVideoId = getSelectedThumbId($(this));
-      var selectedVideo = getSelectedMediaLi(selectedVideoId).find('iframe');
-      var icon = $(this).find('i');
-      // selectedVideo.playVideo();
+      var selectedVideo = getSelectedMediaLi(selectedVideoId).find('#player');
       if (selectedVideo.hasClass('playing')) {
         videoPlayer(selectedVideo[0], "pauseVideo");
         selectedVideo.removeClass('playing');
-        icon.removeClass('fa-pause');
-        icon.addClass('fa-play');
       } else {
         videoPlayer(selectedVideo[0], "playVideo");
         selectedVideo.addClass('playing');
-        icon.removeClass('fa-play');
-        icon.addClass('fa-pause');
       }
     });
 
