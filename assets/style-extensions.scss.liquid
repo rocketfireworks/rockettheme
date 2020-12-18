@@ -1978,15 +1978,24 @@ PRODUCT
   }
 
   // Swatch
-  .swatch label {
-    min-width: 40px;
-    border:1.5px solid #ddd;
-    box-shadow: 1px 1px 3px #ccc;
+  .swatch {
+    margin: 0.7em 0;
+    label {
+      min-width: 40px;
+      border:1.5px solid #ddd;
+      box-shadow: 1px 1px 3px #ccc;
+    }
+    .swatch-element {
+      margin: 0 10px 0 0;
+      label {
+        padding: 0.375em 0;
+      }
+    }
+    .color.swatch-element label {
+      min-height: 2.25em;
+    }
   }
 
-  .swatch-element label {
-    padding: 6px 0;
-  }
 
   .swatch input:checked + label {
     border:1.5px solid {{ settings.primary_color }};
@@ -2370,50 +2379,54 @@ Swatches
   display: none;
 }
 
-{% assign width = '15px' %}
-{% assign height = '30px' %}
+{% assign width = '22px' %}
+{% assign height = '20px' %}
 .swatch { 
-  margin: 1em 0; 
+  display: flex;
+  flex-wrap: wrap-reverse;
+  text-align: left;
 }
 /* Label */
 .swatch .header {
-  margin: 0.5em 0;
-  font-weight:700;
-  color:{{ settings.heading_text_color }};
+  font-weight: 700;
+  color: {{ settings.heading_text_color }};
 }
 /* Hide radio buttons.*/
 .swatch input { 
-  display:none;
+  display: none;
 }
 
 .swatch label {
+  display: block; // Fix bootstrap display: inline-block
   /* Rounded corners */
-  -webkit-border-radius:2px;
-  -moz-border-radius:2px;
-  border-radius:2px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+
   /* Color swatches contain no text so they need to have a width. */
   min-width:{{ width }}; 
   height: auto !important;
+
   /* No extra spacing between them */
-  margin:0;
+  margin: 0;
+
   /* The border when the button is not selected */
-  border:1px solid #ccc;
+  border: 1px solid #ccc;
+
   /* Background color */
-  background-color:#fff;
+  background-color: #fff;
   background-size: cover;
+
   /* Styling text */
-  font-size:13px;
-  text-align:center;
-  white-space:normal;
-  text-transform:uppercase;
-  color:#212b36;
-  cursor:pointer;
-  -moz-box-sizing:content-box; 
-  -webkit-box-sizing:content-box; 
-  box-sizing:content-box;
+  font-size: 13px;
+  text-align: center;
+  white-space: normal;
+  text-transform: uppercase;
+  color: #212b36;
+  cursor: pointer;
 }
 .swatch-element label { 
-  padding: 3px 5px; 
+  padding: 1px 4px; 
 }
 .color.swatch-element label { 
   padding:0; 
@@ -2422,23 +2435,33 @@ Swatches
 /* Styling selected swatch */
 /* Slightly raised */
 .swatch input:checked + label {
-  border:1px solid {{ settings.primary_color }};
-  background-color:{{ settings.primary_color }};
-  color:{{ settings.button_text_color }};
+  border: 1px solid {{ settings.primary_color }};
+  background-color: {{ settings.primary_color }};
+  color: {{ settings.button_text_color }};
 } 
 .swatch .swatch-element {
-  float:left;
-  -webkit-transform:translateZ(0); /* webkit flicker fix */
-  -webkit-font-smoothing:antialiased; /* webkit text rendering fix */
+  -webkit-transform: translateZ(0); /* webkit flicker fix */
+  -webkit-font-smoothing: antialiased; /* webkit text rendering fix */
+
   /* Spacing between buttons */
-  margin:0px 10px 0 0;
+  margin: 3px 3px 0 0;
   /* To position the sold out graphic and tooltip */
-  position:relative;
+  position: relative;
 }
 /* Image with the cross in it */
-.crossed-out { position:absolute; width:100%; height:100%; left:0; top:0; }
-.swatch .swatch-element .crossed-out { display:none; }
-.swatch .swatch-element.soldout .crossed-out { display:block; }
+.crossed-out { 
+  position: absolute; 
+  width: 100%; 
+  height: 100%; 
+  left: 0; 
+  top: 0; 
+}
+.swatch .swatch-element .crossed-out { 
+  display: none; 
+}
+.swatch .swatch-element.soldout .crossed-out { 
+  display: block; 
+}
 .swatch .swatch-element.soldout label {
   filter: alpha(opacity=60); /* internet explorer */
   -khtml-opacity: 0.6;      /* khtml, old safari */
@@ -2447,22 +2470,22 @@ Swatches
 }
 /* Tooltips */
 .swatch .tooltip {
-  text-align:center;
-  background:{{ settings.primary_color }};
-  color:{{ settings.button_text_color }};
-  bottom:100%;
+  text-align: center;
+  background: {{ settings.primary_color }};
+  color: {{ settings.button_text_color }};
+  bottom: 100%;
   padding: 10px;
-  display:block;
-  position:absolute;
-  width:100px;
-  left:{{ width | remove: 'px' | to_number | divided_by: 2 | minus: 50 | plus: 2 }}px;
-  margin-bottom:15px;
+  display: block;
+  position: absolute;
+  width: 100px;
+  left: {{ width | remove: 'px' | to_number | divided_by: 2 | minus: 50 | plus: 2 }}px;
+  margin-bottom: 15px;
   /* Make it invisible by default */
-  filter:alpha(opacity=0);
+  filter: alpha(opacity=0);
   -khtml-opacity: 0;
   -moz-opacity: 0;
-  opacity:0;
-  visibility:hidden;
+  opacity: 0;
+  visibility: hidden;
   /* Animations */
   -webkit-transform: translateY(10px);
   -moz-transform: translateY(10px);
@@ -2480,9 +2503,6 @@ Swatches
   -o-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
   box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
   z-index: 10000;
-  -moz-box-sizing:border-box; 
-  -webkit-box-sizing:border-box; 
-  box-sizing:border-box;
 }
 .swatch .tooltip:before {
   bottom:-20px;
@@ -2535,4 +2555,20 @@ Swatches
 }
 .swatch.error code {
   font-family:monospace;
+}
+
+#content .main_box .swatch-container {
+  position: absolute;
+  z-index: 4;
+  bottom: 0;
+  margin: 0;
+}
+
+#content .main_box .swatch .tooltip {
+  left: -35px;
+  transition: none;
+  -webkit-transition: none;
+  -moz-transition: none;
+  -ms-transition: none;
+  -o-transition: none;
 }
