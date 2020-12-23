@@ -289,6 +289,31 @@ theme.Sections.prototype = _.assignIn({}, theme.Sections.prototype, {
   }
 });
 
+// ============================================================================
+// Begin Cart Code
+// ============================================================================
+window.initAddToCartForms = function() {
+  $('body').find('.add-to-cart-form').submit(function(e) {
+    {% if settings.cart_type == "modal"%}  
+    e.preventDefault();
+    //Disable the Add To Cart button, add a disabled class. 
+    $(e.target).find('input[type=image], input.submit-add-to-cart').attr('disabled', true).addClass('disabled');
+
+    //Can't use updateCartFromForm since you need the item added before you can update (otherwise, would have been more convenient)
+    //So, in onItemAdded, we Shopify.getCart() to force the repaint of items in cart. 
+    Shopify.addItemFromForm(e.target);
+    {% endif %}
+
+  });
+}
+
+window.handleCarouselUpdate = () => {
+  window.initAddToCartForms();
+}
+// ============================================================================
+// End Cart Code
+// ============================================================================
+
 theme.FeaturedProductsSection = {};
 
 theme.FeaturedProductsSection = (function() {
@@ -299,18 +324,6 @@ theme.FeaturedProductsSection = (function() {
     var starsValue = this.reviewsStars = $container.attr('data-reviews-stars');
     
     initOwlCarousel(sectionId);
-    $container.find('form[action*="/cart/add"]').submit(function(e) {
-      {% if settings.cart_type == "modal"%}  
-      e.preventDefault();
-      //Disable the Add To Cart button, add a disabled class. 
-      $(e.target).find('input[type=image], input.submit-add-to-cart').attr('disabled', true).addClass('disabled');
-
-      //Can't use updateCartFromForm since you need the item added before you can update (otherwise, would have been more convenient)
-      //So, in onItemAdded, we Shopify.getCart() to force the repaint of items in cart. 
-      Shopify.addItemFromForm(e.target);
-      {% endif %}
-
-    }); 
     $('.main_box').matchHeight();
   }
 
