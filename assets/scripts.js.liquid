@@ -303,17 +303,102 @@ window.initAddToCartForms = function() {
     //So, in onItemAdded, we Shopify.getCart() to force the repaint of items in cart. 
     Shopify.addItemFromForm(e.target);
     {% endif %}
-
   });
 }
 
 window.handleCarouselUpdate = () => {
   window.initAddToCartForms();
+  window.swatchSelection();
+}
+
+window.handleCollectionUpdate = () => {
+  window.initAddToCartForms();
+  window.swatchSelection();
 }
 // ============================================================================
 // End Cart Code
 // ============================================================================
 
+
+// ============================================================================
+// Begin Swatch Selection Code
+// ============================================================================
+window.swatchSelection = (container) => {
+  var container = $('.add-to-cart-form');
+  var sectionId = this.sectionId = container.attr('data-section-id');
+  var isFeaturedProduct = container.data("featured-product") || null;
+  
+  var selectedSwatchGroups = [];
+  var selectedSwatchGroup = {
+    index: '',
+    value: ''
+  };
+  container.find('.swatch input').on("change", (e) => {
+    var selectedSwatch = e.target.value;
+
+    // Get selected swatch form
+    var productForm = $(e.target).parents('.add-to-cart-form');
+
+    // Get current/default swatch group
+    
+    var currentSingleSelects = [
+      productForm.find('.recommended-product-select .SingleOptionSelector-0').val() || '',
+      productForm.find('.recommended-product-select .SingleOptionSelector-1').val() || '',
+      productForm.find('.recommended-product-select .SingleOptionSelector-2').val() || ''
+    ]
+    currentSingleSelects.forEach((currentSingleSelect, i) => {
+      // selectedSwatchGroups.push(currentSingleSelect);
+      selectedSwatchGroups[i] = currentSingleSelect;
+    })
+
+    // Get selected swatch group
+    var swatchGroups = [
+      productForm.find('.swatch[data-option-index="0"]')[0],
+      productForm.find('.swatch[data-option-index="1"]')[0],
+      productForm.find('.swatch[data-option-index="2"]')[0]
+    ];
+    swatchGroups.forEach( (swatchGroup, i) => {
+      if (swatchGroup) {
+        var swatches = swatchGroup.getElementsByTagName('input');
+        swatches.forEach(swatch => {
+          var swatchValue = swatch.value;
+          if (swatchValue === selectedSwatch) {
+            selectedSwatchGroup = { 
+              index: i,
+              value: selectedSwatch
+            };
+            selectedSwatchGroups[i] = selectedSwatch;
+          }
+        })
+      }
+    });
+    
+    // Set swatch single select
+    var singleSelect = container.find('.recommended-product-select .SingleOptionSelector-' + selectedSwatchGroup.index);
+    singleSelect.val(selectedSwatch);
+
+    // Make swatch string
+    var selectedSwatches = '';
+    selectedSwatchGroups.forEach(value => {
+      selectedSwatches += value;
+    })
+
+    // set main swatch select
+      var mainSelect = productForm.find('select[name="id"]');
+      var mainSelectOptions = mainSelect.find('option');
+      mainSelectOptions.each((i, mainSelectOption) => {
+        dataOption = mainSelectOption.getAttribute('data-options');
+        if (dataOption === selectedSwatches) {
+          selectedValue = mainSelect.find('option[data-options="'+ dataOption +'"]').val();
+          mainSelect.val(selectedValue);
+        }
+      })
+  });
+}
+// ============================================================================
+// End Swatch Selection Code
+// ============================================================================
+                 
 theme.FeaturedProductsSection = {};
 
 theme.FeaturedProductsSection = (function() {
@@ -1743,7 +1828,7 @@ theme.CollectionPageSection = (function() {
       }
     });
   }
-
+  window.handleCollectionUpdate();
   return CollectionPageSection;
 })();
 
