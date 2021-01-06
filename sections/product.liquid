@@ -219,11 +219,13 @@
               {% unless product.price_max == 0 and settings.hide_price0_box_and_button %} 
                 {% if section.settings.show_smart_checkout%}
                 <div class="product_payments_btns">
-                <input type="submit" name="add" class="btn_c" id="addToCart" value="{{ 'products.product.add_to_cart' | t }}">
-                {{ form | payment_button }}
+                  <input type="submit" name="add" class="btn_c" id="addToCart" value="{{ 'products.product.add_to_cart' | t }}">
+                  {{ form | payment_button }}
                 </div>
                 {% else %}
-                  <input type="submit" name="add" class="btn_c" id="addToCart" value="{{ 'products.product.add_to_cart' | t }}">
+                  <div class="product_payment_btn">
+                    <input type="submit" name="add" class="btn_c" id="addToCart" value="{{ 'products.product.add_to_cart' | t }}">
+                  </div>
                 {% endif %}
               {% endunless %}
             </div>
