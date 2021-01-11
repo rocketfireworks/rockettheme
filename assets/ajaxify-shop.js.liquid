@@ -229,49 +229,15 @@ jQuery(document).ready(function() {
     jQ(this).parents(selectors.LINE_ITEM_ROW).remove();
   });
 
-  /**
- * Shopify.showModal
- * 
- * @param string contents
- * @param integer hideDelay
- */
-  Shopify.modalTimer = false;
-  Shopify.showModal = function(contents,hideDelay) {
-    $("html").css("overflow-y","hidden");
 
-    //Ensure the plugin is loaded
-    if(typeof $().magnificPopup !== 'function'){ return }
-
-    //Check the function vars have been sent
-    if(typeof contents === 'undefined'){ return }
-    //if(typeof hideDelay === 'undefined'){ var hideDelay = 7000 /* default */ }
-
-    //Open the modal
-    $.magnificPopup.open({
-      items: {
-        src: '<div class="mfp-with-anim modal-popup eyFloatingCart">'+contents+'</div>', 
-        type: 'inline'
-      },
-      mainClass: 'mfp-move-from-top',
-      removalDelay: 1000,
-      callbacks: {
-        close: function() {
-          $("html").css("overflow-y","auto");
-        }
-      }
-    });
-
-    bindEventsInCart();
-  };
-
-  {% comment %}
-  /**
+{% comment %}
+/**
  * Shopify.addImageSize
  * 
  * @param string - the image src
  * @param size - this size to make it
  */
-  {% endcomment %}
+{% endcomment %}
 
   Shopify.addImageSize = function(src,size){
     if(typeof size === 'undefined'){ return src; }
