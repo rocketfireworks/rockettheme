@@ -78,6 +78,10 @@ html {
   margin-right: 15px;
 }
 
+.is-transitioning {
+  display: block !important;
+  visibility: visible !important;
+}
 /*------------------------------------------------------------------
 Custom Page Template
 -------------------------------------------------------------------*/
@@ -2574,4 +2578,98 @@ Swatches
   -moz-transition: none;
   -ms-transition: none;
   -o-transition: none;
+}
+
+/*------------------------------------------------------------------
+PRODUCT CONFIRM ADD POPUP
+-------------------------------------------------------------------*/
+.product-confirm-popup {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  font-size: 14px;
+  background-color: #107fa8;
+  color: #fff;
+  transform: translateY(0%);
+  transition: transform 0.45s cubic-bezier(0.29, 0.63, 0.44, 1);
+  &.toggle-hide {
+    transform: translateY(-100%);
+  }
+  &.error {
+    background-color: #c94344;
+  }
+  .confirm-popup-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    column-gap: 1em;
+    justify-content: space-between;
+  }
+  .popup-close {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 5px 20px;
+    font-size: 1.2em;
+    background-color: transparent;
+    border: none;
+  }
+  .popup-wrapper {
+    display: flex;
+    column-gap: 1em;
+    justify-content: space-between;
+    .popup-image-wrapper {
+      max-width: 100px;
+      max-height: 100px;
+      display: flex;
+      margin: 1em 0;
+      img {
+        width: 100%;
+        object-fit: contain;
+      }
+    }
+    .popup-heading {
+      font-size: 1.563em;
+      font-weight: bold;
+      color: #fff;
+    }
+    .popup-content-wrapper {
+      margin: 1em 0;
+      .popup-description {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        column-gap: 1em;
+      }
+      .popup-product-title {
+        font-size: 1.25em;
+      }
+      .popup-product-price {
+        font-size: 1.4em;
+        font-weight: bold;
+      }
+    }
+  }
+  .popup-cta-link {
+    text-align: center;
+    padding: 0.3em 1.8em;
+    background: #fff;
+    color: #16142c;
+    font-size: 1.4em;
+    font-weight: bold;
+    text-transform: uppercase;
+    &:hover, &:focus {
+      text-decoration: none;
+    }
+  }
+  @media (max-width: 789px) {
+    font-size: 13px;
+  }
+  @media (max-width: 680px) {
+    font-size: 12px;
+    .popup-image-wrapper {
+      max-width: 80px;
+    }
+  }
 }

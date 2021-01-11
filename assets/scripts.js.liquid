@@ -288,22 +288,33 @@ theme.Sections.prototype = _.assignIn({}, theme.Sections.prototype, {
     }.bind(this));
   }
 });
-
 // ============================================================================
 // Begin Cart Code
 // ============================================================================
 window.initAddToCartForms = function() {
-  $('body').find('.add-to-cart-form').submit(function(e) {
+  $('body').find('.add-to-cart-form').on('submit', (e) => {
     {% if settings.cart_type == "modal"%}  
     e.preventDefault();
     //Disable the Add To Cart button, add a disabled class. 
     $(e.target).find('input[type=image], input.submit-add-to-cart').attr('disabled', true).addClass('disabled');
 
-    //Can't use updateCartFromForm since you need the item added before you can update (otherwise, would have been more convenient)
-    //So, in onItemAdded, we Shopify.getCart() to force the repaint of items in cart. 
-    Shopify.addItemFromForm(e.target);
+    window.addItemToCart(e.target);
     {% endif %}
   });
+}
+
+window.addItemToCart = function(form) {
+  Shopify.addItemFromForm(form, (line_item) => {
+    // Note: getCart() refreshes the cart. This updates the number of items in the cart.
+    Shopify.getCart(Shopify.updateQuickCart);
+    window.displayConfirmPopup(true, line_item);
+  });
+  
+  Shopify.onError = function(XMLHttpRequest, textStatus) {
+    var response = jQuery.parseJSON(XMLHttpRequest.responseText);
+    var error = response.description;
+    window.displayConfirmPopup(false, null, error);
+  }
 }
 
 window.handleCarouselUpdate = () => {
@@ -319,12 +330,110 @@ window.handleCollectionUpdate = () => {
 // End Cart Code
 // ============================================================================
 
+
+window.displayConfirmPopup = function(success, product, error) {
+
+  var successMessage = 'Just added to your cart';
+  var errorMessage = 'Couldn\'t add to cart';
+
+  var popup = $('.product-confirm-popup');
+  var popupWrapper = $('.popup-wrapper');
+  var hoverState = false;
+  var timer;
+
+  popup.removeClass('error');
+  $.getJSON('/cart.js', function (cart) {
+    var productCount = cart.item_count;
+    $('.product-count').text(productCount);
+  });
+
+  if (success) {
+    // Make variant string
+    if (product.variant_title) {
+      product.variant_title = '(' + product.variant_title + ')';
+    } else {
+      product.variant_title = '';
+    }
+    // Format price
+    productPrice = Shopify.formatMoney(product.price, app.data.money_format);
+
+    // Popup html
+    var popupContent = `
+      <div class="popup-image-wrapper">
+        <img src="${product.featured_image.url}" alt="${product.featured_image.alt}" class="confirm-popup-image">
+      </div>
+
+      <div class="popup-content-wrapper">
+        <h2 id="ConfirmPopupMessage" class="popup-heading">${successMessage}</h2>
+        <div class="popup-description">
+          <div>
+            <div class="popup-product-title">
+              <span class="popup-product-name">${product.product_title}</span> <span class="popup-product-variants">${product.variant_title}</span>
+            </div>
+            <div class="popup-product-quantity">
+              <span>Qty:</span> <span class="qty">${product.quantity}</span>
+            </div>
+          </div>
+          <div class="popup-product-price">${productPrice}</div>
+        </div>
+      </div>
+    `;
+  } else {
+    popup.addClass('error');
+
+    // Popup html
+    var popupContent = `
+      <div class="popup-content-wrapper">
+        <h2 id="ConfirmPopupMessage" class="popup-heading">${errorMessage}</h2>
+        <div class="error-message">${error}</div>
+      </div>
+    `;
+  }
+  popupWrapper.html(popupContent);
+
+  showPopup(popup);
+  timer = setTimeout(() => {
+    hidePopup(popup)
+  }, 3000);
+  
+  $('.popup-close').on('click', () => {
+    hidePopup(popup);
+  })
+
+  // Open cart modal 
+  {% if settings.cart_type == "modal" %}
+  $(".popup-cta-link").on("click", (e) => {
+    window.openCartPopup(e);
+  });   
+  {% endif %} 
+
+  // Auto close/keep popup on page
+  popup.on('mouseenter', () => {
+    hoverState = true;
+    clearTimeout(timer);
+  })
+
+  popup.on('mouseleave', () => {
+    hoverState = false;
+    timer = setTimeout(() => {
+      hidePopup(popup);
+    }, 3000);
+  })
+
+  function hidePopup(popup) {
+    popup.addClass('toggle-hide');
+  }
+
+  function showPopup(popup) {
+    popup.removeClass('toggle-hide');
+  }
+}
+
 // ============================================================================
 // Begin Open Cart Popup Code
 // ============================================================================
 window.openCartPopup = function openCartPopup(e) {
   e.preventDefault();
-  alert();
   $("html").css("overflow-y","hidden");
 
   Shopify.getCart(function(cart){
@@ -536,36 +645,12 @@ theme.HeaderSection = (function() {
   
     jQuery(document).ready(function() { 
     /// Open modal by cart icon in header ///
-      $(".cart-popup").on("click", function(){
+      $(".cart-popup").on("click", function(e){
         {% if settings.cart_type == "page"%}
           var url = "/cart";
           $(location).attr('href',url);
-        {% else %}
-          $("html").css("overflow-y","hidden");
-
-             Shopify.getCart(function(cart){
-               var textareas = $("div.cart_menu").find("textarea");
-               $(textareas).each(function () {
-                 $(this).val(cart.note);
-                 $(this).text(cart.note);
-               });
-             });
-
-              var contents = $("div.cart_menu").wrap('<p>').parent().html();
-              $.magnificPopup.open({
-                  items: {
-                      src: '<div class="mfp-with-anim modal-popup eyFloatingCart">'+contents+'</div>',
-                      type: 'inline'
-                  },
-                  mainClass: 'mfp-move-from-top',
-                  removalDelay: 1000,
-                  callbacks: {
-              close: function() {
-                $("html").css("overflow-y","auto");
-              }
-              }
-              });
-             bindEventsInCart();
+        {% else if settings.cart_type == "modal" %}
+          window.openCartPopup(e);
         {% endif %} 
       });   
       
@@ -2051,6 +2136,12 @@ theme.ProductPageSection = (function() {
       // Set active image
       var selectedThumbId = getSelectedThumbId(thumb);
       setSelectedMediaLi(selectedThumbId);
+
+      // Pause video if not active
+      var selectedMedia = getSelectedMediaLi(selectedThumbId).find('#player');
+      if (selectedMedia.length) {
+        
+      }
     }
 
     function videoPlayer(iframe, func, args) {
@@ -2101,28 +2192,26 @@ theme.ProductPageSection = (function() {
     /* END SHOW PRODUCT SUMMARY */
 
     selectCallback = function (variant, selector) {
-  
-      if(variant && changeUrl && isFeaturedProduct != true){
+
+      if (variant && changeUrl && isFeaturedProduct != true) {
         var newurl = window.location.protocol + '//' + window.location.host + window.location.pathname + '?variant=' + variant.id;
-        window.history.replaceState({path: newurl}, '', newurl);
+        window.history.replaceState({ path: newurl }, '', newurl);
       }
-     /* for the variant sku change */
-    if ($container.find(".variant-sku")){
-    if (jQuery.type( variant ) === "null")
-    {
-      $container.find('.variant-sku').empty();
-    } 
-    else {
-         if (variant.sku ) 
-         {
-          $container.find('.variant-sku').html("{{'products.general.product_sku' | t}}: "+ variant.sku);
-        }
-        else {
+      /* for the variant sku change */
+      if ($container.find(".variant-sku")) {
+        if (jQuery.type(variant) === "null") {
           $container.find('.variant-sku').empty();
         }
+        else {
+          if (variant.sku) {
+            $container.find('.variant-sku').html("{{'products.general.product_sku' | t}}: " + variant.sku);
+          }
+          else {
+            $container.find('.variant-sku').empty();
+          }
+        }
+
       }
-    
-    }
      /* end of variant sku change  */
     
    
@@ -2197,15 +2286,15 @@ theme.ProductPageSection = (function() {
     }
     if (variant) {
       if (variant.available) {
-//          if (variant.inventory_management == "shopify" && variant.inventory_policy != "continue" && variant.inventory_quantity < qty) {
-//           // Variant is sold out, disable the submit button
-//           addToCart.val('{{ "products.product.sold_out" | t }}').addClass('disabled').prop('disabled', true);
-//          }
-//         else{
-          // We have a valid product variant, so enable the submit button
-          addToCart.removeClass('disabled').prop('disabled', false).val('{{ "products.product.add_to_cart" | t }}');
-          smart_checkout_btn.show();
-//         }
+  //          if (variant.inventory_management == "shopify" && variant.inventory_policy != "continue" && variant.inventory_quantity < qty) {
+  //           // Variant is sold out, disable the submit button
+  //           addToCart.val('{{ "products.product.sold_out" | t }}').addClass('disabled').prop('disabled', true);
+  //          }
+  //         else{
+            // We have a valid product variant, so enable the submit button
+            addToCart.removeClass('disabled').prop('disabled', false).val('{{ "products.product.add_to_cart" | t }}');
+            smart_checkout_btn.show();
+  //         }
         
 
       } else {
@@ -2260,98 +2349,92 @@ theme.ProductPageSection = (function() {
     addToCart.val('{{ "products.product.unavailable" | t }}').addClass('disabled').prop('disabled', true);
     smart_checkout_btn.hide();
     }
-
-  
-                   
- };
+  };
                       
-    
-    
-    $container.find(".main-product-select .single-option-selector").on("change", function(){
-      var option1 = $container.find(".main-product-select #SingleOptionSelector-0").val() || null,
-          option2 = $container.find(".main-product-select #SingleOptionSelector-1").val() || null,
-          option3 = $container.find(".main-product-select #SingleOptionSelector-2").val() || null,
-          flag = true;
-     for (var i=0,length=productVariantObj.length; i<length; i++) {
-       var productVar = productVariantObj[i];
-      	 if(productVar.option1 != null){productVar.option1 = productVar.option1.replace(/\s{2,}/g, ' ');} 
-         if(productVar.option2 != null){productVar.option2 = productVar.option2.replace(/\s{2,}/g, ' ');} 
-         if(productVar.option3 != null){productVar.option3 = productVar.option3.replace(/\s{2,}/g, ' ');} 
-         
-       if(option1==productVar.option1 && option2==productVar.option2 && option3==productVar.option3){
-         flag = false;
-         $container.find('#product-select-' + productJSON.id ).val(productVar.id);
-         selectCallback(productVar, productJSON.id);
-         break;
-       }
-     }
-     if(flag){
-        selectCallback(null, productJSON.id);
+  $container.find(".main-product-select .single-option-selector").on("change", function () {
+    var option1 = $container.find(".main-product-select #SingleOptionSelector-0").val() || null,
+      option2 = $container.find(".main-product-select #SingleOptionSelector-1").val() || null,
+      option3 = $container.find(".main-product-select #SingleOptionSelector-2").val() || null,
+      flag = true;
+    for (var i = 0, length = productVariantObj.length; i < length; i++) {
+      var productVar = productVariantObj[i];
+      if (productVar.option1 != null) { productVar.option1 = productVar.option1.replace(/\s{2,}/g, ' '); }
+      if (productVar.option2 != null) { productVar.option2 = productVar.option2.replace(/\s{2,}/g, ' '); }
+      if (productVar.option3 != null) { productVar.option3 = productVar.option3.replace(/\s{2,}/g, ' '); }
+
+      if (option1 == productVar.option1 && option2 == productVar.option2 && option3 == productVar.option3) {
+        flag = false;
+        $container.find('#product-select-' + productJSON.id).val(productVar.id);
+        selectCallback(productVar, productJSON.id);
+        break;
       }
-      
-    });
-     
-        var selectedOptionsLength = $container.find('#product-select-' + productJSON.id + ' option[selected]').length;
-        var optionsLength = $container.find('.single-option-selector').length;
-        if(!selectedOptionsLength || optionsLength == 1){    
-           selectCallback(productJSON.variants[0], productJSON.id);
+    }
+    if (flag) {
+      selectCallback(null, productJSON.id);
+    }
+  });
+
+  var selectedOptionsLength = $container.find('#product-select-' + productJSON.id + ' option[selected]').length;
+  var optionsLength = $container.find('.single-option-selector').length;
+  if (!selectedOptionsLength || optionsLength == 1) {
+    selectCallback(productJSON.variants[0], productJSON.id);
+  }
+
+  for (var i = 0, length = productJSON.variants.length; i < length; i++) {
+    var productVariants = productJSON.variants[i];
+
+    if (productVariants.available) {
+      for (var j = 0, optlength = productVariants.options.length; j < optlength; j++) {
+        var variantOption = productVariants.options[j];
+        variantOption = handleizeStr(variantOption);
+        if (variantOption != "") {
+          $container.find('.swatch-product-id-' + productJSON.id + ' .swatch[data-option-index="' + j + '"] .' + variantOption + '').removeClass('soldout').addClass('available').find(':radio').removeAttr('disabled');
         }
+      }
 
-        for (var i=0,length=productJSON.variants.length; i<length; i++) {
-            var productVariants = productJSON.variants[i];
+    }
+  }
 
-            if(productVariants.available){
-              for (var j=0,optlength=productVariants.options.length; j<optlength; j++) {
-                var variantOption = productVariants.options[j];
-                    variantOption = handleizeStr(variantOption);
-              if(variantOption != ""){
-                $container.find('.swatch-product-id-'+productJSON.id+' .swatch[data-option-index="'+j+'"] .'+variantOption+'').removeClass('soldout').addClass('available').find(':radio').removeAttr('disabled');
-              }
-             }
+  $product = $('#product-' + productJSON.id);
+  // new Shopify.OptionSelectors("product-select-" + productJSON.id+"", { product: productJSON, onVariantSelected: selectCallback });
 
+  // Add label if only one product option and it isn't 'Title'. Could be 'Size'.
+  if (productJSON.options.size == 1 && productJSON.options[0] != 'Title') {
+    $container.find('.selector-wrapper:eq(0)').prepend('<label>' + productJSON.options[0] + '</label>');
+  }
+
+  // Hide selectors if we only have 1 variant and its title contains 'Default'.
+  if (productJSON.variants.size == 1 && (productJSON.variants[0].title.indexOf('Default') + 1)) {
+    $container.find('.selector-wrapper').hide();
+  }
+  if (isFeaturedProduct != true) {
+    var str = window.location.href;
+    if (!(str.indexOf('?variant=') + 1)) {
+
+      // Auto-select first available variant on page load. Otherwise the product looks sold out.
+      var found_one_in_stock = false;
+      for (variant in productJSON.variants) {
+        if (productJSON.variants[variant].available && found_one_in_stock == false) {
+          found_one_in_stock = true;
+          for (option in productJSON.options) {
+            var i = Object.keys(productJSON.options).indexOf(option);
+            if (i >= 0) {
+              $container.find('.main-product-select .single-option-selector:eq(' + i + ')').val(productJSON.variants[variant].options[i].replace(/\s{2,}/g, ' ')).trigger("change");
             }
           }
-
-        $product = $('#product-' + productJSON.id );
-       // new Shopify.OptionSelectors("product-select-" + productJSON.id+"", { product: productJSON, onVariantSelected: selectCallback });
-
-        // Add label if only one product option and it isn't 'Title'. Could be 'Size'.
-        if(productJSON.options.size == 1 && productJSON.options[0] != 'Title'){
-            $container.find('.selector-wrapper:eq(0)').prepend('<label>'+productJSON.options[0]+'</label>');
-        }
-
-       // Hide selectors if we only have 1 variant and its title contains 'Default'.
-        if(productJSON.variants.size == 1 && (productJSON.variants[0].title.indexOf('Default') + 1)){
-         $container.find('.selector-wrapper').hide();
-        }
-	if(isFeaturedProduct != true){
-        var str = window.location.href;
-        if(!(str.indexOf('?variant=') + 1)) {
-
-           // Auto-select first available variant on page load. Otherwise the product looks sold out.
-            var found_one_in_stock = false;
-            for(variant in productJSON.variants){
-              if(productJSON.variants[variant].available && found_one_in_stock == false){
-                found_one_in_stock = true;
-                for(option in productJSON.options){
-                 var i = Object.keys(productJSON.options).indexOf(option);
-                  if(i>=0){
-                    $container.find('.main-product-select .single-option-selector:eq('+i+')').val(productJSON.variants[variant].options[i].replace(/\s{2,}/g, ' ')).trigger("change");        
-              	}
-              }
-                changeUrl = true;
-             }
-            }
-       }
-        else{
-
-         $('.main-product-select .single-option-selector').first().trigger("change");
           changeUrl = true;
         }
-    }else{
-       changeUrl = true;
+      }
     }
-  
+    else {
+
+      $('.main-product-select .single-option-selector').first().trigger("change");
+      changeUrl = true;
+    }
+  } else {
+    changeUrl = true;
+  }
+
   //////////////////////////////////////
   // Qty
   /////////////////////////////////////
@@ -2476,9 +2559,7 @@ theme.ProductPageSection = (function() {
       //Disable the Add To Cart button, add a disabled class. 
       $(e.target).find('input[type=image], input.submit-add-to-cart').attr('disabled', true).addClass('disabled');
 
-      //Can't use updateCartFromForm since you need the item added before you can update (otherwise, would have been more convenient)
-      //So, in onItemAdded, we Shopify.getCart() to force the repaint of items in cart. 
-      Shopify.addItemFromForm(e.target);
+      window.addItemToCart(e.target);
       {% endif %}
     }); 
 
@@ -2715,6 +2796,7 @@ var initOwlCarousel = function (sectionId){
       }
     })
   }
+  window.handleCarouselUpdate();
 };
         
         // theme.LogoSection
@@ -2788,7 +2870,7 @@ theme.LogoSection = (function() {
   return LogoSection;
 })();
         
-   theme.ProductRecommendations = (function() {
+theme.ProductRecommendations = (function() {
   function  ProductRecommendations(container) {
 
     var $container = this.$container = $(container);
@@ -2828,16 +2910,11 @@ theme.LogoSection = (function() {
         }
       };
       request.send();
-}                                               
+    }                                               
   }
 
   return  ProductRecommendations;
 })();
-        
-        
-       
-  
-
 
 /////////////////////////////////////
 //  Double-Tap for Mobile Menu
@@ -3189,9 +3266,7 @@ $(window).load(function() {
                 //Disable the Add To Cart button, add a disabled class. 
                 $(e.target).find('input[type=image], input.submit-add-to-cart').attr('disabled', true).addClass('disabled');
 
-                //Can't use updateCartFromForm since you need the item added before you can update (otherwise, would have been more convenient)
-                //So, in onItemAdded, we Shopify.getCart() to force the repaint of items in cart. 
-                Shopify.addItemFromForm(e.target);
+                window.addItemToCart(e.target);
                 {% endif %}
 
               }); 
