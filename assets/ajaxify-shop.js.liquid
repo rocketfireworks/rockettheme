@@ -556,24 +556,6 @@ jQuery(document).ready(function() {
         }
       };
 
-      Shopify.onError = function(XMLHttpRequest, textStatus) {
-        var response = jQuery.parseJSON(XMLHttpRequest.responseText);
-        var error = response.description;
-
-        if(typeof $().magnificPopup !== 'function'){ 
-          alert(error) ;
-        }else{
-          $.magnificPopup.open({
-            items: {
-              src: '<div class="mfp-with-anim modal-popup error"><h3>{{ "general.forms.error" | t }}</h3>'+error+'</div>',
-              type: 'inline'
-            },
-            mainClass: 'mfp-move-from-top',
-            removalDelay: 1000
-          });
-        }
-      };
-      
       $(".cart_tbl").on("focusout","textarea", function(){
         var note = $(this).val(),
             textareas = jQ(selectors.QUICK_CART_MENU).find("textarea");
