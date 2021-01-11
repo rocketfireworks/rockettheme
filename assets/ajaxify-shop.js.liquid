@@ -527,20 +527,15 @@ jQuery(document).ready(function() {
         }
 
       }
-      else{
+      else {
         t.html('<div class="menu_title clearfix"><h4>{{ 'cart.general.title' | t }}</h4> </div><div class="cart_row"><div class="empty-cart">{{ 'cart.general.empty' | t }}</div><p><a href="javascript:void(0)" class="btn_c btn_close">{{ 'cart.general.continue_browsing' | t }}</a></p></div>'); 
         c.html('<div class="empty-cart-message"><p>{{ 'cart.general.empty' | t }}</p><p><a href="/collections/all" class="btn_c">{{ 'cart.general.continue_browsing' | t }}</a></p></div');
-       }  
-      } 
-        if(!$(selectors.CART_PAGE_MENU).length){
-          setTimeout(function(){        
-            Shopify.showModal($(selectors.QUICK_CART_MENU).wrap('<p>').parent().html());
-          }, 500);
-        }
-        Shopify.onCartUpdate(cart);         
+      }  
+    } 
+      Shopify.onCartUpdate(cart);         
       
-      };
-      /**
+  };
+  /**
  * This updates the N item/items left in your cart
  * 
  * It's setup to match the HTML used to display the Cart Count on Load. If you change that (in your theme.liquid) 
