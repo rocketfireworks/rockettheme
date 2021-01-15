@@ -330,6 +330,19 @@ window.handleCollectionUpdate = () => {
 // End Cart Code
 // ============================================================================
 
+window.getHeaderHeight = function() {
+  var headerHeight;
+  var windowWidth = window.innerWidth;
+  var promoBarHeight = document.querySelector('.promo-bar').offsetHeight;
+  var headerTopHeight = document.querySelector('.header_top').offsetHeight;
+  var headerBotHeight = document.querySelector('.header_bot').offsetHeight;
+  if (windowWidth < 769 ) {
+    headerHeight = promoBarHeight + headerBotHeight;
+  } else {
+    headerHeight = promoBarHeight + headerTopHeight;
+  }
+  return headerHeight;
+}
 
 window.displayConfirmPopup = function(success, product, error) {
 
@@ -364,7 +377,7 @@ window.displayConfirmPopup = function(success, product, error) {
       </div>
 
       <div class="popup-content-wrapper">
-        <h2 id="ConfirmPopupMessage" class="popup-heading">${successMessage}</h2>
+        <h2 id="ConfirmPopupMessage" class="popup-heading"><span class="icon icon-fireworks-1"></span> ${successMessage}</h2>
         <div class="popup-description">
           <div>
             <div class="popup-product-title">
@@ -390,7 +403,7 @@ window.displayConfirmPopup = function(success, product, error) {
     `;
   }
   popupWrapper.html(popupContent);
-
+  popup.css('height', window.getHeaderHeight());
   showPopup(popup);
   timer = setTimeout(() => {
     hidePopup(popup)
