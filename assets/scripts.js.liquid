@@ -293,7 +293,7 @@ theme.Sections.prototype = _.assignIn({}, theme.Sections.prototype, {
 // ============================================================================
 window.initAddToCartForms = function() {
   $('body').find('.add-to-cart-form').on('submit', (e) => {
-    {% if settings.cart_type == "modal"%}  
+    {% if settings.cart_type == "modal"%}
     e.preventDefault();
     //Disable the Add To Cart button, add a disabled class. 
     $(e.target).find('input[type=image], input.submit-add-to-cart').attr('disabled', true).addClass('disabled');

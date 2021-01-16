@@ -8,6 +8,7 @@
 
 <div id="content">
   <div class="container search-page">
+  {% include 'product-confirm-popup' %}
 
     {% if search.performed %}
     {% paginate search.results by 18 %}
