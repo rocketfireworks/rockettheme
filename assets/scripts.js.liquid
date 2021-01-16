@@ -318,8 +318,7 @@ window.addItemToCart = function(form) {
     // Example response description:
     // 'All 1 Pro Series Zodiac are in your cart.'
     var productName = response.description.split(' are in your cart.')[0].split(' ').splice(2).join(' ');
-    var error = `You've already got all the ${productName} we have in your cart.`;
-    window.displayConfirmPopup(false, null, error);
+    window.displayConfirmPopup(false, null, productName);
   }
 }
 
@@ -350,7 +349,7 @@ window.getHeaderHeight = function() {
   return headerHeight;
 }
 
-window.displayConfirmPopup = function(success, product, error) {
+window.displayConfirmPopup = function(success, product, errorProductName) {
 
   var successMessage = 'Just added to your cart';
   var errorMessage = 'None left';
@@ -404,7 +403,15 @@ window.displayConfirmPopup = function(success, product, error) {
     var popupContent = `
       <div class="popup-content-wrapper">
         <h2 id="ConfirmPopupMessage" class="popup-heading"><i class="far fa-times-circle"></i> ${errorMessage}</h2>
-        <div class="error-message">${error}</div>
+
+        <div class="popup-description">
+          <div>
+            <div class="popup-product-title">
+              <span class="popup-product-name">${errorProductName}</span></span>
+            </div>
+            <div>All available stock is already in your cart.</div>
+          </div>
+        </div>
       </div>
     `;
   }
