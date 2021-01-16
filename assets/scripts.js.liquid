@@ -312,7 +312,13 @@ window.addItemToCart = function(form) {
   
   Shopify.onError = function(XMLHttpRequest, textStatus) {
     var response = jQuery.parseJSON(XMLHttpRequest.responseText);
-    var error = response.description;
+    // WARNING: Fragile code
+    // The server does not return a product name, so we're forced
+    // to extract it from response.description
+    // Example response description:
+    // 'All 1 Pro Series Zodiac are in your cart.'
+    var productName = response.description.split(' are in your cart.')[0].split(' ').splice(2).join(' ');
+    var error = `You've already got all the ${productName} we have in your cart.`;
     window.displayConfirmPopup(false, null, error);
   }
 }
@@ -347,7 +353,7 @@ window.getHeaderHeight = function() {
 window.displayConfirmPopup = function(success, product, error) {
 
   var successMessage = 'Just added to your cart';
-  var errorMessage = 'Couldn\'t add to cart';
+  var errorMessage = 'None left';
 
   var popup = $('.product-confirm-popup');
   var popupWrapper = $('.popup-wrapper');
@@ -377,7 +383,7 @@ window.displayConfirmPopup = function(success, product, error) {
       </div>
 
       <div class="popup-content-wrapper">
-        <h2 id="ConfirmPopupMessage" class="popup-heading"><span class="icon icon-fireworks-1"></span> ${successMessage}</h2>
+        <h2 id="ConfirmPopupMessage" class="popup-heading"><span class="icon icon-fireworks-2"></span> ${successMessage}</h2>
         <div class="popup-description">
           <div>
             <div class="popup-product-title">
@@ -397,7 +403,7 @@ window.displayConfirmPopup = function(success, product, error) {
     // Popup html
     var popupContent = `
       <div class="popup-content-wrapper">
-        <h2 id="ConfirmPopupMessage" class="popup-heading">${errorMessage}</h2>
+        <h2 id="ConfirmPopupMessage" class="popup-heading"><i class="far fa-times-circle"></i> ${errorMessage}</h2>
         <div class="error-message">${error}</div>
       </div>
     `;
