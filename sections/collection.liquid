@@ -20,6 +20,9 @@
 {% endif %}
 
 <div id="content">
+
+  {% include 'product-confirm-popup' %}
+
   <div class="container" data-section-id="{{ section.id }}" data-section-type="collection-page-section" data-reviews-stars="{{section.settings.show_product_reviews_stars}}">
     
     <!-- This snippet is required for the product filter  -->
@@ -75,7 +78,6 @@
   </div>
 </div>
 
-{% include 'product-confirm-popup' %}
 <script>
   jQuery(document).ready(function($){
 
