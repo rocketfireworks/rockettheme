@@ -2579,12 +2579,9 @@ theme.ProductPageSection = (function() {
   });
   ////// end Swatches //////  
     
-   $container.find('form[action*="/cart/add"]').submit(function(e) {
+   $container.find('form[action*="/cart/add"]').submit((e) => {
       {% if settings.cart_type == "modal"%}  
       e.preventDefault();
-      //Disable the Add To Cart button, add a disabled class. 
-      $(e.target).find('input[type=image], input.submit-add-to-cart').attr('disabled', true).addClass('disabled');
-
       window.addItemToCart(e.target);
       {% endif %}
     }); 
