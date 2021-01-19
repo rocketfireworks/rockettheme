@@ -322,15 +322,6 @@ window.addItemToCart = function(form) {
   }
 }
 
-window.handleCarouselUpdate = () => {
-  window.initAddToCartForms();
-  window.swatchSelection();
-}
-
-window.handleCollectionUpdate = () => {
-  window.initAddToCartForms();
-  window.swatchSelection();
-}
 // ============================================================================
 // End Cart Code
 // ============================================================================
@@ -1975,7 +1966,6 @@ theme.CollectionPageSection = (function() {
       }
     });
   }
-  window.handleCollectionUpdate();
   return CollectionPageSection;
 })();
 
@@ -2819,7 +2809,6 @@ var initOwlCarousel = function (sectionId){
       }
     })
   }
-  window.handleCarouselUpdate();
 };
         
         // theme.LogoSection
@@ -3589,6 +3578,10 @@ function enableInfiniteScrollList(){
           sections.register('product-recommendations', theme.ProductRecommendations);
 		
           enabledQuickView();
+          
+          window.initAddToCartForms();
+          window.swatchSelection();
+
         {% if settings.use_infinite_scroll%}
         if($(".search-page").length){
         var infiniteScrollSearch = new Waypoint.Infinite({
