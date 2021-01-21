@@ -49,6 +49,30 @@ html {
   	margin-right: 10px;
   }
 }
+// BUTTONS
+.btn_c, .next_btb {
+  border-radius: 0;
+  padding: 0.3em 1em;
+  &:hover, &:focus {
+    text-decoration: none;
+    background-color: #77dbf3;
+  }
+}
+.btn_c.floatCCartBtn,
+#content .cart_btn button.next_btn {
+  background-color: #3dbfde;
+  color: #16142c;
+  text-transform: uppercase;
+  font-size: 20px;
+  max-width: 300px;
+  border-radius: 0;
+  padding: 0.3em 1em;
+  &:hover, &:focus {
+    text-decoration: none;
+    background-color: #77dbf3;
+  }
+}
+
 .photobox {
   border-radius: 30px;
 /*   border: 3px solid #ffda57; */
@@ -1697,12 +1721,16 @@ Ancillary Page Banner
     flex-wrap: wrap;
     font-size: 1.4em;
     a {
-      border: 1px solid #3dbfde;
-      padding: 0.5em 2em;
+      border: 2px solid #3dbfde;
+      padding: 0.4em 2em;
       margin: 1.6em 0.8em 1em 0;
       font-weight: 700;
       text-align: center;
       transition: all 0.3s;
+      &:hover, &:focus {
+        background-color: #fff;
+        text-decoration: none;
+      }
     }
   }
 }
@@ -1760,7 +1788,7 @@ Ancillary Page Banner
         color: #000;
         background-color: #3dbfde;
         border: 1px solid #3dbfde;
-        padding: 0.5em 2em;
+        padding: 0.4em 2em;
         margin: 0.5em 0;
         font-weight: 700;
         text-transform: uppercase;
@@ -2199,14 +2227,18 @@ PRODUCT
     margin-top: 10px;
     margin-right: 0;
     margin-left: auto;
-    background: #3dbfde;
+    background-color: #3dbfde;
     border-radius: 0;
+    border: 2px solid #3dbfde;
     text-transform: uppercase;
     color: #16142c;
     font-size: 21px;
     max-width: 325px;
     height: 50px;
     width: 100%;
+    &:hover, &:focus {
+      background-color: #77dbf3;
+    }
   }
   @media (max-width: 560px) {
     position: fixed;
@@ -2275,8 +2307,9 @@ PRODUCT CAROUSEL
   color: #16142c;
   font-weight: bold;
   padding: 7px 0px;
-  &>:hover {
-    background: #3dbfde;
+  transition: all 0.3s;
+  &:hover, &:focus {
+    background-color: #3dbfde;
   }
   @media (max-width: 991px) {
     font-size: 0.9em;
@@ -2767,11 +2800,15 @@ SEARCH RESULT
         margin: 10px 0 0;
         background: #3dbfde;
         border-radius: 0;
+        border: 2px solid #3dbfde;
         text-transform: uppercase;
         color: #16142c;
         font-size: 1.25em;
         width: 100%;
         max-width: unset;
+        &:hover {
+          background-color: #77dbf3;
+        }
       }
   
       @media (max-width: 991px) {
