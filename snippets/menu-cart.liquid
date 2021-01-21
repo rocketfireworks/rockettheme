@@ -1,30 +1,32 @@
 <div class="menu_c cart_menu">
-  <div class="menu_title clearfix">
+  <div class="menu_title">
     <h4>{{ 'cart.general.title' | t }}</h4>
-  </div>
-  {% if cart.item_count > 0 %}
-  <form action="/cart" method="post" novalidate>
-    <div class="cart_row">
+    <div class="cart_row_heading">
       <ul>
         <li>{{ 'cart.general.name' | t }}</li>
-        <li class="photo-column-header">{{ 'cart.general.photo' | t }}</li>
         <li>{{ 'cart.general.price' | t }}</li>
         <li>{{ 'cart.general.quantity' | t }}</li>
         <li>{{ 'cart.general.total' | t }}</li>
       </ul>
+    </div>
+  </div>
+  {% if cart.item_count > 0 %}
+  <form action="/cart" method="post" novalidate>
+    <div class="cart_row">
+      <ul></ul>
       {% for item in cart.items %}
       <ul>
         <li>
-          <div class="thumb">
-            <a href="{{ item.url }}">  
+          <div class="product-image-container">
+            <a href="{{ item.url }}" class="product-image-link">  
               <img src="{{ item | img_url: '300x' }}" alt="{{ item.title | escape }}" />
             </a>
           </div>
-        </li>
-        <li>
-          <h5><a href="{{ item.product.url | within: collections.all }}" class="item-name">{{ item.product.title | escape}}</a></h5>
-          {% unless item.variant.title contains 'Default' %}
-          <p>{{ item.variant.title | escape }}</p>
+          <div class="product-title-container">
+            <h5><a href="{{ item.product.url | within: collections.all }}" class="item-name">{{ item.product.title | escape}}</a></h5>
+            {% unless item.variant.title contains 'Default' %}
+            <p>{{ item.variant.title | escape }}</p>
+          </div>
           {% endunless %}
           <!-- <a href="#" data-id="{{ item.id }}" class="remove_item_button">{{ 'cart.general.remove' | t }}</a> -->
         </li>
@@ -70,26 +72,9 @@
       </ul>
       {% endfor %}
     </div>
-    <div class="total_row">
-      <ul>
-        <li>
-          {%- if cart.cart_level_discount_applications != blank -%}
-          <div class="order-discount-cart-wrapper">
-            {%- for discount_application in cart.cart_level_discount_applications -%}
-            <span class="order-discount--cart total_val">
-              {%- include 'icon-saletag' -%} {{- discount_application.title | strip -}}:
-            </span>
-            <span class="order-discount--cart-total">(-{{ discount_application.total_allocated_amount | money }})</span>
-            {%- endfor -%}
-          </div>
-          {%- endif -%}
-          
-          <span class="total_val">{{ 'cart.general.subtotal' | t }}:</span><span class="total-price money">{{ cart.total_price | money }}</span>
-        </li>
-      </ul>
-    </div>
+
     {% if settings.cart_notes %}
-    <div class="clearfix order_notes">
+    <div class="order_notes">
       <label for="cartSpecialInstructions" class="sr-only">{{ 'cart.general.note' | t }}:</label>
       <textarea name="note" id="cartSpecialInstructions" placeholder="{{ 'cart.general.note' | t }}">{% if cart.note != null %}{{cart.note}}{% endif %}</textarea>
     </div>
@@ -97,27 +82,47 @@
     {% if settings.show_currency_disclaimer %}
     {{ 'cart.general.currency_disclaimer_html' | t: shopname: shop.name, currency: shop.currency }}
     {% endif %}
-    <div class="checkout_row clearfix">
-        {% if settings.enable_terms_and_conditions %}
-      <div class='terms_and_conditions_wrapper'>
-        <input type="checkbox" id="agree" />                      
-        <div class='for_agree_text'>
-          {{settings.terms_and_conditions_text}}
-        </div>  
-        <div class='error_text'>
-         {{ 'cart.general.terms_and_conditions_error' | t }}
-        </div>  
-      </div>
-      {% endif %}
-      {% if template == 'cart' %}
-      <button type="submit" name="checkout" value="{{ 'cart.general.checkout' | t }}" class="btn_c">{{ 'cart.general.checkout' | t }}</button>
-      {%endif%}
-      <a href="/cart" class="btn_c floatCCartBtn">Continue to Checkout</a>
-      <a href="javascript:void(0)" class="info_btn"><span class="fa fa-chevron-left"></span>{{ 'cart.general.continue_browsing' | t }}</a>
-    </div>
     <div id="additional-checkout-block" class="text-right additional-checkout-buttons">
     </div>
- </form>
+  </form>
+
+  
+  <div class="checkout_row">
+    {% if settings.enable_terms_and_conditions %}
+  <div class='terms_and_conditions_wrapper'>
+    <input type="checkbox" id="agree" />                      
+    <div class='for_agree_text'>
+      {{settings.terms_and_conditions_text}}
+    </div>  
+    <div class='error_text'>
+     {{ 'cart.general.terms_and_conditions_error' | t }}
+    </div>  
+  </div>
+  {% endif %}
+  <div class="total_row">
+    <ul>
+      <li>
+        {%- if cart.cart_level_discount_applications != blank -%}
+        <div class="order-discount-cart-wrapper">
+          {%- for discount_application in cart.cart_level_discount_applications -%}
+          <span class="order-discount--cart total_val">
+            {%- include 'icon-saletag' -%} {{- discount_application.title | strip -}}:
+          </span>
+          <span class="order-discount--cart-total">(-{{ discount_application.total_allocated_amount | money }})</span>
+          {%- endfor -%}
+        </div>
+        {%- endif -%}
+        
+        <span class="total_val">{{ 'cart.general.subtotal' | t }}:</span><span class="total-price money">{{ cart.total_price | money }}</span>
+      </li>
+    </ul>
+  </div>
+  {% if template == 'cart' %}
+  <button type="submit" name="checkout" value="{{ 'cart.general.checkout' | t }}" class="btn_c">{{ 'cart.general.checkout' | t }}</button>
+  {%endif%}
+  <a href="/cart" class="btn_c floatCCartBtn">Continue to Checkout</a>
+  <a href="javascript:void(0)" class="info_btn"><span class="fa fa-chevron-left"></span>{{ 'cart.general.continue_browsing' | t }}</a>
+</div>
   {% else %}
   <div class="cart_row">
     <div class="empty-cart">{{ 'cart.general.empty' | t }}</div>

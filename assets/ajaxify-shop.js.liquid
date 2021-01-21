@@ -31,7 +31,6 @@ var  bindEventsInCart = function(){
   // Qty for cart modal
   /////////////////////////////////////
   jQuery(".cart_menu").on("click", ".minus_btn", function () {
-
     var inputEl = jQuery(this).parent().find("input");
     var qty = inputEl.val();
     if (jQuery(this).parent().hasClass("minus_btn"))
@@ -45,8 +44,8 @@ var  bindEventsInCart = function(){
     var quantity = qty,
         id = inputEl.data("id");
     if(quantity != 0){
-       var line = $(this).closest("ul").index();
-       Shopify.changeItemByLine(line, quantity, function(cart){
+      var line = $(this).closest("ul").index();
+      Shopify.changeItemByLine(line, quantity, function(cart){
         Shopify.updateQuickCart(cart);
       });
     }
@@ -262,12 +261,7 @@ jQuery(document).ready(function() {
 
       if(cart.items.length){
 
-        var toAppend = [],
-            tableHeader = '<ul><li>{{ 'cart.general.name' | t }}</li>'+
-        '<li class="photo-column-header">{{ 'cart.general.photo' | t }}</li>'+
-        '<li>{{ 'cart.general.price' | t }}</li>'+
-        '<li>{{ 'cart.general.quantity' | t }}</li>'+
-        '<li>{{ 'cart.general.total' | t }}</li></ul>';
+        var toAppend = [];
         
         var discounts_html = '';            
         if(cart.cart_level_discount_applications.length){
@@ -451,25 +445,44 @@ jQuery(document).ready(function() {
               item_discounts_html = item_discounts_html + '</div>'
             
           }
-          
-          var row = '<ul class="productRow"><li class="productRowImg"><div class="thumb"><a href="' + cart.items[i].url + 
-              '"><img src="' + Shopify.addImageSize(cart.items[i].image,'small') + '" alt="' + cart.items[i].title + 
-              '"></a></div></li><li class="productRowTitle"><h5 class="'+cart.items[i].id+'"><a href="' + cart.items[i].url + 
-              '" class="item-name">' + cart.items[i].product_title + 
-              '</a></h5><p class="product-type">'+title+'</p><p>'+propertiesText+'</p></li><li class="productRowPrice"><p class="mobile-label-price">{{ 'cart.general.price' | t }}</p>'+itemPriceContent + ' ' + item_discounts_html + '</li><li class="productRowQuantity">';
-              
-              if(cart.items[i].id != '32047066972241'){
-              	row+='<p class="mobile-label-quantity">{{ 'cart.general.quantity' | t }}</p><a class="minus_btn"></a><input type="text" name="updates[]" class="txtbox number_val_input" min="0" id="updates_'+cart.items[i].id+'" data-id="'+cart.items[i].id+'" value="'+cart.items[i].quantity+'" /><a class="plus_btn"></a>'+
-              '<div class="ajaxcart__errors text-center ajaxcart__item__'+cart.items[i].id+'__errors">{{ 'cart.general.error' | t }}</div>';   
-              }
-          
-              row+='</li><li class="productRowTotal"><p class="mobile-label-total">{{ 'cart.general.total' | t }}</p>'+linePriceContent + 
-              '</li><hr class="line_items_separator"></ul>';
+
+          var cartPriceTitle = "{{ 'cart.general.price' | t }}";
+          var cartQuantityTitle = "{{ 'cart.general.quantity' | t }}";
+          var cartTotalTitle = "{{ 'cart.general.total' | t }}";
+          var cartErrorText = "{{ 'cart.general.error' | t }}";
+
+          var row = `
+          <ul class="productRow">
+            <li class="productRowTitle">
+              <div class="product-image-container">
+                <a href="${cart.items[i].url}" class="product-image-link">  
+                  <img src="${Shopify.addImageSize(cart.items[i].image,'small')}" alt="${cart.items[i].title}" />
+                </a>
+              </div>
+              <div class="product-title-container">
+                <h5 class="${cart.items[i].id}"><a href="${cart.items[i].url}" class="item-name">${cart.items[i].product_title}</a></h5>
+                <p class="product-type">${title}</p>
+                <p>${propertiesText}</p>
+              </div>
+            </li>
+            <li class="productRowPrice">
+              <p class="mobile-label-price">${cartPriceTitle}</p>${itemPriceContent} ${item_discounts_html}
+            </li>
+            <li class="productRowQuantity">
+              <p class="mobile-label-quantity">${cartQuantityTitle}</p>
+              <a class="minus_btn"></a>
+              <input type="text" name="updates[]" class="txtbox number_val_input" min="0" id="updates_${cart.items[i].id}" data-id="${cart.items[i].id}" value="${cart.items[i].quantity}" />
+              <a class="plus_btn"></a>
+              <div class="ajaxcart__errors text-center ajaxcart__item__${cart.items[i].id}__errors">${cartErrorText}</div>
+            </li>
+            <li class="productRowTotal">
+              <p class="mobile-label-total">${cartTotalTitle}</p>${linePriceContent}
+            </li>
+          </ul>
+          `
           
           toAppend.push(row);
         };
-
-        //console.log(bonusTotal);
 
         var terms_checkbox = '';
         
@@ -480,7 +493,6 @@ jQuery(document).ready(function() {
 
         if(checkoutRow.length){ /* we have existing items in the quick cart */
           t.find('div.cart_row').html(toAppend.join(''));
-          t.find('div.cart_row').prepend(tableHeader);
           c.find(".con_row").html(toAppend.join(''));
           
           var subtotalRowHtml = '<ul><li>'+discounts_html+'<span class="total_val">{{ 'cart.general.subtotal' | t }}:</span><span class="money total-price">'+totalPriceConverted+'</span></li></ul>';
@@ -514,7 +526,7 @@ jQuery(document).ready(function() {
           }
           form.append($("div.cart_row"));
           form.find("div.cart_row").html(toAppend.join(''));
-          form.find('div.cart_row').prepend(tableHeader);
+          form.find('div.cart_row').prepend('<ul></ul>');
           form.append(subtotalRow);
           form.append(notesRow);
           {% if settings.show_currency_disclaimer and settings.show_multiple_currencies %}

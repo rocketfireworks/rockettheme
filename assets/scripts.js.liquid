@@ -449,7 +449,7 @@ window.displayConfirmPopup = function(success, product, errorProductName) {
 // ============================================================================
 // Begin Open Cart Popup Code
 // ============================================================================
-window.openCartPopup = function openCartPopup(e) {
+window.openCartPopup = (e) => {
   e.preventDefault();
   $("html").css("overflow-y","hidden");
 
