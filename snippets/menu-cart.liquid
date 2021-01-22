@@ -1,5 +1,5 @@
 <div class="menu_c cart_menu">
-  <div class="menu_title clearfix">
+  <div class="menu_title">
     <h4>{{ 'cart.general.title' | t }}</h4>
   </div>
   {% if cart.item_count > 0 %}
@@ -32,8 +32,8 @@
           <p class="mobile-label-price">{{ 'cart.general.price' | t }}</p>
 
           {% if item.original_price != item.final_price %}
-          <span class="price money original_price">{{ item.original_price | money }}</span><br class="clearfix">
-          <span class="price money">{{ item.final_price | money }}</span><br class="clearfix">
+          <span class="price money original_price">{{ item.original_price | money }}</span><br>
+          <span class="price money">{{ item.final_price | money }}</span><br>
           {% else %}
           <span class="price money">{{ item.final_line_price | money }}</span>
           {% endif %}
@@ -61,8 +61,8 @@
           <p class="mobile-label-total">{{ 'cart.general.total' | t }}</p>
           
           {%- if item.original_line_price != item.final_line_price -%}
-          <span class="price money original_price">{{ item.original_line_price | money }}</span><br class="clearfix">
-          <span class="price money">{{ item.final_line_price | money }}</span><br class="clearfix">
+          <span class="price money original_price">{{ item.original_line_price | money }}</span><br>
+          <span class="price money">{{ item.final_line_price | money }}</span><br>
           {% else %}
           <span class="price money">{{ item.original_line_price | money }}</span>
           {% endif %}
@@ -71,7 +71,7 @@
       {% endfor %}
     </div>
     {% if settings.cart_notes %}
-    <div class="clearfix order_notes">
+    <div class="order_notes">
       <label for="cartSpecialInstructions" class="sr-only">{{ 'cart.general.note' | t }}:</label>
       <textarea name="note" id="cartSpecialInstructions" placeholder="{{ 'cart.general.note' | t }}">{% if cart.note != null %}{{cart.note}}{% endif %}</textarea>
     </div>
@@ -79,7 +79,7 @@
     {% if settings.show_currency_disclaimer %}
     {{ 'cart.general.currency_disclaimer_html' | t: shopname: shop.name, currency: shop.currency }}
     {% endif %}
-    <div class="checkout_row clearfix">
+    <div class="checkout_row">
       
       <div class="total_row">
         <ul>
@@ -99,7 +99,7 @@
           </li>
         </ul>
       </div>
-      
+
         {% if settings.enable_terms_and_conditions %}
       <div class='terms_and_conditions_wrapper'>
         <input type="checkbox" id="agree" />                      
