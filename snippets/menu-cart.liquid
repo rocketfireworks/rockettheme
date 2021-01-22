@@ -1,6 +1,15 @@
 <div class="menu_c cart_menu">
   <div class="menu_title">
     <h4>{{ 'cart.general.title' | t }}</h4>
+    <div class="cart_row_heading">
+      <ul>
+        <li>{{ 'cart.general.name' | t }}</li>
+        <li class="photo-column-header">{{ 'cart.general.photo' | t }}</li>
+        <li>{{ 'cart.general.price' | t }}</li>
+        <li>{{ 'cart.general.quantity' | t }}</li>
+        <li>{{ 'cart.general.total' | t }}</li>
+      </ul>
+    </div>
   </div>
   {% if cart.item_count > 0 %}
   <form action="/cart" method="post" novalidate>
