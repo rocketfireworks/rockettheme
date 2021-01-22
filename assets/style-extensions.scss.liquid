@@ -76,7 +76,6 @@ html {
 // ERRORS
 .error-popup {
   position: absolute;
-  transform: initial;
   width: max-content;
   background-color: #ffda57;
   color: black;
@@ -1910,14 +1909,7 @@ PRODUCT
           }
         }
         .maximum-in-stock-error {
-          position: absolute;
-          transform: initial;
-          width: max-content;
           bottom: -32px;
-          background-color: #ffda57;
-          color: black;
-          box-shadow: 1px 1px 3px #ccc;
-          padding: 4px 10px;
         }
       }
     }
@@ -1999,13 +1991,9 @@ PRODUCT
   .maximum-in-stock-error {
     right: 0;
     transform: translateX(102%);
-    position: absolute;
-    width: max-content;
-    background-color: #ffda57;
-    color: black;
-    box-shadow: 1px 1px 3px #ccc;
-    padding: 4px 10px;
-    margin-bottom: 0;
+    @media (max-width: 990px) {
+      transform: initial;
+    }
   }
 }
 
