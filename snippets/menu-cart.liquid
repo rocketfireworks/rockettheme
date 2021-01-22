@@ -14,7 +14,8 @@
   {% if cart.item_count > 0 %}
   <form action="/cart" method="post" novalidate>
     <div class="cart_row">
-      <ul>
+      <!-- Hide the cart body header row with css instead of removing the html because removing the html breaks the cart js -->
+      <ul class="hidden">
         <li>{{ 'cart.general.name' | t }}</li>
         <li class="photo-column-header">{{ 'cart.general.photo' | t }}</li>
         <li>{{ 'cart.general.price' | t }}</li>

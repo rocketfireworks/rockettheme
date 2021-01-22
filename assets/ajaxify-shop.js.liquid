@@ -262,8 +262,9 @@ jQuery(document).ready(function() {
 
       if(cart.items.length){
 
+        // Hide the cart body header row with css instead of removing the html because removing the html breaks the cart js
         var toAppend = [],
-            tableHeader = '<ul><li>{{ 'cart.general.name' | t }}</li>'+
+            tableHeader = '<ul class="hidden"><li>{{ 'cart.general.name' | t }}</li>'+
         '<li class="photo-column-header">{{ 'cart.general.photo' | t }}</li>'+
         '<li>{{ 'cart.general.price' | t }}</li>'+
         '<li>{{ 'cart.general.quantity' | t }}</li>'+
