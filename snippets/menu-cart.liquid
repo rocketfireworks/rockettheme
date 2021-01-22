@@ -70,24 +70,6 @@
       </ul>
       {% endfor %}
     </div>
-    <div class="total_row">
-      <ul>
-        <li>
-          {%- if cart.cart_level_discount_applications != blank -%}
-          <div class="order-discount-cart-wrapper">
-            {%- for discount_application in cart.cart_level_discount_applications -%}
-            <span class="order-discount--cart total_val">
-              {%- include 'icon-saletag' -%} {{- discount_application.title | strip -}}:
-            </span>
-            <span class="order-discount--cart-total">(-{{ discount_application.total_allocated_amount | money }})</span>
-            {%- endfor -%}
-          </div>
-          {%- endif -%}
-          
-          <span class="total_val">{{ 'cart.general.subtotal' | t }}:</span><span class="total-price money">{{ cart.total_price | money }}</span>
-        </li>
-      </ul>
-    </div>
     {% if settings.cart_notes %}
     <div class="clearfix order_notes">
       <label for="cartSpecialInstructions" class="sr-only">{{ 'cart.general.note' | t }}:</label>
@@ -98,6 +80,26 @@
     {{ 'cart.general.currency_disclaimer_html' | t: shopname: shop.name, currency: shop.currency }}
     {% endif %}
     <div class="checkout_row clearfix">
+      
+      <div class="total_row">
+        <ul>
+          <li>
+            {%- if cart.cart_level_discount_applications != blank -%}
+            <div class="order-discount-cart-wrapper">
+              {%- for discount_application in cart.cart_level_discount_applications -%}
+              <span class="order-discount--cart total_val">
+                {%- include 'icon-saletag' -%} {{- discount_application.title | strip -}}:
+              </span>
+              <span class="order-discount--cart-total">(-{{ discount_application.total_allocated_amount | money }})</span>
+              {%- endfor -%}
+            </div>
+            {%- endif -%}
+            
+            <span class="total_val">{{ 'cart.general.subtotal' | t }}:</span><span class="total-price money">{{ cart.total_price | money }}</span>
+          </li>
+        </ul>
+      </div>
+      
         {% if settings.enable_terms_and_conditions %}
       <div class='terms_and_conditions_wrapper'>
         <input type="checkbox" id="agree" />                      
