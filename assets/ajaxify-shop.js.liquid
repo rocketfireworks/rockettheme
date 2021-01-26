@@ -499,7 +499,7 @@ jQuery(document).ready(function() {
           terms_checkbox = "<div class='terms_and_conditions_wrapper'><input type='checkbox' id='agree' /><div class='for_agree_text'>{{settings.terms_and_conditions_text | replace:'"', "'"}}</div><div class='error_text'>{{ 'cart.general.terms_and_conditions_error' | t }}</div></div>";
           {% endif %}
 
-          checkoutRow = '<div class="checkout_row">' + terms_checkbox + '<button type="submit" name="checkout" value="Check Out" class="btn_c">{{ 'cart.general.checkout' | t }}</button> <a href="javascript:void(0)" class="info_btn"><span class="fa fa-chevron-left"></span>{{ 'cart.general.continue_browsing' | t }}</a></div>';
+          checkoutRow = '<div class="checkout_row">' + terms_checkbox + '<a href="/cart" class="btn_c floatCCartBtn">{{ 'cart.general.checkout' | t }}</a> <a href="javascript:void(0)" class="info_btn"><span class="fa fa-chevron-left"></span>{{ 'cart.general.continue_browsing' | t }}</a></div>';
           subtotalRow = '<div class="total_row"><ul><li>'+discounts_html+'<span class="total_val">{{ 'cart.general.subtotal' | t }}:</span><span class="money total-price">'+totalPriceConverted+'</span></li></ul></div>';
           var addCheckOutBlock = '<div id="additional-checkout-block" class="text-right additional-checkout-buttons" ></div>';
           var form = jQ('<form />',{
