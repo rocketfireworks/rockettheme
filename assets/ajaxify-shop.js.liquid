@@ -258,8 +258,13 @@ jQuery(document).ready(function() {
     
     var t = jQ(selectors.QUICK_CART_MENU),
         c = jQ(selectors.CART_PAGE_MENU);
-    if(t.length){
 
+    var cartTitleText = "{{ 'cart.general.title' | t }}";
+    var cartEmptyText = "{{ 'cart.general.empty' | t }}";
+    var cartContinueText = "{{ 'cart.general.continue_browsing' | t }}";
+
+    if(t.length){
+      t.find('.cart_row_heading').removeClass('hidden');
       if(cart.items.length){
 
         // Hide the cart body header row with css instead of removing the html because removing the html breaks the cart js
@@ -529,11 +534,19 @@ jQuery(document).ready(function() {
 
       }
       else {
-        var cartTitleText = "{{ 'cart.general.title' | t }}";
-        var cartEmptyText = "{{ 'cart.general.empty' | t }}";
-        var cartContinueText = "{{ 'cart.general.continue_browsing' | t }}";
         t.html(`<div class="menu_title">
-          <h4>${cartTitleText}</h4> </div><div class="cart_row">
+          <h4>${cartTitleText}</h4>
+            <div class="cart_row_heading hidden" >
+            <ul>
+              <li>{{ 'cart.general.name' | t }}</li>
+              <li class="photo-column-header">{{ 'cart.general.photo' | t }}</li>
+              <li>{{ 'cart.general.price' | t }}</li>
+              <li>{{ 'cart.general.quantity' | t }}</li>
+              <li>{{ 'cart.general.total' | t }}</li>
+            </ul>
+          </div>
+        </div>
+        <div class="cart_row">
           <div class="empty-cart">${cartEmptyText}</div>
           <p><a href="javascript:void(0)" class="btn_c btn_close">${cartContinueText}</a></p>
         </div>`);
