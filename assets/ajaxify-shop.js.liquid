@@ -521,12 +521,12 @@ jQuery(document).ready(function() {
           form.append($("div.cart_row"));
           form.find("div.cart_row").html(toAppend.join(''));
           form.find('div.cart_row').prepend(tableHeader);
-          form.append(subtotalRow);
           form.append(notesRow);
           {% if settings.show_currency_disclaimer and settings.show_multiple_currencies %}
           form.append(currencyNote);
           {% endif %}
           form.append(checkoutRow);
+          form.find("div.checkout_row").prepend(subtotalRow);
           form.append(addCheckOutBlock);
           t.append(form);
    
