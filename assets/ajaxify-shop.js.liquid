@@ -494,8 +494,8 @@ jQuery(document).ready(function() {
           terms_checkbox = "<div class='terms_and_conditions_wrapper'><input type='checkbox' id='agree' /><div class='for_agree_text'>{{settings.terms_and_conditions_text | replace:'"', "'"}}</div><div class='error_text'>{{ 'cart.general.terms_and_conditions_error' | t }}</div></div>";
           {% endif %}
 
-          checkoutRow = '<div class="checkout_row clearfix">' + terms_checkbox + '<button type="submit" name="checkout" value="Check Out" class="btn_c">{{ 'cart.general.checkout' | t }}</button> <a href="javascript:void(0)" class="info_btn"><span class="fa fa-chevron-left"></span>{{ 'cart.general.continue_browsing' | t }}</a></div>';
-          subtotalRow = '<div class="total_row clearfix"><ul><li>'+discounts_html+'<span class="total_val">{{ 'cart.general.subtotal' | t }}:</span><span class="money total-price">'+totalPriceConverted+'</span></li></ul></div>';
+          checkoutRow = '<div class="checkout_row">' + terms_checkbox + '<button type="submit" name="checkout" value="Check Out" class="btn_c">{{ 'cart.general.checkout' | t }}</button> <a href="javascript:void(0)" class="info_btn"><span class="fa fa-chevron-left"></span>{{ 'cart.general.continue_browsing' | t }}</a></div>';
+          subtotalRow = '<div class="total_row"><ul><li>'+discounts_html+'<span class="total_val">{{ 'cart.general.subtotal' | t }}:</span><span class="money total-price">'+totalPriceConverted+'</span></li></ul></div>';
           var addCheckOutBlock = '<div id="additional-checkout-block" class="text-right additional-checkout-buttons" ></div>';
           var form = jQ('<form />',{
             'action':'/cart',
@@ -506,7 +506,7 @@ jQuery(document).ready(function() {
              var currencyNote = currencyNoteCompiled;
               {% endif %}
               if({{settings.cart_notes}}){
-                var notesRow='<div class="clearfix order_notes">'+
+                var notesRow='<div class="order_notes">'+
                     '<label for="cartSpecialInstructions" class="sr-only">{{ 'cart.general.note' | t }}:</label>'+
                     '<textarea name="note" id="cartSpecialInstructionsFromPopup" class="note_text" placeholder="{{ 'cart.general.note' | t }}">'+ cartNote +'</textarea></div>';
               }
@@ -529,7 +529,7 @@ jQuery(document).ready(function() {
 
       }
       else {
-        t.html('<div class="menu_title clearfix"><h4>{{ 'cart.general.title' | t }}</h4> </div><div class="cart_row"><div class="empty-cart">{{ 'cart.general.empty' | t }}</div><p><a href="javascript:void(0)" class="btn_c btn_close">{{ 'cart.general.continue_browsing' | t }}</a></p></div>'); 
+        t.html('<div class="menu_title"><h4>{{ 'cart.general.title' | t }}</h4> </div><div class="cart_row"><div class="empty-cart">{{ 'cart.general.empty' | t }}</div><p><a href="javascript:void(0)" class="btn_c btn_close">{{ 'cart.general.continue_browsing' | t }}</a></p></div>'); 
         c.html('<div class="empty-cart-message"><p>{{ 'cart.general.empty' | t }}</p><p><a href="/collections/all" class="btn_c">{{ 'cart.general.continue_browsing' | t }}</a></p></div');
       }  
     } 
