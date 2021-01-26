@@ -529,8 +529,18 @@ jQuery(document).ready(function() {
 
       }
       else {
-        t.html('<div class="menu_title"><h4>{{ 'cart.general.title' | t }}</h4> </div><div class="cart_row"><div class="empty-cart">{{ 'cart.general.empty' | t }}</div><p><a href="javascript:void(0)" class="btn_c btn_close">{{ 'cart.general.continue_browsing' | t }}</a></p></div>'); 
-        c.html('<div class="empty-cart-message"><p>{{ 'cart.general.empty' | t }}</p><p><a href="/collections/all" class="btn_c">{{ 'cart.general.continue_browsing' | t }}</a></p></div');
+        var cartTitleText = "{{ 'cart.general.title' | t }}";
+        var cartEmptyText = "{{ 'cart.general.empty' | t }}";
+        var cartContinueText = "{{ 'cart.general.continue_browsing' | t }}";
+        t.html(`<div class="menu_title">
+          <h4>${cartTitleText}</h4> </div><div class="cart_row">
+          <div class="empty-cart">${cartEmptyText}</div>
+          <p><a href="javascript:void(0)" class="btn_c btn_close">${cartContinueText}</a></p>
+        </div>`);
+        c.html(`<div class="empty-cart-message">
+          <p>${cartEmptyText}</p>
+          <p><a href="/collections/all" class="btn_c">${cartContinueText}</a></p>
+        </div`);
       }  
     } 
       Shopify.onCartUpdate(cart);         
