@@ -2881,6 +2881,7 @@ FLOATING CART
       .cart_row_heading {
         display: table;
         width: 100%;
+        padding-right: 15px;
         ul {
           li {
             padding-bottom: 0;
@@ -2890,8 +2891,23 @@ FLOATING CART
     }
     ul {
       li {
+        text-align: center;
+        padding: 10px 0;
+        vertical-align: middle;
         position: relative;
         overflow: initial;
+        &:nth-child(2) {
+          text-align: left;
+        }
+        &:nth-child(3) {
+          width: 16%;
+        }
+        &:nth-child(4) {
+          width: 22%;
+        }
+        &:nth-child(5) {
+          width: 16%;
+        }
       }
     }
     .photo-column-header {
@@ -2935,9 +2951,22 @@ FLOATING CART
   
   @media (max-width: 790px) {
     .cart_menu {
+      .cart_row_heading {
+        ul {
+          li {
+            &:nth-child(1) {
+              width: 10%;
+            }
+          }
+        }
+      }
       .cart_row {
         ul {
           li {
+            &:nth-child(1) {
+              padding-left: 0;
+              padding-right: 10px;
+            }
             .minus_btn, .plus_btn {
               width: 1.2em;
               height: 1.2em;
@@ -2976,12 +3005,48 @@ FLOATING CART
       .menu_title .cart_row_heading {
         display: none;
       }
+      .mobile-label-price,
+      .mobile-label-quantity,
+      .mobile-label-total {
+        display: block;
+        width: 100%;
+      }
+      ul {
+        display: flex;
+        flex-flow: wrap;
+        align-items: center;
+        padding: 10px 0;
+        li {
+          padding: 0;
+          display: inline-block;
+          &:nth-child(1) {
+            width: 35%;
+          }
+          &:nth-child(2) {
+            width: 65%;
+          }
+          &:nth-child(3) {
+            width: 33%;
+          }
+          &:nth-child(4) {
+            width: 34%;
+          }
+          &:nth-child(5) {
+            width: 33%;
+          }
+        }
+      }
       a.info_btn, a.info_btn .fa {
         font-size: 14px;
       }
       .total_row {
         ul {
           padding: 5px 0;
+          li {
+            &:nth-child(1) {
+              width: 100%;
+            }
+          }
         }
       }
       .checkout_row {
