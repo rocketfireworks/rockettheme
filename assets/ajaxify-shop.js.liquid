@@ -466,7 +466,7 @@ jQuery(document).ready(function() {
               
               if(cart.items[i].id != '32047066972241'){
               	row+='<p class="mobile-label-quantity">{{ 'cart.general.quantity' | t }}</p><a class="minus_btn"></a><input type="text" name="updates[]" class="txtbox number_val_input" min="0" id="updates_'+cart.items[i].id+'" data-id="'+cart.items[i].id+'" value="'+cart.items[i].quantity+'" /><a class="plus_btn"></a>'+
-              '<div class="ajaxcart__errors text-center ajaxcart__item__'+cart.items[i].id+'__errors">{{ 'cart.general.error' | t }}</div>';   
+              '<div class="ajaxcart__errors error-popup ajaxcart__item__'+cart.items[i].id+'__errors">{{ 'cart.general.error' | t }}</div>';   
               }
           
               row+='</li><li class="productRowTotal"><p class="mobile-label-total">{{ 'cart.general.total' | t }}</p>'+linePriceContent + 
