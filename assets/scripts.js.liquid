@@ -291,6 +291,14 @@ theme.Sections.prototype = _.assignIn({}, theme.Sections.prototype, {
 // ============================================================================
 // Begin Cart Code
 // ============================================================================
+window.setCartHeight = function() {
+  var cartHeight = $('.modal-popup').innerHeight();
+  var cartHeaderHeight = $('.menu_title').innerHeight();
+  var cartFooterHeight = $('.checkout_row').innerHeight();
+  var formHeight = cartHeight - cartHeaderHeight - cartFooterHeight;
+  $('.modal-popup form').css('max-height', formHeight);
+}
+
 window.initAddToCartForms = function() {
   $('body').find('.add-to-cart-form').on('submit', (e) => {
     {% if settings.cart_type == "modal"%}
@@ -322,6 +330,7 @@ window.addItemToCart = function(form) {
   }
 }
 
+$(window).resize(setCartHeight);
 // ============================================================================
 // End Cart Code
 // ============================================================================
@@ -475,6 +484,9 @@ window.openCartPopup = function openCartPopup(e) {
       }
     }
   });
+
+  window.setCartHeight();
+
   bindEventsInCart();
 }
 
