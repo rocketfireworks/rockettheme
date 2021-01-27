@@ -25,8 +25,8 @@
       {% for item in cart.items %}
       <ul>
         <li>
-          <div class="thumb">
-            <a href="{{ item.url }}">  
+          <div class="product-image-container">
+            <a href="{{ item.url }}" class="product-image-link">  
               <img src="{{ item | img_url: '300x' }}" alt="{{ item.title | escape }}" />
             </a>
           </div>
