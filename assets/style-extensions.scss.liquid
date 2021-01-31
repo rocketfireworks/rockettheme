@@ -2896,6 +2896,9 @@ FLOATING CART
         vertical-align: middle;
         position: relative;
         overflow: initial;
+        &:nth-child(1) {
+          padding-right: 10px;
+        }
         &:nth-child(2) {
           text-align: left;
         }
@@ -2965,7 +2968,6 @@ FLOATING CART
           li {
             &:nth-child(1) {
               padding-left: 0;
-              padding-right: 10px;
             }
             .minus_btn, .plus_btn {
               width: 1.2em;
@@ -3015,6 +3017,7 @@ FLOATING CART
         flex-flow: wrap;
         align-items: center;
         padding: 10px 0;
+        margin-bottom: 0;
         li {
           padding: 0;
           display: inline-block;
@@ -3029,6 +3032,7 @@ FLOATING CART
           }
           &:nth-child(4) {
             width: 34%;
+            padding-top: 0;
           }
           &:nth-child(5) {
             width: 33%;
@@ -3041,6 +3045,7 @@ FLOATING CART
       .total_row {
         ul {
           padding: 5px 0;
+          border-bottom: none;
           li {
             &:nth-child(1) {
               width: 100%;
@@ -3063,5 +3068,75 @@ FLOATING CART
   
   @media (max-width: 480px) {
     padding: 55px 0 140px;
+  }
+}
+
+/*------------------------------------------------------------------
+CHECKOUT CART
+-------------------------------------------------------------------*/
+#content {
+  .cart_tbl {
+    ul {
+      li {
+        padding: 10px 0;
+        text-align: center;
+        &:nth-child(1) {
+          padding-right: 10px;
+        }
+        &:nth-child(2) {
+          text-align: left;
+        }
+        &:nth-child(3) {
+          width: 16%;
+        }
+        &:nth-child(4) {
+          width: 21%;
+        }
+        &:nth-child(5) {
+          width: 16%;
+        }
+        .product-image-link {
+          height: 70px;
+        }
+        .minus_btn, .plus_btn, .txtbox {
+          width: 1.875em;
+          height: 1.5em;
+          padding: 0 5px;
+        }
+        .txtbox {
+          width: 2em;
+        }
+        .price {
+          float: none;
+        }
+      }
+      @media (max-width: 480px) {
+        display: flex;
+        flex-flow: wrap;
+        align-items: center;
+        padding: 5px 0;
+        li {
+          padding: 0;
+          &:nth-child(3) {
+            float: none;
+            width: 33%;
+            padding-bottom: 0;
+          }
+          &:nth-child(4) {
+            float: none;
+            width: 34%;
+            display: inline-block;
+          }
+          &:nth-child(5) {
+            float: none;
+            width: 33%;
+            padding-bottom: 0;
+          }
+        }
+      }
+      .photo-column-header {
+        visibility: hidden;
+      }
+    } 
   }
 }

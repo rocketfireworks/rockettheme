@@ -27,7 +27,13 @@
                   <div class="clearfix con_row">
                     {% for item in cart.items %}
                     <ul class="productRow">
-                      <li class="productRowImg"><div class="thumb"><span> <a href="{{ item.url }}"><img src="{{ item | img_url: '800x' }}"  alt="{{ item.title | escape }}" /></a></span></div></li>
+                      <li class="productRowImg">
+                        <div class="product-image-container">
+                          <a href="{{ item.url }}" class="product-image-link">
+                            <img src="{{ item | img_url: '800x' }}"  alt="{{ item.title | escape }}" />
+                          </a>
+                        </div>
+                      </li>
                       <li class="productRowTitle">
                         <h5 class="{{ item.id }}"><a href="{{ item.url | within: collections.all }}">{{ item.product.title | escape }}</a></h5>
                         {% if item.product.variants.size != 0 %}
@@ -88,7 +94,7 @@
                         <a class="minus_btn"></a>
                         <input type="text" id="updates_{{ item.id }}" name="updates[]" class="txtbox number_val_input" value="{{ item.quantity }}" min="0" data-id="{{ item.id }}">
                         <a class="plus_btn"></a>
-                        <div class="ajaxcart__errors text-center ajaxcart__item__{{ item.id }}__errors">
+                        <div class="ajaxcart__errors error-popup ajaxcart__item__{{ item.id }}__errors">
                           {{ 'cart.general.error' | t }}
                         </div>
                         {%- endif -%}
