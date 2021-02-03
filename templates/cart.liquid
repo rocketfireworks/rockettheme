@@ -15,7 +15,7 @@
               <div class="cart_tbl">
                 {% if cart.item_count > 0 %}
                 <form action="/cart" method="post" novalidate>
-                  <div class="clearfix title_row">
+                  <div class="title_row">
                     <ul>
                       <li>{{ 'cart.general.name' | t }}</li>
                       <li class="photo-column-header">{{ 'cart.general.photo' | t }}</li>
@@ -24,7 +24,7 @@
                       <li>{{ 'cart.general.total' | t }}</li>
                     </ul>
                   </div>
-                  <div class="clearfix con_row">
+                  <div class="con_row">
                     {% for item in cart.items %}
                     <ul class="productRow">
                       <li class="productRowImg">
@@ -71,8 +71,8 @@
                       <li class="productRowPrice">
                         <p class="mobile-label-price">{{ 'cart.general.price' | t }}</p>
                           {%- if item.original_price != item.final_price -%}
-                       	    <span class="price money original_price">{{ item.original_price | money }}</span><br class="clearfix">
-                            <span class="price money">{{ item.final_price | money }}</span><br class="clearfix">
+                       	    <span class="price money original_price">{{ item.original_price | money }}</span><br >
+                            <span class="price money">{{ item.final_price | money }}</span><br >
                           {% else %}
                          	<span class="price money">{{ item.original_price | money }}</span>
                           {% endif %}
@@ -103,8 +103,8 @@
                         <p class="mobile-label-total">{{ 'cart.general.total' | t }}</p>
 
                           {%- if item.original_line_price != item.final_line_price -%}
-                            <span class="price money original_price">{{ item.original_line_price | money }}</span><br class="clearfix">
-                            <span class="price money">{{ item.final_line_price | money }}</span><br class="clearfix">
+                            <span class="price money original_price">{{ item.original_line_price | money }}</span><br >
+                            <span class="price money">{{ item.final_line_price | money }}</span><br >
                           {% else %}
                           	<span class="price money">{{ item.original_line_price | money }}</span>
                           {% endif %}
