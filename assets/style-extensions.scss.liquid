@@ -75,6 +75,7 @@ html {
     text-decoration: none;
     background-color: #77dbf3;
   }
+  
 }
 
 .product-image-link {
@@ -3138,5 +3139,43 @@ CHECKOUT CART
         visibility: hidden;
       }
     } 
+    .total_row {
+      text-align: right;
+      ul {
+        display: block;
+        li {
+          display: block;
+          &:nth-child(1) {
+            padding: 10px 20px;
+          }
+        }
+      }
+    }
+  }
+  textarea {
+    height: 80px;
+  }
+  .cart_btn {
+    padding: 15px;
+  }
+  .cart_c .cart_btn a.info_btn {
+    padding: 0;
+  }
+  @media (max-width: 790px) {
+    width: initial;
+  }
+  @media (max-width: 560px) {
+    .cart_btn {
+      button.next_btn {
+        padding: 0 1em;
+        font-size: 18px;
+      }
+    }
+  }
+  @media (max-width: 560px) {
+    .cart_c .cart_btn a.info_btn,
+    .cart_btn button.next_btn {
+      margin: 0 auto;
+    }
   }
 }

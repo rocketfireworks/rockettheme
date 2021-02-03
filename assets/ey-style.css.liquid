@@ -365,12 +365,6 @@ select {
   color: #16142c;
 }
 
-.template-cart #content .cart_tbl .total_row ul li:nth-child(1) {
-  text-align: left;
-  width: 80%;
-  padding-left: 20px;
-}
-
 .sequencePrice {
   color: #c94344;
 }
@@ -444,11 +438,8 @@ select {
   color: #3dbfde;
 }
 
-.template-cart .firingSequenceAddon,
-#content .cart_tbl .total_row {
-  width: 48%;
-  display: inline-block;
-  padding-left: 20px;
+.template-cart .firingSequenceAddon {
+  padding: 0 20px;
 }
 
 /* Product PG */
@@ -1624,16 +1615,8 @@ select {
 }
 
 @media (max-width: 991px) {
-  .template-cart #content .cart_tbl .total_row ul li:nth-child(1) {
-    width: 100% !important;
-    padding-left: 0px !important;
-  }
-
   .template-cart .firingSequenceAddon {
     width: 100%;
-  }
-  .total_row {
-    width: 100% !important;
   }
   .desktop-xs {
     display: none !important;
@@ -1695,15 +1678,6 @@ select {
 #footer .f_mid .container {
   margin: 0 auto;
   max-width: 100%;
-}
-
-.cart_tbl .total_row ul {
-  float: right;
-}
-.cart_tbl .total_row ul li {
-  text-align: right !important;
-  float: right;
-  width: 100%;
 }
 #content .cart_tbl .total_row ul li span.total_val,
 .template-cart #content .cart_tbl ul li .total-price {
