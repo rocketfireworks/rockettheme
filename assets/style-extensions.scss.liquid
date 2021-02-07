@@ -3162,6 +3162,13 @@ CHECKOUT CART
     padding: 0;
   }
   @media (max-width: 790px) {
+    .cart_tbl {
+      ul {
+        li:nth-child(1) {
+          width: initial;
+        }
+      }
+    }
     width: initial;
   }
   @media (max-width: 560px) {
@@ -3172,7 +3179,14 @@ CHECKOUT CART
       }
     }
   }
-  @media (max-width: 560px) {
+  @media (max-width: 480px) {
+    .cart_tbl {
+      ul {
+        li:nth-child(1) {
+          width: 40%;
+        }
+      }
+    }
     .cart_c .cart_btn a.info_btn,
     .cart_btn button.next_btn {
       margin: 0 auto;
