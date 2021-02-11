@@ -6,20 +6,41 @@
     <input type="hidden" name="id" value="{{ item.variants.first.id }}" />
 
     <div class="product-gallery-container">
-      <div class="spinner-cube">
-        <div class="loadFacebookG"></div>
-      </div>
-      <a href="{{ item.url | within: collection }}" class="product-image-link">
-        <noscript>
-          <img
-            srcset="{{ item.featured_image.src | product_img_url: img_size}} 1x, {{ item.featured_image.src | product_img_url: img_size, scale: 2}} 2x, {{ item.featured_image.src | product_img_url: img_size, scale: 3}} 3x"
-            alt="{{ item.featured_image.alt | escape }}">
-        </noscript>
-        {% assign img_url = item.featured_image.src | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
-        <img class="lazyload" src="{{ item.featured_image.src | img_url: "300x"}}"
-          data-srcset="{{ item.featured_image.src | product_img_url: img_size}} 1x, {{ item.featured_image.src | product_img_url: img_size, scale: 2}} 2x, {{ item.featured_image.src | product_img_url: img_size, scale: 3}} 3x"
-          alt="{{ item.featured_image.alt | escape }}" style="max-width: {{max_img_width}}" />
-      </a>
+
+      {% assign hasVideo = false %}
+      
+      {% for media in item.media %}
+
+        {% if media.media_type == 'external_video' %}
+        {% assign hasVideo = true %}
+        <div data-thumb="{{ media | img_url: '150x' }}" data-title="{{ item.title | escape }}" class="video_slide">
+          {% assign video = media.alt | split: 'src="' %}
+          {% assign video = video[1] | split: '"' | first %}
+          <div class="video-container {% if media.alt contains 'vimeo' %}vimeo{% else %}youtube{% endif %}">
+            <div class="media" data-media-id="{{ media.id }}">{{ media | external_video_tag }}</div>
+          </div>
+        </div>
+        {% endif %}
+
+      {% endfor %}
+
+      {% if hasVideo == false %}
+        <div class="spinner-cube">
+          <div class="loadFacebookG"></div>
+        </div>
+        <a href="{{ item.url | within: collection }}" class="product-image-link">
+          <noscript>
+            <img
+              srcset="{{ item.featured_image.src | product_img_url: img_size}} 1x, {{ item.featured_image.src | product_img_url: img_size, scale: 2}} 2x, {{ item.featured_image.src | product_img_url: img_size, scale: 3}} 3x"
+              alt="{{ item.featured_image.alt | escape }}">
+          </noscript>
+          {% assign img_url = item.featured_image.src | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+          <img class="lazyload" src="{{ item.featured_image.src | img_url: "300x"}}"
+            data-srcset="{{ item.featured_image.src | product_img_url: img_size}} 1x, {{ item.featured_image.src | product_img_url: img_size, scale: 2}} 2x, {{ item.featured_image.src | product_img_url: img_size, scale: 3}} 3x"
+            alt="{{ item.featured_image.alt | escape }}" style="max-width: {{max_img_width}}" />
+        </a>
+      {% endif %}
+      
     </div>
     
     <div class="product-details">

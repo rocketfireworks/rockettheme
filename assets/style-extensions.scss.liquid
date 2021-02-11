@@ -2779,7 +2779,7 @@ SEARCH RESULT
     .product-container {
       flex-basis: 48%;
       padding-bottom: 20px;
-      grid-template-columns: 1fr 2fr;
+      grid-template-columns: 1fr 1fr;
       h3 {
         a {
           color: #16142c;
@@ -2791,7 +2791,7 @@ SEARCH RESULT
         align-self: center;
         .product-image-link {
           display: flex;
-          height: 130px;
+          max-height: 200px;
           img {
             position: relative;
             width: 100%;
@@ -2823,9 +2823,9 @@ SEARCH RESULT
   
       @media (max-width: 991px) {
         grid-template-columns: 1fr;
-        .product-details {
-          .product-title-inventory {
-  
+        .product-gallery-container {
+          .product-image-link {
+            max-height: 150px;
           }
         }
         .product-price-qty {
@@ -2839,6 +2839,11 @@ SEARCH RESULT
       }
       @media (max-width: 560px) {
         flex-basis: 100%;
+        .product-gallery-container {
+          .product-image-link {
+            max-height: 130px;
+          }
+        }
       }
     }
   }
