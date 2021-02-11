@@ -2818,10 +2818,10 @@ var initOwlCarousel = function (sectionId){
         1000: {
           items: 7
         }
-      }
+      },
+      onInitialized: window.initAddToCartForms()
     })
   }
-  initOwlCarouselFinish = true;
 };
         
         // theme.LogoSection
@@ -2938,7 +2938,7 @@ theme.ProductRecommendations = (function() {
     }                                               
   }
 
-  return  ProductRecommendations;
+  return ProductRecommendations;
 })();
 
 /////////////////////////////////////
