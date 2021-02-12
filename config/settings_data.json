@@ -14,7 +14,7 @@
     "primary_color": "#107fa8",
     "secondary_color": "#fbcf00",
     "heading_text_color": "#282727",
-    "body_text_color": "#898989",
+    "body_text_color": "#16142c",
     "link_hover_color": "#136f99",
     "button_text_color": "#ffffff",
     "regular_price_color": "#282827",
@@ -25,7 +25,7 @@
     "bg_fixed": false,
     "bg_stretched": false,
     "content_heading_color": "#282827",
-    "content_text_color": "#898989",
+    "content_text_color": "#16142c",
     "content_link_color": "#107fa8",
     "footer_bg_color": "#eae8e8",
     "footer_heading_color": "#16142c",
@@ -53,12 +53,12 @@
     "cart_link_list": "",
     "show_shipping_calculator": true,
     "shipping_calculator_default_country": "United States",
-    "search_type_query": "search_everything",
-    "enable_live_search": false,
-    "use_infinite_scroll": false,
+    "search_type_query": "search_products_only",
+    "enable_live_search": true,
+    "use_infinite_scroll": true,
     "custom_price0_text": "Free",
     "hide_price0_box_and_button": true,
-    "align_height": true,
+    "align_height": false,
     "collection_height": 200,
     "show_product_swatches": false,
     "show_smart_checkout": true,
@@ -455,8 +455,8 @@
           "promo_bar_link": "#",
           "head_promobar": 14,
           "header_style": "header2",
-          "logo": "shopify:\/\/shop_images\/logo_2x_98b3df27-6bcb-4769-ace3-750a3fb5eebb.png",
-          "logo_max_width": 320,
+          "logo": "shopify:\/\/shop_images\/logo_6cb16038-1947-4e1c-8e41-b0186cd14b39.png",
+          "logo_max_width": 300,
           "logo_height": 106,
           "mobile_padding": 15,
           "search_style": "bar",
@@ -468,8 +468,15 @@
           "head_font_size": 14,
           "header_top_linklist": "",
           "header_top_text": "",
-          "header_phone": "800.555.5555",
-          "header_email": "example@cooktime.com"
+          "header_phone": "(888) 405-5278",
+          "header_location": "shopify:\/\/pages\/store-locations",
+          "header_link1_text": "Find a Store",
+          "header_link1": "shopify:\/\/pages\/store-locations",
+          "header_link2_text": "Order Info",
+          "header_link2": "shopify:\/\/pages\/fireworks-delivery",
+          "header_link3_text": "Free Stuff",
+          "header_link3": "shopify:\/\/pages\/free-fireworks",
+          "header_email": "sales@rocket.ca"
         }
       },
       "footer": {
@@ -486,7 +493,7 @@
             "type": "text",
             "settings": {
               "title": "Store Locations",
-              "text": "<p>Come check us out at our year-round location:<\/p>\n\n<div class=\"footerLocation\">\n<i class=\"fa fa-map-marker\"><\/i>\n<p>14 Advance Road, Toronto, Ontario<br>\nPhone: 416.456.5057<br><a href=\"#\">View location details<\/a><\/p>\n<\/div>\n\n<p><a href=\"#\"><i class=\"fa fa-chevron-right\"><\/i> Or find a seasonal store near you<\/a><\/p>"
+              "text": "<p>Toronto Superstore<\/p>\n<div>\n<p>\n<a href=\"\/pages\/toronto-etobicoke-html\"><i class=\"fa fa-map-marker\"><\/i> 14 Advance Road, Toronto, Ontario<\/a><br>\n<a href=\"tel:416.456.5057\">\n<i class=\"fas fa-phone-alt\"><\/i> 416.456.5057<\/a><br>\n<a href=\"\/pages\/toronto-etobicoke-html\">Get directions...<\/a><\/p>\n<\/div>\n\n<p><a href=\"\/pages\/store-locations\"><i class=\"fa fa-chevron-right\"><\/i> Or find a seasonal store near you<\/a><\/p>"
             }
           },
           "1483746503941": {
@@ -522,9 +529,9 @@
       "collection": {
         "type": "collection",
         "settings": {
-          "product_grid_layout": 3,
-          "pagination_limit": 12,
-          "use_infinite_scroll": false,
+          "product_grid_layout": 4,
+          "pagination_limit": 24,
+          "use_infinite_scroll": true,
           "show_featured_image": true,
           "show_grid_type": false,
           "show_sale_badge": true,
@@ -534,7 +541,7 @@
           "collection_sidebar_filters": "groups",
           "group_array": "Price,Duration,Color",
           "collection_link_list": "",
-          "show_sidebar_collections": false,
+          "show_sidebar_collections": true,
           "show_sidebar_vendors": false,
           "sidebar_collection_sale_collection": "",
           "sidebar_collection_product_count": 4
@@ -542,6 +549,7 @@
       },
       "slideshow": {
         "type": "slideshow",
+        "disabled": true,
         "blocks": {
           "slideshow-2": {
             "type": "slide",
@@ -552,7 +560,6 @@
               "slideshow_subtitle": "",
               "slideshow_subsubtitle": "",
               "slideshow_button_text": "",
-              "slideshow_link": "",
               "slideshow_caption_position": "right"
             }
           }
@@ -575,19 +582,16 @@
       "product": {
         "type": "product",
         "settings": {
-          "show_product_cart_postion": "bottom",
           "show_smart_checkout": false,
           "enable_description_enhancements": true,
-          "product_reviews": true,
+          "product_reviews": false,
           "show_product_swatches": true,
-          "show_product_zoom": true,
+          "show_product_zoom": false,
           "show_product_sku": true,
           "show_product_vendor": false,
-          "show_product_quantity": false,
-          "show_product_tags": true,
-          "product_additional_img": "carousel",
-          "enable_images_limit": false,
-          "images_limit_height": 500,
+          "show_product_quantity": true,
+          "show_product_tags": false,
+          "product_additional_img": "grid",
           "show_product_tab_1": false,
           "tab_1_title": "Reviews",
           "product_tab_1_page": "",
@@ -629,141 +633,40 @@
         "type": "product-recommendations",
         "settings": {
           "show_product_recommendations": true,
-          "related_products_title": "Related products",
+          "related_products_title": "Goes Great With...",
           "show_sale_badge": true,
           "collection_overlay": false,
           "show_product_reviews_stars": false
         }
       },
-      "1582604312502": {
-        "type": "gallery",
-        "blocks": {
-          "1582604312502-0": {
-            "type": "image",
-            "settings": {
-              "promo": "shopify:\/\/shop_images\/kicker_SmokeFX.jpg",
-              "promo_banner_position": "bottom",
-              "promo_banner_heading": "",
-              "promo_banner_subtext": "",
-              "promo_banner_link": ""
-            }
-          },
-          "1582604312502-1": {
-            "type": "image",
-            "settings": {
-              "promo": "shopify:\/\/shop_images\/kicker_RemoteFiring.jpg",
-              "promo_banner_position": "bottom",
-              "promo_banner_heading": "",
-              "promo_banner_subtext": "",
-              "promo_banner_link": ""
-            }
-          }
-        },
-        "block_order": [
-          "1582604312502-0",
-          "1582604312502-1"
-        ],
-        "settings": {}
-      },
-      "1582607002835": {
-        "type": "gallery",
-        "blocks": {
-          "1582607002835-0": {
-            "type": "image",
-            "settings": {
-              "promo": "shopify:\/\/shop_images\/kicker_GenderReveal.jpg",
-              "promo_banner_position": "bottom",
-              "promo_banner_heading": "",
-              "promo_banner_subtext": "",
-              "promo_banner_link": ""
-            }
-          },
-          "1582607002835-1": {
-            "type": "image",
-            "settings": {
-              "promo": "shopify:\/\/shop_images\/kicker_Nightclub.jpg",
-              "promo_banner_position": "bottom",
-              "promo_banner_heading": "",
-              "promo_banner_subtext": "",
-              "promo_banner_link": ""
-            }
-          },
-          "1582607059593": {
-            "type": "image",
-            "settings": {
-              "promo": "shopify:\/\/shop_images\/kicker_ProfDisplays.jpg",
-              "promo_banner_position": "bottom",
-              "promo_banner_heading": "",
-              "promo_banner_subtext": "",
-              "promo_banner_link": ""
-            }
-          }
-        },
-        "block_order": [
-          "1582607002835-0",
-          "1582607002835-1",
-          "1582607059593"
-        ],
-        "settings": {}
-      },
       "1582607093561": {
         "type": "featured-collection",
         "settings": {
-          "title": "Featured collection",
-          "featured_collection": "",
+          "title": "Best Sellers",
+          "featured_collection": "best-sellers",
           "home_feature_product_grid_type": "carousel",
           "home_feature_product_grid_layout": "col-md-3",
-          "home_feature_product_limit": 7,
+          "home_feature_product_limit": 24,
           "show_grid_type": false,
           "show_sale_badge": true,
-          "collection_overlay": true,
-          "show_product_reviews_stars": false
-        }
-      },
-      "1582607207763": {
-        "type": "slideshow",
-        "blocks": {
-          "1582607207763-0": {
-            "type": "slide",
-            "settings": {
-              "slideshow_image": "shopify:\/\/shop_images\/hpfireworkbanner.png",
-              "slideshow_caption_val": 20,
-              "title": "",
-              "slideshow_subtitle": "",
-              "slideshow_subsubtitle": "",
-              "slideshow_button_text": "",
-              "slideshow_link": "",
-              "slideshow_caption_position": "center"
-            }
-          }
-        },
-        "block_order": [
-          "1582607207763-0"
-        ],
-        "settings": {
-          "slideshow_width": "contained",
-          "animation_speed": 7,
-          "slider_heading_size": 36,
-          "slider_sub_heading_size": 24,
-          "slider_content_size": 18,
-          "sd_heading_color": "#ffffff",
-          "sd_line_color": "#fbcf00",
-          "sd_sub_heading_color": "#ffffff",
-          "sd_text_color": "#ffffff"
+          "collection_overlay": false,
+          "show_product_reviews_stars": false,
+          "show_link_to_collection": true
         }
       },
       "1582607276657": {
         "type": "featured-collection",
         "settings": {
-          "title": "Featured collection",
-          "featured_collection": "",
+          "title": "Packages",
+          "featured_collection": "packages",
           "home_feature_product_grid_type": "carousel",
           "home_feature_product_grid_layout": "col-md-3",
-          "home_feature_product_limit": 12,
+          "home_feature_product_limit": 24,
           "show_grid_type": false,
           "show_sale_badge": true,
           "collection_overlay": false,
-          "show_product_reviews_stars": false
+          "show_product_reviews_stars": false,
+          "show_link_to_collection": true
         }
       },
       "location": {
@@ -786,14 +689,154 @@
           "sidebar_page_sale_collection": "",
           "sidebar_page_product_count": 4
         }
+      },
+      "1598559316445": {
+        "type": "home-herobanner",
+        "blocks": {
+          "1598559354444": {
+            "type": "select",
+            "settings": {
+              "link": "shopify:\/\/collections",
+              "linktext": "Shop Now",
+              "color": "#16142c",
+              "background_color": "#3cc0df"
+            }
+          }
+        },
+        "block_order": [
+          "1598559354444"
+        ],
+        "settings": {
+          "heading": "40% off",
+          "subtitle": "Fireworks Packages",
+          "text": "Up to",
+          "image": "shopify:\/\/shop_images\/herobanner.jpg"
+        }
+      },
+      "1598559381906": {
+        "type": "home-ctatilegroup",
+        "blocks": {
+          "1598559386214": {
+            "type": "select",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/home-big-bucket1_71fc7161-b489-495d-b754-1a7d2e1fec83.png",
+              "image_title": "Smoke fx",
+              "heading": "Smoke fx",
+              "tagline": "For Tactical Games, Film, Photography & More",
+              "link": "shopify:\/\/collections\/smoke-fx",
+              "linktext": "Shop Now"
+            }
+          },
+          "1598559388555": {
+            "type": "select",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/kicker_RemoteFiring_9fd5811f-8a94-4453-b5a7-d331a2602597.jpg",
+              "image_title": "Remote Firing System",
+              "heading": "Remote Firing System",
+              "tagline": "Ignite Fireworks With The Push Of A Button",
+              "link": "shopify:\/\/collections\/firing-systems",
+              "linktext": "Shop Now"
+            }
+          }
+        },
+        "block_order": [
+          "1598559386214",
+          "1598559388555"
+        ],
+        "settings": {}
+      },
+      "1598559395273": {
+        "type": "home-ctaarrowtilegroup",
+        "blocks": {
+          "1598559400226": {
+            "type": "select",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/kicker_GenderReveal_a93836b0-2a6d-4fc2-a1c4-077408cb6ae5.jpg",
+              "image_title": "Fireworks Party",
+              "heading": "Gender Reveal Party",
+              "tagline": "Exciting Options For Your Announcement",
+              "link": "shopify:\/\/collections\/wholesale-party-supplies"
+            }
+          },
+          "1598559401537": {
+            "type": "select",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/kicker_Nightclub_b2fd7a7a-8382-4bcb-9025-28be5bfd0945.jpg",
+              "image_title": "Nightclub & Bar Supply",
+              "heading": "Nightclub & Bar Supply",
+              "tagline": "Unique Items To Enhance Your Vibe",
+              "link": "shopify:\/\/collections\/nightclub-bar-products"
+            }
+          },
+          "1598559402509": {
+            "type": "select",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/home-small-bucket3_e8dbd138-6d7b-4e7e-a72f-7f305590e88b.png",
+              "image_title": "Professional Displays",
+              "heading": "Professional Displays",
+              "tagline": "For Weddings & Special Events",
+              "link": "shopify:\/\/collections\/weddings-events"
+            }
+          }
+        },
+        "block_order": [
+          "1598559400226",
+          "1598559401537",
+          "1598559402509"
+        ],
+        "settings": {}
+      },
+      "product-coupon": {
+        "type": "product-coupon",
+        "settings": {
+          "show_coupon": true,
+          "coupon_title": "<p>Free<br\/>Fireworks<\/p>",
+          "coupon_subtitle": "<p>Shop In-Store or Online<br\/>and get Bonus Rewards<\/p>",
+          "coupon_image": "shopify:\/\/shop_images\/coupon.png",
+          "coupon_linktext": "View Deals"
+        }
+      },
+      "featured-collection": {
+        "type": "featured-collection",
+        "settings": {
+          "title": "Best Sellers",
+          "featured_collection": "best-sellers",
+          "home_feature_product_grid_type": "carousel",
+          "home_feature_product_grid_layout": "col-md-3",
+          "home_feature_product_limit": 24,
+          "show_grid_type": false,
+          "show_sale_badge": true,
+          "collection_overlay": false,
+          "show_product_reviews_stars": false,
+          "show_link_to_collection": true
+        }
+      },
+      "1605323136286a8b94": {
+        "type": "product-coupon",
+        "settings": {
+          "show_coupon": true,
+          "coupon_title": "<p>Free<br\/>Fireworks<\/p>",
+          "coupon_subtitle": "<p>Shop In-Store or Online<br\/>and get Bonus Rewards!<\/p>",
+          "coupon_image": "shopify:\/\/shop_images\/coupon.png",
+          "coupon_linktext": "View Deals"
+        }
+      },
+      "list-collections-template": {
+        "type": "list-collections-template",
+        "settings": {
+          "display_type": "all",
+          "sort": "alphabetical",
+          "product_grid_layout": 4,
+          "show_item_count": false
+        }
       }
     },
     "content_for_index": [
-      "slideshow",
-      "1582604312502",
-      "1582607002835",
+      "1598559316445",
+      "1598559381906",
+      "1598559395273",
       "1582607093561",
-      "1582607207763",
+      "1605323136286a8b94",
       "1582607276657"
     ]
   },
@@ -1042,7 +1085,6 @@
         "product": {
           "type": "product",
           "settings": {
-            "show_product_cart_postion": "bottom",
             "product_reviews": false,
             "show_product_swatches": false,
             "show_product_zoom": false,
@@ -1313,7 +1355,6 @@
         "product": {
           "type": "product",
           "settings": {
-            "show_product_cart_postion": "bottom",
             "product_reviews": false,
             "show_product_swatches": false,
             "show_product_zoom": false,
@@ -1582,7 +1623,6 @@
         "product": {
           "type": "product",
           "settings": {
-            "show_product_cart_postion": "bottom",
             "product_reviews": false,
             "show_product_swatches": false,
             "show_product_zoom": false,
