@@ -534,7 +534,7 @@ window.swatchSelection = (container) => {
     swatchGroups.forEach( (swatchGroup, i) => {
       if (swatchGroup) {
         var swatches = swatchGroup.getElementsByTagName('input');
-        swatches.forEach(swatch => {
+        for (swatch of swatches) {
           var swatchValue = swatch.value;
           if (swatchValue === selectedSwatch) {
             selectedSwatchGroup = { 
@@ -543,7 +543,7 @@ window.swatchSelection = (container) => {
             };
             selectedSwatchGroups[i] = selectedSwatch;
           }
-        })
+        }
       }
     });
     
