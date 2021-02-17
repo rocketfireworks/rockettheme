@@ -141,7 +141,9 @@ html {
   background-size: contain;
   background-repeat: no-repeat;
 }
-
+.video-container {
+  opacity: 1;
+}
 /*------------------------------------------------------------------
 Custom Page Template
 -------------------------------------------------------------------*/
@@ -2303,11 +2305,6 @@ PRODUCT
 PRODUCT CAROUSEL
 -------------------------------------------------------------------*/
 
-// Carousel
-#content .product_c .main_box {
-  margin: 0 5px;
-}
-
 // Add to Cart button
 .proListAddToCart .proListAddToCartBtn {
   width: 100%;
@@ -2863,6 +2860,113 @@ SEARCH RESULT
     font-weight: bold;
   }
 }
+
+/*------------------------------------------------------------------
+COLLECTION
+-------------------------------------------------------------------*/
+.template-collection {
+  // Carousel
+  .collection-list {
+    clear: both;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    column-gap: 4%;
+    .product-container {
+      flex-basis: 48%;
+      padding-bottom: 20px;
+      grid-template-columns: 1fr 1fr;
+      transition: all 0.5s;
+      -moz-transition: all 0.5s;
+      -webkit-transition: all 0.5s;
+      -o-transition: all 0.5s;
+      &:hover {
+        transform: scale(1.08);
+      }
+      h3 {
+        a {
+          color: #16142c;
+          text-transform: uppercase;
+        }
+      }
+      .product-gallery-container {
+        position: relative;
+        align-self: center;
+        .product-image-link {
+          display: flex;
+          max-height: 200px;
+          img {
+            position: relative;
+            width: 100%;
+            margin: 0 auto;
+            object-fit: contain;
+          }
+        }
+      }
+      .product-price-qty {
+        min-height: 4em;
+      }
+      .product-desc {
+        min-height: 6em;
+      }
+      .btn_c {
+        display: block;
+        margin: 10px 0 0;
+        background: #3dbfde;
+        border-radius: 0;
+        text-transform: uppercase;
+        color: #16142c;
+        font-size: 1.25em;
+        width: 100%;
+        max-width: unset;
+        &:hover {
+          background-color: #77dbf3;
+        }
+      }
+      @media (max-width: 991px) {
+        grid-template-columns: 1fr;
+        .product-gallery-container {
+          .product-image-link {
+            max-height: 150px;
+          }
+        }
+        .product-price-qty {
+          grid-column: unset;
+          justify-content: unset;
+          .price {
+            text-align: unset;
+            flex-basis: unset;
+          }
+        }
+      }
+      @media (max-width: 560px) {
+        flex-basis: 100%;
+        .product-gallery-container {
+          .product-image-link {
+            max-height: 130px;
+          }
+        }
+      }
+    }
+  }
+  
+  .video-container {
+    opacity: 1;
+  }
+  .price .compare-price {
+    color: #777;
+    font-size: 1.25em;
+    font-weight: 400;
+    text-decoration: line-through;
+  }
+  .price .product-price {
+    color: #c94344;
+    font-size: 1.75em;
+    font-weight: bold;
+  }
+}
+
+
 
 /*------------------------------------------------------------------
 FLOATING CART

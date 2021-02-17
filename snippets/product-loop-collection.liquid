@@ -1,0 +1,197 @@
+{% assign bulk_deals = false %}
+{% if product.tags contains 'bulk_deals' %}
+  {% assign bulk_deals = true %}
+{% endif %}
+
+{% assign staff_pick = false %}
+{% if product.tags contains 'staff_pick' %}
+  {% assign staff_pick = true %}
+{% endif %}
+
+{% assign colors_available = false %}
+{%  if product.variants.size > 1 %}
+  {% assign colors_available = true %}
+{% endif %}
+
+{% assign max_img_width = product.featured_image.width | append: "px" %}
+
+
+{% if settings.align_height %} 
+  {% assign max_img_height = settings.collection_height %}
+  {% assign product_img_width = product.featured_image.width %}
+  {% assign product_img_height = product.featured_image.height %}
+  {% assign product_img_ratio = product.featured_image.aspect_ratio %}
+		{% if max_img_height < product_img_height %}
+		{% assign max_img_width = max_img_height | times: product_img_ratio | append:"px"%}
+        {% else %}
+		{% assign max_img_width = product_img_height | times: product_img_ratio | append:"px"%}
+		{% endif %}
+{% endif %}
+
+
+  <form method="post" action="/cart/add" class="add-to-cart-form product-container">
+
+    <input type="hidden" name="id" value="{{ item.variants.first.id }}" />
+
+    <div class="product-image-container">
+
+      {% assign hasVideo = false %}
+      
+      {% for media in product.media %}
+
+        {% if media.media_type == 'external_video' %}
+        {% assign hasVideo = true %}
+        <div data-thumb="{{ media | img_url: '150x' }}" data-title="{{ product.title | escape }}" class="video_slide">
+          {% assign video = media.alt | split: 'src="' %}
+          {% assign video = video[1] | split: '"' | first %}
+          <div class="video-container {% if media.alt contains 'vimeo' %}vimeo{% else %}youtube{% endif %}">
+            <div class="media" data-media-id="{{ media.id }}">{{ media | external_video_tag }}</div>
+          </div>
+        </div>
+        {% endif %}
+
+      {% endfor %}
+
+      {% if hasVideo == false %}
+        <a href="{{ product.url | within: collection }}" class="product-image-link">
+          <noscript>
+            <img
+              srcset="{{ product.featured_image.src | product_img_url: img_size}} 1x, {{ product.featured_image.src | product_img_url: img_size, scale: 2}} 2x, {{ product.featured_image.src | product_img_url: img_size, scale: 3}} 3x"
+              alt="{{ product.featured_image.alt | escape }}">
+          </noscript>
+          {% assign img_url = product.featured_image.src | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+          <img class="lazyload" src="{{ product.featured_image.src | img_url: "300x"}}"
+            data-srcset="{{ product.featured_image.src | product_img_url: img_size}} 1x, {{ product.featured_image.src | product_img_url: img_size, scale: 2}} 2x, {{ product.featured_image.src | product_img_url: img_size, scale: 3}} 3x"
+            alt="{{ product.featured_image.alt | escape }}" style="max-width: {{max_img_width}}" />
+        </a>
+      {% endif %}
+      
+    </div>
+    
+    <div class="product-details">
+      <div class="product-title-inventory">
+        <h3><a href="{{ product.url }}">{{ product.title | escape }}</a></h5>
+
+        <div class="prod_sku_container">
+          {% if section.settings.show_product_quantity %}
+          <div class="prod_sku_vend">
+            {% if section.settings.show_product_quantity %}
+            <div id="variant-inventory">
+            </div>
+            {% endif %}
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="product-sku">
+        <div class="variant-sku">{{'products.general.product_sku' | t }}: {{ product.variants[0].sku }}</div>
+      </div>
+
+      <div class="product-price-qty">
+        <div class="price{% if section.settings.show_smart_checkout %} smart_checkout_price_pos {% endif %}">
+          {% if product.selected_or_first_available_variant.price < product.selected_or_first_available_variant.compare_at_price %}
+          <div class="compare-price" class="money">
+            {{ product.selected_or_first_available_variant.compare_at_price | money }}
+          </div>
+          {% endif %}
+
+          {% unless product.price_max == 0 and settings.custom_price0_text != blank %} 
+          {% if product.price_varies %}{{ 'products.product.price_from' | t }}{% endif %} 
+            <span class="product-price" class="money">
+              {{ product.selected_or_first_available_variant.price | money }} 
+            </span> 
+          {% else %}  
+          <span>
+            {{settings.custom_price0_text }}
+          </span>                    
+          {% endunless %}
+        </div>
+
+        <div class="qty product-page-qty">
+          {% unless product.price_max == 0 and settings.hide_price0_box_and_button %} <span class="productPGQtyLable">Quantity</span><a class="minus_btn" ></a>
+            <input type="text" name="quantity" class="txtbox" value="1" min="1">
+            <a class="plus_btn" ></a>
+          {% endunless %}
+
+          <div class="maximum-in-stock-error error-popup">{{ 'products.product.maximum_quantity_error' | t }}</div>
+        </div>
+      </div>
+
+
+    </div>
+    <div class="product-description">
+      <p class="product-desc">{{ product.content | truncatewords:30 }}</p>
+  
+      <div>
+      
+        {% if bulk_deals %}
+        <div class="bulkDeals"><i class="fa fa-dollar-sign"></i> Bulk Deals</div>
+        {% endif %}
+        {% if staff_pick %}
+        <div class="staffPick"><i class="fa fa-star"></i> Staff Pick</div>
+        {% endif %}
+        
+        <div class="variations">
+  
+          {% unless product.options.size == 1 and product.variants[0].title contains 'Default' %}
+            {% for option in product.options_with_values %}
+              <div class="selector-wrapper recommended-product-select">
+                <label {% if option.name == 'default' %}class="hidden" {% endif %} for="product-select-{{ option.name }}">
+                    {{ option.name }}
+                </label>
+                <select class="single-option-selector SingleOptionSelector-{{ forloop.index0 }}">
+                  {% for value in option.values %}
+                    <option data-value={{value}} {% if option.selected_value == value %}selected{% endif %}>{{value}}</option>
+                  {% endfor %}
+                </select>
+              </div>  
+            {% endfor %}
+          {% endunless %}
+        
+          <select name="id" id="product-select-{{ product.id }}" class="product-variants form-control hidden">
+            {% for variant in product.variants %}
+            {% if variant.available %}
+            <option 
+              {% if section.settings.show_product_quantity %} 
+              data-inventory_management="{{variant.inventory_management}}" 
+              data-inventory_policy="{{variant.inventory_policy}}"
+              data-inventory_quantity="{{variant.inventory_quantity}}"
+              {% endif %}       
+              {% if variant == product.selected_or_first_available_variant %} selected {% endif %} data-sku="{{ variant.sku }}" data-options="{{ variant.options }}" value="{{ variant.id }}">{{ variant.title | escape }} - {{ variant.price | money_with_currency }}</option>
+            {% else %}
+            <option 
+              {% if section.settings.show_product_quantity %} 
+              data-inventory_management="{{variant.inventory_management}}" 
+              data-inventory_policy="{{variant.inventory_policy}}"
+              data-inventory_quantity="{{variant.inventory_quantity}}"
+              {% endif %}                           
+              disabled="disabled"
+              value="{{ variant.id }}">
+              
+              {{ variant.title | escape }} - {{ 'products.product.sold_out' | t }}
+            </option>
+            {% endif %}
+            {% endfor %}
+          </select>
+        
+          <div class="swatch-container">
+            {% if product.variants.size > 1 %}
+              {% for option in product.options %}
+              {% include 'swatch' with option %}
+              {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+  
+      </div>
+
+      {% unless product.price_max == 0 and settings.hide_price0_box_and_button %} 
+        <div class="proListAddToCart">
+          <input name="add" value="{{ 'products.product.add_to_cart' | t }}" type="submit"  class="proListAddToCartBtn"/>
+        </div>
+      {% endunless %}
+    </div>
+
+</form>
+

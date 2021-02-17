@@ -62,13 +62,13 @@
             </div>
             
             <div class="collection-grid view-grid {% if settings.align_height %} use_align_height {% else %} use_image_height {% endif %}">
-              {% for product in collection.products %}
-              <div class="col-md-{{ grid_item_width }} col-sm-6 col-xs-6 element mb30">
-                {% include 'product-loop' %}
+              <div class="collection-list">
+                {% for product in collection.products %}
+                  {% include 'product-loop-collection' %}
+                {% else %}
+                <p class="no-products">{{ 'collections.general.no_matches' | t }}</p>
+                {% endfor %}
               </div>
-              {% else %}
-               <p class="no-products">{{ 'collections.general.no_matches' | t }}</p>
-              {% endfor %}
             </div>
           </div>
           
