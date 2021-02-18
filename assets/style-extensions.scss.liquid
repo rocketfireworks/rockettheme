@@ -2869,6 +2869,9 @@ COLLECTION
 -------------------------------------------------------------------*/
 .template-collection {
   // Carousel
+  .collection-grid {
+    margin: 0 auto;
+  }
   .collection-list {
     clear: both;
     display: flex;
@@ -2960,6 +2963,24 @@ COLLECTION
     color: #c94344;
     font-size: 1.75em;
     font-weight: bold;
+  }
+  .container {
+    @media (min-width: 480px ) and (max-width: 768px) {
+      max-width: 768px;
+      width: 100%;
+    }
+    @media (min-width: 768px) {
+      max-width: 992px;
+      width: 100%;
+    }
+    @media (min-width: 992px) {
+      max-width: 1200px;
+      width: 100%;
+    }
+    @media (min-width: 1200px) {
+      max-width: 1270px;
+      width: 100%;
+    }
   }
 }
 
