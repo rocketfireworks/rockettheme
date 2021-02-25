@@ -2905,26 +2905,19 @@ COLLECTION
       }
       .product-price-qty {
         min-height: 4em;
-      }
-      .product-desc {
-        min-height: 6em;
-      }
-      .btn_c {
-        display: block;
-        margin: 10px 0 0;
-        background: #3dbfde;
-        border-radius: 0;
-        text-transform: uppercase;
-        color: #16142c;
-        font-size: 1.25em;
-        width: 100%;
-        max-width: unset;
-        &:hover {
-          background-color: #77dbf3;
+        justify-content: space-between;
+        .maximum-in-stock-error {
+          top: 30px;
+          transform: initial;
+          z-index: 1;
         }
       }
-      @media (max-width: 991px) {
+      .proListAddToCartBtn {
+        margin: 10px 0;
+      }
+      @media (max-width: 1200px) {
         grid-template-columns: 1fr;
+        row-gap: 10px;
         .product-gallery-container {
           .product-image-link {
             max-height: 150px;
@@ -2932,11 +2925,33 @@ COLLECTION
         }
         .product-price-qty {
           grid-column: unset;
-          justify-content: unset;
           .price {
             text-align: unset;
             flex-basis: unset;
           }
+        }
+        .product-details {
+          grid-column: 1 / 2;
+          grid-row-start: 1;
+          grid-row-end: 2;
+          display: grid;
+          padding: 0;
+          align-items: center;
+          .product-title-inventory {
+            grid-column: 1 / 2;
+          }
+        }
+        .product-gallery-container{
+          grid-row: 2 / 3;
+        }
+        .product-sku-share {
+          grid-column: 1 / 2;
+          grid-row: 3 / 4;
+        }
+        .product-description {
+          grid-row: 4 / 5;
+          grid-column: 1 / 2;
+          padding: 0;
         }
       }
       @media (max-width: 560px) {

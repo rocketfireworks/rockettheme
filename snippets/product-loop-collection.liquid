@@ -152,12 +152,10 @@
           <select name="id" id="product-select-{{ product.id }}" class="product-variants form-control hidden">
             {% for variant in product.variants %}
             {% if variant.available %}
-            <option 
-              {% if section.settings.show_product_quantity %} 
+            <option
               data-inventory_management="{{variant.inventory_management}}" 
               data-inventory_policy="{{variant.inventory_policy}}"
-              data-inventory_quantity="{{variant.inventory_quantity}}"
-              {% endif %}       
+              data-inventory_quantity="{{variant.inventory_quantity}}"    
               {% if variant == product.selected_or_first_available_variant %} selected {% endif %} data-sku="{{ variant.sku }}" data-options="{{ variant.options }}" value="{{ variant.id }}">{{ variant.title | escape }} - {{ variant.price | money_with_currency }}</option>
             {% else %}
             <option 
