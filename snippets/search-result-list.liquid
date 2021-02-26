@@ -105,6 +105,58 @@
     <div class="product-description">
       <p class="product-desc">{{ item.content | truncatewords:30 }}</p>
   
+      <div>
+        {% if bulk_deals %}
+        <div class="bulkDeals"><i class="fa fa-dollar-sign"></i> Bulk Deals</div>
+        {% endif %}
+        {% if staff_pick %}
+        <div class="staffPick"><i class="fa fa-star"></i> Staff Pick</div>
+        {% endif %}
+        
+        <div class="variations">
+  
+          {% unless item.options.size == 1 and item.variants[0].title contains 'Default' %}
+            {% for option in item.options_with_values %}
+              <div class="selector-wrapper recommended-product-select">
+                <label {% if option.name == 'default' %}class="hidden" {% endif %} for="product-select-{{ option.name }}">
+                    {{ option.name }}
+                </label>
+                <select class="single-option-selector SingleOptionSelector-{{ forloop.index0 }}">
+                  {% for value in option.values %}
+                    <option data-value={{value}} {% if option.selected_value == value %}selected{% endif %}>{{value}}</option>
+                  {% endfor %}
+                </select>
+              </div>  
+            {% endfor %}
+          {% endunless %}
+        
+          <select name="id" id="product-select-{{ item.id }}" class="product-variants form-control hidden">
+            {% for variant in item.variants %}
+            {% if variant.available %}
+            <option
+              data-inventory_management="{{variant.inventory_management}}" 
+              data-inventory_policy="{{variant.inventory_policy}}"
+              data-inventory_quantity="{{variant.inventory_quantity}}"    
+              {% if variant == product.selected_or_first_available_variant %} selected {% endif %} data-sku="{{ variant.sku }}" data-options="{{ variant.options }}" value="{{ variant.id }}">{{ variant.title | escape }} - {{ variant.price | money_with_currency }}</option>
+            {% else %}
+            <option 
+              {% if section.settings.show_product_quantity %} 
+              data-inventory_management="{{variant.inventory_management}}" 
+              data-inventory_policy="{{variant.inventory_policy}}"
+              data-inventory_quantity="{{variant.inventory_quantity}}"
+              {% endif %}                           
+              disabled="disabled"
+              value="{{ variant.id }}">
+              
+              {{ variant.title | escape }} - {{ 'products.product.sold_out' | t }}
+            </option>
+            {% endif %}
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+
       {% unless product.price_max == 0 and settings.hide_price0_box_and_button %} 
         {% if item.available and item.variants.size == 1 %}
         <div class="proListAddToCart">
