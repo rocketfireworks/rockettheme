@@ -107,7 +107,9 @@
   
       {% unless product.price_max == 0 and settings.hide_price0_box_and_button %} 
         {% if item.available and item.variants.size == 1 %}
-        <input type="submit" name="add" class="btn_c" value="{{ 'products.product.add_to_cart' | t }}">
+        <div class="proListAddToCart">
+          <input name="add" value="{{ 'products.product.add_to_cart' | t }}" type="submit"  class="proListAddToCartBtn"/>
+        </div>
         {% else %}
         <a href="{{ item.url | within: collection }}"
           class="btn_c more_btn">{{ 'products.product.select_options' | t }}</a>
