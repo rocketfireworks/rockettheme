@@ -44,8 +44,8 @@
          <div class="{% if section.settings.show_collection_sidebar %}col-md-9 col-sm-8{% else %} col-sm-12 {% endif %}">
           <div class="product_c mobile_pt60">
             <div class="filter_c">
-              {% include 'collection-views' %}
               {% include 'collection-sorting' %}
+              {% include 'collection-views' %}
               <a href="javascript:void(0);" class="visible-xs offcanvas_filter_toggle"><i class="fa fa-filter"></i><small class="filter_text">{{ 'collections.general.filter_button' | t }}</small></a>
               {% if section.settings.use_infinite_scroll%}
               {% if paginate.next.url %}

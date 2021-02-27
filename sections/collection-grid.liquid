@@ -1,68 +1,53 @@
 {% paginate collection.products by section.settings.pagination_limit %}
+ {% assign img_size = "350x"%}
+{% if section.settings.product_grid_layout == 4 %}
+{% assign grid_item_width = '3' %}
+{% elsif section.settings.product_grid_layout == 3 %}
+{% assign grid_item_width = '4' %}
+{% else %}
+{% assign grid_item_width = '6' %}
+ {% assign img_size = "550x"%}
+{% endif %}
+
+{% assign on_sale = false %}
+{% if product.available and product.compare_at_price > product.price %}
+{% assign on_sale = true %}
+{% endif %}
+
+{% assign sold_out = true %}
+{% if product.available  %}
+{% assign sold_out = false %}
+{% endif %}
 
 <div id="content">
-  <div class="container" data-section-id="{{ section.id }}" data-section-type="collection-list-page-section">
-    {% include 'breadcrumb' %}
-    <div class="catalog_c">
-      {% if collection.image  and section.settings.show_featured_image %}
-      {% assign show_featured_image = true %}
-      {% endif %}
-      {% if show_featured_image or collection.description.size > 0 %}
-      <div class="row">
-        <div class="col-sm-12">
-          <div class="box collection-box" >
-            {% if collection.image  and section.settings.show_featured_image %}
-            <noscript>
-              <img alt="{{ collection.title | escape }}" srcset="{{ collection | img_url: '1200x' }} 1x, {{ collection | img_url: '1200x', scale: 2 }} 2x, {{ collection | img_url: '1200x', scale: 3 }} 3x" >  
-            </noscript>
-              {%- assign img_url = collection.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
-             <img
-                 src="{{ collection.image | img_url:'100x100' }}" 
-                 alt="{{  collection.title | escape }}" 
-                 class="lazyload blur-up collection-main-image"                         
-                 data-src="{{ img_url }}"
-                 style="max-width: {{ collection.image.width }}px" 
-                 data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
-                 data-aspectratio="{{ collection.image.aspect_ratio }}"
-                 data-sizes="auto"
-                 />
-            {% endif %}
-            {% if collection.description.size > 0 %}
-            <div class="rte">
-              {{ collection.description }}
-            </div>
-            {% endif %}
-          </div>
-        </div>
-      </div>
-      {% endif %}
 
+  {% include 'product-confirm-popup' %}
+
+  <div class="container" data-section-id="{{ section.id }}" data-section-type="collection-list-page-section">
+
+    <!-- This snippet is required for the product filter  -->
+    {% include 'advanced-tag-loop' %}
+
+    <div class="catalog_c">
+      
       <div class="title clearfix">
         <h1>{{ collection.title | escape }}</h1>
       </div>
 
       <div class="row">
          {% if section.settings.show_collection_sidebar %}
-          <div class="col-md-3 col-sm-4">
+          <div class="overlapblackbg_sidebar"></div>
+          <div class="col-md-3 col-sm-4 mobile_off_canvas_sidebar">
           {% include 'sidebar-collection' %}
           </div>
         {% endif %}
          <div class="{% if section.settings.show_collection_sidebar %}col-md-9 col-sm-8{% else %} col-sm-12 {% endif %}">
           <div class="product_c mobile_pt60">
             <div class="filter_c">
-              {% include 'collection-views' %}
               {% include 'collection-sorting' %}
-            </div>
-            <div class="row collection-view-list">
-              {% for product in collection.products %}
-              <div class="collection-list">
-                {% include 'product-loop-list' %}
-              </div>
-              {% else %}
-              <p class="no-products">{{ 'collections.general.no_matches' | t }}</p>
-              {% endfor %}
-            </div>
-            {% if section.settings.use_infinite_scroll%}
+              {% include 'collection-views' %}
+              <a href="javascript:void(0);" class="visible-xs offcanvas_filter_toggle"><i class="fa fa-filter"></i><small class="filter_text">{{ 'collections.general.filter_button' | t }}</small></a>
+              {% if section.settings.use_infinite_scroll%}
               {% if paginate.next.url %}
                 <div class="load-more__icon"></div>
                 <div class="js-load-more load-more">
@@ -74,21 +59,45 @@
               	{% include 'pagination-custom' %}
               {% endif %}
             {% endif %}
+            </div>
+            
+            <div class="collection-grid view-grid {% if settings.align_height %} use_align_height {% else %} use_image_height {% endif %}">
+              <div>
+                {% for product in collection.products %}
+                  <div class="col-md-{{ grid_item_width }} col-sm-6 col-xs-6 element mb30">
+                    {% include 'product-loop' %}
+                  </div>
+                {% else %}
+                <p class="no-products">{{ 'collections.general.no_matches' | t }}</p>
+                {% endfor %}
+              </div>
+            </div>
           </div>
-        </div>      
+          
+        </div>
       </div>
     </div>
+    
   </div>
 </div>
 
 {% endpaginate %}
 {% schema %}
    {
-    "name": "Collection List",
+    "name": "Collection Grid",
     "settings": [
       {
         "type": "header",
         "content": "Display options"
+      },
+      {
+        "type": "range",
+        "id": "product_grid_layout",
+        "label": "Products per row",
+        "min":       2,
+        "max":        4,
+        "step":       1,
+        "default": 4
       },
       {
         "type": "range",
@@ -115,13 +124,6 @@
         "type": "checkbox",
         "id": "show_grid_type",
         "label": "Show product type"
-      },
-	  {
-        "type": "checkbox",
-        "id": "show_smart_checkout",
-        "label": "Show dynamic checkout button",
-        "info": "Lets customers check out directly using a familiar payment method. [Learn more](https:\/\/help.shopify.com\/manual\/using-themes\/change-the-layout\/dynamic-checkout)",
-	    "default": true
       },	
 	  {
         "type": "header",

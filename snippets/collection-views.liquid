@@ -1,9 +1,9 @@
-<div class="collection-view pull-right hidden-xs">
-  <a title="Grid view" class="btn btn-default change-view{% unless template contains 'list' %} active-filter{% endunless %} ml5 mr5" data-view="grid">
-    <i class="fa fa-lg fa-th"></i>
+<div class="collection-view hidden-xs">
+  <a title="{{ 'collections.general.list_view' | t }}" class="btn btn-default change-view{% unless template contains 'grid' %} active-filter{% endunless %} mr5" data-view="list">
+    <i class="fas fa-list"></i>
   </a>
-  <a title="{{ 'collections.general.list_view' | t }}" class="btn btn-default change-view{% if template contains 'list' %} active-filter{% endif %} mr5" data-view="list">
-    <i class="fa fa-lg fa-list"></i>
+  <a title="Grid view" class="btn btn-default change-view{% if template contains 'grid' %} active-filter{% endif %} ml5 mr5" data-view="grid">
+    <i class="fas fa-th-large"></i>
   </a>
 </div>
 
