@@ -65,7 +65,7 @@
               <div>
                 {% for product in collection.products %}
                   <div class="col-md-{{ grid_item_width }} col-sm-6 col-xs-6 element mb30">
-                    {% include 'product-loop' %}
+                    {% include 'product-loop-collection-grid' %}
                   </div>
                 {% else %}
                 <p class="no-products">{{ 'collections.general.no_matches' | t }}</p>
