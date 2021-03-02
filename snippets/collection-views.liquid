@@ -9,11 +9,8 @@
 
 <script>
   function replaceUrlParam(url, paramName, paramValue) {
-    var pattern = new RegExp('('+paramName+'=).*?(&|$)'),
-        newUrl = url.replace(pattern,'$1' + paramValue + '$2');
-    if ( newUrl == url ) {
-      newUrl = newUrl + (newUrl.indexOf('?')>0 ? '&' : '?') + paramName + '=' + paramValue;
-    }
+    var pattern = new RegExp('('+paramName+'=).*?(&|$)');
+    var newUrl = url.replace(pattern,'$1' + paramValue + '$2');
     return newUrl;
   }
 
