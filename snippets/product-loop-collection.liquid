@@ -84,10 +84,6 @@
         </div>
       </div>
 
-      <div class="product-sku">
-        <div class="variant-sku">{{'products.general.product_sku' | t }}: {{ product.variants[0].sku }}</div>
-      </div>
-
       <div class="product-price-qty">
         <div class="price{% if section.settings.show_smart_checkout %} smart_checkout_price_pos {% endif %}">
           {% if product.selected_or_first_available_variant.price < product.selected_or_first_available_variant.compare_at_price %}
