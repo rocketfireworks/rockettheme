@@ -47,18 +47,6 @@
               {% include 'collection-sorting' %}
               {% include 'collection-views' %}
               <a href="javascript:void(0);" class="visible-xs offcanvas_filter_toggle"><i class="fa fa-filter"></i><small class="filter_text">{{ 'collections.general.filter_button' | t }}</small></a>
-              {% if section.settings.use_infinite_scroll%}
-              {% if paginate.next.url %}
-                <div class="load-more__icon"></div>
-                <div class="js-load-more load-more">
-                  <a href="{{ paginate.next.url }}" data-no-instant class="load-more__btn action_button continue-button">{{ 'collections.general.load_more' | t }}</a>
-                </div>
-              {% endif %}
-             {% else %}   
-              {% if paginate.pages > 1 %}
-              	{% include 'pagination-custom' %}
-              {% endif %}
-            {% endif %}
             </div>
             
             <div class="collection-grid view-grid {% if settings.align_height %} use_align_height {% else %} use_image_height {% endif %}">
@@ -70,6 +58,20 @@
                 {% endfor %}
               </div>
             </div>
+            
+            {% if section.settings.use_infinite_scroll%}
+              {% if paginate.next.url %}
+                <div class="load-more__icon"></div>
+                <div class="js-load-more load-more">
+                  <a href="{{ paginate.next.url }}" data-no-instant class="load-more__btn action_button continue-button">{{ 'collections.general.load_more' | t }}</a>
+                </div>
+              {% endif %}
+            {% else %}
+              {% if paginate.pages > 1 %}
+                {% include 'pagination-custom' %}
+              {% endif %}
+            {% endif %}
+
           </div>
           
         </div>

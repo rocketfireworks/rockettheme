@@ -141,6 +141,24 @@ html {
   background-size: contain;
   background-repeat: no-repeat;
 }
+.load-more__icon {
+  content: '';
+  box-sizing: border-box;
+  top: 50%;
+  left: 50%;
+  width: 30px;
+  height: 30px;
+  margin-top: -10px;
+  margin-left: -10px;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  border-top-color: #333;
+  animation: spinner .6s linear infinite;
+  display: none;
+}
+.loading-in-progress + .load-more__icon {
+  display: block;
+}
 .video-container {
   opacity: 1;
 }
