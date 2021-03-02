@@ -2078,10 +2078,10 @@ theme.CollectionPageSection.prototype = _.assignIn({}, theme.CollectionPageSecti
   }
 });
 
-theme.CollectionListPageSection = {};
+theme.CollectionGridPageSection = {};
 
-theme.CollectionListPageSection = (function() {
-  function CollectionListPageSection(container) {
+theme.CollectionGridPageSection = (function() {
+  function CollectionGridPageSection(container) {
    
     var $container = this.$container = $(container);
     var sectionId = this.sectionId = $container.attr('data-section-id');
@@ -2090,12 +2090,14 @@ theme.CollectionListPageSection = (function() {
       enableInfiniteScrollList();
     }
     
+    window.initAddToCartForms();
+    window.swatchSelection();
   }
 
-  return CollectionListPageSection;
+  return CollectionGridPageSection;
 })();
 
-theme.CollectionListPageSection.prototype = _.assignIn({}, theme.CollectionListPageSection.prototype, {
+theme.CollectionGridPageSection.prototype = _.assignIn({}, theme.CollectionGridPageSection.prototype, {
 
   onSelect: function(){
        
@@ -3634,7 +3636,7 @@ function enableInfiniteScrollList(){
           sections.register('blog-page-section', theme.BlogPageSection);
           sections.register('article-page-section', theme.ArticlePageSection);
           sections.register('collection-page-section', theme.CollectionPageSection);
-          sections.register('collection-list-page-section', theme.CollectionListPageSection);        
+          sections.register('collection-grid-page-section', theme.CollectionGridPageSection);        
           sections.register('product-page-section', theme.ProductPageSection);
           sections.register('header-section', theme.HeaderSection);
           sections.register('map', theme.Maps);
