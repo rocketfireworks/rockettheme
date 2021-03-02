@@ -15,6 +15,13 @@
   }
 
   $(function() {
+    var queryString = window.location.search;
+    viewPattern = new RegExp('(view=).*?(&|$)');
+    if (queryString.match(viewPattern)) {
+      var viewQuery = queryString.match(viewPattern)[0];
+      $('.tgl_c li a').attr('href', $('.tgl_c li a').attr('href') + '?' + viewQuery);
+    }
+
     $('.change-view').on('click', function() {
       var view = $(this).data('view'),
           url = document.URL,
