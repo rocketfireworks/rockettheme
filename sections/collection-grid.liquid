@@ -23,7 +23,7 @@
 
   {% include 'product-confirm-popup' %}
 
-  <div class="container" data-section-id="{{ section.id }}" data-section-type="collection-list-page-section">
+  <div class="container" data-section-id="{{ section.id }}" data-section-type="collection-grid-page-section">
 
     <!-- This snippet is required for the product filter  -->
     {% include 'advanced-tag-loop' %}
@@ -61,8 +61,8 @@
             {% endif %}
             </div>
             
-            <div class="collection-grid view-grid {% if settings.align_height %} use_align_height {% else %} use_image_height {% endif %}">
-              <div>
+            <div class="collection-view-grid view-grid {% if settings.align_height %} use_align_height {% else %} use_image_height {% endif %}">
+              <div class="collection-grid">
                 {% for product in collection.products %}
                   <div class="col-md-{{ grid_item_width }} col-sm-6 col-xs-6 element mb30">
                     {% include 'product-loop-collection-grid' %}

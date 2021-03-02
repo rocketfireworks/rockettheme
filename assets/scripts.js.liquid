@@ -3581,8 +3581,8 @@ $(window).load(function() {
 
 function enableInfiniteScrollList(){
         var infiniteScroll = new Waypoint.Infinite({
-          element: $('.collection-view-list')[0],
-          items: '.collection-view-list > .collection-list',
+          element: $('.collection-view-grid')[0],
+          items: '.collection-view-grid > .collection-grid',
           more: '.load-more__btn',          
 		  onBeforePageLoad: function(){
             $('.load-more__icon').show();         
