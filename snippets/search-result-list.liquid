@@ -1,19 +1,19 @@
 
 
 
-{% if item.object_type == 'product' %}
+{% if product.object_type == 'product' %}
   <form method="post" action="/cart/add" class="add-to-cart-form product-container">
-    <input type="hidden" name="id" value="{{ item.variants.first.id }}" />
+    <input type="hidden" name="id" value="{{ product.variants.first.id }}" />
 
     <div class="product-gallery-container">
 
       {% assign hasVideo = false %}
       
-      {% for media in item.media %}
+      {% for media in product.media %}
 
         {% if media.media_type == 'external_video' %}
         {% assign hasVideo = true %}
-        <div data-thumb="{{ media | img_url: '150x' }}" data-title="{{ item.title | escape }}" class="video_slide">
+        <div data-thumb="{{ media | img_url: '150x' }}" data-title="{{ product.title | escape }}" class="video_slide">
           {% assign video = media.alt | split: 'src="' %}
           {% assign video = video[1] | split: '"' | first %}
           <div class="video-container {% if media.alt contains 'vimeo' %}vimeo{% else %}youtube{% endif %}">
@@ -28,16 +28,16 @@
         <div class="spinner-cube">
           <div class="loadFacebookG"></div>
         </div>
-        <a href="{{ item.url | within: collection }}" class="product-image-link">
+        <a href="{{ product.url | within: collection }}" class="product-image-link">
           <noscript>
             <img
-              srcset="{{ item.featured_image.src | product_img_url: img_size}} 1x, {{ item.featured_image.src | product_img_url: img_size, scale: 2}} 2x, {{ item.featured_image.src | product_img_url: img_size, scale: 3}} 3x"
-              alt="{{ item.featured_image.alt | escape }}">
+              srcset="{{ product.featured_image.src | product_img_url: img_size}} 1x, {{ product.featured_image.src | product_img_url: img_size, scale: 2}} 2x, {{ product.featured_image.src | product_img_url: img_size, scale: 3}} 3x"
+              alt="{{ product.featured_image.alt | escape }}">
           </noscript>
-          {% assign img_url = item.featured_image.src | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
-          <img class="lazyload" src="{{ item.featured_image.src | img_url: "300x"}}"
-            data-srcset="{{ item.featured_image.src | product_img_url: img_size}} 1x, {{ item.featured_image.src | product_img_url: img_size, scale: 2}} 2x, {{ item.featured_image.src | product_img_url: img_size, scale: 3}} 3x"
-            alt="{{ item.featured_image.alt | escape }}" style="max-width: {{max_img_width}}" />
+          {% assign img_url = product.featured_image.src | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+          <img class="lazyload" src="{{ product.featured_image.src | img_url: "300x"}}"
+            data-srcset="{{ product.featured_image.src | product_img_url: img_size}} 1x, {{ product.featured_image.src | product_img_url: img_size, scale: 2}} 2x, {{ product.featured_image.src | product_img_url: img_size, scale: 3}} 3x"
+            alt="{{ product.featured_image.alt | escape }}" style="max-width: {{max_img_width}}" />
         </a>
       {% endif %}
       
@@ -45,7 +45,7 @@
     
     <div class="product-details">
       <div class="product-title-inventory">
-        <h3><a href="{{ item.url }}">{{ item.title | escape }}</a></h5>
+        <h3><a href="{{ product.url }}">{{ product.title | escape }}</a></h5>
 
         <div class="prod_sku_container">
           {% if section.settings.show_product_quantity %}
@@ -59,8 +59,8 @@
         
           {% if section.settings.product_reviews %}
           <div class="shopify-product-reviews">
-            {{item.reviews_count}}
-            <span class="shopify-product-reviews-badge" data-id="{{ item.id }}"></span>
+            {{product.reviews_count}}
+            <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
           </div>
           {% endif %}
         </div>
@@ -68,16 +68,16 @@
 
       <div class="product-price-qty">
         <div class="price{% if section.settings.show_smart_checkout %} smart_checkout_price_pos {% endif %}">
-          {% if item.selected_or_first_available_variant.price < item.selected_or_first_available_variant.compare_at_price %}
+          {% if product.selected_or_first_available_variant.price < product.selected_or_first_available_variant.compare_at_price %}
           <div class="compare-price" class="money">
-            {{ item.selected_or_first_available_variant.compare_at_price | money }}
+            {{ product.selected_or_first_available_variant.compare_at_price | money }}
           </div>
           {% endif %}
 
-          {% unless item.price_max == 0 and settings.custom_price0_text != blank %} 
-          {% if item.price_varies %}{{ 'products.product.price_from' | t }}{% endif %} 
+          {% unless product.price_max == 0 and settings.custom_price0_text != blank %} 
+          {% if product.price_varies %}{{ 'products.product.price_from' | t }}{% endif %} 
             <span class="product-price" class="money">
-              {{ item.selected_or_first_available_variant.price | money }} 
+              {{ product.selected_or_first_available_variant.price | money }} 
             </span> 
           {% else %}  
           <span>
@@ -87,7 +87,7 @@
         </div>
 
         <div class="qty product-page-qty">
-          {% unless item.price_max == 0 and settings.hide_price0_box_and_button %} <span class="productPGQtyLable">Quantity</span><a class="minus_btn" ></a>
+          {% unless product.price_max == 0 and settings.hide_price0_box_and_button %} <span class="productPGQtyLable">Quantity</span><a class="minus_btn" ></a>
             <input type="text" name="quantity" class="txtbox" value="1" min="1">
             <a class="plus_btn" ></a>
           {% endunless %}
@@ -99,7 +99,7 @@
 
     </div>
     <div class="product-description">
-      <p class="product-desc">{{ item.content | truncatewords:30 }}</p>
+      <p class="product-desc">{{ product.content | truncatewords:30 }}</p>
   
       <div>
         {% if bulk_deals %}
@@ -111,8 +111,8 @@
         
         <div class="variations">
   
-          {% unless item.options.size == 1 and item.variants[0].title contains 'Default' %}
-            {% for option in item.options_with_values %}
+          {% unless product.options.size == 1 and product.variants[0].title contains 'Default' %}
+            {% for option in product.options_with_values %}
               <div class="selector-wrapper recommended-product-select">
                 <label {% if option.name == 'default' %}class="hidden" {% endif %} for="product-select-{{ option.name }}">
                     {{ option.name }}
@@ -126,8 +126,8 @@
             {% endfor %}
           {% endunless %}
         
-          <select name="id" id="product-select-{{ item.id }}" class="product-variants form-control hidden">
-            {% for variant in item.variants %}
+          <select name="id" id="product-select-{{ product.id }}" class="product-variants form-control hidden">
+            {% for variant in product.variants %}
             {% if variant.available %}
             <option
               data-inventory_management="{{variant.inventory_management}}" 
@@ -149,23 +149,25 @@
             {% endif %}
             {% endfor %}
           </select>
+          <div class="swatch-container">
+            {% if product.variants.size > 1 %}
+              {% for option in product.options %}
+              {% include 'swatch' with option %}
+              {% endfor %}
+            {% endif %}
+          </div>
         </div>
       </div>
 
 
       {% unless product.price_max == 0 and settings.hide_price0_box_and_button %} 
-        {% if item.available and item.variants.size == 1 %}
         <div class="proListAddToCart">
           <input name="add" value="{{ 'products.product.add_to_cart' | t }}" type="submit"  class="proListAddToCartBtn"/>
         </div>
-        {% else %}
-        <a href="{{ item.url | within: collection }}"
-          class="btn_c more_btn">{{ 'products.product.select_options' | t }}</a>
-        {% endif %}
       {% endunless %}
     </div>
   </form>
 {% endif %}
 {% if settings.show_collection_overlay and settings.collection_overlay == 'quick-view' %}
-{% include 'product-quick-view' qvp:item %}
+{% include 'product-quick-view' qvp:product %}
 {% endif %}
