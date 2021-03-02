@@ -19,14 +19,16 @@
     viewPattern = new RegExp('(view=).*?(&|$)');
     if (queryString.match(viewPattern)) {
       var viewQuery = queryString.match(viewPattern)[0];
-      $('.tgl_c li a').attr('href', $('.tgl_c li a').attr('href') + '?' + viewQuery);
+      $('.tgl_c li a').each(function() {
+        var _href = $(this).attr("href");
+        $(this).attr("href", _href + '?' + viewQuery);
+      });
     }
 
     $('.change-view').on('click', function() {
       var view = $(this).data('view'),
           url = document.URL,
           hasParams = url.indexOf('?') > -1;
-
       if (hasParams) {
         window.location = replaceUrlParam(url, 'view', view);
       } else {
