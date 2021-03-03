@@ -829,6 +829,23 @@
           "product_grid_layout": 4,
           "show_item_count": false
         }
+      },
+      "collection-grid": {
+        "type": "collection-grid",
+        "settings": {
+          "pagination_limit": 12,
+          "use_infinite_scroll": true,
+          "show_featured_image": true,
+          "show_grid_type": false,
+          "show_collection_sidebar": true,
+          "collection_sidebar_filters": "none",
+          "group_array": "",
+          "collection_link_list": "",
+          "show_sidebar_collections": true,
+          "show_sidebar_vendors": false,
+          "sidebar_collection_sale_collection": "",
+          "sidebar_collection_product_count": 4
+        }
       }
     },
     "content_for_index": [
