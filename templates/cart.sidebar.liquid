@@ -1,4 +1,4 @@
-<div id="content">
+<script class="cartFlagX"></script><div id="content">
   <div class="container">
     {% include 'breadcrumb' %}
     <div class="title clearfix">
@@ -58,7 +58,7 @@
                         <a class="plus_btn"></a>
                       </li>
                       <li>
-                        <div class="price">{{ item.price | money }}</div>
+                        <div class="price"><span class=tdf-cart-item-p-p>{{ item.price | money }}</span></div>
                         <a href="/cart/change?line={{ forloop.index }}&amp;quantity=0" data-id="{{ item.id }}" class="del_btn"></a>
                       </li>
                     </ul>
@@ -67,7 +67,7 @@
                   <div class="total_row clearfix">
                     <ul>
                       <li>
-                        <span class="total_val">{{ 'cart.general.subtotal' | t }}:</span><span class="total-price">{{ cart.total_price | money }}</span>
+                        <span class="total_val">{{ 'cart.general.subtotal' | t }}:</span><span class="total-price"><span style="display:none" class="tdf-cart-total-flag"></span>{{ cart.total_price | money }}</span>
                       </li>
                       <li><button type="submit" name="update" value="{{ 'cart.general.update' | t }}" class="refresh_btn"></button></li>
                     </ul>

@@ -1,4 +1,4 @@
-<div id="content">
+<script class="cartFlagX"></script><div id="content">
   <div class="container">
     {% include 'breadcrumb' %}
     <div class="title clearfix">
@@ -74,7 +74,7 @@
                        	    <span class="price money original_price">{{ item.original_price | money }}</span><br >
                             <span class="price money">{{ item.final_price | money }}</span><br >
                           {% else %}
-                         	<span class="price money">{{ item.original_price | money }}</span>
+                         	<span class="price money tdf-cart-item-p-p">{{ item.original_price | money }}</span>
                           {% endif %}
                         
                         {%- if item.line_level_discount_allocations != blank -%}
@@ -106,7 +106,7 @@
                             <span class="price money original_price">{{ item.original_line_price | money }}</span><br >
                             <span class="price money">{{ item.final_line_price | money }}</span><br >
                           {% else %}
-                          	<span class="price money">{{ item.original_line_price | money }}</span>
+                          	<span class="price money tdf-cart-item-lp-p">{{ item.original_line_price | money }}</span>
                           {% endif %}
 
                     </ul>
@@ -163,7 +163,7 @@
                         </div>
                         {%- endif -%}
                         
-                        <span class="total_val">{{ 'cart.general.subtotal' | t }}:</span><span class="total-price money">{{ cart.total_price | money }}</span>
+                        <span class="total_val">{{ 'cart.general.subtotal' | t }}:</span><span class="tdf-cart-total-parent"><span class="total-price money">{{ cart.total_price | money }}</span></span>
                       </li>
                     </ul>
                   </div>
@@ -204,3 +204,5 @@
       </div>
     </div>
   </div>
+
+<noscript type="text/flag" class="tdfPlaceWholesale"></noscript>
