@@ -1,4 +1,4 @@
-<div class="menu_c cart_menu">
+<script class="cartFlagX"></script><div class="menu_c cart_menu">
   <div class="menu_title">
     <h4>{{ 'cart.general.title' | t }}</h4>
     <div class="cart_row_heading{% if cart.item_count == 0 %} hidden{% endif %}" >
@@ -68,7 +68,7 @@
           <span class="price money original_price">{{ item.original_price | money }}</span><br>
           <span class="price money">{{ item.final_price | money }}</span><br>
           {% else %}
-          <span class="price money">{{ item.final_line_price | money }}</span>
+          <span class="price money tdf-cart-item-p-p">{{ item.final_line_price | money }}</span>
           {% endif %}
 
           {%- if item.line_level_discount_allocations != blank -%}
@@ -97,7 +97,7 @@
           <span class="price money original_price">{{ item.original_line_price | money }}</span><br>
           <span class="price money">{{ item.final_line_price | money }}</span><br>
           {% else %}
-          <span class="price money">{{ item.original_line_price | money }}</span>
+          <span class="price money tdf-cart-item-lp-p">{{ item.original_line_price | money }}</span>
           {% endif %}
         </li>
       </ul>
@@ -128,7 +128,7 @@
             </div>
             {%- endif -%}
             
-            <span class="total_val">{{ 'cart.general.subtotal' | t }}:</span><span class="total-price money">{{ cart.total_price | money }}</span>
+            <span class="total_val">{{ 'cart.general.subtotal' | t }}:</span><span class="total-price money"><span style="display:none" class="tdf-cart-total-flag"></span>{{ cart.total_price | money }}</span>
           </li>
         </ul>
       </div>
