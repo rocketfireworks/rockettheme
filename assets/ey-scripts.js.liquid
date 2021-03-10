@@ -32,14 +32,6 @@ $(document).ready(function () {
 */
   //console.log(cartItems);
 
-  // $('.popup-youtube').magnificPopup({
-  // 	disableOn: 700,
-  // 	type: 'iframe',
-  // 	mainClass: 'mfp-fade',
-  // 	removalDelay: 160,
-  // 	preloader: false,
-  // 	fixedContentPos: false
-  // });
 });
 
 function checkCartForBonusProduct() {
@@ -49,9 +41,6 @@ function checkCartForBonusProduct() {
   }
   var cartItems = $(".productRowTitle h5");
   var cartRewardPresent = false;
-
-  //console.log(bonusTotal);
-  // console.log(cartItems);
 
   for (var i = 0; i < cartItems.length; i++) {
     if (cartItems[i].className == 32047066972241) {
@@ -87,10 +76,7 @@ function calcNewTotal() {
       }
     }
 
-    console.log(productQuantity);
     var finalLoop = 1;
-
-    //console.log(url);
 
     var settings = {
       type: "GET",
@@ -127,11 +113,6 @@ function newBonusRewards(bonusTotal) {
   cartLevelReward = $(".cartRewardsProgram .cartRewardLevel")[0];
   untilBonus = $(".cartRewardsProgram .untilBonusNum")[0];
   var progressBar = $("#cartrewardsBar")[0];
-
-  //console.log(cartLevelReward);
-  //console.log(untilBonus);
-
-  //console.log($('#cartrewardsBar'));
 
   var level1Bonus = 150.0;
   var level2Bonus = 200.0;
@@ -193,7 +174,7 @@ function newBonusRewards(bonusTotal) {
     diffNum = level10Bonus - level9Bonus;
     progressBarWidth = calculateProgressBar(untilBonusNum, level10Bonus);
   } else if (bonusTotal > level10Bonus) {
-    // $('.cartRewardsProgram')[0].innerHTML = `<p>The maximum bonus reward has been added to your cart</p>`
+    $('.cartRewardsProgram')[0].innerHTML = `<p>The maximum bonus reward has been added to your cart</p>`
   }
 
   progressBarWidth = progressBarWidth.toString();
@@ -400,7 +381,7 @@ function newBonusRewards_load(bonusTotal) {
   } else if (bonusTotal > level10Bonus) {
     cartLevelReward.innerText = "Level 10 Rewards (Max reward reached)";
     currentreward_level = "Bonus Rewards - Level 10";
-    // $('.cartRewardsProgram')[0].innerHTML = `<p>The maximum bonus reward has been added to your cart</p>`
+    // $('.cartRewardsProgram').html(`<p>The maximum bonus reward has been added to your cart</p>`);
   }
 
   progressBarWidth = progressBarWidth.toString();
