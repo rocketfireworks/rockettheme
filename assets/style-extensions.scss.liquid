@@ -3115,6 +3115,7 @@ FLOATING CART
 .modal-popup {
   padding: 85px 0 120px;
   max-height: 90vh;
+  font-size: 16px;
   form {
     padding: 0 30px;
     overflow-y: scroll;
@@ -3161,6 +3162,10 @@ FLOATING CART
         }
         &:nth-child(5) {
           width: 16%;
+        }
+        .total-price span.money {
+          color: #c94344;
+          font-size: 22px;
         }
       }
     }
@@ -3321,7 +3326,10 @@ FLOATING CART
     padding: 55px 0 140px;
   }
 }
-
+.cart_menu ul li .total-price {
+  color: #C94344;
+  font-weight: 900;
+}
 /*------------------------------------------------------------------
 CHECKOUT CART
 -------------------------------------------------------------------*/
@@ -3360,6 +3368,9 @@ CHECKOUT CART
         .price {
           float: none;
         }
+        .total-price {
+          color: #c94344;
+        }
       }
       @media (max-width: 480px) {
         display: flex;
@@ -3397,6 +3408,10 @@ CHECKOUT CART
           display: block;
           &:nth-child(1) {
             padding: 10px 20px;
+          }
+          span.money {
+            color: #c94344;
+            font-size: 16px;
           }
         }
       }
