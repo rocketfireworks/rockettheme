@@ -216,6 +216,9 @@
                   </div>                    
                 {% endunless %}
               </div>
+              <div class="product-wholesale-discount">
+                <noscript type="text/flag" class="tdfPlaceWholesale"></noscript>
+              </div>
               {% unless product.price_max == 0 and settings.hide_price0_box_and_button %} 
                 {% if section.settings.show_smart_checkout%}
                 <div class="product_payments_btns">
