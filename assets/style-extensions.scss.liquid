@@ -42,6 +42,9 @@ html {
 .text-uppercase {
   text-transform: uppercase;
 }
+.linethrough {
+  text-decoration: line-through;
+}
 .layout-inline {
   display: flex;
   align-items: center;
@@ -3468,4 +3471,19 @@ CHECKOUT CART
     }
   }
 }
+
+.price-wholesale {
+  width: 100%;
+  font-size: 1.25em;
+  margin-bottom: 5px;
+  .money {
+    color: #c94344;
+    font-weight: 600;
+    font-size: 1.5em;
+  }
+}
+
+.product-container .product-price-qty .price #productPrice.linethrough {
+  color: #777;
+  font-size: 1.25em;
 }
