@@ -67,8 +67,11 @@
                   {{settings.custom_price0_text }}
                 </span>                    
                 {% endunless %}
+                
+                <div class="price-wholesale">
+                  <div>Your bulk price:</div>
+                </div>
               </div>
-              
               <div class="qty product-page-qty">
                 {% unless product.price_max == 0 and settings.hide_price0_box_and_button %} <span class="productPGQtyLable">Quantity</span><a class="minus_btn" ></a>
                   <input type="text" id="quantity" name="quantity" class="txtbox" value="1" min="1">
@@ -76,8 +79,6 @@
                 {% endunless %}
 
                 <div class="maximum-in-stock-error error-popup">{{ 'products.product.maximum_quantity_error' | t }}</div>
-              </div>
-              <div class="price-wholesale">
               </div>
             </div>
           </div>

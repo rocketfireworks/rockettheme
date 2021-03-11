@@ -710,8 +710,8 @@ function updateDiscountMessage(newPrice) {
   let price = $('.price-wholesale');
   let existingPrice = $('#productPrice');
   existingPrice.addClass('linethrough');
-  price.html(
-    `Your bulkbuy price: <span class="money" data-tov="${formattedPrice}" data-tovc="CAD" data-origin-value="${newPrice}" data-currency="CAD">${formattedPrice}</span`
+  price.append(
+    `<div class="money" data-tov="${formattedPrice}" data-tovc="CAD" data-origin-value="${newPrice}" data-currency="CAD">${formattedPrice}</div>`
   );
 }
 
