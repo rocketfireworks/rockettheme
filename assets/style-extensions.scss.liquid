@@ -2256,7 +2256,6 @@ PRODUCT
     pointer-events: none;
   }
   .product_payment_btn {
-    padding-bottom: 40px;
     background-color: #fff;
   }
   input#addToCart.btn_c {
@@ -3463,8 +3462,10 @@ CHECKOUT CART
 .product-wholesale-discount {
   #tdf_wholesale {
     &.tdf_container {
-      padding-top: 0;
-      margin-top: 0;
+      padding: 10px 15px;
+      margin: 10px 0 15px;
+      background-color: #eae8e8;
+      box-shadow: 2px 2px 4px lightgrey;
       .tdf_nonpopup .tdf_normal_btn {
         border: 1.5px solid #3dbfde;
         background: #fff;
@@ -3476,14 +3477,20 @@ CHECKOUT CART
           color: #16142C;
         }
       }
+      &.tdf_wholesale_2 table td {
+        border: none;
+      }
     }
     h2 {
       font-weight: 600;
-      font-size: 1.25em;
+      font-size: 14px;
     }
     th, td {
-      padding: 5px 10px; 
+      padding: 5px 0 5px 0;
     }
+    // .tdf_wholesale_level  {
+    //   padding-left: 0;
+    // }
   }
 }
 
@@ -3491,6 +3498,10 @@ CHECKOUT CART
   width: 100%;
   font-size: 1.25em;
   margin-bottom: 5px;
+  div {
+    font-size: 14px;
+    font-weight: 600;
+  }
   .money {
     color: #c94344;
     font-weight: 600;
