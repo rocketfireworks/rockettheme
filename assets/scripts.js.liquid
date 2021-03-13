@@ -632,42 +632,51 @@ $('.add-to-cart-form').find(".plus_btn").click(function () {
 // ============================================================================
 // Treedify
 // ============================================================================
+window.callbackCustomTheme = data => {
+  window.sellyData = data;
+}
 
-function calculateCurrentDiscountPrice() {
-  window.callbackCustomTheme = data => { 
-    const offers = data.offers;
-    // Get current product id 
-    const productId = meta.product.id;
-  
-    // Check if current item in cart
-    $.getJSON('/cart.js', cart => {
-      cart.items.forEach(item => {
-        if (item.product_id === productId) {
-  
-          itemQuantity = item.quantity;
-          originalPrice = item.original_price;
-  
-          const discount = getCurrentDiscountOffer(productId, offers);
-  
-          let qualifiedLevel = [];
-          discount.levels.forEach((level, index) => {
-            if (itemQuantity >= level.quantity) {
-              qualifiedLevel.push(index);
-            }
-          });
-  
-          // Get the highest volumn discount
-          let highestQualifiedLevel = Math.max(...qualifiedLevel);
-          let highestDiscountValue = discount.levels[highestQualifiedLevel].value;
-  
-          // If the discount is in percent
-          let discountedPrice = originalPrice - (originalPrice * (highestDiscountValue / 100));
-  
-          updateDiscountMessage(discountedPrice);
-        }
-      });
+window.invokeAfterSellyDataLoads = callback => {
+  let intervalId = setInterval(() => {
+    if (window.sellyData != undefined) {
+      callback();
+      clearInterval(intervalId);
+    }
+  }, 500);
+}
+
+window.calculateCurrentDiscountPrice = () => {
+  const offers = window.sellyData.offers;
+  // Get current product id 
+  const productId = meta.product.id;
+
+  // Check if current item in cart
+  $.getJSON('/cart.js', cart => {
+    cart.items.forEach(item => {
+      if (item.product_id === productId) {
+
+        itemQuantity = item.quantity;
+        originalPrice = item.original_price;
+        const discount = getCurrentDiscountOffer(productId, offers);
+
+        let qualifiedLevel = [];
+        discount.levels.forEach((level, index) => {
+          if (itemQuantity >= level.quantity) {
+            qualifiedLevel.push(index);
+          }
+        });
+
+        // Get the highest volumn discount
+        let highestQualifiedLevel = Math.max(...qualifiedLevel);
+        let highestDiscountValue = discount.levels[highestQualifiedLevel].value;
+
+        // If the discount is in percent
+        let discountedPrice = originalPrice - (originalPrice * (highestDiscountValue / 100));
+
+        updateDiscountMessage(discountedPrice);
+      }
     });
-  }
+  });
 }
 
 function getCurrentDiscountOffer(currentProductId, offers) {
@@ -693,6 +702,7 @@ function getCurrentDiscountOffer(currentProductId, offers) {
               levels.push(l);
             });
             discount = {
+              "product_id" : discountProductId,
               "message" : o.message,
               "mtv_message" : o.mtv_message,
               "levels" : levels,
@@ -710,9 +720,9 @@ function updateDiscountMessage(newPrice) {
   let price = $('.price-wholesale');
   let existingPrice = $('#productPrice');
   existingPrice.addClass('linethrough');
-  price.append(
-    `<div class="money" data-tov="${formattedPrice}" data-tovc="CAD" data-origin-value="${newPrice}" data-currency="CAD">${formattedPrice}</div>`
-  );
+  
+  price.html(`<div>Your bulk price:</div>
+    <div class="money" data-tov="${formattedPrice}" data-tovc="CAD" data-origin-value="${newPrice}" data-currency="CAD">${formattedPrice}</div>`);
 }
 
 // ============================================================================
@@ -3743,7 +3753,7 @@ function enableInfiniteScrollList(){
           window.initAddToCartForms();
           window.swatchSelection();
 
-          calculateCurrentDiscountPrice();
+          window.invokeAfterSellyDataLoads(window.calculateCurrentDiscountPrice);
 
         {% if settings.use_infinite_scroll%}
         if($(".search-page").length){
