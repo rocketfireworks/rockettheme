@@ -264,7 +264,7 @@ jQuery(document).ready(function() {
     var cartContinueText = "{{ 'cart.general.continue_browsing' | t }}";
 
     // Check and update if product has Selly discount
-    invokeAfterSellyDataLoads(calculateCurrentDiscountPrice());
+    invokeAfterSellyDataLoads(window.calculateCurrentDiscountPrice);
 
     if (t.length){
       t.find('.cart_row_heading').removeClass('hidden');
