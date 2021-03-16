@@ -670,8 +670,33 @@ window.calculateCurrentDiscountPrice = () => {
         let highestQualifiedLevel = Math.max(...qualifiedLevel);
         let highestDiscountValue = discount.levels[highestQualifiedLevel].value;
 
-        // If the discount is in percent
-        let discountedPrice = originalPrice - (originalPrice * (highestDiscountValue / 100));
+        let discountedPrice;
+
+        discount.levels.forEach(level => {
+          // If discount type is Percentage discount
+          if (level.typeId == 1) {
+            discountedPrice = originalPrice - (originalPrice * (highestDiscountValue / 100));
+          }
+
+          // If discount type is Fixed amount discount
+          if (level.typeId == 2) {
+            discountedPrice = ((originalPrice / 100) - highestDiscountValue)*100;
+          }
+          
+          // If discount type is Fixed price
+          if (level.typeId == 3) {
+            discountedPrice = highestDiscountValue;
+          }
+
+          // If discount type is Free shipping
+          if (level.typeId == 4) {
+          }
+
+          // If discount type is Free gift
+          if (level.typeId == 5) {
+          }
+
+        });
 
         updateDiscountMessage(discountedPrice);
       }
@@ -693,6 +718,7 @@ function getCurrentDiscountOffer(currentProductId, offers) {
               const l = new Object();
               for (const key in level) {
                 if (key == 'discount') {
+                  l.typeId = level[key].type_id;
                   l.value = level[key].value;
                 }
                 if (key == 'quantity') {
