@@ -41,7 +41,7 @@
     {% endif %}
     
     <!-- Header hook for plugins ================================================== -->
-    {{ content_for_header }}
+    {% render 'treedify' %}{{ content_for_header }}
 
     <!--[if lt IE 9]>
     {{ '//html5shiv.googlecode.com/svn/trunk/html5.js' | script_tag }}
@@ -85,6 +85,7 @@
       {% section 'header' %}
      
       {{ content_for_layout }}
+	<noscript class="endOfLayoutContentX" type="text/mark"></noscript>{% render 'treedify_script' %}
       
 	  {% section 'icon-buttons' %}	
       {% section 'footer' %}
