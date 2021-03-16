@@ -33,7 +33,7 @@
 
     <input type="hidden" name="id" value="{{ item.variants.first.id }}" />
 
-    <div class="product-gallery-container">
+    <div class="product-gallery-container fakea" href="{{ product.url | within: collection }}">
 
       {% assign hasVideo = false %}
       
@@ -65,7 +65,7 @@
             alt="{{ product.featured_image.alt | escape }}" style="max-width: {{max_img_width}}" />
         </a>
       {% endif %}
-      
+      <span class="tdfPlaceLabel"></span>
     </div>
     
     <div class="product-details">
