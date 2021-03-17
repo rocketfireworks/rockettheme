@@ -657,7 +657,7 @@ window.calculateCurrentDiscountPrice = () => {
 
         itemQuantity = item.quantity;
         originalPrice = item.original_price;
-        const discount = getCurrentDiscountOffer(productId, offers);
+        const discount = getProductDiscount(productId, offers);
 
         let qualifiedLevel = [];
         discount.levels.forEach((level, index) => {
@@ -706,7 +706,7 @@ window.calculateCurrentDiscountPrice = () => {
   });
 }
 
-function getCurrentDiscountOffer(currentProductId, offers) {
+function getProductDiscount(currentProductId, offers) {
   let discount = new Object();
   for (const property in offers) {
     const offer = offers[property];
