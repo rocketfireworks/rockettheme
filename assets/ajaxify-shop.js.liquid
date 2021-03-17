@@ -455,6 +455,8 @@ jQuery(document).ready(function() {
               if (discount.levels[nextQualifiedLevel].typeId == 5) {
                 mtvMessage = mtvMessage.replace('{discount}', 'Free shipping');
               }
+            } else {
+              mtvMessage = '';
             }
           }
 

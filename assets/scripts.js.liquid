@@ -811,6 +811,8 @@ window.getNextQualifiedDiscount = () => {
         if (discount.levels[nextQualifiedLevel].typeId == 5) {
           mtvMessage = mtvMessage.replace('{discount}', 'Free shipping');
         }
+      } else {
+        mtvMessage = '';
       }
 
       item.querySelector('.discount-wholesale-motivation').innerHTML = mtvMessage;
