@@ -312,6 +312,7 @@ jQuery(document).ready(function() {
               properties = cart.items[i].properties || null,
               url = cart.items[i].url,
               item_discounts_html = "",
+              itemId = cart.items[i].product_id;
           
           if (properties != null) {
             var propertiesText = "";
@@ -404,11 +405,64 @@ jQuery(document).ready(function() {
             
           }
           
+          
+          // Check for Selly discount 
+          const offers = window.sellyData.offers;
+          let discount = getProductDiscount(itemId, offers);
+          let mtvMessage = '';
+          if (Object.keys(discount).length !== 0) {
+            mtvMessage = discount.mtv_message;
+            let nextLevels = [];
+            discount.levels.forEach((level, index) => {
+              if (productRowQuantity < level.quantity) {
+                nextLevels.push(index);
+              }
+            });
+          
+            if (nextLevels.length !== 0) {
+              let nextQualifiedLevel = Math.min(...nextLevels);
+              let nextDiscountValue = discount.levels[nextQualifiedLevel].value;
+              let neededQuantity = discount.levels[nextQualifiedLevel].quantity - productRowQuantity;
+              mtvMessage = mtvMessage.replace('{quantity}', neededQuantity);
+
+              // If discount type is Percentage discount
+              if (discount.levels[nextQualifiedLevel].typeId == 1) {
+                mtvMessage = mtvMessage.replace('{discount}', discount.levels[nextQualifiedLevel].value + '% Off');
+              }
+  
+              // If discount type is Fixed amount discount
+              if (discount.levels[nextQualifiedLevel].typeId == 2) {
+                mtvMessage = mtvMessage.replace('{discount}', '$' + discount.levels[nextQualifiedLevel].value + ' Off');
+              }
+              
+              // If discount type is Fixed price
+              if (discount.levels[nextQualifiedLevel].typeId == 3) {
+                let fixedAmount = discount.levels[nextQualifiedLevel].value;
+                let fixedPrice = price - fixedAmount;
+                mtvMessage = mtvMessage.replace('{discount}', '$' + discount.levels[nextQualifiedLevel].value + ' Off');
+              }
+  
+              // If discount type is Free gift
+              if (discount.levels[nextQualifiedLevel].typeId == 4) {
+                let giftId = discount.levels[nextQualifiedLevel].value;
+                // jQuery.getJSON('/products/' + giftId + '.js', function(product) {
+                  let giftOutput = `<a href="#">1 Free Gift</a>`;
+                  mtvMessage = mtvMessage.replace('{discount}', giftOutput);
+                // }); 
+              }
+  
+              // If discount type is Free shipping
+              if (discount.levels[nextQualifiedLevel].typeId == 5) {
+                mtvMessage = mtvMessage.replace('{discount}', 'Free shipping');
+              }
+            }
+          }
+
           var row = '<ul class="productRow"><li class="productRowImg"><div class="product-image-container"><a href="' + cart.items[i].url + 
               '" class="product-image-link"><img src="' + Shopify.addImageSize(cart.items[i].image,'small') + '" alt="' + cart.items[i].title + 
               '"></a></div></li><li class="productRowTitle"><h5 class="'+cart.items[i].id+'"><a href="' + cart.items[i].url + 
               '" class="item-name">' + cart.items[i].product_title + 
-              '</a></h5><p class="product-type">'+title+'</p><p>'+propertiesText+'</p></li><li class="productRowPrice"><p class="mobile-label-price">{{ 'cart.general.price' | t }}</p>'+ itemPriceContent + ' ' + item_discounts_html + '</li><li class="productRowQuantity">';
+              '</a></h5><p class="product-type">'+title+'</p><p>'+propertiesText+'</p><div class="discount-wholesale-motivation">' + mtvMessage + '</div></li><li class="productRowPrice"><p class="mobile-label-price">{{ 'cart.general.price' | t }}</p>'+ itemPriceContent + ' ' + item_discounts_html + '</li><li class="productRowQuantity">';
               
               if (cart.items[i].id != '32047066972241') {
               	row+='<p class="mobile-label-quantity">{{ 'cart.general.quantity' | t }}</p><a class="minus_btn"></a><input type="text" name="updates[]" class="txtbox number_val_input" min="0" id="updates_'+cart.items[i].id+'" data-id="'+cart.items[i].id+'" value="'+cart.items[i].quantity+'" /><a class="plus_btn"></a>'+

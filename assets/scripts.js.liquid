@@ -488,6 +488,8 @@ window.openCartPopup = function openCartPopup(e) {
   window.setCartHeight();
 
   bindEventsInCart();
+  
+  window.invokeAfterSellyDataLoads(window.getNextQualifiedDiscount);
 }
 
 // ============================================================================
@@ -714,7 +716,7 @@ function getProductDiscount(currentProductId, offers) {
       const o = offer[offerId];
       o.product_groups.forEach(group => {
         group.ids.forEach(discountProductId => {
-          if (discountProductId === currentProductId) {
+          if (discountProductId == currentProductId) {
             const levels = [];
             o.discount.value.levels.forEach(level => {
               const l = new Object();
@@ -754,6 +756,66 @@ function updateDiscountMessage(newPrice, discountType) {
   } 
   price.html(`<div>Your bulk price:</div>
     <div class="money" data-tov="${formattedPrice}" data-tovc="CAD" data-origin-value="${newPrice}" data-currency="CAD">${formattedPrice}</div>`);
+}
+
+// Popup Cart
+window.getNextQualifiedDiscount = () => {
+  const offers = window.sellyData.offers;
+  let items = document.querySelectorAll('.productRow');
+  items.forEach(item => {
+    let itemId = item.querySelector('.discount-wholesale-motivation').getAttribute('data-product-id');
+    let itemQuantity = item.querySelector('.productRowQty input').value;
+
+    let discount = getProductDiscount(itemId, offers);
+    let mtvMessage = '';
+    if (Object.keys(discount).length !== 0) {
+      mtvMessage = discount.mtv_message;
+      let nextLevels = [];
+      discount.levels.forEach((level, index) => {
+        if (itemQuantity < level.quantity) {
+          nextLevels.push(index);
+        }
+      });
+    
+      if (nextLevels.length !== 0) {
+        let nextQualifiedLevel = Math.min(...nextLevels);
+        let nextDiscountValue = discount.levels[nextQualifiedLevel].value;
+        let neededQuantity = discount.levels[nextQualifiedLevel].quantity - itemQuantity;
+        mtvMessage = mtvMessage.replace('{quantity}', neededQuantity);
+  
+        // If discount type is Percentage discount
+        if (discount.levels[nextQualifiedLevel].typeId == 1) {
+          mtvMessage = mtvMessage.replace('{discount}', nextDiscountValue + '% Off');
+        }
+  
+        // If discount type is Fixed amount discount
+        if (discount.levels[nextQualifiedLevel].typeId == 2) {
+          mtvMessage = mtvMessage.replace('{discount}', '$' + nextDiscountValue + ' Off');
+        }
+        
+        // If discount type is Fixed price
+        if (discount.levels[nextQualifiedLevel].typeId == 3) {
+          let fixedAmount = nextDiscountValue;
+          let fixedPrice = price - fixedAmount;
+          mtvMessage = mtvMessage.replace('{discount}', '$' + nextDiscountValue + ' Off');
+        }
+  
+        // If discount type is Free gift
+        if (discount.levels[nextQualifiedLevel].typeId == 4) {
+          let giftId = nextDiscountValue;
+          let giftOutput = `1 Free Gift`;
+          mtvMessage = mtvMessage.replace('{discount}', giftOutput);
+        }
+  
+        // If discount type is Free shipping
+        if (discount.levels[nextQualifiedLevel].typeId == 5) {
+          mtvMessage = mtvMessage.replace('{discount}', 'Free shipping');
+        }
+      }
+
+      item.querySelector('.discount-wholesale-motivation').innerHTML = mtvMessage;
+    }
+  });
 }
 
 // ============================================================================
