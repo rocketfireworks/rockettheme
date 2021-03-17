@@ -671,7 +671,8 @@
       },
       "location": {
         "type": "location",
-        "settings": {}
+        "settings": {
+        }
       },
       "location-additional-info": {
         "type": "location-additional-info",
@@ -743,7 +744,8 @@
           "1598559386214",
           "1598559388555"
         ],
-        "settings": {}
+        "settings": {
+        }
       },
       "1598559395273": {
         "type": "home-ctaarrowtilegroup",
@@ -784,7 +786,8 @@
           "1598559401537",
           "1598559402509"
         ],
-        "settings": {}
+        "settings": {
+        }
       },
       "product-coupon": {
         "type": "product-coupon",
@@ -1047,7 +1050,8 @@
         },
         "blog-posts": {
           "type": "blog-posts",
-          "settings": {}
+          "settings": {
+          }
         },
         "video": {
           "type": "video",
@@ -1057,7 +1061,8 @@
         },
         "page-content": {
           "type": "page-content",
-          "settings": {}
+          "settings": {
+          }
         },
         "instagram-feed": {
           "type": "instagram-feed",
@@ -1317,7 +1322,8 @@
         },
         "blog-posts": {
           "type": "blog-posts",
-          "settings": {}
+          "settings": {
+          }
         },
         "video": {
           "type": "video",
@@ -1327,7 +1333,8 @@
         },
         "page-content": {
           "type": "page-content",
-          "settings": {}
+          "settings": {
+          }
         },
         "instagram-feed": {
           "type": "instagram-feed",
@@ -1585,7 +1592,8 @@
         },
         "blog-posts": {
           "type": "blog-posts",
-          "settings": {}
+          "settings": {
+          }
         },
         "video": {
           "type": "video",
@@ -1595,7 +1603,8 @@
         },
         "page-content": {
           "type": "page-content",
-          "settings": {}
+          "settings": {
+          }
         },
         "instagram-feed": {
           "type": "instagram-feed",
