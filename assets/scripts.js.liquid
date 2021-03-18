@@ -650,7 +650,12 @@ window.invokeAfterSellyDataLoads = callback => {
 window.calculateCurrentDiscountPrice = () => {
   const offers = window.sellyData.offers;
   // Get current product id 
-  const productId = meta.product.id;
+  let productId;
+  if (meta.product) {
+    productId = meta.product.id;
+  } else {
+    return;
+  }
 
   // Check if current item in cart
   $.getJSON('/cart.js', cart => {
@@ -661,15 +666,15 @@ window.calculateCurrentDiscountPrice = () => {
         originalPrice = item.original_price;
         const discount = getProductDiscount(productId, offers);
 
-        let qualifiedLevel = [];
+        let qualifiedLevels = [];
         discount.levels.forEach((level, index) => {
           if (itemQuantity >= level.quantity) {
-            qualifiedLevel.push(index);
+            qualifiedLevels.push(index);
           }
         });
 
         // Get the highest volumn discount
-        let highestQualifiedLevel = Math.max(...qualifiedLevel);
+        let highestQualifiedLevel = Math.max(...qualifiedLevels);
         let highestDiscountValue = discount.levels[highestQualifiedLevel].value;
 
         let discountPrice;
@@ -764,7 +769,12 @@ window.getNextQualifiedDiscount = () => {
   let items = document.querySelectorAll('.productRow');
   items.forEach(item => {
     let itemId = item.querySelector('.discount-wholesale-motivation').getAttribute('data-product-id');
-    let itemQuantity = item.querySelector('.productRowQty input').value;
+    let itemQuantity;
+    if (item.querySelector('.productRowQty input')) {
+      itemQuantity = item.querySelector('.productRowQty input').value;
+    } else {
+      return;
+    }
 
     let discount = getProductDiscount(itemId, offers);
     let mtvMessage = '';
