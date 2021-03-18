@@ -1781,6 +1781,27 @@ theme.HeaderSection.prototype = _.assignIn({}, theme.HeaderSection.prototype, {
   }
 });
 
+theme.CheckoutPageSection = {};
+
+theme.CheckoutPageSection = (function() {
+  function CheckoutPageSection(container) {
+   
+    var $container = this.$container = $(container);
+    var sectionId = this.sectionId = $container.attr('data-section-id');
+    var starsValue = this.reviewsStars = $container.attr('data-reviews-stars');
+    window.invokeAfterSellyDataLoads(window.getNextQualifiedDiscount);
+  }
+
+  return CheckoutPageSection;
+})();
+
+theme.CheckoutPageSection.prototype = _.assignIn({}, theme.CheckoutPageSection.prototype, {
+
+  onSelect: function() {
+     var sectionId = this.sectionId;
+     var starsValue = this.reviewsStars;
+  }
+});
 
 theme.FeaturedImagesSection = {};
 
@@ -3852,6 +3873,7 @@ function enableInfiniteScrollList(){
           sections.register('password', theme.PasswordSection);
           sections.register('logo-section', theme.LogoSection);
           sections.register('product-recommendations', theme.ProductRecommendations);
+          sections.register('checkout-page-section', theme.CheckoutPageSection);
 		
           enabledQuickView();
           
