@@ -666,43 +666,36 @@ window.calculateCurrentDiscountPrice = () => {
         originalPrice = item.original_price;
         const discount = getProductDiscount(productId, offers);
 
-        let qualifiedLevels = [];
-        discount.levels.forEach((level, index) => {
-          if (itemQuantity >= level.quantity) {
-            qualifiedLevels.push(index);
-          }
-        });
-
         // Get the highest volumn discount
-        let highestQualifiedLevel = Math.max(...qualifiedLevels);
-        let highestDiscountValue = discount.levels[highestQualifiedLevel].value;
+        let currentDiscountLevel = getProductCurrentDiscountLevel(itemQuantity, discount);
+        let currentDiscountValue = discount.levels[currentDiscountLevel].value;
 
         let discountPrice;
         let discountType;
 
         // If discount type is Percentage discount
-        if (discount.levels[highestQualifiedLevel].typeId == 1) {
-          discountPrice = originalPrice - (originalPrice * (highestDiscountValue / 100));
+        if (discount.levels[currentDiscountLevel].typeId == 1) {
+          discountPrice = originalPrice - (originalPrice * (currentDiscountValue / 100));
         }
 
         // If discount type is Fixed amount discount
-        if (discount.levels[highestQualifiedLevel].typeId == 2) {
-          discountPrice = ((originalPrice / 100) - highestDiscountValue)*100;
+        if (discount.levels[currentDiscountLevel].typeId == 2) {
+          discountPrice = ((originalPrice / 100) - currentDiscountValue)*100;
         }
         
         // If discount type is Fixed price
-        if (discount.levels[highestQualifiedLevel].typeId == 3) {
-          discountPrice = highestDiscountValue;
+        if (discount.levels[currentDiscountLevel].typeId == 3) {
+          discountPrice = currentDiscountValue;
         }
 
         // If discount type is Free gift
-        if (discount.levels[highestQualifiedLevel].typeId == 4) {
+        if (discount.levels[currentDiscountLevel].typeId == 4) {
           discountPrice = originalPrice;
           discountType = 'Free gift';
         }
 
         // If discount type is Free shipping
-        if (discount.levels[highestQualifiedLevel].typeId == 5) {
+        if (discount.levels[currentDiscountLevel].typeId == 5) {
           discountPrice = original_price;
           discountType = 'Free shipping'
         }
@@ -711,6 +704,34 @@ window.calculateCurrentDiscountPrice = () => {
       }
     });
   });
+}
+
+function getProductCurrentDiscountLevel(productQuantity, productDiscount) {
+  let qualifiedLevels = [];
+  productDiscount.levels.forEach((level, index) => {
+    if (productQuantity >= level.quantity) {
+      qualifiedLevels.push(index);
+    }
+  });
+  
+  if (qualifiedLevels.length === 0) {
+    return null;
+  }
+  return Math.max(...qualifiedLevels);
+}
+
+function getProductNextDiscountLevel(productQuantity, productDiscount) {
+  let nextLevels = [];
+  productDiscount.levels.forEach((level, index) => {
+    if (productQuantity < level.quantity) {
+      nextLevels.push(index);
+    }
+  });
+  
+  if (nextLevels.length === 0) {
+    return null;
+  }
+  return Math.min(...nextLevels);
 }
 
 function getProductDiscount(currentProductId, offers) {

@@ -342,58 +342,49 @@ jQuery(document).ready(function() {
           let mtvMessage = '';
           if (Object.keys(discount).length !== 0) {
             mtvMessage = discount.mtv_message;
-            let nextLevels = [];
-            let qualifiedLevels = [];
-            discount.levels.forEach((level, index) => {
-              if (productRowQuantity < level.quantity) {
-                nextLevels.push(index);
-              }
-              if (productRowQuantity >= level.quantity) {
-                qualifiedLevels.push(index);
-              }
-            });
 
-            if (nextLevels.length !== 0) {
-              let nextQualifiedLevel = Math.min(...nextLevels);
-              let nextDiscountValue = discount.levels[nextQualifiedLevel].value;
-              let neededQuantity = discount.levels[nextQualifiedLevel].quantity - productRowQuantity;
-              let currentQualifiedLevel = false;
-              let currentdiscountValue = false;
-              if (qualifiedLevels.length !== 0) {
-                currentQualifiedLevel = Math.max(...qualifiedLevels);
-                currentdiscountValue = discount.levels[currentQualifiedLevel].value;
+            let nextDiscountLevel = getProductNextDiscountLevel(productRowQuantity, discount);
+            let currentDiscountLevel = getProductCurrentDiscountLevel(productRowQuantity, discount);
+            let nextDiscountValue;
+            let currentdiscountValue;
+
+            if (nextDiscountLevel) {
+              nextDiscountValue = discount.levels[nextDiscountLevel].value;
+              let neededQuantity = discount.levels[nextDiscountLevel].quantity - productRowQuantity;
+              if (currentDiscountLevel) {
+                currentdiscountValue = discount.levels[currentDiscountLevel].value;
               }
               mtvMessage = mtvMessage.replace('{quantity}', neededQuantity);
 
               // If discount type is Percentage discount
-              if (discount.levels[nextQualifiedLevel].typeId == 1) {
+              if (discount.levels[nextDiscountLevel].typeId == 1) {
                 mtvMessage = mtvMessage.replace('{discount}', nextDiscountValue + '% Off');
                 finalItemPrice = itemPrice - ((currentdiscountValue / 100) * itemPrice);
                 finalLinePrice = finalItemPrice * productRowQuantity;
               }
-              if (currentQualifiedLevel !== false && discount.levels[currentQualifiedLevel].typeId == 1) {
+              if (currentDiscountLevel !== false && discount.levels[currentDiscountLevel].typeId == 1) {
                 finalItemPrice = itemPrice - ((currentdiscountValue / 100) * itemPrice);
                 finalLinePrice = finalItemPrice * productRowQuantity;
               }
 
               // If discount type is Fixed amount discount
-              if (discount.levels[nextQualifiedLevel].typeId == 2) {
+              if (discount.levels[nextDiscountLevel].typeId == 2) {
                 mtvMessage = mtvMessage.replace('{discount}', '$' + nextDiscountValue + ' Off');
               }
-              if (currentQualifiedLevel !== false && discount.levels[currentQualifiedLevel].typeId == 2) {
+              if (currentDiscountLevel !== false && discount.levels[currentDiscountLevel].typeId == 2) {
                 finalItemPrice = itemPrice - (currentdiscountValue / 100);
                 finalLinePrice = finalItemPrice * productRowQuantity;
               }
               
               // If discount type is Fixed price
-              if (discount.levels[nextQualifiedLevel].typeId == 3) {
+              if (discount.levels[nextDiscountLevel].typeId == 3) {
                 let fixedAmount = nextDiscountValue;
                 let fixedPrice = price - fixedAmount;
                 mtvMessage = mtvMessage.replace('{discount}', '$' + nextDiscountValue + ' Off');
               }
 
               // If discount type is Free gift
-              if (discount.levels[nextQualifiedLevel].typeId == 4) {
+              if (discount.levels[nextDiscountLevel].typeId == 4) {
                 let giftId = nextDiscountValue;
                 // jQuery.getJSON('/products/' + giftId + '.js', function(product) {
                   let giftOutput = `<a href="#">1 Free Gift</a>`;
@@ -402,7 +393,7 @@ jQuery(document).ready(function() {
               }
 
               // If discount type is Free shipping
-              if (discount.levels[nextQualifiedLevel].typeId == 5) {
+              if (discount.levels[nextDiscountLevel].typeId == 5) {
                 mtvMessage = mtvMessage.replace('{discount}', 'Free shipping');
               }
             } else {
