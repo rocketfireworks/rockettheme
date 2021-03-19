@@ -2889,6 +2889,17 @@ theme.ProductPageSection = (function() {
    $container.find('form[action*="/cart/add"]').submit((e) => {
       {% if settings.cart_type == "modal"%}  
       e.preventDefault();
+
+      var addToCartButton = e.target.querySelector('#addToCart');
+      if (e.originalEvent != null 
+        && e.originalEvent.submitter === addToCartButton) {
+        var inputs = e.target.querySelectorAll('input');
+        inputs.forEach(input => {
+          if (input.type === 'hidden' && input.name === 'quantity') {
+            input.remove();
+          }
+        });
+      }
       window.addItemToCart(e.target);
       {% endif %}
     }); 
