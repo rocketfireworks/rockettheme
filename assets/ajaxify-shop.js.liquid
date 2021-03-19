@@ -396,13 +396,13 @@ jQuery(document).ready(function() {
 
               // If discount type is Fixed amount discount
               if (discount.levels[currentDiscountLevel].typeId == 2) {
-                finalItemPrice = itemPrice - (currentdiscountValue / 100);
+                finalItemPrice = itemPrice - (currentdiscountValue * 100);
                 finalLinePrice = finalItemPrice * productRowQuantity;
               }
 
               // If discount type is Fixed price
               if (discount.levels[currentDiscountLevel].typeId == 3) {
-                finalItemPrice = itemPrice - (currentdiscountValue);
+                finalItemPrice = itemPrice - currentdiscountValue;
                 finalLinePrice = finalItemPrice * productRowQuantity;
               }
 
