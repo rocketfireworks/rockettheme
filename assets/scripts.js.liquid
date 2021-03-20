@@ -857,11 +857,35 @@ window.displayDiscountBadge = () => {
   let products = document.querySelectorAll('.add-to-cart-form');
   products.forEach(product => {
     let productData = product.querySelector('.product-data')
-    let productId = productData.getAttribute('data-product-id');
-    let productUrl = productData.getAttribute('data-product-url');
-    const discount = getProductDiscount(productId, offers);
-    if (Object.keys(discount).length !== 0) {
-      productData.innerHTML = `<a href="${productUrl}" class="bulk-pricing">See bulk prices...</a>`;
+    if (productData) {
+      let productId = productData.getAttribute('data-product-id');
+      let productUrl = productData.getAttribute('data-product-url');
+      const discount = getProductDiscount(productId, offers);
+      if (Object.keys(discount).length !== 0) {
+        let highestDiscountLevel = discount.levels.length - 1;
+        let highestDiscountValue = discount.levels[highestDiscountLevel].value;
+        let highestDiscountType = discount.levels[highestDiscountLevel].typeId;
+  
+        if (highestDiscountType == 1) {
+          productData.innerHTML = `<a href="${productUrl}" class="bulk-pricing">Buy bulk for up to ${highestDiscountValue}% Off...</a>`;
+        }
+  
+        if (highestDiscountType == 2) {
+          productData.innerHTML = `<a href="${productUrl}" class="bulk-pricing">Buy bulk for up to $${highestDiscountValue} Off...</a>`;
+        }
+  
+        if (highestDiscountType == 3) {
+          productData.innerHTML = `<a href="${productUrl}" class="bulk-pricing">Buy bulk for up to $${highestDiscountValue} Off...</a>`;
+        }
+  
+        if (highestDiscountType == 4) {
+          productData.innerHTML = `<a href="${productUrl}" class="bulk-pricing">Buy bulk to get Free Gift...</a>`;
+        }
+  
+        if (highestDiscountType == 5) {
+          productData.innerHTML = `<a href="${productUrl}" class="bulk-pricing">Buy bulk to get Free Gift...</a>`;
+        }
+      }
     }
   });
 }
