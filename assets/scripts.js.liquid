@@ -666,7 +666,7 @@ window.calculateCurrentDiscountPrice = () => {
         originalPrice = item.original_price;
         const discount = getProductDiscount(productId, offers);
 
-        // Get the highest volumn discount
+        // Get the current volumn discount
         let currentDiscountLevel = getProductCurrentDiscountLevel(itemQuantity, discount);
         if (currentDiscountLevel >= 0) {
           let currentDiscountValue = discount.levels[currentDiscountLevel].value;
@@ -705,6 +705,47 @@ window.calculateCurrentDiscountPrice = () => {
           discountType = 'none';
           updateDiscountMessage(originalPrice, discountType);
         }
+
+        // Get the next volumn discount
+        let nextDiscountLevel = getProductNextDiscountLevel(itemQuantity, discount);
+        let mtvMessage = discount.mtv_message;
+        if (nextDiscountLevel >= 0) {
+          nextDiscountValue = discount.levels[nextDiscountLevel].value;
+          let neededQuantity = discount.levels[nextDiscountLevel].quantity - item.quantity;
+          mtvMessage = mtvMessage.replace('{quantity}', neededQuantity);
+  
+          // If discount type is Percentage discount
+          if (discount.levels[nextDiscountLevel].typeId == 1) {
+            mtvMessage = mtvMessage.replace('{discount}', nextDiscountValue + '% Off');
+          }
+  
+          // If discount type is Fixed amount discount
+          if (discount.levels[nextDiscountLevel].typeId == 2) {
+            mtvMessage = mtvMessage.replace('{discount}', '$' + nextDiscountValue + ' Off');
+          }
+          
+          // If discount type is Fixed price
+          if (discount.levels[nextDiscountLevel].typeId == 3) {
+            mtvMessage = mtvMessage.replace('{discount}', '$' + nextDiscountValue + ' Off');
+          }
+  
+          // If discount type is Free gift
+          if (discount.levels[nextDiscountLevel].typeId == 4) {
+            let giftId = nextDiscountValue;
+            // jQuery.getJSON('/products/' + giftId + '.js', function(product) {
+              let giftOutput = `<a href="#">1 Free Gift</a>`;
+              mtvMessage = mtvMessage.replace('{discount}', giftOutput);
+            // }); 
+          }
+  
+          // If discount type is Free shipping
+          if (discount.levels[nextDiscountLevel].typeId == 5) {
+            mtvMessage = mtvMessage.replace('{discount}', 'Free shipping');
+          }
+        } else {
+          mtvMessage = '';
+        }
+        document.querySelector('.motivational-message').innerHTML = mtvMessage;
       }
     });
   });
