@@ -698,9 +698,12 @@ window.calculateCurrentDiscountPrice = () => {
           // If discount type is Free shipping
           if (discount.levels[currentDiscountLevel].typeId == 5) {
             discountPrice = original_price;
-            discountType = 'Free shipping'
+            discountType = 'Free shipping';
           }
           updateDiscountMessage(discountPrice, discountType);
+        } else {
+          discountType = 'none';
+          updateDiscountMessage(originalPrice, discountType);
         }
       }
     });
@@ -776,13 +779,18 @@ function updateDiscountMessage(newPrice, discountType) {
   formattedPrice = Shopify.formatMoney(newPrice, app.data.money_format);
   let price = $('.price-wholesale');
   let existingPrice = $('#productPrice');
-  existingPrice.addClass('linethrough');
   
-  if (discountType) {
+  if (discountType === "none") {
+    existingPrice.removeClass('linethrough');
+    price.html('');
+  } else if (discountType) {
+    existingPrice.addClass('linethrough');
     formattedPrice = formattedPrice + ' + ' + discountType;
-  } 
-  price.html(`<div>Your bulk price:</div>
-    <div class="money" data-tov="${formattedPrice}" data-tovc="CAD" data-origin-value="${newPrice}" data-currency="CAD">${formattedPrice}</div>`);
+  } else {
+    existingPrice.addClass('linethrough');
+    price.html(`<div>Your bulk price:</div>
+      <div class="money" data-tov="${formattedPrice}" data-tovc="CAD" data-origin-value="${newPrice}" data-currency="CAD">${formattedPrice}</div>`);
+  }
 }
 
 // Popup Cart
