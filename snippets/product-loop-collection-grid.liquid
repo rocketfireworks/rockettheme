@@ -158,11 +158,13 @@
 
     </div>
     <div class="desc">
-      <h5><a href="{{ product.url | within: collection }}">{{ product.title | escape }}</a></h5>
+      <h5>
+        <a href="{{ product.url | within: collection }}">{{ product.title | escape }}</a>
+        <span class="product-data" data-product-id="{{ product.id }}" data-product-url="{{ product.url }}"></span>
+      </h5>
       {% if section.settings.show_grid_type %}
       <p>{{ product.type }}</p>
-      {% endif %}    
-
+      {% endif %}
 
           {% if product.tags contains 'video_available' %}
           <span class="productVideoIcon"><a class="popup-youtube" href="{{ product.metafields.custom_fields["youtube_embed_code"] }}"><img src="{{ 'video-icon2.png' | asset_url }}"> View Video</a></span>

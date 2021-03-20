@@ -31,7 +31,7 @@
 
   <form method="post" action="/cart/add" class="add-to-cart-form product-container">
 
-    <input type="hidden" name="id" value="{{ item.variants.first.id }}" />
+    <input type="hidden" name="id" value="{{ product.variants.first.id }}" />
 
     <div class="product-gallery-container fakea" href="{{ product.url | within: collection }}">
 
@@ -102,6 +102,7 @@
             {{settings.custom_price0_text }}
           </span>                    
           {% endunless %}
+          <div class="product-data" data-product-id="{{ product.id }}" data-product-url="{{ product.url }}"></div>
         </div>
 
         <div class="qty product-page-qty">

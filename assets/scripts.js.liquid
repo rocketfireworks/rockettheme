@@ -851,6 +851,21 @@ window.getNextQualifiedDiscount = () => {
   });
 }
 
+// Collection Page
+window.displayDiscountBadge = () => {
+  const offers = window.sellyData.offers;
+  let products = document.querySelectorAll('.add-to-cart-form');
+  products.forEach(product => {
+    let productData = product.querySelector('.product-data')
+    let productId = productData.getAttribute('data-product-id');
+    let productUrl = productData.getAttribute('data-product-url');
+    const discount = getProductDiscount(productId, offers);
+    if (Object.keys(discount).length !== 0) {
+      productData.innerHTML = `<a href="${productUrl}" class="bulk-pricing">See bulk prices...</a>`;
+    }
+  });
+}
+
 // ============================================================================
 // End Treedify Code
 // ============================================================================
@@ -2280,6 +2295,8 @@ theme.CollectionPageSection = (function() {
         window.location.href = data_url;
       }
     });
+
+    window.invokeAfterSellyDataLoads(window.displayDiscountBadge);
   }
   return CollectionPageSection;
 })();
@@ -2344,6 +2361,8 @@ theme.CollectionGridPageSection = (function() {
     window.initAddToCartForms();
     window.swatchSelection();
   }
+
+  window.invokeAfterSellyDataLoads(window.displayDiscountBadge);
 
   return CollectionGridPageSection;
 })();
