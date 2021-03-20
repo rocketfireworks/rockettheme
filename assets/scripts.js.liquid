@@ -668,39 +668,40 @@ window.calculateCurrentDiscountPrice = () => {
 
         // Get the highest volumn discount
         let currentDiscountLevel = getProductCurrentDiscountLevel(itemQuantity, discount);
-        let currentDiscountValue = discount.levels[currentDiscountLevel].value;
+        if (currentDiscountLevel >= 0) {
+          let currentDiscountValue = discount.levels[currentDiscountLevel].value;
 
-        let discountPrice;
-        let discountType;
-
-        // If discount type is Percentage discount
-        if (discount.levels[currentDiscountLevel].typeId == 1) {
-          discountPrice = originalPrice - (originalPrice * (currentDiscountValue / 100));
+          let discountPrice;
+          let discountType;
+  
+          // If discount type is Percentage discount
+          if (discount.levels[currentDiscountLevel].typeId == 1) {
+            discountPrice = originalPrice - (originalPrice * (currentDiscountValue / 100));
+          }
+  
+          // If discount type is Fixed amount discount
+          if (discount.levels[currentDiscountLevel].typeId == 2) {
+            discountPrice = ((originalPrice / 100) - currentDiscountValue)*100;
+          }
+          
+          // If discount type is Fixed price
+          if (discount.levels[currentDiscountLevel].typeId == 3) {
+            discountPrice = currentDiscountValue;
+          }
+  
+          // If discount type is Free gift
+          if (discount.levels[currentDiscountLevel].typeId == 4) {
+            discountPrice = originalPrice;
+            discountType = 'Free gift';
+          }
+  
+          // If discount type is Free shipping
+          if (discount.levels[currentDiscountLevel].typeId == 5) {
+            discountPrice = original_price;
+            discountType = 'Free shipping'
+          }
+          updateDiscountMessage(discountPrice, discountType);
         }
-
-        // If discount type is Fixed amount discount
-        if (discount.levels[currentDiscountLevel].typeId == 2) {
-          discountPrice = ((originalPrice / 100) - currentDiscountValue)*100;
-        }
-        
-        // If discount type is Fixed price
-        if (discount.levels[currentDiscountLevel].typeId == 3) {
-          discountPrice = currentDiscountValue;
-        }
-
-        // If discount type is Free gift
-        if (discount.levels[currentDiscountLevel].typeId == 4) {
-          discountPrice = originalPrice;
-          discountType = 'Free gift';
-        }
-
-        // If discount type is Free shipping
-        if (discount.levels[currentDiscountLevel].typeId == 5) {
-          discountPrice = original_price;
-          discountType = 'Free shipping'
-        }
-
-        updateDiscountMessage(discountPrice, discountType);
       }
     });
   });
@@ -715,7 +716,7 @@ function getProductCurrentDiscountLevel(productQuantity, productDiscount) {
   });
   
   if (qualifiedLevels.length === 0) {
-    return null;
+    return -1;
   }
   return Math.max(...qualifiedLevels);
 }
@@ -729,7 +730,7 @@ function getProductNextDiscountLevel(productQuantity, productDiscount) {
   });
   
   if (nextLevels.length === 0) {
-    return null;
+    return -1;
   }
   return Math.min(...nextLevels);
 }
