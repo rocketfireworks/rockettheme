@@ -64,12 +64,13 @@
         </li>
         <li class="productRowPrice">
           <p class="mobile-label-price">{{ 'cart.general.price' | t }}</p>
-
           {% if item.original_price != item.final_price %}
           <span class="price money original_price">{{ item.original_price | money }}</span><br>
           <span class="price money">{{ item.final_price | money }}</span><br>
           {% else %}
           <span class="price money tdf-cart-item-p-p">{{ item.final_line_price | money }}</span>
+          
+          <span class="currentDiscount hidden"></span>
           {% endif %}
 
           {%- if item.line_level_discount_allocations != blank -%}

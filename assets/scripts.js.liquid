@@ -489,7 +489,8 @@ window.openCartPopup = function openCartPopup(e) {
 
   bindEventsInCart();
   
-  window.invokeAfterSellyDataLoads(window.getNextQualifiedDiscount);
+  window.invokeAfterSellyDataLoads(window.getNextQualifiedDiscountOnCart);
+  window.invokeAfterSellyDataLoads(window.getCurrentQualifiedDiscountOnCart);
 }
 
 // ============================================================================
@@ -835,7 +836,7 @@ function updateDiscountMessage(newPrice, discountType) {
 }
 
 // Popup Cart
-window.getNextQualifiedDiscount = () => {
+window.getNextQualifiedDiscountOnCart = () => {
   const offers = window.sellyData.offers;
   let items = document.querySelectorAll('.productRow');
   items.forEach(item => {
@@ -897,6 +898,59 @@ window.getNextQualifiedDiscount = () => {
       }
 
       item.querySelector('.discount-wholesale-motivation').innerHTML = mtvMessage;
+    }
+  });
+}
+
+
+window.getCurrentQualifiedDiscountOnCart = () => {
+  const offers = window.sellyData.offers;
+  let items = document.querySelectorAll('.productRow');
+  items.forEach(item => {
+    let itemId = item.querySelector('.discount-wholesale-motivation').getAttribute('data-product-id');
+    let itemQuantity;
+    if (item.querySelector('.productRowQty input')) {
+      itemQuantity = item.querySelector('.productRowQty input').value;
+    } else {
+      return;
+    }
+
+    let discount = getProductDiscount(itemId, offers);
+    if (Object.keys(discount).length !== 0) {
+      let currentDiscountLevel = getProductCurrentDiscountLevel(itemQuantity, discount);
+
+      if (currentDiscountLevel >= 0) {
+        let currentDiscountValue = discount.levels[currentDiscountLevel].value;
+        let discountValueOutput;
+
+        // If discount type is Percentage discount
+        if (discount.levels[currentDiscountLevel].typeId == 1) {
+          discountValueOutput = currentDiscountValue + '% Off';
+        }
+  
+        // If discount type is Fixed amount discount
+        if (discount.levels[currentDiscountLevel].typeId == 2) {
+          discountValueOutput = '$' + currentDiscountValue + ' Off';
+        }
+        
+        // If discount type is Fixed price
+        if (discount.levels[currentDiscountLevel].typeId == 3) {
+          discountValueOutput = '$' + currentDiscountValue + ' Off';
+        }
+  
+        // If discount type is Free gift
+        if (discount.levels[currentDiscountLevel].typeId == 4) {
+          discountValueOutput = 'Free Gift'
+        }
+  
+        // If discount type is Free shipping
+        if (discount.levels[currentDiscountLevel].typeId == 5) {
+          discountValueOutput = 'Free Shipping'
+        }
+        item.querySelector('.currentDiscount').innerHTML = discountValueOutput;
+        item.querySelector('.currentDiscount').classList.remove('hidden');
+      }
+
     }
   });
 }
@@ -1899,7 +1953,8 @@ theme.CheckoutPageSection = (function() {
     var $container = this.$container = $(container);
     var sectionId = this.sectionId = $container.attr('data-section-id');
     var starsValue = this.reviewsStars = $container.attr('data-reviews-stars');
-    window.invokeAfterSellyDataLoads(window.getNextQualifiedDiscount);
+    window.invokeAfterSellyDataLoads(window.getNextQualifiedDiscountOnCart);
+    window.invokeAfterSellyDataLoads(window.getCurrentQualifiedDiscountOnCart);
   }
 
   return CheckoutPageSection;

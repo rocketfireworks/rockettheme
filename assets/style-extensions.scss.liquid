@@ -3155,8 +3155,10 @@ FLOATING CART
         }
         &:nth-child(2) {
           text-align: left;
+          width: 25%;
         }
         &:nth-child(3) {
+          text-align: left;
           width: 16%;
         }
         &:nth-child(4) {
@@ -3302,6 +3304,7 @@ FLOATING CART
           }
           &:nth-child(5) {
             width: 33%;
+            text-align: right;
           }
         }
       }
@@ -3540,6 +3543,23 @@ TREEDIFY
     color: #c94344;
     font-weight: 600;
     font-size: 1.5em;
+  }
+}
+.productRowPrice .currentDiscount {
+  position: absolute;
+  left: 50px;
+  bottom: 25px;
+  display: block;
+  padding: 2px 5px;
+  margin: auto;
+  border-radius: 6px;
+  white-space: nowrap;
+  font-size: 11px;
+  font-weight: 600;
+  background-color: #149436;
+  color: white;
+  @media (max-width: 560px) {
+    bottom: 0;
   }
 }
 

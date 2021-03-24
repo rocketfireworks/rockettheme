@@ -337,6 +337,9 @@ jQuery(document).ready(function() {
           const offers = window.sellyData.offers;
           let discount = getProductDiscount(itemId, offers);
           let mtvMessage = '';
+          let discountValueOutput = '';
+          let currentDiscountClass = '';
+
           if (Object.keys(discount).length !== 0) {
             mtvMessage = discount.mtv_message;
 
@@ -381,36 +384,43 @@ jQuery(document).ready(function() {
             }
 
             let currentDiscountLevel = getProductCurrentDiscountLevel(productRowQuantity, discount);
-            let currentdiscountValue;
+            let currentDiscountValue = '';
 
             if (currentDiscountLevel >= 0) {
-              currentdiscountValue = discount.levels[currentDiscountLevel].value;
+              currentDiscountValue = discount.levels[currentDiscountLevel].value;
               // If discount type is Percentage discount
               if (discount.levels[currentDiscountLevel].typeId == 1) {
-                finalItemPrice = itemPrice - ((currentdiscountValue / 100) * itemPrice);
+                finalItemPrice = itemPrice - ((currentDiscountValue / 100) * itemPrice);
                 finalLinePrice = finalItemPrice * productRowQuantity;
+                discountValueOutput = currentDiscountValue + '% Off';
               }
 
               // If discount type is Fixed amount discount
               if (discount.levels[currentDiscountLevel].typeId == 2) {
-                finalItemPrice = itemPrice - (currentdiscountValue * 100);
+                finalItemPrice = itemPrice - (currentDiscountValue * 100);
                 finalLinePrice = finalItemPrice * productRowQuantity;
+                discountValueOutput = '$' + currentDiscountValue + ' Off';
               }
 
               // If discount type is Fixed price
               if (discount.levels[currentDiscountLevel].typeId == 3) {
-                finalItemPrice = itemPrice - currentdiscountValue;
+                finalItemPrice = itemPrice - currentDiscountValue;
                 finalLinePrice = finalItemPrice * productRowQuantity;
+                discountValueOutput = '$' + currentDiscountValue + ' Off';
               }
 
               // If discount type is Free gift
               if (discount.levels[currentDiscountLevel].typeId == 4) {
+                discountValueOutput = 'Free Gift'
               }
 
               // If discount type is Free shipping
               if (discount.levels[currentDiscountLevel].typeId == 5) {
+                discountValueOutput = 'Free Shipping'
               }
             }
+          } else {
+            currentDiscountClass = 'hidden';
           }
 
           //convert prices
@@ -492,7 +502,7 @@ jQuery(document).ready(function() {
               '" class="product-image-link"><img src="' + Shopify.addImageSize(cart.items[i].image,'small') + '" alt="' + cart.items[i].title + 
               '"></a></div></li><li class="productRowTitle"><h5 class="'+cart.items[i].id+'"><a href="' + cart.items[i].url + 
               '" class="item-name">' + cart.items[i].product_title + 
-              '</a></h5><p class="product-type">'+title+'</p><p>'+propertiesText+'</p><div class="discount-wholesale-motivation">' + mtvMessage + '</div></li><li class="productRowPrice"><p class="mobile-label-price">{{ 'cart.general.price' | t }}</p>'+ itemPriceContent + ' ' + item_discounts_html + '</li><li class="productRowQuantity">';
+              '</a></h5><p class="product-type">'+title+'</p><p>'+propertiesText+'</p><div class="discount-wholesale-motivation">' + mtvMessage + '</div></li><li class="productRowPrice"><p class="mobile-label-price">{{ 'cart.general.price' | t }}</p>'+ itemPriceContent + ' ' + item_discounts_html + '<span class="currentDiscount ' +  currentDiscountClass + '">' + discountValueOutput + '</span></li><li class="productRowQuantity">';
               
               if (cart.items[i].id != '32047066972241') {
               	row+='<p class="mobile-label-quantity">{{ 'cart.general.quantity' | t }}</p><a class="minus_btn"></a><input type="text" name="updates[]" class="txtbox number_val_input" min="0" id="updates_'+cart.items[i].id+'" data-id="'+cart.items[i].id+'" value="'+cart.items[i].quantity+'" /><a class="plus_btn"></a>'+
