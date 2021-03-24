@@ -23,8 +23,8 @@
 
   {% include 'product-confirm-popup' %}
 
-  <div class="container" data-section-id="{{ section.id }}" data-section-type="collection-grid-page-section">
-
+  <div class="container" data-section-id="{{ section.id }}" data-section-type="collection-page-section" data-reviews-stars="{{section.settings.show_product_reviews_stars}}">
+    
     <!-- This snippet is required for the product filter  -->
     {% include 'advanced-tag-loop' %}
 
@@ -49,12 +49,10 @@
               <a href="javascript:void(0);" class="visible-xs offcanvas_filter_toggle"><i class="fa fa-filter"></i><small class="filter_text">{{ 'collections.general.filter_button' | t }}</small></a>
             </div>
             
-            <div class="collection-view-grid view-grid {% if settings.align_height %} use_align_height {% else %} use_image_height {% endif %}">
-              <div class="collection-grid">
+            <div class="collection-grid view-grid {% if settings.align_height %} use_align_height {% else %} use_image_height {% endif %}">
+              <div class="collection-list element">
                 {% for product in collection.products %}
-                  <div class="col-md-{{ grid_item_width }} col-sm-6 col-xs-6 element mb30">
-                    {% include 'product-loop-collection-grid' %}
-                  </div>
+                  {% include 'product-loop-collection-list' %}
                 {% else %}
                 <p class="no-products">{{ 'collections.general.no_matches' | t }}</p>
                 {% endfor %}
@@ -62,30 +60,30 @@
             </div>
             
             {% if section.settings.use_infinite_scroll%}
-            {% if paginate.next.url %}
-              <div class="load-more__icon"></div>
-              <div class="js-load-more load-more">
-                <a href="{{ paginate.next.url }}" data-no-instant class="load-more__btn action_button continue-button">{{ 'collections.general.load_more' | t }}</a>
-              </div>
+              {% if paginate.next.url %}
+                <div class="load-more__icon"></div>
+                <div class="js-load-more load-more">
+                  <a href="{{ paginate.next.url }}" data-no-instant class="load-more__btn action_button continue-button">{{ 'collections.general.load_more' | t }}</a>
+                </div>
+              {% endif %}
+            {% else %}
+              {% if paginate.pages > 1 %}
+                {% include 'pagination-custom' %}
+              {% endif %}
             {% endif %}
-           {% else %}   
-            {% if paginate.pages > 1 %}
-              {% include 'pagination-custom' %}
-            {% endif %}
-          {% endif %}
+
           </div>
           
         </div>
       </div>
     </div>
-    
   </div>
 </div>
 
 {% endpaginate %}
 {% schema %}
    {
-    "name": "Collection Grid",
+    "name": "Collection List",
     "settings": [
       {
         "type": "header",
@@ -113,19 +111,36 @@
         "type": "checkbox",
         "id": "use_infinite_scroll",
         "label": "Enable infinite scroll",
-        "info": "Eliminates pagination and loads new collections as you scroll down the page."
+        "info": "Eliminates pagination and loads new products as you scroll down the page."
       },
 	  {
         "type": "checkbox",
         "id": "show_featured_image",
         "label": "Show featured image",
   		"default": true
-      },			
-	  {
+      },
+      {
         "type": "checkbox",
         "id": "show_grid_type",
         "label": "Show product type"
-      },	
+      },
+	  {
+        "type": "checkbox",
+        "id": "show_sale_badge",
+        "label": "Show sale badge",
+		"default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "collection_overlay",
+        "label": "Enable product quick view"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_product_reviews_stars",
+        "label": "Show review stars",
+		"info": "Shopify product reviews app must be enabled"
+      }, 
 	  {
         "type": "header",
         "content": "Sidebar"

@@ -23,8 +23,8 @@
 
   {% include 'product-confirm-popup' %}
 
-  <div class="container" data-section-id="{{ section.id }}" data-section-type="collection-page-section" data-reviews-stars="{{section.settings.show_product_reviews_stars}}">
-    
+  <div class="container" data-section-id="{{ section.id }}" data-section-type="collection-grid-page-section">
+
     <!-- This snippet is required for the product filter  -->
     {% include 'advanced-tag-loop' %}
 
@@ -49,10 +49,12 @@
               <a href="javascript:void(0);" class="visible-xs offcanvas_filter_toggle"><i class="fa fa-filter"></i><small class="filter_text">{{ 'collections.general.filter_button' | t }}</small></a>
             </div>
             
-            <div class="collection-grid view-grid {% if settings.align_height %} use_align_height {% else %} use_image_height {% endif %}">
-              <div class="collection-list element">
+            <div class="collection-view-grid view-grid {% if settings.align_height %} use_align_height {% else %} use_image_height {% endif %}">
+              <div class="collection-grid">
                 {% for product in collection.products %}
-                  {% include 'product-loop-collection' %}
+                  <div class="col-md-{{ grid_item_width }} col-sm-6 col-xs-6 element mb30">
+                    {% include 'product-loop-collection' %}
+                  </div>
                 {% else %}
                 <p class="no-products">{{ 'collections.general.no_matches' | t }}</p>
                 {% endfor %}
