@@ -3169,10 +3169,14 @@ FLOATING CART
         }
         .price {
           font-weight: 700;
+          &.money.original_price {
+            font-weight: 400;
+            color: gray !important;
+          }
         }
         .total-price {
           color: #c94344;
-          font-size: 22px;
+          font-size: 20px;
           font-weight: 700;
         }
         .total-price span.money {
@@ -3379,6 +3383,15 @@ CHECKOUT CART
         }
         .price {
           float: none;
+          font-weight: 600;
+          .tdf_price_original {
+            font-weight: 400;
+            color: gray;
+          }
+          &.money.original_price {
+            font-weight: 400;
+            color: gray;
+          }
         }
         .total-price {
           color: #c94344;
@@ -3545,6 +3558,18 @@ TREEDIFY
     font-size: 1.5em;
   }
 }
+
+// Fixing cart price style
+.mfp-content {
+  .productRow .tdf_price_original span.money {
+    color: gray;
+    font-weight: 400;
+  }
+  .total-price .tdf_price_original span.money {
+    font-weight: 400;
+  }
+}
+
 .productRowPrice .currentDiscount {
   position: absolute;
   left: 50px;
