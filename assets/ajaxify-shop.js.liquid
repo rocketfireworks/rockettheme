@@ -344,41 +344,13 @@ jQuery(document).ready(function() {
             mtvMessage = discount.mtv_message;
 
             let nextDiscountLevel = getProductNextDiscountLevel(productRowQuantity, discount);
-            let nextDiscountValue;
 
             if (nextDiscountLevel >= 0) {
-              nextDiscountValue = discount.levels[nextDiscountLevel].value;
+              let nextDiscountType = discount.levels[nextDiscountLevel].typeId;
+              let nextDiscountValue = discount.levels[nextDiscountLevel].value;
               let neededQuantity = discount.levels[nextDiscountLevel].quantity - productRowQuantity;
               mtvMessage = mtvMessage.replace('{quantity}', neededQuantity);
-
-              // If discount type is Percentage discount
-              if (discount.levels[nextDiscountLevel].typeId == 1) {
-                mtvMessage = mtvMessage.replace('{discount}', nextDiscountValue + '% Off');
-              }
-
-              // If discount type is Fixed amount discount
-              if (discount.levels[nextDiscountLevel].typeId == 2) {
-                mtvMessage = mtvMessage.replace('{discount}', '$' + nextDiscountValue + ' Off');
-              }
-              
-              // If discount type is Fixed price
-              if (discount.levels[nextDiscountLevel].typeId == 3) {
-                mtvMessage = mtvMessage.replace('{discount}', '$' + nextDiscountValue + ' Off');
-              }
-
-              // If discount type is Free gift
-              if (discount.levels[nextDiscountLevel].typeId == 4) {
-                let giftId = nextDiscountValue;
-                // jQuery.getJSON('/products/' + giftId + '.js', function(product) {
-                  let giftOutput = `<a href="#">1 Free Gift</a>`;
-                  mtvMessage = mtvMessage.replace('{discount}', giftOutput);
-                // }); 
-              }
-
-              // If discount type is Free shipping
-              if (discount.levels[nextDiscountLevel].typeId == 5) {
-                mtvMessage = mtvMessage.replace('{discount}', 'Free shipping');
-              }
+              mtvMessage = window.outputMtvMessage(nextDiscountType, nextDiscountValue, mtvMessage);
             } else {
               mtvMessage = '';
             }
@@ -387,37 +359,11 @@ jQuery(document).ready(function() {
             let currentDiscountValue = '';
 
             if (currentDiscountLevel >= 0) {
+              currentDiscountType = discount.levels[currentDiscountLevel].typeId;
               currentDiscountValue = discount.levels[currentDiscountLevel].value;
-              // If discount type is Percentage discount
-              if (discount.levels[currentDiscountLevel].typeId == 1) {
-                finalItemPrice = itemPrice - ((currentDiscountValue / 100) * itemPrice);
-                finalLinePrice = finalItemPrice * productRowQuantity;
-                discountValueOutput = currentDiscountValue + '% Off';
-              }
-
-              // If discount type is Fixed amount discount
-              if (discount.levels[currentDiscountLevel].typeId == 2) {
-                finalItemPrice = itemPrice - (currentDiscountValue * 100);
-                finalLinePrice = finalItemPrice * productRowQuantity;
-                discountValueOutput = '$' + currentDiscountValue + ' Off';
-              }
-
-              // If discount type is Fixed price
-              if (discount.levels[currentDiscountLevel].typeId == 3) {
-                finalItemPrice = itemPrice - currentDiscountValue;
-                finalLinePrice = finalItemPrice * productRowQuantity;
-                discountValueOutput = '$' + currentDiscountValue + ' Off';
-              }
-
-              // If discount type is Free gift
-              if (discount.levels[currentDiscountLevel].typeId == 4) {
-                discountValueOutput = 'Free Gift'
-              }
-
-              // If discount type is Free shipping
-              if (discount.levels[currentDiscountLevel].typeId == 5) {
-                discountValueOutput = 'Free Shipping'
-              }
+              discountValueOutput = window.outputDiscountValue(currentDiscountType, currentDiscountValue)
+              finalItemPrice = window.calculateFinalItemPrice(currentDiscountType, currentDiscountValue, itemPrice);
+              finalLinePrice = finalItemPrice * productRowQuantity;
             }
           } else {
             currentDiscountClass = 'hidden';

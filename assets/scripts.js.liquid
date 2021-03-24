@@ -648,6 +648,7 @@ window.invokeAfterSellyDataLoads = callback => {
   }, 500);
 }
 
+// Product page
 window.calculateCurrentDiscountPrice = () => {
   const offers = window.sellyData.offers;
   // Get current product id 
@@ -710,39 +711,13 @@ window.calculateCurrentDiscountPrice = () => {
         // Get the next volumn discount
         let nextDiscountLevel = getProductNextDiscountLevel(itemQuantity, discount);
         let mtvMessage = discount.mtv_message;
+
         if (nextDiscountLevel >= 0) {
-          nextDiscountValue = discount.levels[nextDiscountLevel].value;
+          let nextDiscountType = discount.levels[nextDiscountLevel].typeId;
+          let nextDiscountValue = discount.levels[nextDiscountLevel].value;
           let neededQuantity = discount.levels[nextDiscountLevel].quantity - item.quantity;
           mtvMessage = mtvMessage.replace('{quantity}', neededQuantity);
-  
-          // If discount type is Percentage discount
-          if (discount.levels[nextDiscountLevel].typeId == 1) {
-            mtvMessage = mtvMessage.replace('{discount}', nextDiscountValue + '% Off');
-          }
-  
-          // If discount type is Fixed amount discount
-          if (discount.levels[nextDiscountLevel].typeId == 2) {
-            mtvMessage = mtvMessage.replace('{discount}', '$' + nextDiscountValue + ' Off');
-          }
-          
-          // If discount type is Fixed price
-          if (discount.levels[nextDiscountLevel].typeId == 3) {
-            mtvMessage = mtvMessage.replace('{discount}', '$' + nextDiscountValue + ' Off');
-          }
-  
-          // If discount type is Free gift
-          if (discount.levels[nextDiscountLevel].typeId == 4) {
-            let giftId = nextDiscountValue;
-            // jQuery.getJSON('/products/' + giftId + '.js', function(product) {
-              let giftOutput = `<a href="#">1 Free Gift</a>`;
-              mtvMessage = mtvMessage.replace('{discount}', giftOutput);
-            // }); 
-          }
-  
-          // If discount type is Free shipping
-          if (discount.levels[nextDiscountLevel].typeId == 5) {
-            mtvMessage = mtvMessage.replace('{discount}', 'Free shipping');
-          }
+          mtvMessage = window.outputMtvMessage(nextDiscountType, nextDiscountValue, mtvMessage);
         } else {
           mtvMessage = '';
         }
@@ -852,56 +827,106 @@ window.getNextQualifiedDiscountOnCart = () => {
     let mtvMessage = '';
     if (Object.keys(discount).length !== 0) {
       mtvMessage = discount.mtv_message;
-      let nextLevels = [];
-      discount.levels.forEach((level, index) => {
-        if (itemQuantity < level.quantity) {
-          nextLevels.push(index);
-        }
-      });
+
+      let nextDiscountLevel = getProductNextDiscountLevel(itemQuantity, discount);
     
-      if (nextLevels.length !== 0) {
-        let nextQualifiedLevel = Math.min(...nextLevels);
-        let nextDiscountValue = discount.levels[nextQualifiedLevel].value;
-        let neededQuantity = discount.levels[nextQualifiedLevel].quantity - itemQuantity;
+      if (nextDiscountLevel >= 0) {
+        let nextDiscountType = discount.levels[nextDiscountLevel].typeId;
+        let nextDiscountValue = discount.levels[nextDiscountLevel].value;
+        let neededQuantity = discount.levels[nextDiscountLevel].quantity - itemQuantity;
         mtvMessage = mtvMessage.replace('{quantity}', neededQuantity);
-  
-        // If discount type is Percentage discount
-        if (discount.levels[nextQualifiedLevel].typeId == 1) {
-          mtvMessage = mtvMessage.replace('{discount}', nextDiscountValue + '% Off');
-        }
-  
-        // If discount type is Fixed amount discount
-        if (discount.levels[nextQualifiedLevel].typeId == 2) {
-          mtvMessage = mtvMessage.replace('{discount}', '$' + nextDiscountValue + ' Off');
-        }
-        
-        // If discount type is Fixed price
-        if (discount.levels[nextQualifiedLevel].typeId == 3) {
-          let fixedAmount = nextDiscountValue;
-          let fixedPrice = price - fixedAmount;
-          mtvMessage = mtvMessage.replace('{discount}', '$' + nextDiscountValue + ' Off');
-        }
-  
-        // If discount type is Free gift
-        if (discount.levels[nextQualifiedLevel].typeId == 4) {
-          let giftId = nextDiscountValue;
-          let giftOutput = `1 Free Gift`;
-          mtvMessage = mtvMessage.replace('{discount}', giftOutput);
-        }
-  
-        // If discount type is Free shipping
-        if (discount.levels[nextQualifiedLevel].typeId == 5) {
-          mtvMessage = mtvMessage.replace('{discount}', 'Free shipping');
-        }
+        mtvMessage = window.outputMtvMessage(nextDiscountType, nextDiscountValue, mtvMessage);
       } else {
         mtvMessage = '';
       }
-
       item.querySelector('.discount-wholesale-motivation').innerHTML = mtvMessage;
     }
   });
 }
 
+window.outputMtvMessage = (discountType, nextDiscountValue, mtvMessage) => {
+  // If discount type is Percentage discount
+  if (discountType == 1) {
+    mtvMessage = mtvMessage.replace('{discount}', nextDiscountValue + '% Off');
+  }
+
+  // If discount type is Fixed amount discount
+  if (discountType == 2) {
+    mtvMessage = mtvMessage.replace('{discount}', '$' + nextDiscountValue + ' Off');
+  }
+  
+  // If discount type is Fixed price
+  if (discountType == 3) {
+    mtvMessage = mtvMessage.replace('{discount}', '$' + nextDiscountValue + ' Off');
+  }
+
+  // If discount type is Free gift
+  if (discountType == 4) {
+    mtvMessage = mtvMessage.replace('{discount}', '1 Free Gift');
+  }
+
+  // If discount type is Free shipping
+  if (discountType == 5) {
+    mtvMessage = mtvMessage.replace('{discount}', 'Free shipping');
+  }
+  return mtvMessage;
+}
+
+window.outputDiscountValue = (discountType, currentDiscountValue) => {
+  // If discount type is Percentage discount
+  if (discountType == 1) {
+    discountValueOutput = currentDiscountValue + '% Off';
+  }
+
+  // If discount type is Fixed amount discount
+  if (discountType == 2) {
+    discountValueOutput = '$' + currentDiscountValue + ' Off';
+  }
+  
+  // If discount type is Fixed price
+  if (discountType == 3) {
+    discountValueOutput = '$' + currentDiscountValue + ' Off';
+  }
+
+  // If discount type is Free gift
+  if (discountType == 4) {
+    discountValueOutput = 'Free Gift'
+  }
+
+  // If discount type is Free shipping
+  if (discountType == 5) {
+    discountValueOutput = 'Free Shipping'
+  }
+  return discountValueOutput;
+}
+
+window.calculateFinalItemPrice = (discountType, currentDiscountValue, itemPrice) => {
+  // If discount type is Percentage discount
+  if (discountType == 1) {
+    finalItemPrice = itemPrice - ((currentDiscountValue / 100) * itemPrice);
+  }
+
+  // If discount type is Fixed amount discount
+  if (discountType == 2) {
+    finalItemPrice = itemPrice - ((currentDiscountValue / 100) * itemPrice);
+  }
+  
+  // If discount type is Fixed price
+  if (discountType == 3) {
+    finalItemPrice = itemPrice - (currentDiscountValue * 100);
+  }
+
+  // If discount type is Free gift
+  if (discountType == 4) {
+    finalItemPrice = itemPrice;
+  }
+
+  // If discount type is Free shipping
+  if (discountType == 5) {
+    finalItemPrice = itemPrice;
+  }
+  return finalItemPrice;
+}
 
 window.getCurrentQualifiedDiscountOnCart = () => {
   const offers = window.sellyData.offers;
