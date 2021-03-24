@@ -727,6 +727,79 @@ window.calculateCurrentDiscountPrice = () => {
   });
 }
 
+// Popup Cart
+window.getNextQualifiedDiscountOnCart = () => {
+  const offers = window.sellyData.offers;
+  let items = document.querySelectorAll('.productRow');
+  items.forEach(item => {
+    let itemId = item.querySelector('.discount-wholesale-motivation').getAttribute('data-product-id');
+    let itemQuantity;
+    if (item.querySelector('.productRowQty input')) {
+      itemQuantity = item.querySelector('.productRowQty input').value;
+    } else {
+      return;
+    }
+
+    let discount = getProductDiscount(itemId, offers);
+    let mtvMessage = '';
+    if (Object.keys(discount).length !== 0) {
+      mtvMessage = discount.mtv_message;
+
+      let nextDiscountLevel = getProductNextDiscountLevel(itemQuantity, discount);
+    
+      if (nextDiscountLevel >= 0) {
+        let nextDiscountType = discount.levels[nextDiscountLevel].typeId;
+        let nextDiscountValue = discount.levels[nextDiscountLevel].value;
+        let neededQuantity = discount.levels[nextDiscountLevel].quantity - itemQuantity;
+        mtvMessage = mtvMessage.replace('{quantity}', neededQuantity);
+        mtvMessage = window.outputMtvMessage(nextDiscountType, nextDiscountValue, mtvMessage);
+      } else {
+        mtvMessage = '';
+      }
+      item.querySelector('.discount-wholesale-motivation').innerHTML = mtvMessage;
+    }
+  });
+}
+
+// Collection Page
+window.displayDiscountBadge = () => {
+  const offers = window.sellyData.offers;
+  let products = document.querySelectorAll('.add-to-cart-form');
+  products.forEach(product => {
+    let productData = product.querySelector('.product-data')
+    if (productData) {
+      let productId = productData.getAttribute('data-product-id');
+      let productUrl = productData.getAttribute('data-product-url');
+      const discount = getProductDiscount(productId, offers);
+      if (Object.keys(discount).length !== 0) {
+        let highestDiscountLevel = discount.levels.length - 1;
+        let highestDiscountValue = discount.levels[highestDiscountLevel].value;
+        let highestDiscountType = discount.levels[highestDiscountLevel].typeId;
+  
+        if (highestDiscountType == 1) {
+          productData.innerHTML = `<a href="${productUrl}" class="bulk-pricing">Buy bulk for up to ${highestDiscountValue}% Off...</a>`;
+        }
+  
+        if (highestDiscountType == 2) {
+          productData.innerHTML = `<a href="${productUrl}" class="bulk-pricing">Buy bulk for up to $${highestDiscountValue} Off...</a>`;
+        }
+  
+        if (highestDiscountType == 3) {
+          productData.innerHTML = `<a href="${productUrl}" class="bulk-pricing">Buy bulk for up to $${highestDiscountValue} Off...</a>`;
+        }
+  
+        if (highestDiscountType == 4) {
+          productData.innerHTML = `<a href="${productUrl}" class="bulk-pricing">Buy bulk to get Free Gift...</a>`;
+        }
+  
+        if (highestDiscountType == 5) {
+          productData.innerHTML = `<a href="${productUrl}" class="bulk-pricing">Buy bulk to get Free Gift...</a>`;
+        }
+      }
+    }
+  });
+}
+
 function getProductCurrentDiscountLevel(productQuantity, productDiscount) {
   let qualifiedLevels = [];
   productDiscount.levels.forEach((level, index) => {
@@ -808,40 +881,6 @@ function updateDiscountMessage(newPrice, discountType) {
     price.html(`<div>Your bulk price:</div>
       <div class="money" data-tov="${formattedPrice}" data-tovc="CAD" data-origin-value="${newPrice}" data-currency="CAD">${formattedPrice}</div>`);
   }
-}
-
-// Popup Cart
-window.getNextQualifiedDiscountOnCart = () => {
-  const offers = window.sellyData.offers;
-  let items = document.querySelectorAll('.productRow');
-  items.forEach(item => {
-    let itemId = item.querySelector('.discount-wholesale-motivation').getAttribute('data-product-id');
-    let itemQuantity;
-    if (item.querySelector('.productRowQty input')) {
-      itemQuantity = item.querySelector('.productRowQty input').value;
-    } else {
-      return;
-    }
-
-    let discount = getProductDiscount(itemId, offers);
-    let mtvMessage = '';
-    if (Object.keys(discount).length !== 0) {
-      mtvMessage = discount.mtv_message;
-
-      let nextDiscountLevel = getProductNextDiscountLevel(itemQuantity, discount);
-    
-      if (nextDiscountLevel >= 0) {
-        let nextDiscountType = discount.levels[nextDiscountLevel].typeId;
-        let nextDiscountValue = discount.levels[nextDiscountLevel].value;
-        let neededQuantity = discount.levels[nextDiscountLevel].quantity - itemQuantity;
-        mtvMessage = mtvMessage.replace('{quantity}', neededQuantity);
-        mtvMessage = window.outputMtvMessage(nextDiscountType, nextDiscountValue, mtvMessage);
-      } else {
-        mtvMessage = '';
-      }
-      item.querySelector('.discount-wholesale-motivation').innerHTML = mtvMessage;
-    }
-  });
 }
 
 window.outputMtvMessage = (discountType, nextDiscountValue, mtvMessage) => {
@@ -976,45 +1015,6 @@ window.getCurrentQualifiedDiscountOnCart = () => {
         item.querySelector('.currentDiscount').classList.remove('hidden');
       }
 
-    }
-  });
-}
-
-// Collection Page
-window.displayDiscountBadge = () => {
-  const offers = window.sellyData.offers;
-  let products = document.querySelectorAll('.add-to-cart-form');
-  products.forEach(product => {
-    let productData = product.querySelector('.product-data')
-    if (productData) {
-      let productId = productData.getAttribute('data-product-id');
-      let productUrl = productData.getAttribute('data-product-url');
-      const discount = getProductDiscount(productId, offers);
-      if (Object.keys(discount).length !== 0) {
-        let highestDiscountLevel = discount.levels.length - 1;
-        let highestDiscountValue = discount.levels[highestDiscountLevel].value;
-        let highestDiscountType = discount.levels[highestDiscountLevel].typeId;
-  
-        if (highestDiscountType == 1) {
-          productData.innerHTML = `<a href="${productUrl}" class="bulk-pricing">Buy bulk for up to ${highestDiscountValue}% Off...</a>`;
-        }
-  
-        if (highestDiscountType == 2) {
-          productData.innerHTML = `<a href="${productUrl}" class="bulk-pricing">Buy bulk for up to $${highestDiscountValue} Off...</a>`;
-        }
-  
-        if (highestDiscountType == 3) {
-          productData.innerHTML = `<a href="${productUrl}" class="bulk-pricing">Buy bulk for up to $${highestDiscountValue} Off...</a>`;
-        }
-  
-        if (highestDiscountType == 4) {
-          productData.innerHTML = `<a href="${productUrl}" class="bulk-pricing">Buy bulk to get Free Gift...</a>`;
-        }
-  
-        if (highestDiscountType == 5) {
-          productData.innerHTML = `<a href="${productUrl}" class="bulk-pricing">Buy bulk to get Free Gift...</a>`;
-        }
-      }
     }
   });
 }
