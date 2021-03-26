@@ -671,41 +671,14 @@ window.calculateCurrentDiscountPrice = () => {
         // Get the current volumn discount
         let currentDiscountLevel = getProductCurrentDiscountLevel(itemQuantity, discount);
         if (currentDiscountLevel >= 0) {
+          let currentDiscountType = discount.levels[currentDiscountLevel].typeId;
           let currentDiscountValue = discount.levels[currentDiscountLevel].value;
 
-          let discountPrice;
-          let discountType;
-  
-          // If discount type is Percentage discount
-          if (discount.levels[currentDiscountLevel].typeId == 1) {
-            discountPrice = originalPrice - (originalPrice * (currentDiscountValue / 100));
-          }
-  
-          // If discount type is Fixed amount discount
-          if (discount.levels[currentDiscountLevel].typeId == 2) {
-            discountPrice = ((originalPrice / 100) - currentDiscountValue)*100;
-          }
-          
-          // If discount type is Fixed price
-          if (discount.levels[currentDiscountLevel].typeId == 3) {
-            discountPrice = currentDiscountValue;
-          }
-  
-          // If discount type is Free gift
-          if (discount.levels[currentDiscountLevel].typeId == 4) {
-            discountPrice = originalPrice;
-            discountType = 'Free gift';
-          }
-  
-          // If discount type is Free shipping
-          if (discount.levels[currentDiscountLevel].typeId == 5) {
-            discountPrice = original_price;
-            discountType = 'Free shipping';
-          }
-          updateDiscountMessage(discountPrice, discountType);
+          let finalItemPrice = window.calculateFinalItemPrice(currentDiscountType, currentDiscountValue, originalPrice);
+          updateDiscountMessage(finalItemPrice, currentDiscountType);
+
         } else {
-          discountType = 'none';
-          updateDiscountMessage(originalPrice, discountType);
+          updateDiscountMessage(originalPrice);
         }
 
         // Get the next volumn discount
@@ -866,20 +839,26 @@ function getProductDiscount(currentProductId, offers) {
 }
 
 function updateDiscountMessage(newPrice, discountType) {
-  formattedPrice = Shopify.formatMoney(newPrice, app.data.money_format);
+  let formattedPrice = Shopify.formatMoney(newPrice, app.data.money_format);
   let price = $('.price-wholesale');
   let existingPrice = $('#productPrice');
   
-  if (discountType === "none") {
-    existingPrice.removeClass('linethrough');
-    price.html('');
-  } else if (discountType) {
-    existingPrice.addClass('linethrough');
-    formattedPrice = formattedPrice + ' + ' + discountType;
-  } else {
+  if (discountType) {
+    // If discount type is Free shipping
+    if (discountType == 4) {
+      formattedPrice = formattedPrice + ' + Free gift';
+    }
+
+    // If discount type is Free shipping
+    if (discountType == 5) {
+      formattedPrice = formattedPrice + ' + Free shipping';
+    }
     existingPrice.addClass('linethrough');
     price.html(`<div>Your bulk price:</div>
       <div class="money" data-tov="${formattedPrice}" data-tovc="CAD" data-origin-value="${newPrice}" data-currency="CAD">${formattedPrice}</div>`);
+  } else {
+    existingPrice.removeClass('linethrough');
+    price.html('');
   }
 }
 

@@ -359,7 +359,7 @@ jQuery(document).ready(function() {
             let currentDiscountValue = '';
 
             if (currentDiscountLevel >= 0) {
-              currentDiscountType = discount.levels[currentDiscountLevel].typeId;
+              let currentDiscountType = discount.levels[currentDiscountLevel].typeId;
               currentDiscountValue = discount.levels[currentDiscountLevel].value;
               discountValueOutput = window.outputDiscountValue(currentDiscountType, currentDiscountValue)
               finalItemPrice = window.calculateFinalItemPrice(currentDiscountType, currentDiscountValue, itemPrice);
