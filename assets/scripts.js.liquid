@@ -661,9 +661,10 @@ window.calculateCurrentDiscountPrice = () => {
 
   // Check if current item in cart
   $.getJSON('/cart.js', cart => {
+    let itemCount = 0;
     cart.items.forEach(item => {
       if (item.product_id === productId) {
-
+        itemCount++;
         itemQuantity = item.quantity;
         originalPrice = item.original_price;
         const discount = getProductDiscount(productId, offers);
@@ -695,6 +696,12 @@ window.calculateCurrentDiscountPrice = () => {
           mtvMessage = '';
         }
         document.querySelector('.motivational-message').innerHTML = mtvMessage;
+      } 
+
+      if (item.product_id !== productId && itemCount === 0) {
+        mtvMessage = '';
+        document.querySelector('.motivational-message').innerHTML = mtvMessage;
+        updateDiscountMessage(originalPrice);
       }
     });
   });
