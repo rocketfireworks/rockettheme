@@ -75,6 +75,8 @@
                             <span class="price money">{{ item.final_price | money }}</span><br >
                           {% else %}
                          	<span class="price money tdf-cart-item-p-p">{{ item.original_price | money }}</span>
+                           
+                          <span class="currentDiscount hidden"></span>
                           {% endif %}
                         
                         {%- if item.line_level_discount_allocations != blank -%}
