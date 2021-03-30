@@ -364,6 +364,8 @@ jQuery(document).ready(function() {
               discountValueOutput = window.outputDiscountValue(currentDiscountType, currentDiscountValue)
               finalItemPrice = window.calculateFinalItemPrice(currentDiscountType, currentDiscountValue, itemPrice);
               finalLinePrice = finalItemPrice * productRowQuantity;
+            } else {
+              currentDiscountClass = 'hidden';
             }
           } else {
             currentDiscountClass = 'hidden';
