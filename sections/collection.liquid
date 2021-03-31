@@ -64,12 +64,12 @@
                   {% assign descriptionSecondPart = descriptionParts | last %}
                 {% endif %}
               
-                <div class="container" data-section-id="{{ section.id }}" data-section-type="product-page-section" data-featured-product="true" data-reviews-stars="{% if section.settings.product_reviews or section.settings.show_product_reviews_stars %}true{% else %}false{% endif%}">   
-                  
+                <div id="featuredProduct" data-section-id="{{ section.id }}" data-section-type="product-page-section" data-featured-product="true" data-reviews-stars="{% if section.settings.product_reviews or section.settings.show_product_reviews_stars %}true{% else %}false{% endif%}">
+                  <h2 class="section-title">Featured Product</h2>
                   <div class="product-json">{{ product | json }}</div> 
                   <input id="product-handle" type="hidden" value="{{product.handle}}"/> <!--  using for JS -->
 
-                  <div id="featuredProduct">
+                  <div class="featured-product-wrapper">
 
                     {% if product.selected_or_first_available_variant.available %}
                     <link href="http://schema.org/InStock" />
@@ -86,9 +86,9 @@
                         <div class="product-details">
                             
                           <div class="product-title-inventory">
-                            <h1>
+                            <h3>
                               {{ product.title | escape }}  
-                            </h1>
+                            </h3>
                             <div class="prod_sku_container">
                               {% if section.settings.show_product_sku or section.settings.show_product_vendor or section.settings.show_product_quantity  %}
                               <div class="prod_sku_vend">

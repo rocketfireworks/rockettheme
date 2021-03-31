@@ -2901,6 +2901,32 @@ COLLECTION
   }
   #featuredProduct {
     margin-bottom: 30px;
+    border: 2px solid #107fa8;
+    .section-title {
+      color: #fff;
+      background-color: #107fa8;
+      padding: 5px 10px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+    .featured-product-wrapper {
+      padding: 0 10px 10px 10px;
+      h3 {
+        text-transform: uppercase;
+      }
+      #image-block .product_gallery .product_slides li a {
+        height: 250px;
+        @media (max-width: 768px) { 
+          height: 180px;
+        }
+        @media (max-width: 560px) { 
+          height: 110px;
+        }
+      }
+      .product-summary-container {
+        position: initial;
+      }
+    }
   }
   // Carousel
   .collection-grid {
