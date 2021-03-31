@@ -49,25 +49,27 @@
               <a href="javascript:void(0);" class="visible-xs offcanvas_filter_toggle"><i class="fa fa-filter"></i><small class="filter_text">{{ 'collections.general.filter_button' | t }}</small></a>
             </div>
 
-            {% if section.settings.featured_product %}
+            
+            {% if section.settings.enable_featured_product %}
+              {% if section.settings.featured_product %}
 
-              {% assign collection_link = collection.url %}
-              {% assign product = all_products[section.settings.featured_product] %}
+                {% assign collection_link = collection.url %}
+                {% assign product = all_products[section.settings.featured_product] %}
+                {% assign productDescriptionContent = product.description %}	
               {% assign productDescriptionContent = product.description %}	
-              {% assign descriptionParts = product.description | split: "<!-- split -->" %}
-              {% if descriptionParts.size > 1%}
-                {% assign descriptionFirstPart = descriptionParts | first %}
-                {% assign descriptionSecondPart = descriptionParts | last %}
-              {% endif %}
+                {% assign productDescriptionContent = product.description %}	
+                {% assign descriptionParts = product.description | split: "<!-- split -->" %}
+                {% if descriptionParts.size > 1%}
+                  {% assign descriptionFirstPart = descriptionParts | first %}
+                  {% assign descriptionSecondPart = descriptionParts | last %}
+                {% endif %}
               
-              <div>
-                
                 <div class="container" data-section-id="{{ section.id }}" data-section-type="product-page-section" data-featured-product="true" data-reviews-stars="{% if section.settings.product_reviews or section.settings.show_product_reviews_stars %}true{% else %}false{% endif%}">   
                   
                   <div class="product-json">{{ product | json }}</div> 
                   <input id="product-handle" type="hidden" value="{{product.handle}}"/> <!--  using for JS -->
 
-                  <div class="pro_main_c">
+                  <div id="featuredProduct">
 
                     {% if product.selected_or_first_available_variant.available %}
                     <link href="http://schema.org/InStock" />
@@ -343,7 +345,8 @@
                     {% endunless %}
                   </div>
                 </div>
-            
+              
+              {% endif %}
             {% endif %}
 
 
@@ -497,6 +500,11 @@
     {
       "type": "header",
       "content": "Featured Product"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_featured_product",
+      "label": "Enable Featured Product"
     },
     {
       "type": "product",
