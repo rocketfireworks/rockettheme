@@ -1,6 +1,3 @@
-
-
-
 {% if product.object_type == 'product' %}
   <form method="post" action="/cart/add" class="add-to-cart-form product-container">
     <input type="hidden" name="id" value="{{ product.variants.first.id }}" />
@@ -13,7 +10,7 @@
 
         {% if media.media_type == 'external_video' %}
         {% assign hasVideo = true %}
-        <div data-thumb="{{ media | img_url: '150x' }}" data-title="{{ product.title | escape }}" class="video_slide">
+        <div data-thumb="{{ media | img_url: '150x' }}" data-title="{{ product.title | escape }}" class="video_slide hidden">
           {% assign video = media.alt | split: 'src="' %}
           {% assign video = video[1] | split: '"' | first %}
           <div class="video-container {% if media.alt contains 'vimeo' %}vimeo{% else %}youtube{% endif %}">
@@ -23,8 +20,9 @@
         {% endif %}
 
       {% endfor %}
-
-      {% if hasVideo == false %}
+      {% if hasVideo == true %}
+      <div class="play-video"><i class="fas fa-play"></i>  Video</div>
+      {% endif %}
         <div class="spinner-cube">
           <div class="loadFacebookG"></div>
         </div>
@@ -39,8 +37,6 @@
             data-srcset="{{ product.featured_image.src | product_img_url: img_size}} 1x, {{ product.featured_image.src | product_img_url: img_size, scale: 2}} 2x, {{ product.featured_image.src | product_img_url: img_size, scale: 3}} 3x"
             alt="{{ product.featured_image.alt | escape }}" style="max-width: {{max_img_width}}" />
         </a>
-      {% endif %}
-      
     </div>
     
     <div class="product-details">
@@ -84,6 +80,7 @@
             {{settings.custom_price0_text }}
           </span>                    
           {% endunless %}
+          <div class="product-data" data-product-id="{{ product.id }}" data-product-url="{{ product.url }}" data-product-price="{{ product.price }}"></div>
         </div>
 
         <div class="qty product-page-qty">
