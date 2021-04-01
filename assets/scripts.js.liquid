@@ -2438,7 +2438,13 @@ theme.CollectionPageSection = (function() {
         window.location.href = data_url;
       }
     });
-
+    
+    $(".play-video").on("click", function(e) {
+      $(this).parent().find(".video_slide").removeClass("hidden");
+    })
+    $(".video_slide").on("click", function(e) {
+      $(this).addClass("hidden");
+    })
     window.invokeAfterSellyDataLoads(window.displayDiscountBadge);
   }
   return CollectionPageSection;
@@ -2505,6 +2511,12 @@ theme.CollectionGridPageSection = (function() {
     window.swatchSelection();
   }
 
+  $(".play-video").on("click", function(e) {
+    $(this).parent().find(".video_slide").removeClass("hidden");
+  })
+  $(".video_slide").on("click", function(e) {
+    $(this).addClass("hidden");
+  })
   window.invokeAfterSellyDataLoads(window.displayDiscountBadge);
 
   return CollectionGridPageSection;

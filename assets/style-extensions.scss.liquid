@@ -3030,14 +3030,46 @@ COLLECTION
     padding-top: 10px;
   }
 
-  .video-container {
-    opacity: 1;
-    .media {
-      height: 130px;
-      max-width: calc(130/9*16px);
-      display: flex;
-      margin: 0 auto;
-      padding-top: 0;
+  // Video button
+  .play-video {
+    position: absolute;
+    z-index: 1;
+    top: -5px;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 0.8em;
+    font-weight: 600;
+    background-color: #ffda57;
+    color: #525251;
+    &:hover {
+      color: initial;
+    }
+  }
+  .video_slide {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: #0000004a;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    .video-container {
+      opacity: 1;
+      position: fixed;
+      width: 100%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      .media {
+        height: 40vh;
+        max-width: calc(40/9*16vh);
+        display: flex;
+        margin: 0 auto;
+        padding-top: 0;
+      }
     }
   }
   .price .compare-price {

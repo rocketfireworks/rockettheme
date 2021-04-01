@@ -118,10 +118,10 @@
         {% assign hasVideo = false %}
       
         {% for media in product.media %}
-
           {% if media.media_type == 'external_video' %}
           {% assign hasVideo = true %}
-          <div data-thumb="{{ media | img_url: '150x' }}" data-title="{{ product.title | escape }}" class="video_slide">
+          
+          <div data-thumb="{{ media | img_url: '150x' }}" data-title="{{ product.title | escape }}" class="video_slide hidden">
             {% assign video = media.alt | split: 'src="' %}
             {% assign video = video[1] | split: '"' | first %}
             <div class="video-container {% if media.alt contains 'vimeo' %}vimeo{% else %}youtube{% endif %}">
@@ -132,22 +132,23 @@
 
         {% endfor %}
 
-        {% if hasVideo == false %}
-          <div class="spinner-cube">
-            <div class="loadFacebookG"></div>
-          </div>
-            <a href="{{ product.url | within: collection }}" class="product-image-link">
-              <noscript>
-                <img
-                  srcset="{{ product.featured_image.src | product_img_url: img_size}} 1x, {{ product.featured_image.src | product_img_url: img_size, scale: 2}} 2x, {{ product.featured_image.src | product_img_url: img_size, scale: 3}} 3x"
-                  alt="{{ product.featured_image.alt | escape }}">
-              </noscript>
-              {% assign img_url = product.featured_image.src | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
-              <img class="lazyload" src="{{ product.featured_image.src | img_url: "300x"}}"
-                data-srcset="{{ product.featured_image.src | product_img_url: img_size}} 1x, {{ product.featured_image.src | product_img_url: img_size, scale: 2}} 2x, {{ product.featured_image.src | product_img_url: img_size, scale: 3}} 3x"
-                alt="{{ product.featured_image.alt | escape }}" style="max-width: {{max_img_width}}" />
-            </a>
+        {% if hasVideo == true %}
+          <div class="play-video"><i class="fas fa-play"></i>  Video</div>
         {% endif %}
+        <div class="spinner-cube">
+          <div class="loadFacebookG"></div>
+        </div>
+        <a href="{{ product.url | within: collection }}" class="product-image-link">
+          <noscript>
+            <img
+              srcset="{{ product.featured_image.src | product_img_url: img_size}} 1x, {{ product.featured_image.src | product_img_url: img_size, scale: 2}} 2x, {{ product.featured_image.src | product_img_url: img_size, scale: 3}} 3x"
+              alt="{{ product.featured_image.alt | escape }}">
+          </noscript>
+          {% assign img_url = product.featured_image.src | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+          <img class="lazyload" src="{{ product.featured_image.src | img_url: "300x"}}"
+            data-srcset="{{ product.featured_image.src | product_img_url: img_size}} 1x, {{ product.featured_image.src | product_img_url: img_size, scale: 2}} 2x, {{ product.featured_image.src | product_img_url: img_size, scale: 3}} 3x"
+            alt="{{ product.featured_image.alt | escape }}" style="max-width: {{max_img_width}}" />
+        </a>
 
         {% if section.settings.collection_overlay %}
           <div class="overlay">
