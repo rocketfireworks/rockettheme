@@ -3050,7 +3050,20 @@ COLLECTION
     font-size: 1.75em;
     font-weight: bold;
   }
-
+  // Treedify discount
+  .product-data {
+    width: 100%;
+    font-weight: 400;
+    .bulk-pricing {
+      padding: 2px;
+      margin-top: 2px;
+      border-radius: 5px;
+      font-size: 0.85em;
+      font-weight: 600;
+      background-color: #ffda57;
+      color: #525251;
+    }
+  }
   // Filters
   #content {
     .filter_c {
@@ -3627,11 +3640,9 @@ TREEDIFY
   font-weight: 400;
 }
 
-// Collection page 
-.product-data {
-  width: 100%;
-  font-weight: 400;
-}
 #content .main_box .desc .bulk-pricing {
-  color: #107fa8;
+  color: #525251;
+  &:hover {
+    color: initial;
+  }
 }

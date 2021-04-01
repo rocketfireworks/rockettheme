@@ -750,30 +750,33 @@ window.displayDiscountBadge = () => {
     if (productData) {
       let productId = productData.getAttribute('data-product-id');
       let productUrl = productData.getAttribute('data-product-url');
+      let productPrice = productData.getAttribute('data-product-price');
       const discount = getProductDiscount(productId, offers);
       if (Object.keys(discount).length !== 0) {
         let highestDiscountLevel = discount.levels.length - 1;
         let highestDiscountValue = discount.levels[highestDiscountLevel].value;
         let highestDiscountType = discount.levels[highestDiscountLevel].typeId;
-  
+        let discountPrice = window.calculateFinalItemPrice(highestDiscountType, highestDiscountValue, productPrice);
+        let formattedDiscountPrice = Shopify.formatMoney(discountPrice, app.data.money_format);
+
         if (highestDiscountType == 1) {
-          productData.innerHTML = `<a href="${productUrl}" class="bulk-pricing">Buy bulk for up to ${highestDiscountValue}% Off...</a>`;
+          productData.innerHTML = `<a href="${productUrl}" class="bulk-pricing">Bulk Price: ${formattedDiscountPrice}...</a>`;
         }
   
         if (highestDiscountType == 2) {
-          productData.innerHTML = `<a href="${productUrl}" class="bulk-pricing">Buy bulk for up to $${highestDiscountValue} Off...</a>`;
+          productData.innerHTML = `<a href="${productUrl}" class="bulk-pricing">Bulk Price: ${formattedDiscountPrice}...</a>`;
         }
   
         if (highestDiscountType == 3) {
-          productData.innerHTML = `<a href="${productUrl}" class="bulk-pricing">Buy bulk for up to $${highestDiscountValue} Off...</a>`;
+          productData.innerHTML = `<a href="${productUrl}" class="bulk-pricing">Off...${formattedDiscountPrice}...</a>`;
         }
   
         if (highestDiscountType == 4) {
-          productData.innerHTML = `<a href="${productUrl}" class="bulk-pricing">Buy bulk to get Free Gift...</a>`;
+          productData.innerHTML = `<a href="${productUrl}" class="bulk-pricing">Bulk buy for Free Gift...</a>`;
         }
   
         if (highestDiscountType == 5) {
-          productData.innerHTML = `<a href="${productUrl}" class="bulk-pricing">Buy bulk to get Free Gift...</a>`;
+          productData.innerHTML = `<a href="${productUrl}" class="bulk-pricing">Bulk buy for Free Shipping...</a>`;
         }
       }
     }
