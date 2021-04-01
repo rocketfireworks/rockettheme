@@ -3438,6 +3438,9 @@ CHECKOUT CART
         }
         &:nth-child(3) {
           width: 16%;
+          position: relative;
+          text-align: left;
+          overflow: visible;
         }
         &:nth-child(4) {
           width: 21%;
@@ -3472,13 +3475,30 @@ CHECKOUT CART
           color: #c94344;
         }
       }
-      @media (max-width: 480px) {
+      // @media (max-width: 560px) {
+      //   .productRowPrice .currentDiscount {
+      //     bottom: 25px;
+      //   }
+      // }
+      @media (max-width: 790px) {
+        li:nth-child(1) {
+          width: initial;
+        }
+      }
+      @media (max-width: 560px) {
         display: flex;
         flex-flow: wrap;
         align-items: center;
         padding: 5px 0;
         li {
           padding: 0;
+          &:nth-child(1) {
+            width: 40%;
+          }
+          &:nth-child(2) {
+            width: 60%;
+            text-align: left;
+          }
           &:nth-child(3) {
             float: none;
             width: 33%;
@@ -3494,6 +3514,9 @@ CHECKOUT CART
             width: 33%;
             padding-bottom: 0;
           }
+        }
+        .productRowPrice .currentDiscount {
+          bottom: 0;
         }
       }
       .photo-column-header {
@@ -3537,31 +3560,30 @@ CHECKOUT CART
     padding: 0;
   }
   @media (max-width: 790px) {
-    .cart_tbl {
-      ul {
-        li:nth-child(1) {
-          width: initial;
-        }
-      }
-    }
     width: initial;
   }
   @media (max-width: 560px) {
+    .cart_tbl {
+      .title_row {
+        display: none;
+      }
+    }
     .cart_btn {
       button.next_btn {
         padding: 0 1em;
         font-size: 18px;
       }
     }
+    .mobile-label-price, .mobile-label-quantity, .mobile-label-total {
+      display: block;
+      width: 100%;
+      text-align: center;
+    }
+    .mobile-label-price {
+      text-align: left;
+    }
   }
   @media (max-width: 480px) {
-    .cart_tbl {
-      ul {
-        li:nth-child(1) {
-          width: 40%;
-        }
-      }
-    }
     .cart_c .cart_btn a.info_btn,
     .cart_btn button.next_btn {
       margin: 0 auto;
@@ -3656,7 +3678,7 @@ TREEDIFY
   white-space: nowrap;
   font-size: 11px;
   font-weight: 600;
-  background-color: #149436;
+  background-color: #C94344;
   color: white;
   @media (max-width: 560px) {
     bottom: 0;
