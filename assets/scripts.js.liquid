@@ -662,6 +662,8 @@ window.calculateCurrentDiscountPrice = () => {
   // Check if current item in cart
   $.getJSON('/cart.js', cart => {
     let itemCount = 0;
+    let itemQuantity = 0;
+    let originalPrice = 0;
     cart.items.forEach(item => {
       if (item.product_id === productId) {
         itemCount++;

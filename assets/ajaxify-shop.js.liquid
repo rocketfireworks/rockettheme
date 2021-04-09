@@ -443,21 +443,40 @@ jQuery(document).ready(function() {
             
           }
           
-          
-
-          var row = '<ul class="productRow"><li class="productRowImg"><div class="product-image-container"><a href="' + cart.items[i].url + 
-              '" class="product-image-link"><img src="' + Shopify.addImageSize(cart.items[i].image,'small') + '" alt="' + cart.items[i].title + 
-              '"></a></div></li><li class="productRowTitle"><h5 class="'+cart.items[i].id+'"><a href="' + cart.items[i].url + 
-              '" class="item-name">' + cart.items[i].product_title + 
-              '</a></h5><p class="product-type">'+title+'</p><p>'+propertiesText+'</p><div class="discount-wholesale-motivation">' + mtvMessage + '</div></li><li class="productRowPrice"><p class="mobile-label-price">{{ 'cart.general.price' | t }}</p>'+ itemPriceContent + ' ' + item_discounts_html + '<span class="currentDiscount ' +  currentDiscountClass + '">' + discountValueOutput + '</span></li><li class="productRowQuantity">';
+          var row = `
+          <ul class="productRow">
+            <li class="productRowImg">
+              <div class="product-image-container">
+                <a href="${cart.items[i].url}" class="product-image-link">
+                  <img src="${Shopify.addImageSize(cart.items[i].image,'small')}" alt="${cart.items[i].title}">
+                </a>
+              </div>
+            </li>
+            <li class="productRowTitle">
+              <h5 class="${cart.items[i].id}">
+                <a href="${cart.items[i].url}" class="item-name">${cart.items[i].product_title}</a>
+              </h5>
+              <p class="product-type">${title}</p>
+              <p>${propertiesText}</p>
+              <div class="discount-wholesale-motivation">${mtvMessage}</div>
+            </li>
+            <li class="productRowPrice">
+              <p class="mobile-label-price">{{ 'cart.general.price' | t }}</p>${itemPriceContent} ${item_discounts_html}'<span class="currentDiscount ${currentDiscountClass}">${discountValueOutput}</span>
+            </li>
+            <li class="productRowQuantity">`;
               
-              if (cart.items[i].id != '32047066972241') {
-              	row+='<p class="mobile-label-quantity">{{ 'cart.general.quantity' | t }}</p><a class="minus_btn"></a><input type="text" name="updates[]" class="txtbox number_val_input" min="0" id="updates_'+cart.items[i].id+'" data-id="'+cart.items[i].id+'" value="'+cart.items[i].quantity+'" /><a class="plus_btn"></a>'+
-              '<div class="ajaxcart__errors error-popup ajaxcart__item__'+cart.items[i].id+'__errors">{{ 'cart.general.error' | t }}</div>';   
-              }
+            if (cart.items[i].id != '32047066972241') {
+              row += `
+              <p class="mobile-label-quantity">{{ 'cart.general.quantity' | t }}</p>
+              <a class="minus_btn"></a><input type="text" name="updates[]" class="txtbox number_val_input" min="0" id="updates_${cart.items[i].id}" data-id="${cart.items[i].id}" value="${cart.items[i].quantity}" /><a class="plus_btn"></a>
+              <div class="ajaxcart__errors error-popup ajaxcart__item__${cart.items[i].id}__errors">{{ 'cart.general.error' | t }}</div>`;   
+            }
           
-              row += '</li><li class="productRowTotal"><p class="mobile-label-total">{{ 'cart.general.total' | t }}</p>'+linePriceContent + 
-              '</li><hr class="line_items_separator"></ul>';
+            row += `</li>
+              <li class="productRowTotal">
+                <p class="mobile-label-total">{{ 'cart.general.total' | t }}</p>${linePriceContent}
+              </li><hr class="line_items_separator">
+            </ul>`;
           
           toAppend.push(row);
         };

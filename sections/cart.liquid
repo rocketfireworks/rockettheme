@@ -91,7 +91,8 @@
                         
                       </li>
                       <li class="productRowQty">
-                        {%- if item.id != 32047066972241 -%}
+                        {% assign itemSKU = item.sku | split: "-" %}
+                        {%- if itemSKU.first != "bonusreward" -%}
                         <p class="mobile-label-quantity">{{ 'cart.general.quantity' | t }}</p>
                         <a class="minus_btn"></a>
                         <input type="text" id="updates_{{ item.id }}" name="updates[]" class="txtbox number_val_input" value="{{ item.quantity }}" min="0" data-id="{{ item.id }}">
