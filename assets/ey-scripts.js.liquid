@@ -10,106 +10,142 @@ $(document).ready(function () {
   });
 
   // Bonus Rewards
-
-  checkCartForBonusProduct();
-
-  var cartItems = $(".productRow");
-
-  calcNewTotal_load();
-  /*    $(".cart_tbl").on("click", ".minus_btn", function () {
-       // console.log("the minus btn has been clicked");
-        calcNewTotal_load();
-    });
-
-    $(".cart_tbl").on("click", ".plus_btn", function () {
-       // console.log("the plus btn has been clicked");
-        calcNewTotal_click();
-    });
- 
-    jQuery(".cart_tbl").on("change",".number_val_input", function (event) {
-        calcNewTotal_load();
-    });
-*/
-  //console.log(cartItems);
-
+  checkCartForBonusReward();
 });
 
-function checkCartForBonusProduct() {
-  var level1Bonus = 150.0;
-  if (typeof $(".bonusTotal")[0] != "undefined") {
-    var bonusTotal = $(".bonusTotal")[0].innerText;
-  }
-  var cartItems = $(".productRowTitle h5");
-  var cartRewardPresent = false;
+function checkCartForBonusReward() {
+  const level1Bonus = 150.0;
+  let bonusId = '';
+  let qualifiedBonusId = '';
+  let bonusTotal = 0;
+  let cartRewardPresent = false;
 
-  for (var i = 0; i < cartItems.length; i++) {
-    if (cartItems[i].className == 32047066972241) {
-      cartRewardPresent = true;
-      console.log("reward found");
-    } else {
-      console.log("reward not found");
-    }
-  }
+  // Get cart
+  $.getJSON('/cart.js', cart => {
+    console.log(cart);
+    let finalLoop = 0;
+    cart.items.forEach(item => {
 
-  if (bonusTotal > level1Bonus && cartRewardPresent == false) {
-    Shopify.addItem(32047066972241, 1);
-  }
-}
+      // Get bonus item in cart
+      let firstString = item.sku.split('-');
+      if (firstString[0] === 'bonusreward') {
+        cartRewardPresent = true;
+        bonusId = item.id;
+      };
 
-function calcNewTotal() {
-  var cartItemsTotals = $(".productRowTotal .price");
-  var cartItems = $(".productRow");
-  var url = "";
-  var tags = "";
-  var productQuantity = "";
-  var newBonusTotal = 0;
+      // Get item tags
+      let url = item.url;
+      let quantity = item.quantity;
 
-  for (var i = 0; i < cartItems.length; i++) {
-    url = $(".productRowTitle a")[i].href;
-    if ($(".productRowQuantity").length > 0) {
-      if (typeof $(".productRowQuantity input")[i] != "undefined") {
-        productQuantity = $(".productRowQuantity input")[i].value;
-      }
-    } else {
-      if (typeof $(".productRowQty input")[i] != "undefined") {
-        productQuantity = $(".productRowQty input")[i].value;
-      }
-    }
+      let settings = {
+        type: "GET",
+        url: url + ".js",
+        contentType: "application/json",
+        dataType: "json",
+      };
 
-    var finalLoop = 1;
-
-    var settings = {
-      type: "GET",
-      url: url + ".js",
-      contentType: "application/json",
-      dataType: "json",
-    };
-
-    $.ajax(settings).done(function (results) {
-      tags = results.product.tags;
-
-      tags = tags.split(", ");
-
-      console.log(results);
-      //debugger;
-      for (var i = 0; i < tags.length; i++) {
-        if (tags[i] == "FW" || tags[i] == "FWSEQ") {
-          newBonusTotal =
-            newBonusTotal +
-            parseFloat(results.product.variants[0].price) * productQuantity;
+      $.ajax(settings).done(results => {
+        let tags = results.product.tags;
+        tags = tags.split(", ");
+        for (let i = 0; i < tags.length; i++) {
+          if (tags[i] == "FW" || tags[i] == "FWSEQ") {
+            bonusTotal = bonusTotal +
+                         parseFloat(results.product.variants[0].price) * quantity;
+          }
         }
-      }
 
       finalLoop++;
-
-      if (finalLoop == cartItems.length) {
-        newBonusRewards(newBonusTotal);
+      if (finalLoop == cart.items.length) {
+        if (bonusTotal > level1Bonus) {
+          // Get qualified bonus item
+          let qualifiedBonusLevel = getQualifiedBonusLevel(bonusTotal);
+          let qualifiedBonusId = getQualifiedBonusId(qualifiedBonusLevel);
+          if (cartRewardPresent == false) {
+            debugger;
+            Shopify.addItem(qualifiedBonusId, 1);
+          } else {
+            if (bonusId !== qualifiedBonusId) {
+              removeBonus(bonusId);
+              Shopify.addItem(qualifiedBonusId, 1);
+            }
+          }
+        } else {
+          if (bonusId) {
+            removeBonus(bonusId);
+          }
+        }
+        newBonusRewards(bonusTotal);
       }
+      });
     });
-  }
+    
+  });
 }
+
+function getQualifiedBonusLevel(fwTotal) {
+  const level1 = 150.0;
+  const level2 = 200.0;
+  const level3 = 300.0;
+  const level4 = 400.0;
+  const level5 = 500.0;
+  const level6 = 600.0;
+  const level7 = 750.0;
+  const level8 = 1000.0;
+  const level9 = 1250.0;
+  const level10 = 1500.0;
+  let qualifiedLevel = 0;
+
+  if (fwTotal > level1) {
+    qualifiedLevel = 1;
+  }
+  if (fwTotal > level2) {
+    qualifiedLevel = 2;
+  }
+  if (fwTotal > level3) {
+    qualifiedLevel = 3;
+  }
+  if (fwTotal > level4) {
+    qualifiedLevel = 4;
+  }
+  if (fwTotal > level5) {
+    qualifiedLevel = 5;
+  }
+  if (fwTotal > level6) {
+    qualifiedLevel = 6;
+  }
+  if (fwTotal > level7) {
+    qualifiedLevel = 7;
+  }
+  if (fwTotal > level8) {
+    qualifiedLevel = 8;
+  }
+  if (fwTotal > level9) {
+    qualifiedLevel = 9;
+  }
+  if (fwTotal > level10) {
+    qualifiedLevel = 10;
+  }
+  return qualifiedLevel;
+}
+
+function getQualifiedBonusId(qualifiedLevel) {
+  const bonusId = [
+    39310116454589,
+    39310858420413,
+    39310870708413,
+    39310873297085,
+    39310876115133,
+    39310879195325,
+    39310912815293,
+    39310917664957,
+    39310919336125,
+    39310922252477
+  ];
+  let qualifiedBonusId = bonusId[qualifiedLevel - 1];
+  return qualifiedBonusId;
+}
+
 function newBonusRewards(bonusTotal) {
-  console.log("bonus total : " + bonusTotal);
   cartLevelReward = $(".cartRewardsProgram .cartRewardLevel")[0];
   untilBonus = $(".cartRewardsProgram .untilBonusNum")[0];
   var progressBar = $("#cartrewardsBar")[0];
@@ -133,271 +169,78 @@ function newBonusRewards(bonusTotal) {
     untilBonusNum = (level2Bonus - bonusTotal).toFixed(2);
     diffNum = level2Bonus - level1Bonus;
     progressBarWidth = calculateProgressBar(untilBonusNum, level2Bonus);
+
   } else if (bonusTotal >= level2Bonus && bonusTotal < level3Bonus) {
     cartLevelReward.innerText = "Level 3 Rewards";
     untilBonusNum = (level3Bonus - bonusTotal).toFixed(2);
     diffNum = level3Bonus - level2Bonus;
     progressBarWidth = calculateProgressBar(untilBonusNum, level3Bonus);
+
   } else if (bonusTotal >= level3Bonus && bonusTotal < level4Bonus) {
     cartLevelReward.innerText = "Level 4 Rewards";
     untilBonusNum = (level4Bonus - bonusTotal).toFixed(2);
     diffNum = level4Bonus - level3Bonus;
     progressBarWidth = calculateProgressBar(untilBonusNum, level4Bonus);
+
   } else if (bonusTotal >= level4Bonus && bonusTotal < level5Bonus) {
     cartLevelReward.innerText = "Level 5 Rewards";
     untilBonusNum = (level5Bonus - bonusTotal).toFixed(2);
     diffNum = level5Bonus - level4Bonus;
     progressBarWidth = calculateProgressBar(untilBonusNum, level5Bonus);
+
   } else if (bonusTotal >= level5Bonus && bonusTotal < level6Bonus) {
     cartLevelReward.innerText = "Level 6 Rewards";
     untilBonusNum = (level6Bonus - bonusTotal).toFixed(2);
     diffNum = level6Bonus - level5Bonus;
     progressBarWidth = calculateProgressBar(untilBonusNum, level6Bonus);
+
   } else if (bonusTotal >= level6Bonus && bonusTotal < level7Bonus) {
     cartLevelReward.innerText = "Level 7 Rewards";
     untilBonusNum = (level7Bonus - bonusTotal).toFixed(2);
     diffNum = level7Bonus - level6Bonus;
     progressBarWidth = calculateProgressBar(untilBonusNum, level7Bonus);
+
   } else if (bonusTotal >= level7Bonus && bonusTotal < level8Bonus) {
     cartLevelReward.innerText = "Level 8 Rewards";
     untilBonusNum = (level8Bonus - bonusTotal).toFixed(2);
     diffNum = level8Bonus - level7Bonus;
     progressBarWidth = calculateProgressBar(untilBonusNum, level8Bonus);
+
   } else if (bonusTotal >= level8Bonus && bonusTotal < level9Bonus) {
     cartLevelReward.innerText = "Level 9 Rewards";
     untilBonusNum = (level9Bonus - bonusTotal).toFixed(2);
     diffNum = level9Bonus - level8Bonus;
     progressBarWidth = calculateProgressBar(untilBonusNum, level9Bonus);
+
   } else if (bonusTotal >= level9Bonus && bonusTotal < level10Bonus) {
     cartLevelReward.innerText = "Level 10 Rewards";
     untilBonusNum = (level10Bonus - bonusTotal).toFixed(2);
     diffNum = level10Bonus - level9Bonus;
     progressBarWidth = calculateProgressBar(untilBonusNum, level10Bonus);
+
   } else if (bonusTotal > level10Bonus) {
     $('.cartRewardsProgram')[0].innerHTML = `<p>The maximum bonus reward has been added to your cart</p>`
   }
 
   progressBarWidth = progressBarWidth.toString();
   var progressBarWidth_filled = 100 - progressBarWidth;
-  console.log("progress output : " + progressBarWidth_filled);
   $("#cartrewardsBar").css("width", progressBarWidth_filled + "%");
-  //$(".untilBonus").text(untilBonusNum);
-  //console.log(progressBarWidth_filled);
-  //console.log(untilBonusNum);
 
   untilBonus.innerText = untilBonusNum;
   //progressBar.style.width = progressBarWidth;
 
-  if (bonusTotal < level1Bonus) {
-    removeThis();
-  }
 }
 
 function calculateProgressBar(low, high) {
   return Math.floor((low * 100) / high);
 }
 
-function removeThis() {
-  jQuery.post("/cart/update.js", "updates[" + 32047066972241 + "]=0");
+function removeBonus(bonusProductId) {
+  jQuery.post("/cart/update.js", "updates[" + bonusProductId + "]=0");
 
   setTimeout(function () {
     location.reload();
-  }, 1000);
-}
-
-// console.log(cartItemsTags);
-// console.log(cartItemsTotals);
-
-// for(var i = 0; i < cartItems.length; i++){
-//   console.log(cartItems[i]);
-//     for(var q = 0; q < tag.length; q++){
-//       console.log(cartItemsTags[q]);
-//       if(cartItemsTags[q] == 'FW' || cartItemsTags[q] == 'FWSEQ'){
-//         bonusTotal = bonusTotal + cartItemsTotals[i].innerText.substr(1);
-//       }
-//     }
-//   }
-// }
-
-function calcNewTotal_load() {
-  var cartItemsTotals = $(".productRowTotal .price");
-  var cartItems = $("#content .productRow");
-  var url = "";
-  var tags = "";
-  var productQuantity = "";
-  var newBonusTotal = 0;
-
-  var current_count = 1;
-  var total_count = cartItems.length;
-
-  calculate_bonus_recursive(current_count, total_count, newBonusTotal);
-}
-
-function calculate_bonus_recursive(current_count, total_count, newBonusTotal) {
-  var current_index = current_count - 1;
-  var url = "";
-  if (typeof $("#content .productRowTitle a")[current_index] != "undefined") {
-    url = $("#content .productRowTitle a")[current_index].href;
-  }
-  var productQuantity = "";
-
-  if ($(".productRowQuantity").length > 0) {
-    if (
-      $(".productRowQuantity").eq(current_index).find("input.number_val_input")
-        .length > 0
-    ) {
-      productQuantity = $("#content .productRowQuantity")
-        .eq(current_index)
-        .find("input.number_val_input")
-        .val();
-    } else {
-      productQuantity = 0;
-    }
-  } else {
-    if (
-      $("#content .productRowQty")
-        .eq(current_index)
-        .find("input.number_val_input").length > 0
-    ) {
-      productQuantity = $("#content .productRowQty")
-        .eq(current_index)
-        .find("input.number_val_input")
-        .val();
-    } else {
-      productQuantity = 0;
-    }
-  }
-  //console.log("product QTY : "+productQuantity);
-  var settings = {
-    type: "GET",
-    url: url + ".js",
-    contentType: "application/json",
-    dataType: "json",
-  };
-
-  $.ajax(settings).done(function (results) {
-    tags = results.product.tags;
-
-    tags = tags.split(", ");
-
-    //console.log(results);
-    //debugger;
-    for (var i = 0; i < tags.length; i++) {
-      if (tags[i] == "FW" || tags[i] == "FWSEQ") {
-        newBonusTotal =
-          newBonusTotal +
-          parseFloat(results.product.variants[0].price) * productQuantity;
-      }
-    }
-
-    if (current_count < total_count) {
-      current_count = current_count + 1;
-      calculate_bonus_recursive(current_count, total_count, newBonusTotal);
-    } else {
-      newBonusRewards_load(newBonusTotal);
-    }
-  });
-}
-function newBonusRewards_load(bonusTotal) {
-  cartLevelReward = $("#content .cartRewardsProgram .cartRewardLevel")[0];
-  untilBonus = $("#content .cartRewardsProgram .untilBonusNum")[0];
-  var progressBar = $("#content #cartrewardsBar")[0];
-
-  var level1Bonus = 150.0;
-  var level2Bonus = 200.0;
-  var level3Bonus = 300.0;
-  var level4Bonus = 400.0;
-  var level5Bonus = 500.0;
-  var level6Bonus = 600.0;
-  var level7Bonus = 750.0;
-  var level8Bonus = 1000.0;
-  var level9Bonus = 1250.0;
-  var level10Bonus = 1500.0;
-  var diffNum = 0;
-  var untilBonusNum = 0;
-  var progressBarWidth = 0;
-  var currentreward_level = "";
-
-  if (bonusTotal < level1Bonus) {
-    cartLevelReward.innerText = "Level 1 Rewards";
-    currentreward_level = "Bonus Rewards - Level 0";
-    untilBonusNum = (level1Bonus - bonusTotal).toFixed(2);
-    diffNum = level1Bonus;
-    progressBarWidth = calculateProgressBar(untilBonusNum, level1Bonus);
-  } else if (bonusTotal >= level1Bonus && bonusTotal < level2Bonus) {
-    cartLevelReward.innerText = "Level 2 Rewards";
-    currentreward_level = "Bonus Rewards - Level 1";
-    untilBonusNum = (level2Bonus - bonusTotal).toFixed(2);
-    diffNum = level2Bonus - level1Bonus;
-    progressBarWidth = calculateProgressBar(untilBonusNum, level2Bonus);
-  } else if (bonusTotal >= level2Bonus && bonusTotal < level3Bonus) {
-    cartLevelReward.innerText = "Level 3 Rewards";
-    currentreward_level = "Bonus Rewards - Level 2";
-    untilBonusNum = (level3Bonus - bonusTotal).toFixed(2);
-    diffNum = level3Bonus - level2Bonus;
-    progressBarWidth = calculateProgressBar(untilBonusNum, level3Bonus);
-  } else if (bonusTotal >= level3Bonus && bonusTotal < level4Bonus) {
-    cartLevelReward.innerText = "Level 4 Rewards";
-    currentreward_level = "Bonus Rewards - Level 3";
-    untilBonusNum = (level4Bonus - bonusTotal).toFixed(2);
-    diffNum = level4Bonus - level3Bonus;
-    progressBarWidth = calculateProgressBar(untilBonusNum, level4Bonus);
-  } else if (bonusTotal >= level4Bonus && bonusTotal < level5Bonus) {
-    cartLevelReward.innerText = "Level 5 Rewards";
-    currentreward_level = "Bonus Rewards - Level 4";
-    untilBonusNum = (level5Bonus - bonusTotal).toFixed(2);
-    diffNum = level5Bonus - level4Bonus;
-    progressBarWidth = calculateProgressBar(untilBonusNum, level5Bonus);
-  } else if (bonusTotal >= level5Bonus && bonusTotal < level6Bonus) {
-    cartLevelReward.innerText = "Level 6 Rewards";
-    currentreward_level = "Bonus Rewards - Level 5";
-    untilBonusNum = (level6Bonus - bonusTotal).toFixed(2);
-    diffNum = level6Bonus - level5Bonus;
-    progressBarWidth = calculateProgressBar(untilBonusNum, level6Bonus);
-  } else if (bonusTotal >= level6Bonus && bonusTotal < level7Bonus) {
-    cartLevelReward.innerText = "Level 7 Rewards";
-    currentreward_level = "Bonus Rewards - Level 6";
-    untilBonusNum = (level7Bonus - bonusTotal).toFixed(2);
-    diffNum = level7Bonus - level6Bonus;
-    progressBarWidth = calculateProgressBar(untilBonusNum, level7Bonus);
-  } else if (bonusTotal >= level7Bonus && bonusTotal < level8Bonus) {
-    cartLevelReward.innerText = "Level 8 Rewards";
-    currentreward_level = "Bonus Rewards - Level 7";
-    untilBonusNum = (level8Bonus - bonusTotal).toFixed(2);
-    diffNum = level8Bonus - level7Bonus;
-    progressBarWidth = calculateProgressBar(untilBonusNum, level8Bonus);
-  } else if (bonusTotal >= level8Bonus && bonusTotal < level9Bonus) {
-    cartLevelReward.innerText = "Level 9 Rewards";
-    currentreward_level = "Bonus Rewards - Level 8";
-    untilBonusNum = (level9Bonus - bonusTotal).toFixed(2);
-    diffNum = level9Bonus - level8Bonus;
-    progressBarWidth = calculateProgressBar(untilBonusNum, level9Bonus);
-  } else if (bonusTotal >= level9Bonus && bonusTotal < level10Bonus) {
-    cartLevelReward.innerText = "Level 10 Rewards";
-    currentreward_level = "Bonus Rewards - Level 9";
-    untilBonusNum = (level10Bonus - bonusTotal).toFixed(2);
-    diffNum = level10Bonus - level9Bonus;
-    progressBarWidth = calculateProgressBar(untilBonusNum, level10Bonus);
-  } else if (bonusTotal > level10Bonus) {
-    cartLevelReward.innerText = "Level 10 Rewards (Max reward reached)";
-    currentreward_level = "Bonus Rewards - Level 10";
-    // $('.cartRewardsProgram').html(`<p>The maximum bonus reward has been added to your cart</p>`);
-  }
-
-  progressBarWidth = progressBarWidth.toString();
-  var progressBarWidth_filled = 100 - progressBarWidth;
-  $("#content #cartrewardsBar").css("width", progressBarWidth_filled + "%");
-  $("#content .untilBonusNum").text(untilBonusNum);
-  $("#content .bonusTotal").text(bonusTotal);
-  $(".cartRewardsProgram p:first").text("FW & FWSEQ Total is: $" + bonusTotal);
-
-  $(".32047066972241 a").text(currentreward_level);
-
-  if ($(".32047066972241").length > 0) {
-    if (bonusTotal < level1Bonus) {
-      removeThis();
-    }
-  }
+  }, 500);
 }
 
 function showSubMenu() {

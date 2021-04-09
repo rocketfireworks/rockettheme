@@ -1,6 +1,6 @@
 {% assign featured_image = product.selected_or_first_available_variant.featured_image | default: product.featured_image %}
 
-<div data-featured="{{featured_image.id}}" data-image="{{image.id}}">
+<div data-featured="{{featured_image.id}}" data-image="{{image.id}}" class="product-image-link">
 
   {% if product.images.size == 0 %}
   <img src="{{ '' | product_img_url: '1024x' }}" alt="Product Image">

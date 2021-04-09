@@ -444,7 +444,6 @@ jQuery(document).ready(function() {
           }
           
           
-          }
 
           var row = '<ul class="productRow"><li class="productRowImg"><div class="product-image-container"><a href="' + cart.items[i].url + 
               '" class="product-image-link"><img src="' + Shopify.addImageSize(cart.items[i].image,'small') + '" alt="' + cart.items[i].title + 
@@ -565,6 +564,7 @@ jQuery(document).ready(function() {
     }
     
     window.invokeAfterSellyDataLoads(window.calculateCurrentDiscountPrice);
+    checkCartForBonusReward();
   }
 
   $(".cart_tbl").on("focusout", "textarea", function () {
@@ -607,7 +607,7 @@ jQuery(document).ready(function() {
       if (updatedItem.length && totalUpdatedItemQty >= quantity) {
         Shopify.updateQuickCart(cart);
         inputEl.val(quantity);
-        calcNewTotal_load();
+        // calcNewTotal_load();
       }
       else {
         jQuery('.ajaxcart__item__' + id + '__errors').show().delay(3000).fadeOut();
@@ -639,13 +639,13 @@ jQuery(document).ready(function() {
       var line = $(this).closest("ul").index() + 1;
       Shopify.changeItemByLine(line, quantity, function (cart) {
         Shopify.updateQuickCart(cart);
-        calcNewTotal_load();
+        // calcNewTotal_load();
       });
     }
     else {
       Shopify.removeItem(id, function (cart) {
         Shopify.updateQuickCart(cart);
-        calcNewTotal_load();
+        // calcNewTotal_load();
       });
     }
 
@@ -688,7 +688,7 @@ jQuery(document).ready(function() {
         if (updatedItem.length && totalUpdatedItemQty >= quantity) {
           Shopify.updateQuickCart(cart);
           inputEl.val(quantity);
-          calcNewTotal_load();
+          // calcNewTotal_load();
         }
         else {
           jQuery('.ajaxcart__item__' + id + '__errors').show().delay(2000).fadeOut();
