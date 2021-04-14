@@ -2443,10 +2443,15 @@ theme.CollectionPageSection = (function() {
     
     $(".play-video").on("click", function(e) {
       $(this).parent().find(".video_slide").removeClass("hidden");
-    })
+    });
     $(".video_slide").on("click", function(e) {
       $(this).addClass("hidden");
-    })
+    });
+    $("body").on("keyup", function(e) {
+      if (e.key == "Escape" &&  $(".video_slide").not(".hidden")) {
+        $(".video_slide").addClass("hidden");
+      }
+    });
     window.invokeAfterSellyDataLoads(window.displayDiscountBadge);
   }
   return CollectionPageSection;
@@ -2515,10 +2520,15 @@ theme.CollectionGridPageSection = (function() {
 
   $(".play-video").on("click", function(e) {
     $(this).parent().find(".video_slide").removeClass("hidden");
-  })
+  });
   $(".video_slide").on("click", function(e) {
     $(this).addClass("hidden");
-  })
+  });
+  $("body").on("keyup", function(e) {
+    if (e.key == "Escape" && $(".video_slide").not(".hidden")) {
+      $(".video_slide").addClass("hidden");
+    }
+  });
   window.invokeAfterSellyDataLoads(window.displayDiscountBadge);
 
   return CollectionGridPageSection;
