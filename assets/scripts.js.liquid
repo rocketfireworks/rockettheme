@@ -2441,6 +2441,34 @@ theme.CollectionPageSection = (function() {
       }
     });
     
+    var windowWidth = window.innerWidth;
+    var windowHeight = window.innerHeight;
+    var mediaWidth;
+    var mediaHeight;
+
+    setMediaSize(windowWidth, windowHeight)
+
+    window.addEventListener('resize', function(e){
+      mediaWidth = e.target.innerWidth;
+      mediaHeight = e.target.innerHeight;
+      console.log(mediaHeight)
+      setMediaSize(windowWidth, windowHeight)
+    });
+
+    function setMediaSize(mediaWidth, mediaHeight) {
+      if (mediaWidth >= mediaHeight) {
+        mediaHeight = '80vh';
+        mediaWidth = 80/9*16 + 'vh';
+        $('.video-container .media').css('width', mediaWidth);
+        $('.video-container .media').css('height', mediaHeight);
+      } else {
+        mediaWidth = '80vw';
+        mediaHeight = 80/16*9 + 'vw';
+        $('.video-container .media').css('width', mediaWidth);
+        $('.video-container .media').css('height', mediaHeight);
+      }
+    }
+
     $(".play-video").on("click", function(e) {
       $(this).parent().find(".video_slide").removeClass("hidden");
     });
@@ -2518,6 +2546,33 @@ theme.CollectionGridPageSection = (function() {
     window.swatchSelection();
   }
 
+  var windowWidth = window.innerWidth;
+  var windowHeight = window.innerHeight;
+  var mediaWidth;
+  var mediaHeight;
+
+  setMediaSize(windowWidth, windowHeight)
+
+  window.addEventListener('resize', function(e){
+    mediaWidth = e.target.innerWidth;
+    mediaHeight = e.target.innerHeight;
+    console.log(mediaHeight)
+    setMediaSize(windowWidth, windowHeight)
+  });
+
+  function setMediaSize(mediaWidth, mediaHeight) {
+    if (mediaWidth >= mediaHeight) {
+      mediaHeight = '60vh';
+      mediaWidth = 60/9*16 + 'vh';
+      $('.video-container .media').css('width', mediaWidth);
+      $('.video-container .media').css('height', mediaHeight);
+    } else {
+      mediaWidth = '80vw';
+      mediaHeight = 80/16*9 + 'vw';
+      $('.video-container .media').css('width', mediaWidth);
+      $('.video-container .media').css('height', mediaHeight);
+    }
+  }
   $(".play-video").on("click", function(e) {
     $(this).parent().find(".video_slide").removeClass("hidden");
   });

@@ -3103,6 +3103,10 @@ COLLECTION
     &:hover {
       color: initial;
     }
+    @media (max-width: 1200px) {
+      top: initial;
+      bottom: 0;
+    }
   }
   .video_slide {
     position: fixed;
@@ -3114,15 +3118,13 @@ COLLECTION
     z-index: 1000;
     .video-container {
       opacity: 1;
-      position: fixed;
       width: 100%;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      border: 2px solid white;
       .media {
-        height: 40vh;
-        max-width: calc(40/9*16vh);
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border: 2px solid white;
         display: flex;
         margin: 0 auto;
         padding-top: 0;
@@ -3161,6 +3163,9 @@ COLLECTION
       font-weight: 600;
       background-color: #ffda57;
       color: #525251;
+    }
+    @media (max-width: 1200px) {
+      width: fit-content;
     }
   }
   // Filters
