@@ -2451,14 +2451,13 @@ theme.CollectionPageSection = (function() {
     window.addEventListener('resize', function(e){
       mediaWidth = e.target.innerWidth;
       mediaHeight = e.target.innerHeight;
-      console.log(mediaHeight)
-      setMediaSize(windowWidth, windowHeight)
+      setMediaSize(mediaWidth, mediaHeight);
     });
 
     function setMediaSize(mediaWidth, mediaHeight) {
       if (mediaWidth >= mediaHeight) {
-        mediaHeight = '80vh';
-        mediaWidth = 80/9*16 + 'vh';
+        mediaHeight = '60vh';
+        mediaWidth = 60/9*16 + 'vh';
         $('.video-container .media').css('width', mediaWidth);
         $('.video-container .media').css('height', mediaHeight);
       } else {
@@ -2556,8 +2555,7 @@ theme.CollectionGridPageSection = (function() {
   window.addEventListener('resize', function(e){
     mediaWidth = e.target.innerWidth;
     mediaHeight = e.target.innerHeight;
-    console.log(mediaHeight)
-    setMediaSize(windowWidth, windowHeight)
+    setMediaSize(mediaWidth, mediaHeight)
   });
 
   function setMediaSize(mediaWidth, mediaHeight) {
