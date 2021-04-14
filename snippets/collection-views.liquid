@@ -1,7 +1,7 @@
 <div class="collection-view">
-  <a title="{{ 'collections.general.list_view' | t }}" class="btn btn-default change-view{% unless template contains 'list' %} active-filter{% endunless %} mr5" data-view="grid">
+  <a title="Grid view" class="btn btn-default change-view{% unless template contains 'list' %} active-filter{% endunless %} mr5" data-view="grid">
     <i class="fas fa-th-large"></i>
-  </a><a title="List view" class="btn btn-default change-view{% if template contains 'list' %} active-filter{% endif %} ml5 mr5" data-view="list">
+  </a><a title="{{ 'collections.general.list_view' | t }}" class="btn btn-default change-view{% if template contains 'list' %} active-filter{% endif %} ml5 mr5" data-view="list">
     <i class="fas fa-list"></i>
   </a>
 </div>
@@ -10,6 +10,9 @@
   function replaceUrlParam(url, paramName, paramValue) {
     var pattern = new RegExp('('+paramName+'=).*?(&|$)');
     var newUrl = url.replace(pattern,'$1' + paramValue + '$2');
+    if ( !pattern.test(newUrl) ) {
+      newUrl = newUrl + (newUrl.indexOf('?')>0 ? '&' : '?') + paramName + '=' + paramValue;
+    }
     return newUrl;
   }
 
