@@ -762,11 +762,11 @@ window.displayDiscountBadge = () => {
         let formattedDiscountPrice = Shopify.formatMoney(discountPrice, app.data.money_format);
 
         if (highestDiscountType == 1) {
-          productData.innerHTML = `<a href="${productUrl}" class="bulk-pricing">Bulk Price: ${formattedDiscountPrice}...</a>`;
+          productData.innerHTML = `<a href="${productUrl}" class="bulk-pricing">Bulk Deal: ${formattedDiscountPrice}...</a>`;
         }
   
         if (highestDiscountType == 2) {
-          productData.innerHTML = `<a href="${productUrl}" class="bulk-pricing">Bulk Price: ${formattedDiscountPrice}...</a>`;
+          productData.innerHTML = `<a href="${productUrl}" class="bulk-pricing">Bulk Deal: ${formattedDiscountPrice}...</a>`;
         }
   
         if (highestDiscountType == 3) {
