@@ -2964,6 +2964,20 @@ SEARCH RESULT
       background-color: #ffda57;
       color: #525251;
     }
+    &.hide-large {
+      display: none;
+    }
+    @media (max-width: 991px) {
+      display: none;
+      &.hide-large {
+        position: absolute;
+        width: fit-content;
+        display: block;
+        bottom: 0;
+        right: 0;
+        z-index: 1;
+      }
+    }
   }
 }
 

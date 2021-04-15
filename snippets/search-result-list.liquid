@@ -26,20 +26,23 @@
       {% if hasVideo == true %}
       <div class="play-video"><i class="fas fa-play"></i>  Video</div>
       {% endif %}
-        <div class="spinner-cube">
-          <div class="loadFacebookG"></div>
-        </div>
-        <a href="{{ product.url | within: collection }}" class="product-image-link">
-          <noscript>
-            <img
-              srcset="{{ product.featured_image.src | product_img_url: img_size}} 1x, {{ product.featured_image.src | product_img_url: img_size, scale: 2}} 2x, {{ product.featured_image.src | product_img_url: img_size, scale: 3}} 3x"
-              alt="{{ product.featured_image.alt | escape }}">
-          </noscript>
-          {% assign img_url = product.featured_image.src | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
-          <img class="lazyload" src="{{ product.featured_image.src | img_url: "300x"}}"
-            data-srcset="{{ product.featured_image.src | product_img_url: img_size}} 1x, {{ product.featured_image.src | product_img_url: img_size, scale: 2}} 2x, {{ product.featured_image.src | product_img_url: img_size, scale: 3}} 3x"
-            alt="{{ product.featured_image.alt | escape }}" style="max-width: {{max_img_width}}" />
-        </a>
+
+      <div class="product-data hide-large" data-product-id="{{ product.id }}" data-product-url="{{ product.url }}" data-product-price="{{ product.price }}"></div>
+
+      <div class="spinner-cube">
+        <div class="loadFacebookG"></div>
+      </div>
+      <a href="{{ product.url | within: collection }}" class="product-image-link">
+        <noscript>
+          <img
+            srcset="{{ product.featured_image.src | product_img_url: img_size}} 1x, {{ product.featured_image.src | product_img_url: img_size, scale: 2}} 2x, {{ product.featured_image.src | product_img_url: img_size, scale: 3}} 3x"
+            alt="{{ product.featured_image.alt | escape }}">
+        </noscript>
+        {% assign img_url = product.featured_image.src | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+        <img class="lazyload" src="{{ product.featured_image.src | img_url: "300x"}}"
+          data-srcset="{{ product.featured_image.src | product_img_url: img_size}} 1x, {{ product.featured_image.src | product_img_url: img_size, scale: 2}} 2x, {{ product.featured_image.src | product_img_url: img_size, scale: 3}} 3x"
+          alt="{{ product.featured_image.alt | escape }}" style="max-width: {{max_img_width}}" />
+      </a>
     </div>
     
     <div class="product-details">
