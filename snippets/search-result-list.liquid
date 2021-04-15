@@ -10,12 +10,14 @@
 
         {% if media.media_type == 'external_video' %}
         {% assign hasVideo = true %}
-          <div class="video-close"><i class="fas fa-times"></i></div>
         <div data-thumb="{{ media | img_url: '150x' }}" data-title="{{ product.title | escape }}" class="video_lightbox video_slide hidden">
           {% assign video = media.alt | split: 'src="' %}
           {% assign video = video[1] | split: '"' | first %}
           <div class="video-container {% if media.alt contains 'vimeo' %}vimeo{% else %}youtube{% endif %}">
-            <div class="media" data-media-id="{{ media.id }}">{{ media | external_video_tag }}</div>
+            <div class="media" data-media-id="{{ media.id }}">
+              <div class="video-close"><i class="fas fa-times"></i></div>
+              {{ media | external_video_tag }}
+            </div>
           </div>
         </div>
         {% endif %}
