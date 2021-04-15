@@ -2458,30 +2458,30 @@ theme.CollectionPageSection = (function() {
       if (mediaWidth >= mediaHeight) {
         mediaHeight = '60vh';
         mediaWidth = 60/9*16 + 'vh';
-        $('.video-container .media').css('width', mediaWidth);
-        $('.video-container .media').css('height', mediaHeight);
+        $('.video_lightbox .media').css('width', mediaWidth);
+        $('.video_lightbox .media').css('height', mediaHeight);
       } else {
         mediaWidth = '80vw';
         mediaHeight = 80/16*9 + 'vw';
-        $('.video-container .media').css('width', mediaWidth);
-        $('.video-container .media').css('height', mediaHeight);
+        $('.video_lightbox .media').css('width', mediaWidth);
+        $('.video_lightbox .media').css('height', mediaHeight);
       }
     }
 
     $(".play-video").on("click", function(e) {
-      $(this).parent().find(".video_slide").removeClass("hidden");
+      $(this).parent().find(".video_lightbox").removeClass("hidden");
     });
-    $(".video_slide").on("click", function(e) {
+    $(".video_lightbox").on("click", function(e) {
       $(this).addClass("hidden");
     });
     $("body").on("keyup", function(e) {
-      if (e.key == "Escape" &&  $(".video_slide").not(".hidden")) {
-        $(".video_slide").addClass("hidden");
+      if (e.key == "Escape" &&  $(".video_lightbox").not(".hidden")) {
+        $(".video_lightbox").addClass("hidden");
       }
     });
     window.invokeAfterSellyDataLoads(window.displayDiscountBadge);
   }
-  return CollectionPageSection;
+  return CollectionPageSection; 
 })();
 
 theme.CollectionPageSection.prototype = _.assignIn({}, theme.CollectionPageSection.prototype, {
@@ -2557,29 +2557,28 @@ theme.CollectionGridPageSection = (function() {
     mediaHeight = e.target.innerHeight;
     setMediaSize(mediaWidth, mediaHeight)
   });
-
   function setMediaSize(mediaWidth, mediaHeight) {
     if (mediaWidth >= mediaHeight) {
       mediaHeight = '60vh';
       mediaWidth = 60/9*16 + 'vh';
-      $('.video-container .media').css('width', mediaWidth);
-      $('.video-container .media').css('height', mediaHeight);
+      $('.video_lightbox .media').css('width', mediaWidth);
+      $('.video_lightbox .media').css('height', mediaHeight);
     } else {
       mediaWidth = '80vw';
       mediaHeight = 80/16*9 + 'vw';
-      $('.video-container .media').css('width', mediaWidth);
-      $('.video-container .media').css('height', mediaHeight);
+      $('.video_lightbox .media').css('width', mediaWidth);
+      $('.video_lightbox .media').css('height', mediaHeight);
     }
   }
   $(".play-video").on("click", function(e) {
-    $(this).parent().find(".video_slide").removeClass("hidden");
+    $(this).parent().find(".video_lightbox").removeClass("hidden");
   });
-  $(".video_slide").on("click", function(e) {
+  $(".video_lightbox").on("click", function(e) {
     $(this).addClass("hidden");
   });
   $("body").on("keyup", function(e) {
-    if (e.key == "Escape" && $(".video_slide").not(".hidden")) {
-      $(".video_slide").addClass("hidden");
+    if (e.key == "Escape" &&  $(".video_lightbox").not(".hidden")) {
+      $(".video_lightbox").addClass("hidden");
     }
   });
   window.invokeAfterSellyDataLoads(window.displayDiscountBadge);

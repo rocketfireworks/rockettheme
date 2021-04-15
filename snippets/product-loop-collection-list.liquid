@@ -41,7 +41,7 @@
         {% if media.media_type == 'external_video' %}
         {% assign hasVideo = true %}
         
-        <div data-thumb="{{ media | img_url: '150x' }}" data-title="{{ product.title | escape }}" class="video_slide hidden">
+        <div data-thumb="{{ media | img_url: '150x' }}" data-title="{{ product.title | escape }}" class="video_lightbox video_slide hidden">
           {% assign video = media.alt | split: 'src="' %}
           {% assign video = video[1] | split: '"' | first %}
           <div class="video-container {% if media.alt contains 'vimeo' %}vimeo{% else %}youtube{% endif %}">
