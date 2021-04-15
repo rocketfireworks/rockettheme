@@ -3105,6 +3105,28 @@ COLLECTION
         }
       }
     }
+    .product-data {
+      &.hide-large {
+        display: none;
+      }
+      @media (max-width: 1200px) {
+        display: none;
+        &.hide-large {
+          position: absolute;
+          width: fit-content;
+          display: block;
+          bottom: 0;
+          right: 0;
+          z-index: 1;
+        }
+      }
+    }
+    .play-video {
+      @media (max-width: 1200px) {
+        top: initial;
+        bottom: 0;
+      }
+    }
   }
 
   .collection-view-grid {
@@ -3128,10 +3150,6 @@ COLLECTION
     color: #525251;
     &:hover {
       color: initial;
-    }
-    @media (max-width: 1200px) {
-      top: initial;
-      bottom: 0;
     }
   }
   .video_slide {
@@ -3198,9 +3216,6 @@ COLLECTION
       font-weight: 600;
       background-color: #ffda57;
       color: #525251;
-    }
-    @media (max-width: 1200px) {
-      width: fit-content;
     }
   }
   // Filters
