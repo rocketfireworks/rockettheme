@@ -63,8 +63,8 @@
                   {% assign descriptionSecondPart = descriptionParts | last %}
                 {% endif %}
               
-                <div id="featuredProduct" data-section-id="{{ section.id }}" data-section-type="product-page-section" data-featured-product="true" data-reviews-stars="{% if section.settings.product_reviews or section.settings.show_product_reviews_stars %}true{% else %}false{% endif%}">   
-                  <h2 class="section-title">Featured Product</h2>
+                <div id="featuredProduct" data-section-id="{{ section.id }}" data-section-type="product-page-section" data-featured-product="true" data-reviews-stars="{% if section.settings.product_reviews or section.settings.show_product_reviews_stars %}true{% else %}false{% endif%}">
+                  <h2 class="section-title"><i class="fas fa-star"></i> Featured Product</h2>
                   <div class="product-json">{{ product | json }}</div> 
                   <input id="product-handle" type="hidden" value="{{product.handle}}"/> <!--  using for JS -->
 
