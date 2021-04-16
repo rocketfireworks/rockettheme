@@ -1,6 +1,6 @@
 <div id="content">
-  <div class="custom-container">
-    <div class="custom-title clearfix container-narrowx">
+  <div class="custom-container free-fireworks">
+    <div class="container-narrow">
       <h1>{{ page.title | escape }}</h1>
     </div>
     <div class="page_content">
@@ -13,7 +13,8 @@
               
             {% if shop.metafields.custom_fields["level_1"] != blank %}
               <div class="bonus-tiered">
-                <h3 class="bonus-tiered-title">{{ shop.metafields.custom_fields["level_1"] }}</h3>
+                <h3 class="bonus-tiered-title">Level 1</h3>
+                <p>Order over<span class="bonus-tiered-price"> $150 </span>and receive FREE</p>
                 <div class="bonus-tiered-products">
                   {% assign product_refs = shop.metafields.custom_fields["level_1"] | split: "|" %}
                   {% for product_handle in product_refs %}
@@ -34,6 +35,7 @@
             {% if shop.metafields.custom_fields["level_2"] != blank %}
               <div class="bonus-tiered">
                 <h3 class="bonus-tiered-title">Level 2</h3>
+                <p>Order over<span class="bonus-tiered-price"> $300 </span>and receive FREE</p>
                 <div class="bonus-tiered-products">
                   {% assign product_refs = shop.metafields.custom_fields["level_2"] | split: "|" %}
                   {% for product_handle in product_refs %}
@@ -54,6 +56,7 @@
             {% if shop.metafields.custom_fields["level_3"] != blank %}
               <div class="bonus-tiered">
                 <h3 class="bonus-tiered-title">Level 3</h3>
+                <p>Order over<span class="bonus-tiered-price"> $400 </span>and receive FREE</p>
                 <div class="bonus-tiered-products">
                   {% assign product_refs = shop.metafields.custom_fields["level_3"] | split: "|" %}
                   {% for product_handle in product_refs %}
@@ -74,6 +77,7 @@
             {% if shop.metafields.custom_fields["level_4"] != blank %}
               <div class="bonus-tiered">
                 <h3 class="bonus-tiered-title">Level 4</h3>
+                <p>Order over<span class="bonus-tiered-price"> $500 </span>and receive FREE</p>
                 <div class="bonus-tiered-products">
                   {% assign product_refs = shop.metafields.custom_fields["level_4"] | split: "|" %}
                   {% for product_handle in product_refs %}
@@ -94,6 +98,7 @@
             {% if shop.metafields.custom_fields["level_5"] != blank %}
               <div class="bonus-tiered">
                 <h3 class="bonus-tiered-title">Level 5</h3>
+                <p>Order over<span class="bonus-tiered-price"> $600 </span>and receive FREE</p>
                 <div class="bonus-tiered-products">
                   {% assign product_refs = shop.metafields.custom_fields["level_5"] | split: "|" %}
                   {% for product_handle in product_refs %}
