@@ -3861,3 +3861,45 @@ BONUS REWARDS
     }
   }
 }
+
+.promo-bar {
+  .promo-bar-container {
+    width: fit-content;
+    margin: auto;
+    padding: 0 10px;
+  }
+  .bonusRewards-message {
+    text-transform: uppercase;
+    b {
+      color: brown;
+    }
+  }
+  .bonusRewards-progress {
+    background-color: #a2aab1;
+    .bonusRewards-bar {
+      background-color: #107fa8;
+    }
+  }
+  a {
+    &:hover, &:focus {
+      b, strong {
+        color: #c94344;
+      }
+    }
+  }
+}
+.bonusRewards-progress {
+  display: block;
+  width: 100%;
+  background-color: #c4cdd5;
+  border-radius: 5px;
+}
+
+.bonusRewards-bar {
+  display: block;
+  width: 1%;
+  height: 10px;
+  background-color: #3dbfde;
+  border-radius: 5px;
+  transition: all 1s;
+}

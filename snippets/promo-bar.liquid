@@ -1,11 +1,16 @@
 <div class="promo-bar">
-  {% if section.settings.promo_bar_link != blank %}
-  <a href="{{section.settings.promo_bar_link}}">
-  {% endif %}
-  
-  	{{ section.settings.promo_bar_text }}
-  
-  {% if section.settings.promo_bar_link != blank %}
-  </a>
-  {% endif %}
+  <div class="promo-bar-container">
+    {% if section.settings.promo_bar_link != blank %}
+    <a href="{{section.settings.promo_bar_link}}">
+    {% endif %}
+    
+      {{ section.settings.promo_bar_text }}
+    
+    {% if section.settings.promo_bar_link != blank %}
+    </a>
+    {% endif %}
+    <div class="bonusRewards-progress">
+      <div class="bonusRewards-bar"></div>
+    </div>
+  </div>
 </div>

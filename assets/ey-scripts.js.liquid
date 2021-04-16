@@ -67,13 +67,19 @@ function checkCartForBonusReward() {
         } else {
           removeBonus(bonusId);
         }
-        if ($('.template-cart').length !== 0) {
-          let rewardResults = calculateBonusReward(bonusTotal, levels);
-          let cartLevelReward = $(".cartRewardsProgram .cartRewardLevel")[0];cartLevelReward.innerText = `Level ${qualifiedBonusLevel} Rewards`;
-          let untilBonus = $(".cartRewardsProgram .untilBonusNum")[0];
+        
+        let rewardResults = calculateBonusReward(bonusTotal, levels);
+        progressBarWidth = rewardResults.progress.toString();
+        let progressBarWidth_filled = 100 - progressBarWidth;
 
-          progressBarWidth = rewardResults.progress.toString();
-          let progressBarWidth_filled = 100 - progressBarWidth;
+        $('.promo-bar .bonusRewards-message').html(`You're <b>$${rewardResults.remaining}</b> away from <b>Bonus Rewards Level ${qualifiedBonusLevel + 1}</b>! <i class="fa fa-chevron-right"></i>`);
+        $('.promo-bar .bonusRewards-bar').css("width", progressBarWidth_filled + "%");
+        untilBonus.innerText = rewardResults.remaining;
+
+        if ($('.template-cart').length !== 0) {
+
+          let cartLevelReward = $(".cartRewardsProgram .cartRewardLevel")[0];cartLevelReward.innerText = `Level ${qualifiedBonusLevel + 1} Rewards`;
+          let untilBonus = $(".cartRewardsProgram .untilBonusNum")[0];
           $("#cartrewardsBar").css("width", progressBarWidth_filled + "%");
           untilBonus.innerText = rewardResults.remaining;
         }
