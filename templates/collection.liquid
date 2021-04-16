@@ -1,1 +1,10 @@
-{% section "collection" %}
+{% capture collection_featured_product %}{% section "collection-featured-product" %}{% endcapture %}
+{% assign collection_featured_product = collection_featured_product | replace: 'data-shopify-editor-section', '' %}
+
+{% capture collection_template_content %}
+  {% section 'collection' %}
+{% endcapture %}
+
+{% assign collection_template_content = collection_template_content | replace: "%%collection-featured-product%%", collection_featured_product %}
+
+{{ collection_template_content }}
