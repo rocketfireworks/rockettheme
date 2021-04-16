@@ -451,8 +451,8 @@
         "type": "header",
         "settings": {
           "show_announcement": true,
-          "promo_bar_text": "GET REWARDS LIKE FREE FIREWORKS! Details <i class=\"fa fa-chevron-right\"><\/i>",
-          "promo_bar_link": "#",
+          "promo_bar_text": "<span class=\"bonusRewards-message\">GET REWARDS LIKE FREE FIREWORKS! Details <i class=\"fa fa-chevron-right\"><\/i><\/span>",
+          "promo_bar_link": "shopify:\/\/pages\/free-fireworks",
           "head_promobar": 14,
           "header_style": "header2",
           "logo": "shopify:\/\/shop_images\/logo_6cb16038-1947-4e1c-8e41-b0186cd14b39.png",
@@ -833,13 +833,17 @@
           "show_item_count": false
         }
       },
-      "collection-grid": {
-        "type": "collection-grid",
+      "collection-list": {
+        "type": "collection-list",
         "settings": {
+          "product_grid_layout": 4,
           "pagination_limit": 12,
           "use_infinite_scroll": true,
           "show_featured_image": true,
           "show_grid_type": false,
+          "show_sale_badge": true,
+          "collection_overlay": false,
+          "show_product_reviews_stars": false,
           "show_collection_sidebar": true,
           "collection_sidebar_filters": "none",
           "group_array": "",
@@ -848,6 +852,13 @@
           "show_sidebar_vendors": false,
           "sidebar_collection_sale_collection": "",
           "sidebar_collection_product_count": 4
+        }
+      },
+      "collection-featured-product": {
+        "type": "collection-featured-product",
+        "settings": {
+          "enable_featured_product": true,
+          "featured_product": "perseids"
         }
       }
     },
