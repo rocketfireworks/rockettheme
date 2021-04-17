@@ -176,12 +176,10 @@
                         {% endfor %}
                       </select>
                       
-                      {% if section.settings.show_product_swatches %}
-                        {% if product.variants.size > 1 %}
-                          {% for option in product.options %}
-                            {% include 'swatch' with option %}
-                          {% endfor %}
-                        {% endif %}
+                      {% if product.variants.size > 1 %}
+                        {% for option in product.options %}
+                          {% include 'swatch' with option %}
+                        {% endfor %}
                       {% endif %}
                     </div>
                   </div>
