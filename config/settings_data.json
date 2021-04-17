@@ -451,7 +451,7 @@
         "type": "header",
         "settings": {
           "show_announcement": true,
-          "promo_bar_text": "<span class=\"bonusRewards-message\">GET REWARDS LIKE FREE FIREWORKS! Details <i class=\"fa fa-chevron-right\"><\/i><\/span>",
+          "promo_bar_text": "<span class=\"bonusRewards-message\">GET REWARDS LIKE FREE FIREWORKS! Details <i class=\"fas fa-gift\"><\/i><\/span>",
           "promo_bar_link": "shopify:\/\/pages\/free-fireworks",
           "head_promobar": 14,
           "header_style": "header2",
@@ -858,7 +858,7 @@
         "type": "collection-featured-product",
         "settings": {
           "enable_featured_product": true,
-          "featured_product": "perseids"
+          "featured_product": "10m-fairy-lights"
         }
       }
     },
