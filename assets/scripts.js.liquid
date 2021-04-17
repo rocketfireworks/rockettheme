@@ -2712,8 +2712,9 @@ theme.ProductPageSection = (function() {
 
       // Pause video if not active
       var selectedMedia = getSelectedMediaLi(selectedThumbId).find('#player');
-      if (selectedMedia.length) {
-        
+      if (selectedMedia.length === 0) {
+        videoPlayer($('.product_slides').find('#player')[0], "pauseVideo");
+        $('.product_slides').find('#player').removeClass('playing');
       }
     }
 
