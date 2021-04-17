@@ -76,9 +76,8 @@ function checkCartForBonusReward() {
         progressBarWidth = rewardResults.progress.toString();
         let progressBarWidth_filled = 100 - progressBarWidth;
 
-        $('.promo-bar .bonusRewards-message').html(`You're <b>$${rewardResults.remaining}</b> away from <b>Bonus Rewards Level ${qualifiedBonusLevel + 1}</b>! <i class="fa fa-chevron-right"></i>`);
+        $('.promo-bar .bonusRewards-message').html(`You're <b>$${rewardResults.remaining}</b> away from <b>Bonus Rewards Level ${qualifiedBonusLevel + 1}</b>! <i class="fas fa-gift"></i>`);
         $('.promo-bar .bonusRewards-bar').css("width", progressBarWidth_filled + "%");
-        untilBonus.innerText = rewardResults.remaining;
 
         if ($('.template-cart').length !== 0) {
 

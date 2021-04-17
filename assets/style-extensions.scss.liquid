@@ -3887,28 +3887,30 @@ BONUS REWARDS
 
 .promo-bar {
   .promo-bar-container {
-    width: fit-content;
     margin: auto;
+    display: flex;
     padding: 0 10px;
+    align-items: center;
+    justify-content: center;
   }
   .bonusRewards-message {
     text-transform: uppercase;
     b {
-      color: brown;
+      text-transform: uppercase;
     }
   }
   .bonusRewards-progress {
-    background-color: #a2aab1;
+    height: 10px;
+    margin-right: 10px;
+    width: 6%;
+    background-color: #7f7f7f;
+    box-shadow: 0px 1px 2px #00000070;
     .bonusRewards-bar {
-      background-color: #107fa8;
+      background-color: #fff;
     }
   }
-  a {
-    &:hover, &:focus {
-      b, strong {
-        color: #c94344;
-      }
-    }
+  i {
+    font-size: 18px;
   }
 }
 .bonusRewards-progress {

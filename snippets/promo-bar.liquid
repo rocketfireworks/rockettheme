@@ -1,5 +1,8 @@
 <div class="promo-bar">
   <div class="promo-bar-container">
+    <div class="bonusRewards-progress">
+      <div class="bonusRewards-bar"></div>
+    </div>
     {% if section.settings.promo_bar_link != blank %}
     <a href="{{section.settings.promo_bar_link}}">
     {% endif %}
@@ -9,8 +12,5 @@
     {% if section.settings.promo_bar_link != blank %}
     </a>
     {% endif %}
-    <div class="bonusRewards-progress">
-      <div class="bonusRewards-bar"></div>
-    </div>
   </div>
 </div>
