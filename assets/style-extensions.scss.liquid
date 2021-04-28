@@ -3841,36 +3841,47 @@ TREEDIFY
 BONUS REWARDS
 -------------------------------------------------------------------*/
 .free-fireworks {
-  background-color: #f7f7f7;
 }
 .bonus-rewards-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: space-around;
   gap: 2em;
   margin: 30px 0;
   .bonus-tiered {
+    flex-basis: 31%;
+    border: 1px solid #107fa8;
+    box-shadow: 0 3px 3px #d1d7d7;
     text-align: center;
-    border: 1px solid lightgray;
-    box-shadow: 1px 2px 2px lightgrey;
     background-color: #fff;
-    padding: 0 10px;
-    padding-top: 10px;
-    .bonus-tiered-title {
-      font-weight: 600;
-      margin-bottom: 1em;
-      font-size: 20px;
-      color: #107fa8;
-    }
-    .bonus-tiered-price {
-      display: block;
-      font-size: 2.5em;
-      font-weight: 700;
-      color: #c94344;
+    transition: all 0.3s;
+    .bonus-tiered-heading { 
+      border-bottom: 1px solid lightgray;
+      .bonus-tiered-title {
+        padding: 2px 5px;
+        font-size: 1.6em;
+        text-transform: uppercase;
+        color: #107fa8;
+      }
+      .bonus-tiered-subtitle {
+        text-align: center;
+        background: #ffda57;
+        color: #16142c;
+        font-size: 13px;
+        font-weight: bold;
+        padding: 2px;
+      }
+      p, div {
+        font-size: 0.9em;
+        font-weight: 600;
+      }
     }
     .bonus-tiered-products {
       display: flex;
+      justify-content: space-around;
       text-align: center;
+      padding-left: 10px;
+      padding-right: 10px;
       .bonus-tiered-product {
         margin: 1em;
         max-width: 100px;
@@ -3880,6 +3891,32 @@ BONUS REWARDS
             color: #16142C;
           }
         }
+      }
+    }
+    &:last-child {
+      flex-basis: 100%;
+      .bonus-tiered-title {
+        color: white;
+        background-color: #107fa8;
+      }
+      .bonus-tiered-subtitle {
+        color: white;
+        background-color: #c94344;
+      }
+    }
+    &:hover {
+      transform: scale(1.05);
+    }
+    @media (max-width: 991px) {
+      flex-basis: 45%;
+      &:last-child {
+        flex-basis: 45%;
+      }
+    }
+    @media (max-width: 640px) {
+      flex-basis: 100%;
+      &:last-child {
+        flex-basis: 100%;
       }
     }
   }
