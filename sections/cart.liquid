@@ -137,9 +137,6 @@
                     <textarea name="note" id="cartSpecialInstructions" placeholder="{{ 'cart.general.note' | t }}">{{ cart.note }}</textarea>
                   </div>
                   {% endif %}
-                  <div class="ageCkechBox">
-                    <input type="checkbox" name="verifyAgeBox" value="verifyAgeBox"> By checking this box, I certify that I am 18+ years old and will follow all Instruction on product packaging and will use any Fireworks according to local bylaws.
-                  </div>
  
                   
                   {% include "bonus-rewards" %}
@@ -169,6 +166,10 @@
                     </ul>
                   </div>
 
+                  <div class="ageCheckBox">
+                    <input type="checkbox" name="verifyAgeBox" value="verifyAgeBox"> By checking this box, I certify that I am 18+ years old and will follow all Instruction on product packaging and will use any Fireworks according to local bylaws.
+                  </div>
+                  
                   <div class="cart_btn clearfix">
                     {% if settings.enable_terms_and_conditions %}
                     <div class='terms_and_conditions_wrapper'>
