@@ -38,9 +38,11 @@ function checkCartForBonusReward() {
 
       if (Object.keys(discount).length !== 0) {
         let currentDiscountLevel = getProductCurrentDiscountLevel(item.quantity, discount);
-        let currentDiscountType = discount.levels[currentDiscountLevel].typeId;
-        let currentDiscountValue = discount.levels[currentDiscountLevel].value;
-        discountPrice = window.calculateFinalItemPrice(currentDiscountType, currentDiscountValue, item.price);
+        if (currentDiscountLevel >= 0) {
+          let currentDiscountType = discount.levels[currentDiscountLevel].typeId;
+          let currentDiscountValue = discount.levels[currentDiscountLevel].value;
+          discountPrice = window.calculateFinalItemPrice(currentDiscountType, currentDiscountValue, item.price);
+        }
       }
 
       // Get item tags
