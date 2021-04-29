@@ -100,15 +100,45 @@ function checkCartForBonusReward() {
         progressBarWidth = rewardResults.progress.toString();
         let progressBarWidth_filled = 100 - progressBarWidth;
 
-        $('.promo-bar .bonusRewards-message').html(`<b>$${rewardResults.remaining}</b> away from <b>Bonus Rewards Level ${qualifiedBonusLevel + 1}</b>! <i class="fas fa-gift"></i>`);
-        $('.promo-bar .bonusRewards-bar').css('width', progressBarWidth_filled + '%');
 
         if ($('.template-cart').length !== 0) {
-          let cartLevelReward = $('.cartRewardsProgram .cartRewardLevel')[0];
-          cartLevelReward.innerText = `Bonus Rewards Level ${qualifiedBonusLevel + 1}`;
-          let untilBonus = $('.cartRewardsProgram .untilBonusNum')[0];
-          untilBonus.innerText = '$' + rewardResults.remaining;
+          // Current Rewards 
+          let bonusContainers = document.querySelectorAll('.cartRewardsProgram .bonus-tiered-container');
+          bonusContainers.forEach(bonusContainer => {
+            if (!bonusContainer.classList.contains('hidden')) {
+              bonusContainer.classList.add('hidden');
+            }
+          });
+          $('.cartRewardsProgram .level-' + qualifiedBonusLevel).removeClass('hidden');
+          
+          // Show/Hide progress bar
+          if (bonusTotal === 0) {
+            $('.bonusRewards-progress').addClass('hidden');
+            $('#cartrewardsProgress').addClass('hidden');
+          } else {
+            $('.bonusRewards-progress').removeClass('hidden');
+            $('#cartrewardsProgress').removeClass('hidden');
+          }
           $("#cartrewardsBar").css('width', progressBarWidth_filled + '%' );
+
+          // Bonus Rewards message
+          let bonusTieredMtv = $('.cartRewardsProgram .bonus-tiered-mtv')[0];
+          bonusTieredMtv.innerHTML = `
+          <b>$${rewardResults.remaining}</b> away from <b>Bonus Rewards Level ${qualifiedBonusLevel + 1}</b>! <i class="fas fa-gift"></i>
+          `;
+
+        } else {
+          // Show/Hide progress bar
+          if (bonusTotal === 0) {
+            $('.bonusRewards-progress').addClass('hidden');
+          } else {
+            $('.bonusRewards-progress').removeClass('hidden');
+          }
+          $('.promo-bar .bonusRewards-bar').css('width', progressBarWidth_filled + '%');
+
+          // Bonus Rewards message
+          $('.promo-bar .bonusRewards-message').html(
+            `<b>$${rewardResults.remaining}</b> away from <b>Bonus Rewards Level ${qualifiedBonusLevel + 1}</b>! <i class="fas fa-gift"></i>`);
         }
       }
       });

@@ -1,147 +1,247 @@
-{% assign bonusTotal = 0.00 %}
-{% assign level1Bonus = 150.00 %}
-{% assign level2Bonus = 200.00 %}
-{% assign level3Bonus = 300.00 %}
-{% assign level4Bonus = 400.00 %}
-{% assign level5Bonus = 500.00 %}
-{% assign level6Bonus = 600.00 %}
-{% assign level7Bonus = 750.00 %}
-{% assign level8Bonus = 1000.00 %}
-{% assign level9Bonus = 1250.00 %}
-{% assign level10Bonus = 1500.00 %}
-
-{% assign productId = '' %}
-{% assign level1ProductId = 39310116454589 %}
-{% assign level2ProductId = 39310858420413 %}
-{% assign level3ProductId = 39310870708413 %}
-{% assign level4ProductId = 39310873297085 %}
-{% assign level5ProductId = 39310876115133 %}
-{% assign level6ProductId = 39310879195325 %}
-{% assign level7ProductId = 39310912815293 %}
-{% assign level8ProductId = 39310917664957 %}
-{% assign level9ProductId = 39310919336125 %}
-{% assign level10ProductId = 39310922252477 %}
-<!-- Data from metafields -->
-{% assign product_refs = "" %}
-
-{{ product.tags | join: ', '}}
-
-{% for item in cart.items %}
-  {% if item.product.tags contains 'FW' or item.product.tags contains 'FWSEQ' %}
-    {% assign bonusTotal1 = bonusTotal1 | plus: item.line_price %}
-    {% assign bonusTotal = bonusTotal1 | money_without_currency | plus: 0 %}
-
-  {% endif %}
-{% endfor %}
-
-{% if bonusTotal >= level1Bonus and bonusTotal < level2Bonus %}
-  {% assign currentCartLevel = 'Level 1 Rewards' %}
-  {% assign untilBonus = level2Bonus | minus: bonusTotal %}
+<div class="cartRewardsProgram">
+  
   {% if shop.metafields.custom_fields["level_1"] != blank %}
     {% assign product_refs = shop.metafields.custom_fields["level_1"] | split: "|" %}
+    <div class="bonus-tiered-container level-1 hidden">
+      <div class="bonus-tiered-heading">
+        <div>You've earned: </div>
+        <div class="current-level">Level 1 Rewards</div>
+      </div>
+      <div class="bonus-tiered-products">
+        {% for product_handle in product_refs %}
+          <div class="bonus-tiered-product">
+            {% assign product_ref = all_products[product_handle] %}
+            <div class="product-image-container">
+              <a href="{{ product_ref.url }}" class="product-image-link">
+                <img src="{{ product_ref | img_url: '300x' }}"  alt="{{ product_ref.title | escape }}" />
+              </a>
+            </div>
+            <div class="bonus-tiered-title">{{ product_ref.title | link_to: product_ref.url }}</div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
   {% endif %}
-  {% assign productId = level1ProductId %}
 
-{% elsif bonusTotal >= level2Bonus and bonusTotal < level3Bonus %}
-  {% assign currentCartLevel = 'Level 2 Rewards' %}
-  {% assign untilBonus = level3Bonus | minus: bonusTotal %}
+
   {% if shop.metafields.custom_fields["level_2"] != blank %}
     {% assign product_refs = shop.metafields.custom_fields["level_2"] | split: "|" %}
+    <div class="bonus-tiered-container level-2 hidden">
+      <div class="bonus-tiered-heading">
+        <div>You've earned: </div>
+        <div class="current-level">Level 2 Rewards</div>
+      </div>
+      <div class="bonus-tiered-products">
+        {% for product_handle in product_refs %}
+          <div class="bonus-tiered-product">
+            {% assign product_ref = all_products[product_handle] %}
+            <div class="product-image-container">
+              <a href="{{ product_ref.url }}" class="product-image-link">
+                <img src="{{ product_ref | img_url: '300x' }}"  alt="{{ product_ref.title | escape }}" />
+              </a>
+            </div>
+            <div class="bonus-tiered-title">{{ product_ref.title | link_to: product_ref.url }}</div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
   {% endif %}
-  {% assign productId = level2ProductId %}
 
-{% elsif bonusTotal >= level3Bonus and bonusTotal < level4Bonus %}
-  {% assign currentCartLevel = 'Level 3 Rewards' %}
-  {% assign untilBonus = level4Bonus | minus: bonusTotal %}
+
   {% if shop.metafields.custom_fields["level_3"] != blank %}
     {% assign product_refs = shop.metafields.custom_fields["level_3"] | split: "|" %}
+    <div class="bonus-tiered-container level-3 hidden">
+      <div class="bonus-tiered-heading">
+        <div>You've earned: </div>
+        <div class="current-level">Level 3 Rewards</div>
+      </div>
+      <div class="bonus-tiered-products">
+        {% for product_handle in product_refs %}
+          <div class="bonus-tiered-product">
+            {% assign product_ref = all_products[product_handle] %}
+            <div class="product-image-container">
+              <a href="{{ product_ref.url }}" class="product-image-link">
+                <img src="{{ product_ref | img_url: '300x' }}"  alt="{{ product_ref.title | escape }}" />
+              </a>
+            </div>
+            <div class="bonus-tiered-title">{{ product_ref.title | link_to: product_ref.url }}</div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
   {% endif %}
-  {% assign productId = level3ProductId %}
 
-{% elsif bonusTotal >= level4Bonus and bonusTotal < level5Bonus %}
-  {% assign currentCartLevel = 'Level 4 Rewards' %}
-  {% assign untilBonus = level5Bonus | minus: bonusTotal %}
+
   {% if shop.metafields.custom_fields["level_4"] != blank %}
     {% assign product_refs = shop.metafields.custom_fields["level_4"] | split: "|" %}
+    <div class="bonus-tiered-container level-4 hidden">
+      <div class="bonus-tiered-heading">
+        <div>You've earned: </div>
+        <div class="current-level">Level 4 Rewards</div>
+      </div>
+      <div class="bonus-tiered-products">
+        {% for product_handle in product_refs %}
+          <div class="bonus-tiered-product">
+            {% assign product_ref = all_products[product_handle] %}
+            <div class="product-image-container">
+              <a href="{{ product_ref.url }}" class="product-image-link">
+                <img src="{{ product_ref | img_url: '300x' }}"  alt="{{ product_ref.title | escape }}" />
+              </a>
+            </div>
+            <div class="bonus-tiered-title">{{ product_ref.title | link_to: product_ref.url }}</div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
   {% endif %}
-  {% assign productId = level4ProductId %}
 
-{% elsif bonusTotal >= level5Bonus and bonusTotal < level6Bonus %}
-  {% assign currentCartLevel = 'Level 5 Rewards' %}
-  {% assign untilBonus = level6Bonus | minus: bonusTotal %}
+
   {% if shop.metafields.custom_fields["level_5"] != blank %}
     {% assign product_refs = shop.metafields.custom_fields["level_5"] | split: "|" %}
+    <div class="bonus-tiered-container level-5 hidden">
+      <div class="bonus-tiered-heading">
+        <div>You've earned: </div>
+        <div class="current-level">Level 5 Rewards</div>
+      </div>
+      <div class="bonus-tiered-products">
+        {% for product_handle in product_refs %}
+          <div class="bonus-tiered-product">
+            {% assign product_ref = all_products[product_handle] %}
+            <div class="product-image-container">
+              <a href="{{ product_ref.url }}" class="product-image-link">
+                <img src="{{ product_ref | img_url: '300x' }}"  alt="{{ product_ref.title | escape }}" />
+              </a>
+            </div>
+            <div class="bonus-tiered-title">{{ product_ref.title | link_to: product_ref.url }}</div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
   {% endif %}
-  {% assign productId = level5ProductId %}
 
-{% elsif bonusTotal >= level6Bonus and bonusTotal < level7Bonus %}
-  {% assign currentCartLevel = 'Level 6 Rewards' %}
-  {% assign untilBonus = level7Bonus | minus: bonusTotal %}
-  {% if shop.metafields.custom_fields["level_7"] != blank %}
+
+  {% if shop.metafields.custom_fields["level_6"] != blank %}
     {% assign product_refs = shop.metafields.custom_fields["level_6"] | split: "|" %}
+    <div class="bonus-tiered-container level-6 hidden">
+      <div class="bonus-tiered-heading">
+        <div>You've earned: </div>
+        <div class="current-level">Level 6 Rewards</div>
+      </div>
+      <div class="bonus-tiered-products">
+        {% for product_handle in product_refs %}
+          <div class="bonus-tiered-product">
+            {% assign product_ref = all_products[product_handle] %}
+            <div class="product-image-container">
+              <a href="{{ product_ref.url }}" class="product-image-link">
+                <img src="{{ product_ref | img_url: '300x' }}"  alt="{{ product_ref.title | escape }}" />
+              </a>
+            </div>
+            <div class="bonus-tiered-title">{{ product_ref.title | link_to: product_ref.url }}</div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
   {% endif %}
-  {% assign productId = level6ProductId %}
 
-{% elsif bonusTotal >= level7Bonus and bonusTotal < level8Bonus %}
-  {% assign currentCartLevel = 'Level 7 Rewards' %}
-  {% assign untilBonus = level8Bonus | minus: bonusTotal %}
+
   {% if shop.metafields.custom_fields["level_7"] != blank %}
     {% assign product_refs = shop.metafields.custom_fields["level_7"] | split: "|" %}
+    <div class="bonus-tiered-container level-7 hidden">
+      <div class="bonus-tiered-heading">
+        <div>You've earned: </div>
+        <div class="current-level">Level 7 Rewards</div>
+      </div>
+      <div class="bonus-tiered-products">
+        {% for product_handle in product_refs %}
+          <div class="bonus-tiered-product">
+            {% assign product_ref = all_products[product_handle] %}
+            <div class="product-image-container">
+              <a href="{{ product_ref.url }}" class="product-image-link">
+                <img src="{{ product_ref | img_url: '300x' }}"  alt="{{ product_ref.title | escape }}" />
+              </a>
+            </div>
+            <div class="bonus-tiered-title">{{ product_ref.title | link_to: product_ref.url }}</div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
   {% endif %}
-  {% assign productId = level7ProductId %}
 
-{% elsif bonusTotal >= level8Bonus and bonusTotal < level9Bonus %}
-  {% assign currentCartLevel = 'Level 8 Rewards' %}
-  {% assign untilBonus = level9Bonus | minus: bonusTotal %}
+
   {% if shop.metafields.custom_fields["level_8"] != blank %}
     {% assign product_refs = shop.metafields.custom_fields["level_8"] | split: "|" %}
+    <div class="bonus-tiered-container level-8 hidden">
+      <div class="bonus-tiered-heading">
+        <div>You've earned: </div>
+        <div class="current-level">Level 8 Rewards</div>
+      </div>
+      <div class="bonus-tiered-products">
+        {% for product_handle in product_refs %}
+          <div class="bonus-tiered-product">
+            {% assign product_ref = all_products[product_handle] %}
+            <div class="product-image-container">
+              <a href="{{ product_ref.url }}" class="product-image-link">
+                <img src="{{ product_ref | img_url: '300x' }}"  alt="{{ product_ref.title | escape }}" />
+              </a>
+            </div>
+            <div class="bonus-tiered-title">{{ product_ref.title | link_to: product_ref.url }}</div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
   {% endif %}
-  {% assign productId = level8ProductId %}
 
-{% elsif bonusTotal >= level9Bonus and bonusTotal < level10Bonus %}
-  {% assign currentCartLevel = 'Level 9 Rewards' %}
-  {% assign untilBonus = level10Bonus | minus: bonusTotal %}
+
   {% if shop.metafields.custom_fields["level_9"] != blank %}
     {% assign product_refs = shop.metafields.custom_fields["level_9"] | split: "|" %}
+    <div class="bonus-tiered-container level-9 hidden">
+      <div class="bonus-tiered-heading">
+        <div>You've earned: </div>
+        <div class="current-level">Level 9 Rewards</div>
+      </div>
+      <div class="bonus-tiered-products">
+        {% for product_handle in product_refs %}
+          <div class="bonus-tiered-product">
+            {% assign product_ref = all_products[product_handle] %}
+            <div class="product-image-container">
+              <a href="{{ product_ref.url }}" class="product-image-link">
+                <img src="{{ product_ref | img_url: '300x' }}"  alt="{{ product_ref.title | escape }}" />
+              </a>
+            </div>
+            <div class="bonus-tiered-title">{{ product_ref.title | link_to: product_ref.url }}</div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
   {% endif %}
-  {% assign productId = level9ProductId %}
 
-{% elsif bonusTotal > level10Bonus %}
-  {% assign currentCartLevel = 'Level 10 Rewards' %}
-  {% assign untilBonus = level10Bonus | minus: bonusTotal %}
+
   {% if shop.metafields.custom_fields["level_10"] != blank %}
     {% assign product_refs = shop.metafields.custom_fields["level_10"] | split: "|" %}
+    <div class="bonus-tiered-container level-10 hidden">
+      <div class="bonus-tiered-heading">
+        <div>You've earned: </div>
+        <div class="current-level">Level 10 Rewards</div>
+      </div>
+      <div class="bonus-tiered-products">
+        {% for product_handle in product_refs %}
+          <div class="bonus-tiered-product">
+            {% assign product_ref = all_products[product_handle] %}
+            <div class="product-image-container">
+              <a href="{{ product_ref.url }}" class="product-image-link">
+                <img src="{{ product_ref | img_url: '300x' }}"  alt="{{ product_ref.title | escape }}" />
+              </a>
+            </div>
+            <div class="bonus-tiered-title">{{ product_ref.title | link_to: product_ref.url }}</div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
   {% endif %}
-  {% assign productId = level10ProductId %}
-{% endif %}
 
+  <p class="bonus-tiered-mtv"></p>
 
-
-<div class="cartRewardsProgram">
-
-  <p class="bonusTotal" data-bonus-total="{{ bonusTotal }}">Fireworks Total is: {{ bonusTotal1 | money }}</p>
-
-  <!-- <p>Bonus Total Used: <span class="bonusTotal">{{ bonusTotal }}</span></p> -->
-  <div id="bonusProductId" data-product-id="{{ productId }}"></div>
-  {% if product_refs != blank %}
-  <ul>
-    {% for product_handle in product_refs %}
-      <li>
-        {% assign product_ref = all_products[product_handle] %}
-        <div class="product-image-container">
-          <a href="{{ product_ref.url }}" class="product-image-link">
-            <img src="{{ product_ref | img_url: '300x' }}"  alt="{{ product_ref.title | escape }}" />
-          </a>
-        </div>
-        {{ product_ref.title | link_to: product_ref.url }}
-      </li>
-    {% endfor %}
-  </ul>
-{% endif %}
-
-  <p>You are <span class="untilBonusNum">{{ untilBonus | plus: 0 }}</span> away from <span class="cartRewardLevel">{{ currentCartLevel }}</span></p>
-
-  <div id="cartrewardsProgress"> 
+  <div id="cartrewardsProgress" class="hidden"> 
     <div id="cartrewardsBar"></div>
   </div>
 
