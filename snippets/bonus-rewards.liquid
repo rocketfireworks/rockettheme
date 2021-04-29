@@ -1,243 +1,33 @@
 <div class="cartRewardsProgram">
-  
-  {% if shop.metafields.custom_fields["level_1"] != blank %}
-    {% assign product_refs = shop.metafields.custom_fields["level_1"] | split: "|" %}
-    <div class="bonus-tiered-container level-1 hidden">
-      <div class="bonus-tiered-heading">
-        <div>You've earned: </div>
-        <div class="current-level">Level 1 Rewards</div>
-      </div>
-      <div class="bonus-tiered-products">
-        {% for product_handle in product_refs %}
-          <div class="bonus-tiered-product">
-            {% assign product_ref = all_products[product_handle] %}
-            <div class="product-image-container">
-              <a href="{{ product_ref.url }}" class="product-image-link">
-                <img src="{{ product_ref | img_url: '300x' }}"  alt="{{ product_ref.title | escape }}" />
-              </a>
+  {% for i in (1..10) %}
+    {% assign level_key = "level_" | append: i %}
+    {% assign level_class = "level-" | append: i %}
+
+    {% if shop.metafields.custom_fields[level_key] != blank %}
+      {% assign product_refs = shop.metafields.custom_fields[level_key] | split: "|" %}
+      <div class="bonus-tiered-container {{level_class}} hidden">
+        <div class="bonus-tiered-heading">
+          <div>You've earned: </div>
+          <div class="current-level">Level {{ i }} Rewards</div>
+        </div>
+        <div class="bonus-tiered-products">
+          {% for product_handle in product_refs %}
+            <div class="bonus-tiered-product">
+              {% assign product_ref = all_products[product_handle] %}
+              <div class="product-image-container">
+                <a href="{{ product_ref.url }}" class="product-image-link">
+                  <img src="{{ product_ref | img_url: '300x' }}"  alt="{{ product_ref.title | escape }}" />
+                </a>
+              </div>
+              <div class="bonus-tiered-title">{{ product_ref.title | link_to: product_ref.url }}</div>
+              <p><span class="original-price">{{ product_ref.price | money }}</span> FREE</p>
             </div>
-            <div class="bonus-tiered-title">{{ product_ref.title | link_to: product_ref.url }}</div>
-          </div>
-        {% endfor %}
+          {% endfor %}
+        </div>
       </div>
-    </div>
-  {% endif %}
+    {% endif %}
 
-
-  {% if shop.metafields.custom_fields["level_2"] != blank %}
-    {% assign product_refs = shop.metafields.custom_fields["level_2"] | split: "|" %}
-    <div class="bonus-tiered-container level-2 hidden">
-      <div class="bonus-tiered-heading">
-        <div>You've earned: </div>
-        <div class="current-level">Level 2 Rewards</div>
-      </div>
-      <div class="bonus-tiered-products">
-        {% for product_handle in product_refs %}
-          <div class="bonus-tiered-product">
-            {% assign product_ref = all_products[product_handle] %}
-            <div class="product-image-container">
-              <a href="{{ product_ref.url }}" class="product-image-link">
-                <img src="{{ product_ref | img_url: '300x' }}"  alt="{{ product_ref.title | escape }}" />
-              </a>
-            </div>
-            <div class="bonus-tiered-title">{{ product_ref.title | link_to: product_ref.url }}</div>
-          </div>
-        {% endfor %}
-      </div>
-    </div>
-  {% endif %}
-
-
-  {% if shop.metafields.custom_fields["level_3"] != blank %}
-    {% assign product_refs = shop.metafields.custom_fields["level_3"] | split: "|" %}
-    <div class="bonus-tiered-container level-3 hidden">
-      <div class="bonus-tiered-heading">
-        <div>You've earned: </div>
-        <div class="current-level">Level 3 Rewards</div>
-      </div>
-      <div class="bonus-tiered-products">
-        {% for product_handle in product_refs %}
-          <div class="bonus-tiered-product">
-            {% assign product_ref = all_products[product_handle] %}
-            <div class="product-image-container">
-              <a href="{{ product_ref.url }}" class="product-image-link">
-                <img src="{{ product_ref | img_url: '300x' }}"  alt="{{ product_ref.title | escape }}" />
-              </a>
-            </div>
-            <div class="bonus-tiered-title">{{ product_ref.title | link_to: product_ref.url }}</div>
-          </div>
-        {% endfor %}
-      </div>
-    </div>
-  {% endif %}
-
-
-  {% if shop.metafields.custom_fields["level_4"] != blank %}
-    {% assign product_refs = shop.metafields.custom_fields["level_4"] | split: "|" %}
-    <div class="bonus-tiered-container level-4 hidden">
-      <div class="bonus-tiered-heading">
-        <div>You've earned: </div>
-        <div class="current-level">Level 4 Rewards</div>
-      </div>
-      <div class="bonus-tiered-products">
-        {% for product_handle in product_refs %}
-          <div class="bonus-tiered-product">
-            {% assign product_ref = all_products[product_handle] %}
-            <div class="product-image-container">
-              <a href="{{ product_ref.url }}" class="product-image-link">
-                <img src="{{ product_ref | img_url: '300x' }}"  alt="{{ product_ref.title | escape }}" />
-              </a>
-            </div>
-            <div class="bonus-tiered-title">{{ product_ref.title | link_to: product_ref.url }}</div>
-          </div>
-        {% endfor %}
-      </div>
-    </div>
-  {% endif %}
-
-
-  {% if shop.metafields.custom_fields["level_5"] != blank %}
-    {% assign product_refs = shop.metafields.custom_fields["level_5"] | split: "|" %}
-    <div class="bonus-tiered-container level-5 hidden">
-      <div class="bonus-tiered-heading">
-        <div>You've earned: </div>
-        <div class="current-level">Level 5 Rewards</div>
-      </div>
-      <div class="bonus-tiered-products">
-        {% for product_handle in product_refs %}
-          <div class="bonus-tiered-product">
-            {% assign product_ref = all_products[product_handle] %}
-            <div class="product-image-container">
-              <a href="{{ product_ref.url }}" class="product-image-link">
-                <img src="{{ product_ref | img_url: '300x' }}"  alt="{{ product_ref.title | escape }}" />
-              </a>
-            </div>
-            <div class="bonus-tiered-title">{{ product_ref.title | link_to: product_ref.url }}</div>
-          </div>
-        {% endfor %}
-      </div>
-    </div>
-  {% endif %}
-
-
-  {% if shop.metafields.custom_fields["level_6"] != blank %}
-    {% assign product_refs = shop.metafields.custom_fields["level_6"] | split: "|" %}
-    <div class="bonus-tiered-container level-6 hidden">
-      <div class="bonus-tiered-heading">
-        <div>You've earned: </div>
-        <div class="current-level">Level 6 Rewards</div>
-      </div>
-      <div class="bonus-tiered-products">
-        {% for product_handle in product_refs %}
-          <div class="bonus-tiered-product">
-            {% assign product_ref = all_products[product_handle] %}
-            <div class="product-image-container">
-              <a href="{{ product_ref.url }}" class="product-image-link">
-                <img src="{{ product_ref | img_url: '300x' }}"  alt="{{ product_ref.title | escape }}" />
-              </a>
-            </div>
-            <div class="bonus-tiered-title">{{ product_ref.title | link_to: product_ref.url }}</div>
-          </div>
-        {% endfor %}
-      </div>
-    </div>
-  {% endif %}
-
-
-  {% if shop.metafields.custom_fields["level_7"] != blank %}
-    {% assign product_refs = shop.metafields.custom_fields["level_7"] | split: "|" %}
-    <div class="bonus-tiered-container level-7 hidden">
-      <div class="bonus-tiered-heading">
-        <div>You've earned: </div>
-        <div class="current-level">Level 7 Rewards</div>
-      </div>
-      <div class="bonus-tiered-products">
-        {% for product_handle in product_refs %}
-          <div class="bonus-tiered-product">
-            {% assign product_ref = all_products[product_handle] %}
-            <div class="product-image-container">
-              <a href="{{ product_ref.url }}" class="product-image-link">
-                <img src="{{ product_ref | img_url: '300x' }}"  alt="{{ product_ref.title | escape }}" />
-              </a>
-            </div>
-            <div class="bonus-tiered-title">{{ product_ref.title | link_to: product_ref.url }}</div>
-          </div>
-        {% endfor %}
-      </div>
-    </div>
-  {% endif %}
-
-
-  {% if shop.metafields.custom_fields["level_8"] != blank %}
-    {% assign product_refs = shop.metafields.custom_fields["level_8"] | split: "|" %}
-    <div class="bonus-tiered-container level-8 hidden">
-      <div class="bonus-tiered-heading">
-        <div>You've earned: </div>
-        <div class="current-level">Level 8 Rewards</div>
-      </div>
-      <div class="bonus-tiered-products">
-        {% for product_handle in product_refs %}
-          <div class="bonus-tiered-product">
-            {% assign product_ref = all_products[product_handle] %}
-            <div class="product-image-container">
-              <a href="{{ product_ref.url }}" class="product-image-link">
-                <img src="{{ product_ref | img_url: '300x' }}"  alt="{{ product_ref.title | escape }}" />
-              </a>
-            </div>
-            <div class="bonus-tiered-title">{{ product_ref.title | link_to: product_ref.url }}</div>
-          </div>
-        {% endfor %}
-      </div>
-    </div>
-  {% endif %}
-
-
-  {% if shop.metafields.custom_fields["level_9"] != blank %}
-    {% assign product_refs = shop.metafields.custom_fields["level_9"] | split: "|" %}
-    <div class="bonus-tiered-container level-9 hidden">
-      <div class="bonus-tiered-heading">
-        <div>You've earned: </div>
-        <div class="current-level">Level 9 Rewards</div>
-      </div>
-      <div class="bonus-tiered-products">
-        {% for product_handle in product_refs %}
-          <div class="bonus-tiered-product">
-            {% assign product_ref = all_products[product_handle] %}
-            <div class="product-image-container">
-              <a href="{{ product_ref.url }}" class="product-image-link">
-                <img src="{{ product_ref | img_url: '300x' }}"  alt="{{ product_ref.title | escape }}" />
-              </a>
-            </div>
-            <div class="bonus-tiered-title">{{ product_ref.title | link_to: product_ref.url }}</div>
-          </div>
-        {% endfor %}
-      </div>
-    </div>
-  {% endif %}
-
-
-  {% if shop.metafields.custom_fields["level_10"] != blank %}
-    {% assign product_refs = shop.metafields.custom_fields["level_10"] | split: "|" %}
-    <div class="bonus-tiered-container level-10 hidden">
-      <div class="bonus-tiered-heading">
-        <div>You've earned: </div>
-        <div class="current-level">Level 10 Rewards</div>
-      </div>
-      <div class="bonus-tiered-products">
-        {% for product_handle in product_refs %}
-          <div class="bonus-tiered-product">
-            {% assign product_ref = all_products[product_handle] %}
-            <div class="product-image-container">
-              <a href="{{ product_ref.url }}" class="product-image-link">
-                <img src="{{ product_ref | img_url: '300x' }}"  alt="{{ product_ref.title | escape }}" />
-              </a>
-            </div>
-            <div class="bonus-tiered-title">{{ product_ref.title | link_to: product_ref.url }}</div>
-          </div>
-        {% endfor %}
-      </div>
-    </div>
-  {% endif %}
+  {% endfor %}
 
   <p class="bonus-tiered-mtv"></p>
 
