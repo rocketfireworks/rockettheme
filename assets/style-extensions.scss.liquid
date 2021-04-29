@@ -3603,7 +3603,7 @@ CHECKOUT CART
           }
           &.money.original_price {
             font-weight: 400;
-            color: gray;
+            color: gray !important;
           }
         }
         .total-price {
@@ -3840,8 +3840,6 @@ TREEDIFY
 /*------------------------------------------------------------------
 BONUS REWARDS
 -------------------------------------------------------------------*/
-.free-fireworks {
-}
 .bonus-rewards-container {
   display: flex;
   flex-wrap: wrap;
@@ -3884,12 +3882,17 @@ BONUS REWARDS
       padding-right: 10px;
       .bonus-tiered-product {
         margin: 1em;
-        max-width: 100px;
+        .product-image-link {
+          height: 100px;
+        }
         h4 {
           font-size: 16px;
           a {
             color: #16142C;
           }
+        }
+        .original-price {
+          text-decoration: line-through;
         }
       }
     }

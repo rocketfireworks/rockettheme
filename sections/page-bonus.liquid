@@ -235,6 +235,7 @@
                       <h4>
                         {{ product_ref.title | link_to: product_ref.url}}
                       </h4>
+                      <p><span class="original-price">{{ product_ref.price | money }}</span> FREE</p>
                     </div>
                   {% endfor %}
                 </div>
