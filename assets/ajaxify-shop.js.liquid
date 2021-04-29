@@ -297,6 +297,7 @@ jQuery(document).ready(function() {
         
         var newRowPrice2 = 0.00;
         var bonusTotal = 0.00;
+        var finalTotalPrice = 0;
 
         for (var i = 0; i < cart.items.length; i++) {
           var itemPrice = cart.items[i].original_price,
@@ -371,6 +372,8 @@ jQuery(document).ready(function() {
             currentDiscountClass = 'hidden';
           }
 
+          finalTotalPrice += finalLinePrice;
+
           //convert prices
           var itemPriceConverted = Shopify.formatMoney(itemPrice,app.data.money_format),
               totalPriceConverted = Shopify.formatMoney(totalPrice,app.data.money_format),
@@ -382,6 +385,12 @@ jQuery(document).ready(function() {
           
           if (itemPrice != finalItemPrice){
             var finalItemPriceConverted = Shopify.formatMoney(finalItemPrice,app.data.money_format);
+          }
+
+          if (i === (cart.items.length - 1)) {
+            if (totalPrice != finalTotalPrice){
+              var finalTotalPriceConverted = Shopify.formatMoney(finalTotalPrice,app.data.money_format);
+            }
           }
           
           {% if settings.show_multiple_currencies %}
@@ -493,7 +502,19 @@ jQuery(document).ready(function() {
           t.find('div.cart_row').prepend(tableHeader);
           c.find(".con_row").html(toAppend.join(''));
           
-          var subtotalRowHtml = '<ul><li>'+discounts_html+'<span class="total_val">{{ 'cart.general.subtotal' | t }}:</span><span class="money total-price">'+totalPriceConverted+'</span></li></ul>';
+          
+          subtotalRowHtml = `<div class="total_row">
+            <ul>
+              <li>${discounts_html}<span class="total_val">{{ 'cart.general.subtotal' | t }}:</span>
+                <span class="tdf_price_original">
+                  <span class="tdf_money money">${totalPriceConverted}</span> 
+                </span>
+                <span class="tdf_price_normal">
+                  <span  class="tdf_money money">${finalTotalPriceConverted}</span>
+                </span>
+              </li>
+            </ul>
+          </div>`;
           subtotalRowCartPage.html(subtotalRowHtml);
           subtotalRow.html(subtotalRowHtml);
 
@@ -504,7 +525,18 @@ jQuery(document).ready(function() {
           {% endif %}
 
           checkoutRow = '<div class="checkout_row">' + terms_checkbox + '<a href="/cart" class="btn_c floatCCartBtn">{{ 'cart.general.checkout' | t }}</a> <a href="javascript:void(0)" class="info_btn"><span class="fa fa-chevron-left"></span>{{ 'cart.general.continue_browsing' | t }}</a></div>';
-          subtotalRow = '<div class="total_row"><ul><li>' + discounts_html + '<span class="total_val">{{ 'cart.general.subtotal' | t }}:</span><span class="money total-price">'+totalPriceConverted+'</span></li></ul></div>';
+          subtotalRow = `<div class="total_row">
+            <ul>
+              <li>${discounts_html}<span class="total_val">{{ 'cart.general.subtotal' | t }}:</span>
+                <span class="tdf_price_original">
+                  <span class="tdf_money money">${totalPriceConverted}</span> 
+                </span>
+                <span class="tdf_price_normal">
+                  <span  class="tdf_money money">${finalTotalPriceConverted}</span>
+                </span>
+              </li>
+            </ul>
+          </div>`;
           var addCheckOutBlock = '<div id="additional-checkout-block" class="text-right additional-checkout-buttons" ></div>';
           var form = jQ('<form />',{
             'action':'/cart',
@@ -583,7 +615,7 @@ jQuery(document).ready(function() {
     }
     
     window.invokeAfterSellyDataLoads(window.calculateCurrentDiscountPrice);
-    checkCartForBonusReward();
+    window.invokeAfterSellyDataLoads(checkCartForBonusReward);
   }
 
   $(".cart_tbl").on("focusout", "textarea", function () {
@@ -626,7 +658,6 @@ jQuery(document).ready(function() {
       if (updatedItem.length && totalUpdatedItemQty >= quantity) {
         Shopify.updateQuickCart(cart);
         inputEl.val(quantity);
-        // calcNewTotal_load();
       }
       else {
         jQuery('.ajaxcart__item__' + id + '__errors').show().delay(3000).fadeOut();

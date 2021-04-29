@@ -31,6 +31,18 @@ function checkCartForBonusReward() {
         bonusIds.push(bonusId);
       };
 
+      // Get item's Selly discount
+      let discountPrice = item.price;
+      const offers = window.sellyData.offers;
+      let discount = getProductDiscount(item.product_id, offers);
+
+      if (Object.keys(discount).length !== 0) {
+        let currentDiscountLevel = getProductCurrentDiscountLevel(item.quantity, discount);
+        let currentDiscountType = discount.levels[currentDiscountLevel].typeId;
+        let currentDiscountValue = discount.levels[currentDiscountLevel].value;
+        discountPrice = window.calculateFinalItemPrice(currentDiscountType, currentDiscountValue, item.price);
+      }
+
       // Get item tags
       let url = item.url;
       let quantity = item.quantity;
@@ -47,13 +59,13 @@ function checkCartForBonusReward() {
         tags = tags.split(", ");
         for (let i = 0; i < tags.length; i++) {
           if (tags[i] == "FW" || tags[i] == "FWSEQ") {
-            bonusTotal = bonusTotal +
-                         parseFloat(results.product.variants[0].price) * quantity;
+            bonusTotal = bonusTotal + discountPrice * quantity;
           }
         }
 
       finalLoop++;
       if (finalLoop == cart.items.length) {
+        bonusTotal = bonusTotal / 100
         // Get qualified bonus
         let qualifiedBonusLevel = getQualifiedBonusLevel(bonusTotal, levels);
         if (qualifiedBonusLevel > 0) {
