@@ -1,4 +1,4 @@
-{% if section.settings.show_announcement != blank and section.settings.promo_bar_text != blank and template != 'cart' %}
+{% if section.settings.show_announcement != blank and section.settings.promo_bar_link != blank and template != 'cart' %}
     {% include 'promo-bar' %}
 {% endif %}
 {% assign logo_scale_width = section.settings.logo_max_width | times: 2 | append: 'x' %}
