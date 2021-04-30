@@ -469,8 +469,9 @@ jQuery(document).ready(function() {
               <p class="mobile-label-price">{{ 'cart.general.price' | t }}</p>${itemPriceContent} ${item_discounts_html}<span class="currentDiscount ${currentDiscountClass}">${discountValueOutput}</span>
             </li>
             <li class="productRowQty">`;
-              
-            if (cart.items[i].id != '32047066972241') {
+            
+            let bonusSku = cart.items[i].sku.split("-")[0];
+            if (bonusSku !== 'bonusreward') { 
               row += `
               <p class="mobile-label-quantity">{{ 'cart.general.quantity' | t }}</p>
               <a class="minus_btn"></a> <input type="text" name="updates[]" class="txtbox number_val_input" min="0" id="updates_${cart.items[i].id}" data-id="${cart.items[i].id}" value="${cart.items[i].quantity}" /> <a class="plus_btn"></a>

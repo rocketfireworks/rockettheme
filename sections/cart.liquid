@@ -26,7 +26,9 @@
                   </div>
                   <div class="con_row">
                     {% for item in cart.items %}
-                    <ul class="productRow">
+                    {% assign itemSKU = item.sku | split: "-" %}
+                    
+                    <ul class="productRow{% if itemSKU.first == "bonusreward" %} bonusreward{% endif %}">
                       <li class="productRowImg">
                         <div class="product-image-container">
                           <a href="{{ item.url }}" class="product-image-link">
@@ -35,6 +37,7 @@
                         </div>
                       </li>
                       <li class="productRowTitle">
+                        {% assign itemSKU = item.sku | split: "-" %}
                         <h5 class="{{ item.id }}"><a href="{{ item.url | within: collections.all }}">{{ item.product.title | escape }}</a></h5>
                         {% if item.product.variants.size != 0 %}
                         {% unless item.variant.title contains 'Default' %}
@@ -91,7 +94,6 @@
                         
                       </li>
                       <li class="productRowQty">
-                        {% assign itemSKU = item.sku | split: "-" %}
                         {%- if itemSKU.first != "bonusreward" -%}
                         <p class="mobile-label-quantity">{{ 'cart.general.quantity' | t }}</p>
                         <a class="minus_btn"></a><input type="text" id="updates_{{ item.id }}" name="updates[]" class="txtbox number_val_input" value="{{ item.quantity }}" min="0" data-id="{{ item.id }}"><a class="plus_btn"></a>
