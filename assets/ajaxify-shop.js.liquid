@@ -416,20 +416,16 @@ jQuery(document).ready(function() {
           }
           {% endif %}
 
-          
-          
           if (linePrice != finalLinePrice) {
-            var linePriceContent = '<span class="price money original_price">' + linePriceConverted + '</span>' +
-              '<br class="clearfix"><span class="money price tdf-cart-item-p-p">' + finalLinePriceConverted + '</span>';
+            var linePriceContent = `<span class="price money original_price">${linePriceConverted}</span><br class="clearfix"><span class="money price tdf-cart-item-p-p">${finalLinePriceConverted}</span>'`;
           } else {
-            var linePriceContent = '<span class="money price tdf-cart-item-p-p">' + linePriceConverted + '</span>';
+            var linePriceContent = `<span class="money price tdf-cart-item-p-p">${linePriceConverted}</span>`;
           }
 
           if (itemPrice != finalItemPrice) {
-            var itemPriceContent = ' <span class="price money original_price">' + itemPriceConverted + '</span>' +
-              '<br class="clearfix"><span class="price money tdf-cart-item-p-p">' + finalItemPriceConverted + '</span>';
+            var itemPriceContent = `<span class="price money original_price">${itemPriceConverted}</span><br class="clearfix"><span class="money price tdf-cart-item-p-p">${finalItemPriceConverted}</span>'`;
           } else {
-            var itemPriceContent = '<span class="price money tdf-cart-item-p-p">' + itemPriceConverted + '</span>'
+            var itemPriceContent = `<span class="money price tdf-cart-item-p-p">${itemPriceConverted}</span>`;
           }
 
           if (cart.items[i].line_level_discount_allocations.length) {
@@ -470,9 +466,9 @@ jQuery(document).ready(function() {
               <div class="discount-wholesale-motivation">${mtvMessage}</div>
             </li>
             <li class="productRowPrice">
-              <p class="mobile-label-price">{{ 'cart.general.price' | t }}</p>${itemPriceContent} ${item_discounts_html}'<span class="currentDiscount ${currentDiscountClass}">${discountValueOutput}</span>
+              <p class="mobile-label-price">{{ 'cart.general.price' | t }}</p>${itemPriceContent} ${item_discounts_html}<span class="currentDiscount ${currentDiscountClass}">${discountValueOutput}</span>
             </li>
-            <li class="productRowQuantity">`;
+            <li class="productRowQty">`;
               
             if (cart.items[i].id != '32047066972241') {
               row += `
@@ -506,7 +502,7 @@ jQuery(document).ready(function() {
             subtotalRowHtml = `<div class="total_row">
             <ul>
               <li>${discounts_html}<span class="total_val">{{ 'cart.general.subtotal' | t }}:</span>
-                <span class="tdf-cart-total-parent tdf-priced">
+                <span class="total-price tdf-cart-total-parent tdf-priced">
                   <span class="tdf_price_original">
                     <span class="tdf_money money">${totalPriceConverted}</span> 
                   </span>
@@ -544,7 +540,7 @@ jQuery(document).ready(function() {
             subtotalRow = `<div class="total_row">
             <ul>
               <li>${discounts_html}<span class="total_val">{{ 'cart.general.subtotal' | t }}:</span>
-                <span class="tdf-cart-total-parent tdf-priced">
+                <span class="total-price tdf-cart-total-parent tdf-priced">
                   <span class="tdf_price_original">
                     <span class="tdf_money money">${totalPriceConverted}</span> 
                   </span>

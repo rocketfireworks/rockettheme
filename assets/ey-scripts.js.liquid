@@ -10,7 +10,6 @@ $(document).ready(function () {
   });
 
   // Bonus Rewards
-  // checkCartForBonusReward();
   window.invokeAfterSellyDataLoads(checkCartForBonusReward);
 });
 
@@ -178,13 +177,10 @@ function getQualifiedBonusId(qualifiedLevel) {
 
 function calculateBonusReward(fwTotal, levels) {
   let untilBonusNum = 0;
-  let diffNum = 0;
   let progressBarWidth = 0;
-  let qualifiedIndex = 0;
   let nextQualifiedIndex = 0;
   levels.forEach((level, index) => {
     if (fwTotal > level) {
-      qualifiedIndex = index;
       nextQualifiedIndex = index + 1;
     }
   });
