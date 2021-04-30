@@ -502,19 +502,32 @@ jQuery(document).ready(function() {
           t.find('div.cart_row').prepend(tableHeader);
           c.find(".con_row").html(toAppend.join(''));
           
-          
-          subtotalRowHtml = `<div class="total_row">
+          if (finalTotalPriceConverted) {
+            subtotalRowHtml = `<div class="total_row">
             <ul>
               <li>${discounts_html}<span class="total_val">{{ 'cart.general.subtotal' | t }}:</span>
-                <span class="tdf_price_original">
-                  <span class="tdf_money money">${totalPriceConverted}</span> 
-                </span>
-                <span class="tdf_price_normal">
-                  <span  class="tdf_money money">${finalTotalPriceConverted}</span>
+                <span class="tdf-cart-total-parent tdf-priced">
+                  <span class="tdf_price_original">
+                    <span class="tdf_money money">${totalPriceConverted}</span> 
+                  </span>
+                  <span class="tdf_price_normal">
+                    <span  class="tdf_money money">${finalTotalPriceConverted}</span>
+                  </span>
                 </span>
               </li>
             </ul>
           </div>`;
+          } else {
+            subtotalRowHtml = `<div class="total_row">
+            <ul>
+              <li>${discounts_html}<span class="total_val">{{ 'cart.general.subtotal' | t }}:</span>
+                <span class="tdf_price_normal">
+                  <span class="tdf_money money">${totalPriceConverted}</span> 
+                </span>
+              </li>
+            </ul>
+          </div>`;
+          }
           subtotalRowCartPage.html(subtotalRowHtml);
           subtotalRow.html(subtotalRowHtml);
 
@@ -525,18 +538,34 @@ jQuery(document).ready(function() {
           {% endif %}
 
           checkoutRow = '<div class="checkout_row">' + terms_checkbox + '<a href="/cart" class="btn_c floatCCartBtn">{{ 'cart.general.checkout' | t }}</a> <a href="javascript:void(0)" class="info_btn"><span class="fa fa-chevron-left"></span>{{ 'cart.general.continue_browsing' | t }}</a></div>';
-          subtotalRow = `<div class="total_row">
+
+
+          if (finalTotalPriceConverted) {
+            subtotalRow = `<div class="total_row">
             <ul>
               <li>${discounts_html}<span class="total_val">{{ 'cart.general.subtotal' | t }}:</span>
-                <span class="tdf_price_original">
-                  <span class="tdf_money money">${totalPriceConverted}</span> 
-                </span>
-                <span class="tdf_price_normal">
-                  <span  class="tdf_money money">${finalTotalPriceConverted}</span>
+                <span class="tdf-cart-total-parent tdf-priced">
+                  <span class="tdf_price_original">
+                    <span class="tdf_money money">${totalPriceConverted}</span> 
+                  </span>
+                  <span class="tdf_price_normal">
+                    <span  class="tdf_money money">${finalTotalPriceConverted}</span>
+                  </span>
                 </span>
               </li>
             </ul>
           </div>`;
+          } else {
+            subtotalRow = `<div class="total_row">
+            <ul>
+              <li>${discounts_html}<span class="total_val">{{ 'cart.general.subtotal' | t }}:</span>
+              <span class="tdf_price_normal">
+                <span class="tdf_money money">${totalPriceConverted}</span> 
+              </span>
+              </li>
+            </ul>
+          </div>`;
+          }
           var addCheckOutBlock = '<div id="additional-checkout-block" class="text-right additional-checkout-buttons" ></div>';
           var form = jQ('<form />',{
             'action':'/cart',
