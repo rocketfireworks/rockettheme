@@ -3561,34 +3561,48 @@ CHECKOUT CART
 -------------------------------------------------------------------*/
 #content {
   .cart_tbl {
+    form {
+      padding: 0 20px;
+    }
     ul {
       li {
-        padding: 10px 0;
+        padding: 10px 5px;
         text-align: center;
+        p {
+          font-size: 14px;
+        }
         &:nth-child(1) {
-          padding-right: 10px;
+          width: 15%;
+          text-align: left;
+          padding: 10px 5px;
         }
         &:nth-child(2) {
+          width: 30%;
           text-align: left;
+          padding: 10px 5px;
         }
         &:nth-child(3) {
           width: 16%;
           position: relative;
           text-align: left;
           overflow: visible;
+          padding: 10px 5px;
         }
         &:nth-child(4) {
-          width: 21%;
+          width: 28%;
+          padding: 10px 5px;
         }
         &:nth-child(5) {
-          width: 16%;
+          width: 11%;
+          text-align: right;
+          padding: 10px 3px;
         }
         .product-image-link {
           height: 70px;
         }
         .minus_btn, .plus_btn, .txtbox {
-          width: 1.875em;
-          height: 1.5em;
+          width: 28px;
+          height: 24px;
           padding: 0 5px;
         }
         .txtbox {
@@ -3610,14 +3624,11 @@ CHECKOUT CART
           color: #c94344;
         }
       }
-      // @media (max-width: 560px) {
-      //   .productRowPrice .currentDiscount {
-      //     bottom: 25px;
-      //   }
-      // }
       @media (max-width: 790px) {
-        li:nth-child(1) {
-          width: initial;
+        li {
+          &:nth-child(1) {
+            width: initial;
+          }
         }
       }
       @media (max-width: 560px) {
@@ -3638,16 +3649,19 @@ CHECKOUT CART
             float: none;
             width: 33%;
             padding-bottom: 0;
+            align-self: baseline;
           }
           &:nth-child(4) {
             float: none;
-            width: 34%;
+            width: 42%;
             display: inline-block;
+            align-self: baseline;
           }
           &:nth-child(5) {
             float: none;
-            width: 33%;
+            width: 25%;
             padding-bottom: 0;
+            align-self: baseline;
           }
         }
         .productRowPrice .currentDiscount {
@@ -3665,7 +3679,7 @@ CHECKOUT CART
         li {
           display: block;
           &:nth-child(1) {
-            padding: 10px 20px;
+            padding: 10px 0;
           }
           span.tdf-cart-total-parent {
             display: inline-block;
@@ -3689,10 +3703,16 @@ CHECKOUT CART
     height: 80px;
   }
   .cart_btn {
-    padding: 15px;
+    padding: 15px 0;
   }
   .cart_c .cart_btn a.info_btn {
     padding: 0;
+  }
+  .order_notes {
+    margin: 20px 0;
+  }
+  .ageCheckBox {
+    font-size: 12px;
   }
   @media (max-width: 790px) {
     width: initial;
@@ -3712,10 +3732,15 @@ CHECKOUT CART
     .mobile-label-price, .mobile-label-quantity, .mobile-label-total {
       display: block;
       width: 100%;
+    }
+    .mobile-label-quantity {
       text-align: center;
     }
     .mobile-label-price {
       text-align: left;
+    }
+    .mobile-label-total {
+      text-align: right;
     }
   }
   @media (max-width: 480px) {
@@ -3992,7 +4017,7 @@ a {
 .cartRewardsProgram {
   max-width: 400px;
   text-align: center;
-  margin: 20px auto;
+  margin: 0 auto;
   .bonus-tiered-container {
     border: 1px solid #107fa8;
     box-shadow: 0 3px 3px #d1d7d7;
