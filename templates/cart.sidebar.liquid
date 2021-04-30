@@ -53,9 +53,7 @@
                         {% endif %}                  
                       </li>
                       <li>
-                        <a class="minus_btn"></a>
-                        <input type="text" id="updates_{{ item.id }}" name="updates[]" class="txtbox" value="{{ item.quantity }}" min="0" data-id="{{ item.id }}">
-                        <a class="plus_btn"></a>
+                        <a class="minus_btn"></a> <input type="text" id="updates_{{ item.id }}" name="updates[]" class="txtbox" value="{{ item.quantity }}" min="0" data-id="{{ item.id }}"> <a class="plus_btn"></a>
                       </li>
                       <li>
                         <div class="price"><span class=tdf-cart-item-p-p>{{ item.price | money }}</span></div>

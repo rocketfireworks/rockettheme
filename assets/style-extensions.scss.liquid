@@ -3356,26 +3356,30 @@ FLOATING CART
     ul {
       li {
         text-align: center;
-        padding: 10px 0;
         vertical-align: middle;
         position: relative;
         overflow: initial;
         &:nth-child(1) {
-          padding-right: 10px;
+          width: 15%;
+          padding: 10px 5px;
         }
         &:nth-child(2) {
+          width: 30%;
           text-align: left;
-          width: 25%;
+          padding: 10px 5px;
         }
         &:nth-child(3) {
           text-align: left;
           width: 16%;
+          padding: 10px 5px;
         }
         &:nth-child(4) {
-          width: 22%;
+          width: 28%;
+          padding: 10px 5px;
         }
         &:nth-child(5) {
-          width: 16%;
+          width: 11%;
+          padding: 10px 5px;
         }
         .price {
           font-weight: 700;
@@ -3391,7 +3395,7 @@ FLOATING CART
         }
         .total-price span.money {
           color: #c94344;
-          font-size: 22px;
+          font-size: 20px;
         }
       }
     }
@@ -3452,13 +3456,11 @@ FLOATING CART
               padding-left: 0;
             }
             .minus_btn, .plus_btn {
-              width: 1.2em;
-              height: 1.2em;
-              padding: 10px;
+              padding: 0;
             }
-            .txtbox {
-              width: 1.8em;
-              height: 1.6em;
+            .txtbox, .minus_btn, .plus_btn {
+              width: 28px;
+              height: 24px;
             }
           }
         }
@@ -3498,27 +3500,34 @@ FLOATING CART
         display: flex;
         flex-flow: wrap;
         align-items: center;
-        padding: 10px 0;
+        padding: 5px 0;
         margin-bottom: 0;
         li {
           padding: 0;
           display: inline-block;
           &:nth-child(1) {
             width: 35%;
+            padding: 2px 5px;
           }
           &:nth-child(2) {
             width: 65%;
+            padding: 2px 5px;
           }
           &:nth-child(3) {
             width: 33%;
+            padding: 2px 5px;
+            align-self: baseline;
           }
           &:nth-child(4) {
-            width: 34%;
-            padding-top: 0;
+            width: 42%;
+            padding: 2px 5px;
+            align-self: baseline;
           }
           &:nth-child(5) {
-            width: 33%;
+            width: 25%;
             text-align: right;
+            padding: 2px 5px;
+            align-self: baseline;
           }
         }
       }
@@ -3640,32 +3649,35 @@ CHECKOUT CART
           padding: 0;
           &:nth-child(1) {
             width: 40%;
+            padding: 2px 5px;
           }
           &:nth-child(2) {
             width: 60%;
             text-align: left;
+            padding: 2px 5px;
           }
           &:nth-child(3) {
             float: none;
             width: 33%;
-            padding-bottom: 0;
+            padding: 2px 5px;
             align-self: baseline;
           }
           &:nth-child(4) {
             float: none;
             width: 42%;
             display: inline-block;
+            padding: 2px 5px;
             align-self: baseline;
           }
           &:nth-child(5) {
             float: none;
             width: 25%;
-            padding-bottom: 0;
+            padding: 2px 5px;
             align-self: baseline;
           }
         }
         .productRowPrice .currentDiscount {
-          bottom: 0;
+          bottom: 2px;
         }
       }
       .photo-column-header {
@@ -3686,6 +3698,9 @@ CHECKOUT CART
             padding-left: 10px;
             span {
               display: block;
+              @media (max-width: 480px) {
+                display: initial;
+              }
             }
             span.tdf_price_normal {
               font-weight: 900;
@@ -3693,7 +3708,7 @@ CHECKOUT CART
           }
           span.money {
             color: #c94344;
-            font-size: 16px;
+            font-size: 20px;
           }
         }
       }
@@ -3841,7 +3856,7 @@ TREEDIFY
   background-color: #C94344;
   color: white;
   @media (max-width: 560px) {
-    bottom: 0;
+    bottom: 2px;
   }
 }
 
