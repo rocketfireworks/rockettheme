@@ -23,7 +23,8 @@
         <li>{{ 'cart.general.total' | t }}</li>
       </ul>
       {% for item in cart.items %}
-      <ul class="productRow">
+      {% assign itemSKU = item.sku | split: "-" %}
+      <ul class="productRow{% if itemSKU.first == "bonusreward" %} bonusreward{% endif %}">
         <li class="productRowImg">
           <div class="product-image-container">
             <a href="{{ item.url }}" class="product-image-link">  
@@ -84,11 +85,13 @@
           {%- endif -%}
         </li>
         <li class="productRowQty">
+          {% if itemSKU.first != "bonusreward" %}
           <p class="mobile-label-quantity">{{ 'cart.general.quantity' | t }}</p>
           <a class="minus_btn"></a> <input type="text" id="updates_{{ item.id }}" name="updates[]" class="txtbox number_val_input" value="{{ item.quantity }}" min="0" data-id="{{ item.id }}"/> <a class="plus_btn"></a>
           <div class="ajaxcart__errors error-popup ajaxcart__item__{{ item.id }}__errors">
             {{ 'cart.general.error' | t }}
           </div>
+          {% endif %}
         </li>
         <li class="productRowTotal">
           <p class="mobile-label-total">{{ 'cart.general.total' | t }}</p>
