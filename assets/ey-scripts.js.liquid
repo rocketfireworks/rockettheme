@@ -127,6 +127,11 @@ function checkCartForBonusReward() {
           `;
 
         } else {
+          // Bonus Rewards message
+          $('.promo-bar .promo-bar-container').css('opacity', 1);
+          $('.promo-bar .bonusRewards-message').html(
+            `<b>$${rewardResults.remaining}</b> away from <b>Bonus Rewards Level ${qualifiedBonusLevel + 1}</b>! <i class="fas fa-gift"></i>`);
+
           // Show/Hide progress bar
           if (bonusTotal === 0) {
             $('.bonusRewards-progress').addClass('hidden');
@@ -135,9 +140,6 @@ function checkCartForBonusReward() {
           }
           $('.promo-bar .bonusRewards-bar').css('width', progressBarWidth_filled + '%');
 
-          // Bonus Rewards message
-          $('.promo-bar .bonusRewards-message').html(
-            `<b>$${rewardResults.remaining}</b> away from <b>Bonus Rewards Level ${qualifiedBonusLevel + 1}</b>! <i class="fas fa-gift"></i>`);
         }
       }
       });
