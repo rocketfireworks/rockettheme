@@ -33,7 +33,7 @@
           </div>
         </li>
         <li class="productRowTitle">
-          <h5 class="{{ item.id }}"><a href="{{ item.product.url | within: collections.all }}" class="item-name">{{ item.product.title | escape}}</a></h5>
+          <h5 class="{{ item.id }}"><a href="{{ item.product.url | within: collections.all }}">{{ item.product.title | escape}}</a></h5>
           {% if item.product.variants.size != 0 %}
           {% unless item.variant.title contains 'Default' %}
           <p>{{ item.variant.title | escape }}</p>

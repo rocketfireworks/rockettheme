@@ -66,7 +66,7 @@ function checkCartForBonusReward() {
 
       finalLoop++;
       if (finalLoop == cart.items.length) {
-        bonusTotal = bonusTotal / 100
+        bonusTotal = bonusTotal / 100;
         // Get qualified bonus
         let qualifiedBonusLevel = getQualifiedBonusLevel(bonusTotal, levels);
         if (qualifiedBonusLevel > 0) {
@@ -114,10 +114,8 @@ function checkCartForBonusReward() {
           
           // Show/Hide progress bar
           if (bonusTotal === 0) {
-            $('.bonusRewards-progress').addClass('hidden');
             $('#cartrewardsProgress').addClass('hidden');
           } else {
-            $('.bonusRewards-progress').removeClass('hidden');
             $('#cartrewardsProgress').removeClass('hidden');
           }
           $("#cartrewardsBar").css('width', progressBarWidth_filled + '%' );

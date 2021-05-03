@@ -417,13 +417,13 @@ jQuery(document).ready(function() {
           {% endif %}
 
           if (linePrice != finalLinePrice) {
-            var linePriceContent = `<span class="price money original_price">${linePriceConverted}</span><br class="clearfix"><span class="money price tdf-cart-item-p-p">${finalLinePriceConverted}</span>'`;
+            var linePriceContent = `<span class="price money original_price">${linePriceConverted}</span><br class="clearfix"><span class="money price tdf-cart-item-p-p">${finalLinePriceConverted}</span>`;
           } else {
             var linePriceContent = `<span class="money price tdf-cart-item-p-p">${linePriceConverted}</span>`;
           }
 
           if (itemPrice != finalItemPrice) {
-            var itemPriceContent = `<span class="price money original_price">${itemPriceConverted}</span><br class="clearfix"><span class="money price tdf-cart-item-p-p">${finalItemPriceConverted}</span>'`;
+            var itemPriceContent = `<span class="price money original_price">${itemPriceConverted}</span><br class="clearfix"><span class="money price tdf-cart-item-p-p">${finalItemPriceConverted}</span>`;
           } else {
             var itemPriceContent = `<span class="money price tdf-cart-item-p-p">${itemPriceConverted}</span>`;
           }
@@ -459,7 +459,7 @@ jQuery(document).ready(function() {
             </li>
             <li class="productRowTitle">
               <h5 class="${cart.items[i].id}">
-                <a href="${cart.items[i].url}" class="item-name">${cart.items[i].product_title}</a>
+                <a href="${cart.items[i].url}">${cart.items[i].product_title}</a>
               </h5>
               <p class="product-type">${title}</p>
               <p>${propertiesText}</p>
@@ -469,7 +469,7 @@ jQuery(document).ready(function() {
               <p class="mobile-label-price">{{ 'cart.general.price' | t }}</p>${itemPriceContent} ${item_discounts_html}<span class="currentDiscount ${currentDiscountClass}">${discountValueOutput}</span>
             </li>
             <li class="productRowQty">`;
-            
+
             let bonusSku = cart.items[i].sku.split("-")[0];
             if (bonusSku !== 'bonusreward') { 
               row += `
@@ -715,13 +715,11 @@ jQuery(document).ready(function() {
       var line = $(this).closest("ul").index() + 1;
       Shopify.changeItemByLine(line, quantity, function (cart) {
         Shopify.updateQuickCart(cart);
-        // calcNewTotal_load();
       });
     }
     else {
       Shopify.removeItem(id, function (cart) {
         Shopify.updateQuickCart(cart);
-        // calcNewTotal_load();
       });
     }
 
@@ -764,7 +762,6 @@ jQuery(document).ready(function() {
         if (updatedItem.length && totalUpdatedItemQty >= quantity) {
           Shopify.updateQuickCart(cart);
           inputEl.val(quantity);
-          // calcNewTotal_load();
         }
         else {
           jQuery('.ajaxcart__item__' + id + '__errors').show().delay(2000).fadeOut();
