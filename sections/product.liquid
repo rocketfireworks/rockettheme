@@ -109,7 +109,18 @@
             {% if descriptionSecondPart != blank %}
             
             {% else %}
-            <div class="rte main-product-description-{{ section.id }} justProdDes" >	 
+            <div class="rte main-product-description-{{ section.id }} justProdDes" >
+                <!-- Product's metafield data -->
+                {% if product.metafields.global.effect %}
+                  <div><span class="data-title">Effect:</span> {{ product.metafields.global.effect }}</div>
+                {% endif %}
+                {% if product.metafields.global.duration %}
+                  <div><span class="data-title">Duration:</span> {{ product.metafields.global.duration }}</div>
+                {% endif %}
+                {% if product.metafields.global.height %}
+                  <div><span class="data-title">Height:</span> {{ product.metafields.global.height }}</div>
+                {% endif %}
+
                 {% if product.description contains '<!-- TABS -->' %}
                   {{ product.description | split: "<!-- TABS -->"| first}}
                 {% else %} 

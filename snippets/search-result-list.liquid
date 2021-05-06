@@ -102,6 +102,16 @@
 
     </div>
     <div class="product-description">
+      <!-- Product's metafield data -->
+      {% if product.metafields.global.effect %}
+        <div><span class="data-title">Effect:</span> {{ product.metafields.global.effect }}</div>
+      {% endif %}
+      {% if product.metafields.global.duration %}
+        <div><span class="data-title">Duration:</span> {{ product.metafields.global.duration }}</div>
+      {% endif %}
+      {% if product.metafields.global.height %}
+        <div><span class="data-title">Height:</span> {{ product.metafields.global.height }}</div>
+      {% endif %}
       <p class="product-desc">{{ product.content | truncatewords:30 }}</p>
   
       <div>
