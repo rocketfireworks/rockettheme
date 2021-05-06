@@ -3410,6 +3410,20 @@ FLOATING CART
       .product-image-link {
         height: 70px;
       }
+      ul {
+        li {
+          &:nth-child(1) {
+            padding-left: 0;
+          }
+          .minus_btn, .plus_btn {
+            padding: 0;
+          }
+          .txtbox, .minus_btn, .plus_btn {
+            width: 34px;
+            height: 28px;
+          }
+        }
+      }
     }
 
     .total_row {
@@ -3452,12 +3466,6 @@ FLOATING CART
       .cart_row {
         ul {
           li {
-            &:nth-child(1) {
-              padding-left: 0;
-            }
-            .minus_btn, .plus_btn {
-              padding: 0;
-            }
             .txtbox, .minus_btn, .plus_btn {
               width: 28px;
               height: 24px;
