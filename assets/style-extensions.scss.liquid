@@ -1923,6 +1923,9 @@ PRODUCT
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    .data-title {
+      font-weight: bold;
+    }
   }
   @media (max-width: 991px) {
     grid-template-columns: 1fr;
@@ -2830,9 +2833,6 @@ SEARCH RESULT
           z-index: 1;
         }
       }
-      .product-desc {
-        min-height: 6em;
-      }
       .btn_c {
         display: block;
         margin: 10px 0 0;
@@ -3145,7 +3145,7 @@ COLLECTION
 
   .collection-view-grid {
     border-top: 1px solid #bfbebe;
-    padding-top: 10px;
+    padding-top: 20px;
   }
 
   // Video button
