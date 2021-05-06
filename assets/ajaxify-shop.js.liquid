@@ -640,8 +640,9 @@ jQuery(document).ready(function() {
       jQ(selectors.TOTAL_ITEMS).text('').addClass('hidden');
     }
     
+    window.checkingBonus = false;
     window.invokeAfterSellyDataLoads(window.calculateCurrentDiscountPrice);
-    window.invokeAfterSellyDataLoads(checkCartForBonusReward);
+    checkCartForBonusReward();
   }
 
   $(".cart_tbl").on("focusout", "textarea", function () {

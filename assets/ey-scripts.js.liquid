@@ -10,13 +10,14 @@ $(document).ready(function () {
   });
 
   // Bonus Rewards
+  window.bonusTotal = 0;
   window.invokeAfterSellyDataLoads(checkCartForBonusReward);
 });
 
 function checkCartForBonusReward() {
   const levels = [150, 200, 300, 400, 500, 600, 750, 1000, 1250, 1500];
   let bonusIds = [];
-  let bonusTotal = 0;
+  window.bonusTotal = 0;
 
   // Get cart
   $.getJSON('/cart.js', cart => {
@@ -63,43 +64,42 @@ function checkCartForBonusReward() {
             bonusTotal = bonusTotal + discountPrice * quantity;
           }
         }
-
-      finalLoop++;
-      if (finalLoop == cart.items.length) {
-        bonusTotal = bonusTotal / 100;
-        // Get qualified bonus
-        let qualifiedBonusLevel = getQualifiedBonusLevel(bonusTotal, levels);
-        if (qualifiedBonusLevel > 0) {
-          let qualifiedBonusId = getQualifiedBonusId(qualifiedBonusLevel);
-          if (bonusIds.length === 0) {
-            addBonus(qualifiedBonusId);
-          } else {
-            let correctBonus = false;
-            bonusIds.forEach(bonusId => {
-              if (bonusId !== qualifiedBonusId) {
-                Shopify.removeItem(bonusId, function (cart) {
-                  Shopify.updateQuickCart(cart);
-                });
-              } else {
-                correctBonus = true;
+        window.bonusTotal = window.bonusTotal + discountPrice * quantity;
+        finalLoop++;
+        if (finalLoop == cart.items.length) {
+          window.bonusTotal = window.bonusTotal / 100;
+          // Get qualified bonus
+          let qualifiedBonusLevel = getQualifiedBonusLevel(window.bonusTotal, levels);
+          if (qualifiedBonusLevel > 0) {
+            let qualifiedBonusId = getQualifiedBonusId(qualifiedBonusLevel);
+            if (bonusIds.length === 0) {
+              if (window.checkingBonus === false) {
+                window.checkingBonus = true;
+                addBonus(qualifiedBonusId);
               }
-            });
+            } else {
+              let correctBonus = false;
+              bonusIds.forEach(bonusId => {
+                if (bonusId !== qualifiedBonusId) {
+                  Shopify.removeItem(bonusId, function (cart) {
+                    Shopify.updateQuickCart(cart);
+                  });
+                } else {
+                  correctBonus = true;
+                }
+              });
 
-            if (correctBonus === false) {
-              addBonus(qualifiedBonusId);
+              if (correctBonus === false) {
+                addBonus(qualifiedBonusId);
+              }
             }
-          }
-        } else {
-          bonusIds.forEach(bonusId => {
-            Shopify.removeItem(bonusId, function (cart) {
-              Shopify.updateQuickCart(cart);
+          } else {
+            bonusIds.forEach(bonusId => {
+              Shopify.removeItem(bonusId, function (cart) {
+                Shopify.updateQuickCart(cart);
+              });
             });
-          });
-        }
-        
-        let rewardResults = calculateBonusReward(bonusTotal, levels);
-        progressBarWidth = rewardResults.progress.toString();
-        let progressBarWidth_filled = 100 - progressBarWidth;
+          }
 
 
         if ($('.template-cart').length !== 0) {
@@ -135,13 +135,15 @@ function checkCartForBonusReward() {
           // Show/Hide progress bar
           if (bonusTotal === 0) {
             $('.bonusRewards-progress').addClass('hidden');
+          let rewardResults = calculateBonusReward(window.bonusTotal, levels);
+          progressBarWidth = rewardResults.progress.toString();
+          let progressBarWidth_filled = 100 - progressBarWidth;
+
           } else {
             $('.bonusRewards-progress').removeClass('hidden');
           }
           $('.promo-bar .bonusRewards-bar').css('width', progressBarWidth_filled + '%');
-
         }
-      }
       });
     });
     
@@ -201,6 +203,7 @@ function addBonus(bonusProductId, callback) {
     data: 'quantity=' + quantity + '&id=' + bonusProductId,
     dataType: 'json',
     success: function(line_item) {
+      window.checkingBonus = false;
       if ((typeof callback) === 'function') {
         callback(line_item);
       }
