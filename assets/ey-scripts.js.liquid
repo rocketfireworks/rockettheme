@@ -100,49 +100,16 @@ function checkCartForBonusReward() {
               });
             });
           }
-
-
-        if ($('.template-cart').length !== 0) {
-          // Current Rewards 
-          let bonusContainers = document.querySelectorAll('.cartRewardsProgram .bonus-tiered-container');
-          bonusContainers.forEach(bonusContainer => {
-            if (!bonusContainer.classList.contains('hidden')) {
-              bonusContainer.classList.add('hidden');
-            }
-          });
-          $('.cartRewardsProgram .level-' + qualifiedBonusLevel).removeClass('hidden');
           
-          // Show/Hide progress bar
-          if (bonusTotal === 0) {
-            $('#cartrewardsProgress').addClass('hidden');
-          } else {
-            $('#cartrewardsProgress').removeClass('hidden');
-          }
-          $("#cartrewardsBar").css('width', progressBarWidth_filled + '%' );
-
-          // Bonus Rewards message
-          let bonusTieredMtv = $('.cartRewardsProgram .bonus-tiered-mtv')[0];
-          bonusTieredMtv.innerHTML = `
-          <b>$${rewardResults.remaining}</b> away from <b>Bonus Rewards Level ${qualifiedBonusLevel + 1}</b>! <i class="fas fa-gift"></i>
-          `;
-
-        } else {
-          // Bonus Rewards message
-          $('.promo-bar .promo-bar-container').css('opacity', 1);
-          $('.promo-bar .bonusRewards-message').html(
-            `<b>$${rewardResults.remaining}</b> away from <b>Bonus Rewards Level ${qualifiedBonusLevel + 1}</b>! <i class="fas fa-gift"></i>`);
-
-          // Show/Hide progress bar
-          if (bonusTotal === 0) {
-            $('.bonusRewards-progress').addClass('hidden');
           let rewardResults = calculateBonusReward(window.bonusTotal, levels);
           progressBarWidth = rewardResults.progress.toString();
           let progressBarWidth_filled = 100 - progressBarWidth;
 
+          if ($('.template-cart').length !== 0) {
+            updateBonusRewardsSection(progressBarWidth_filled, rewardResults.remaining, qualifiedBonusLevel)
           } else {
-            $('.bonusRewards-progress').removeClass('hidden');
+            updatePromoBar(progressBarWidth_filled, rewardResults.remaining, qualifiedBonusLevel)
           }
-          $('.promo-bar .bonusRewards-bar').css('width', progressBarWidth_filled + '%');
         }
       });
     });
@@ -193,6 +160,47 @@ function calculateBonusReward(fwTotal, levels) {
 
 function calculateProgressBar(low, high) {
   return Math.floor((low * 100) / high);
+}
+
+
+function updatePromoBar(progressBarWidth_filled, remainingAmount, qualifiedBonusLevel) {
+  // Bonus Rewards message
+  $('.promo-bar .promo-bar-container').css('opacity', 1);
+  $('.promo-bar .bonusRewards-message').html(
+    `<b>$${remainingAmount}</b> away from <b>Bonus Rewards Level ${qualifiedBonusLevel + 1}</b>! <i class="fas fa-gift"></i>`);
+
+  // Show/Hide progress bar
+  if (window.bonusTotal === 0) {
+    $('.bonusRewards-progress').addClass('hidden');
+  } else {
+    $('.bonusRewards-progress').removeClass('hidden');
+  }
+  $('.promo-bar .bonusRewards-bar').css('width', progressBarWidth_filled + '%');
+}
+
+function updateBonusRewardsSection(progressBarWidth_filled, remainingAmount, qualifiedBonusLevel) {
+  // Current Rewards 
+  let bonusContainers = document.querySelectorAll('.cartRewardsProgram .bonus-tiered-container');
+  bonusContainers.forEach(bonusContainer => {
+    if (!bonusContainer.classList.contains('hidden')) {
+      bonusContainer.classList.add('hidden');
+    }
+  });
+  $('.cartRewardsProgram .level-' + qualifiedBonusLevel).removeClass('hidden');
+
+  // Show/Hide progress bar
+  if (window.bonusTotal === 0) {
+    $('#cartrewardsProgress').addClass('hidden');
+  } else {
+    $('#cartrewardsProgress').removeClass('hidden');
+  }
+  $("#cartrewardsBar").css('width', progressBarWidth_filled + '%' );
+
+  // Bonus Rewards message
+  let bonusTieredMtv = $('.cartRewardsProgram .bonus-tiered-mtv')[0];
+  bonusTieredMtv.innerHTML = `
+  <b>$${remainingAmount}</b> away from <b>Bonus Rewards Level ${qualifiedBonusLevel + 1}</b>! <i class="fas fa-gift"></i>
+  `;
 }
 
 function addBonus(bonusProductId, callback) {
