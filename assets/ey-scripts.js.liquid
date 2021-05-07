@@ -22,8 +22,19 @@ function checkCartForBonusReward() {
   // Get cart
   $.getJSON('/cart.js', cart => {
     let finalLoop = 0;
-    cart.items.forEach(item => {
 
+    if (cart.item_count === 0) {
+      let qualifiedBonusLevel = 0;
+      let progressBarWidth_filled = 0;
+      let remaining = 150;
+      if ($('.template-cart').length !== 0) {
+        updateBonusRewardsSection(progressBarWidth_filled, remaining, qualifiedBonusLevel)
+      } else {
+        updatePromoBar(progressBarWidth_filled, remaining, qualifiedBonusLevel)
+      }
+    }
+
+    cart.items.forEach(item => {
       // Get bonus item in cart
       let firstString = item.sku.split('-');
       if (firstString[0] === 'bonusreward') {
@@ -161,7 +172,6 @@ function calculateBonusReward(fwTotal, levels) {
 function calculateProgressBar(low, high) {
   return Math.floor((low * 100) / high);
 }
-
 
 function updatePromoBar(progressBarWidth_filled, remainingAmount, qualifiedBonusLevel) {
   // Bonus Rewards message
