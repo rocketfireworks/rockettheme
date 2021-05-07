@@ -72,10 +72,10 @@ function checkCartForBonusReward() {
         tags = tags.split(", ");
         for (let i = 0; i < tags.length; i++) {
           if (tags[i] == "FW" || tags[i] == "FWSEQ") {
-            bonusTotal = bonusTotal + discountPrice * quantity;
+            window.bonusTotal = window.bonusTotal + discountPrice * quantity;
           }
         }
-        window.bonusTotal = window.bonusTotal + discountPrice * quantity;
+        
         finalLoop++;
         if (finalLoop == cart.items.length) {
           window.bonusTotal = window.bonusTotal / 100;
@@ -166,7 +166,7 @@ function calculateBonusReward(fwTotal, levels) {
   });
   untilBonusNum = (levels[nextQualifiedIndex] - fwTotal).toFixed(2);
   progressBarWidth = calculateProgressBar(untilBonusNum, levels[nextQualifiedIndex]);
-  return results = { "remaining": untilBonusNum, "progress": progressBarWidth};
+  return bonusReward = { "remaining": untilBonusNum, "progress": progressBarWidth};
 }
 
 function calculateProgressBar(low, high) {

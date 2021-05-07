@@ -672,32 +672,34 @@ window.calculateCurrentDiscountPrice = () => {
         const discount = getProductDiscount(productId, offers);
 
         // Get the current volumn discount
-        let currentDiscountLevel = getProductCurrentDiscountLevel(itemQuantity, discount);
-        if (currentDiscountLevel >= 0) {
-          let currentDiscountType = discount.levels[currentDiscountLevel].typeId;
-          let currentDiscountValue = discount.levels[currentDiscountLevel].value;
+        if (Object.keys(discount).length !== 0) {
+          let currentDiscountLevel = getProductCurrentDiscountLevel(itemQuantity, discount);
+          if (currentDiscountLevel >= 0) {
+            let currentDiscountType = discount.levels[currentDiscountLevel].typeId;
+            let currentDiscountValue = discount.levels[currentDiscountLevel].value;
 
-          let finalItemPrice = window.calculateFinalItemPrice(currentDiscountType, currentDiscountValue, originalPrice);
-          updateDiscountMessage(finalItemPrice, currentDiscountType);
+            let finalItemPrice = window.calculateFinalItemPrice(currentDiscountType, currentDiscountValue, originalPrice);
+            updateDiscountMessage(finalItemPrice, currentDiscountType);
 
-        } else {
-          updateDiscountMessage(originalPrice);
+          } else {
+            updateDiscountMessage(originalPrice);
+          }
+
+          // Get the next volumn discount
+          let nextDiscountLevel = getProductNextDiscountLevel(itemQuantity, discount);
+          let mtvMessage = discount.mtv_message;
+
+          if (nextDiscountLevel >= 0) {
+            let nextDiscountType = discount.levels[nextDiscountLevel].typeId;
+            let nextDiscountValue = discount.levels[nextDiscountLevel].value;
+            let neededQuantity = discount.levels[nextDiscountLevel].quantity - item.quantity;
+            mtvMessage = mtvMessage.replace('{quantity}', neededQuantity);
+            mtvMessage = window.outputMtvMessage(nextDiscountType, nextDiscountValue, mtvMessage);
+          } else {
+            mtvMessage = '';
+          }
+          document.querySelector('.motivational-message').innerHTML = mtvMessage;
         }
-
-        // Get the next volumn discount
-        let nextDiscountLevel = getProductNextDiscountLevel(itemQuantity, discount);
-        let mtvMessage = discount.mtv_message;
-
-        if (nextDiscountLevel >= 0) {
-          let nextDiscountType = discount.levels[nextDiscountLevel].typeId;
-          let nextDiscountValue = discount.levels[nextDiscountLevel].value;
-          let neededQuantity = discount.levels[nextDiscountLevel].quantity - item.quantity;
-          mtvMessage = mtvMessage.replace('{quantity}', neededQuantity);
-          mtvMessage = window.outputMtvMessage(nextDiscountType, nextDiscountValue, mtvMessage);
-        } else {
-          mtvMessage = '';
-        }
-        document.querySelector('.motivational-message').innerHTML = mtvMessage;
       } 
 
       if (item.product_id !== productId && itemCount === 0) {
