@@ -29,7 +29,7 @@
 {% endif %}
 
 
-<div class="main_box">
+<div class="collections_container">
   <div class="box_1">
     {% capture collection_title %}{{ collection.title | escape }}{% endcapture %}
     <a href="{{ collection.url }}" title="Browse our {{ collection_title }} collection">  
@@ -61,7 +61,7 @@
       </a>
   </div>
   <div class="desc">
-    <h5><a href="{{ collection.url }}" title="{{ 'collections.general.link_title' | t: title: collection_title }}">{{ collection.title | escape }}</a></h5>
+    <h5 class="collection-title"><a href="{{ collection.url }}" title="{{ 'collections.general.link_title' | t: title: collection_title }}">{{ collection.title | escape }}</a></h5>
     {% if section.settings.show_item_count %}
     	<p>({{ 'collections.general.items_with_count' | t: count: collection.all_products_count }})</p>
  	{% endif %}
