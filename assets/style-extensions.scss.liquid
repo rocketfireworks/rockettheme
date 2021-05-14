@@ -4123,13 +4123,30 @@ a {
         }
         .desc {
           background-color: transparent;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: .8em 1.2em;
           .collection-title {
-            padding: 10px;
-            font-size: 1.6em;
-            text-align: center;
+            flex-basis: 65%;
             text-transform: uppercase;
             a {
               color: #16142C;
+              font-size: 1.1em;
+            }
+          }
+          .collection-button {
+            color: #16142c;
+            border: 2px solid #3dbfde;
+            padding: .4em 1.5em;
+            font-size: 1em;
+            font-weight: 700;
+            text-align: center;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all .3s;
+            &:hover {
+              background-color: #3dbfde;
             }
           }
         }
