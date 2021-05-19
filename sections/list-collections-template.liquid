@@ -9,13 +9,13 @@
 <div id="content">
   <div class="container">
     <div class="catalog_c">
-      <div class="title clearfix">
+      <div class="custom-title hidden">
         <h1>{{ 'collections.general.title' | t }}</h1>
       </div>
       <div class="row collection-list-row">
         <div class="col-sm-12">
           <div class="product_c">
-            <div class="row view-grid {% if settings.align_height %} use_align_height {% else %} use_image_height {% endif %}" >
+            <div class="collections-container" >
               {% if section.settings.display_type == 'all' %}
                 {% case section.settings.sort %}
                 	{% when 'products_high' or 'products_low' %}
@@ -26,15 +26,11 @@
               
                 {% if section.settings.sort == 'products_low' or section.settings.sort == 'date' or section.settings.sort == 'alphabetical' %}
                   {% for collection in collections %}
-                    <div class="col-lg-{{ grid_item_width }} col-md-{{grid_item_width}} col-sm-6 element mb30">
-                      {% include 'collection-loop' %}
-                    </div>
+                    {% include 'collection-loop' %}
                   {% endfor %}
                 {% else %}
                   {% for collection in collections reversed %}
-                    <div class="col-lg-{{ grid_item_width }} col-md-{{grid_item_width}} col-sm-6 element mb30">
-                      {% include 'collection-loop' %}
-                    </div>
+                    {% include 'collection-loop' %}
                   {% endfor %}
                 {% endif %}
                 {% else %}
@@ -109,15 +105,6 @@
             "label": "Date, new to old"
           }
         ]
-      },
-      {
-        "type": "range",
-        "id": "product_grid_layout",
-        "label": "Collections per row",
-        "min":       2,
-        "max":        4,
-        "step":       1,
-        "default": 3
       },
 	   {
         "type": "checkbox",
