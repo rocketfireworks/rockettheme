@@ -1,0 +1,75 @@
+<div id="banner-container" 
+     style="background-image: url({{ section.settings.image |img_url: 'master' }});">
+  <div class="container-narrow">
+    <div>
+      <div class="banner-title">{{ section.settings.heading }}</div>
+      <div class="banner-subtitle">{{ section.settings.subtitle }}</div>
+      
+      <div class="banner-cta">
+        <div>{{ section.settings.text }}</div>
+        <div class="banner-cta-links">
+          {% for block in section.blocks %}
+            <a href="{{ block.settings.link }}">{{ block.settings.linktext }}</a>
+          {% endfor %}
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "List Collection Banner",
+  "max_blocks": 2,
+  "settings": [
+    {
+      "id": "heading",
+      "type": "text",
+      "label": "Heading",
+      "default": "Heading goes here"
+    },
+    {
+      "id": "subtitle",
+      "type": "text",
+      "label": "Subtitle",
+      "default": "Subtitle goes here"
+    },
+    {
+      "id": "text",
+      "type": "text",
+      "label": "Call to Action Text",
+      "default": "Call to Action"
+    },
+    {
+      "id": "image",
+      "type": "image_picker",
+      "label": "List Collection Banner Image"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "select",
+      "name": "CTA Button",
+      "settings": [
+        {
+          "id": "link",
+          "type": "url",
+          "label": "Button link"
+        },
+        {
+          "id": "linktext",
+          "type": "text",
+          "label": "Button text",
+          "default": "Click here"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "List Collection Banner",
+      "category": "Image"
+    }
+  ]
+}
+{% endschema %}
