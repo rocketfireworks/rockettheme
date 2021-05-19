@@ -46,13 +46,13 @@
     "header_size_3": 17,
     "cart_type": "modal",
     "enable_terms_and_conditions": false,
-    "terms_and_conditions_text": "<p>Agree with terms&nbsp;and conditions.<\/p>",
+    "terms_and_conditions_text": "<p>Agree with terms and conditions.<\/p>",
     "limit_purchase_quantities": false,
     "cart_notes": true,
     "show_currency_disclaimer": false,
     "cart_link_list": "",
     "show_shipping_calculator": true,
-    "shipping_calculator_default_country": "United States",
+    "shipping_calculator_default_country": "Canada",
     "search_type_query": "search_products_only",
     "enable_live_search": true,
     "use_infinite_scroll": true,
@@ -95,8 +95,8 @@
     "checkout_input_background_color_mode": "white",
     "checkout_sidebar_background_image": "",
     "checkout_sidebar_background_color": "#fafafa",
-    "checkout_heading_font": "Helvetica Neue",
-    "checkout_body_font": "Helvetica Neue",
+    "checkout_heading_font": "Open Sans",
+    "checkout_body_font": "Open Sans",
     "checkout_accent_color": "#16142c",
     "checkout_button_color": "#3dbfde",
     "checkout_error_color": "#fc1e1e",
@@ -451,7 +451,7 @@
         "type": "header",
         "settings": {
           "show_announcement": true,
-          "promo_bar_text": "<span class=\"bonusRewards-message\">GET REWARDS LIKE FREE FIREWORKS! Details <i class=\"fas fa-gift\"><\/i><\/span>",
+          "promo_bar_text": "",
           "promo_bar_link": "shopify:\/\/pages\/free-fireworks",
           "head_promobar": 14,
           "header_style": "header2",
@@ -796,6 +796,7 @@
           "coupon_title": "<p>Free<br\/>Fireworks<\/p>",
           "coupon_subtitle": "<p>Shop In-Store or Online<br\/>and get Bonus Rewards<\/p>",
           "coupon_image": "shopify:\/\/shop_images\/coupon.png",
+          "coupon_link": "shopify:\/\/pages\/free-fireworks",
           "coupon_linktext": "View Deals"
         }
       },
@@ -829,36 +830,38 @@
         "settings": {
           "display_type": "all",
           "sort": "alphabetical",
-          "product_grid_layout": 4,
+          "product_grid_layout": 3,
           "show_item_count": false
-        }
-      },
-      "collection-list": {
-        "type": "collection-list",
-        "settings": {
-          "product_grid_layout": 4,
-          "pagination_limit": 12,
-          "use_infinite_scroll": true,
-          "show_featured_image": true,
-          "show_grid_type": false,
-          "show_sale_badge": true,
-          "collection_overlay": false,
-          "show_product_reviews_stars": false,
-          "show_collection_sidebar": true,
-          "collection_sidebar_filters": "none",
-          "group_array": "",
-          "collection_link_list": "",
-          "show_sidebar_collections": true,
-          "show_sidebar_vendors": false,
-          "sidebar_collection_sale_collection": "",
-          "sidebar_collection_product_count": 4
         }
       },
       "collection-featured-product": {
         "type": "collection-featured-product",
         "settings": {
           "enable_featured_product": true,
-          "featured_product": "10m-fairy-lights"
+          "featured_product": "007"
+        }
+      },
+      "list-collections-banner": {
+        "type": "list-collections-banner",
+        "blocks": {
+          "33f14abc-5d33-489a-93d4-8848286efbf5": {
+            "type": "select",
+            "settings": {
+              "link": "shopify:\/\/pages\/contact-info",
+              "linktext": "Contact Us",
+              "color": "#16142c",
+              "background_color": "#3cc0df"
+            }
+          }
+        },
+        "block_order": [
+          "33f14abc-5d33-489a-93d4-8848286efbf5"
+        ],
+        "settings": {
+          "heading": "Fireworks Collections",
+          "subtitle": "Let's get this party started!",
+          "text": "Shop from the categories below or",
+          "image": "shopify:\/\/shop_images\/fireworks-display.jpg"
         }
       }
     },
