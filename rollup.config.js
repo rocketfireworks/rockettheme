@@ -26,7 +26,7 @@ export default {
   output: {
     file: `src/assets/rocket-js-compiledtheme.js`,
     format: 'es',
-    sourcemap: true
+    sourcemap: false
   },
 
   // Rollup bundles JavaScript directly, but relies on plugins to perform other build tasks. Run
