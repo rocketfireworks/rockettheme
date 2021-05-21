@@ -94,7 +94,9 @@ const TASK_END = 'task_end';
 
 // HTTP Methods
 const GET = 'GET';
-const POST = 'POST';
+
+// THEME CONSTANTS
+const TAG_FW = 'FW';
 
 class Logger extends EventDispatcher {
   constructor () {
@@ -508,6 +510,18 @@ class LoadJSONTask extends LoadTask {
 class ShopifyCart {
 }
 
+ShopifyCart.getCartTask = function () {
+  let getCartTask = ShopifyCart.getLoadJSONTask('/cart.js', 'GET');
+  getCartTask.name = 'GET CART';
+  return getCartTask;
+};
+
+ShopifyCart.getProductTask = function (productURL) {
+  let getProductTask = ShopifyCart.getLoadJSONTask( productURL, 'GET');
+  getProductTask.name = `GET PRODUCT: ${productURL}`;
+  return getProductTask;
+};
+
 ShopifyCart.getAddToCartTask = function (variantID) {
   let bodyData = {
     'items': [{
@@ -517,11 +531,13 @@ ShopifyCart.getAddToCartTask = function (variantID) {
   };
   let url = '/cart/add.js';
 
-  return this.getLoadJSONTask(url, bodyData);
+  return ShopifyCart.getLoadJSONTask(url, 'POST', bodyData);
 };
 
 ShopifyCart.getRemoveFromCartTask = function (variantID) {
-  return this.getUpdateCartTask(variantID, 0);
+  let removeFromCartTask = ShopifyCart.getUpdateCartTask(variantID,0);
+  removeFromCartTask.name = 'REMOVE FROM CART';
+  return removeFromCartTask;
 };
 
 ShopifyCart.getUpdateCartTask = function (variantID, quantity) {
@@ -530,21 +546,27 @@ ShopifyCart.getUpdateCartTask = function (variantID, quantity) {
   bodyData.updates[variantID] = quantity;
   let url = '/cart/update.js';
 
-  return this.getLoadJSONTask(url, bodyData);
+  let updateItemTask = ShopifyCart.getLoadJSONTask(url, 'POST', bodyData);
+
+  return updateItemTask;
 };
 
-ShopifyCart.getLoadJSONTask = function (url, bodyData) {
-  let loadJSONTask = new LoadJSONTask(url,
-    {
+ShopifyCart.getLoadJSONTask = function (url, method, bodyData = null) {
+  let loadJSONTaskParams = {
       headersObj: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Accept': 'application/json, text/javascript'
       },
-      method: POST,
-      body: JSON.stringify(bodyData)
-    });
+      method: method
+    };
+  if (notNil(bodyData)) {
+    loadJSONTaskParams.body = JSON.stringify(bodyData);
+  }
+
+  let loadJSONTask = new LoadJSONTask(url, loadJSONTaskParams);
 
   loadJSONTask.on(COMPLETE, () => {
-    console.log('Task complete!');
+    // Task complete
   });
 
   loadJSONTask.on(FAIL, (e) => {
@@ -565,45 +587,150 @@ ShopifyCart.getLoadJSONTask = function (url, bodyData) {
   return loadJSONTask;
 };
 
+class GetFireworksInCartTotalTask extends Task {
+  
+  constructor () {
+    super();
+
+    this.name = 'GET FIREWORKS IN CART TOTAL';
+  }
+
+  start() {
+    super.start();
+
+    let fireworksProducts = RocketTheme.globals.dataStore.productsInCart.filter(element => element.product.tags.includes(TAG_FW));
+    RocketTheme.globals.dataStore.fireworksTotalInCart = sumProducts(fireworksProducts);
+    this.done();
+  }
+}
+
+class UpdateCartProductsInDataStoreTask extends TaskManager {
+  
+  constructor () {
+    super('GET ALL PRODUCTS IN CART');
+  }
+
+  initTasks () {
+    this.tasks = [];
+    let cart = RocketTheme.globals.dataStore.cart;
+    let newTasks = [];
+
+    cart.items.forEach(item => {
+      let getProductTask = ShopifyCart.getProductTask(item.url + '.js');
+      getProductTask.on(COMPLETE, () => {
+        RocketTheme.globals.dataStore.productsInCart.push(getProductTask.json);
+      });
+      newTasks.push(getProductTask);
+    });
+    this.addTasks(newTasks);
+  }
+
+  start() {
+    this.clearProductsInCart();
+    this.initTasks();
+    super.start();
+  }
+
+  clearProductsInCart () {
+    RocketTheme.globals.dataStore.productsInCart = [];
+  }
+}
+
+class WaitForSellyTask extends Task {
+  constructor () {
+    super();
+    this.name = "WAIT FOR SELLY";
+  }
+
+  start () {
+    super.start();
+
+    this.checkSellyIntervalID = setInterval(() => {
+      if (this.checkSelly()) {
+        this.done();
+        clearInterval(this.checkSellyIntervalID);
+      }
+    }, 1000);
+  }
+
+  checkSelly () {
+    return true;
+  }
+}
+
+class UpdateCartInDataStoreTask extends Task {
+
+  constructor () {
+    super();
+    this.name = "UpdateCartInDataStore";
+  }
+
+  start () {
+    super.start();
+    
+    let getCartTask = ShopifyCart.getCartTask();
+    getCartTask.on(COMPLETE, () => {
+      RocketTheme.globals.dataStore.cart = getCartTask.json;
+      this.done();
+    });
+    getCartTask.start();
+  }
+}
+
+class BonusReward {
+
+  constructor (level, id, index) {
+    this.level = level;
+    this.id = id;
+    this.index = index;
+  }
+  
+}
+
 class BonusRewards {
   constructor () {
     log('BonusRewards 4.0 manager ready.');
 
-    this.updateRewards(BonusRewards.level1ID, BonusRewards.level2ID);
+    this.updateRewards();
   }
 
-  updateRewards (removeID, addID) {
-    let tasks = [];
-    if (notNil(removeID)) {
-      tasks.push(ShopifyCart.getRemoveFromCartTask(removeID));
-    }
-    if (notNil(addID)) {
-      tasks.push(ShopifyCart.getAddToCartTask(addID));
-    }
+  updateRewards () {
+    // Create list of tasks
+    let tasks = [
+      new UpdateCartInDataStoreTask() ,
+      new UpdateCartProductsInDataStoreTask(),
+      new WaitForSellyTask(),
+      new GetFireworksInCartTotalTask()
+    ];
 
+    // Execute tasks
     this.rewardsManager = new TaskManager('Rewards Manager');
     this.rewardsManager.addTasks(tasks);
     this.rewardsManager.on(COMPLETE, e => {
-      log('RewardsManager finished adding/removing item.');
+      log('RewardsManager finished updating rewards.');
+      log('Current Fireworks total in cart: ');
+      log(RocketTheme.globals.dataStore.fireworksTotalInCart);
     });
     this.rewardsManager.on(FAIL, e => {
-      log('RewardsManager failed to complete tasks.');
+      log('RewardsManager failed to update rewards.');
     });
 
     this.rewardsManager.start();
   }
 }
 
-BonusRewards.level1ID = 39310116454589;
-BonusRewards.level2ID = 39310858420413;
-BonusRewards.level3ID = 39310870708413;
-BonusRewards.level4ID = 39310873297085;
-BonusRewards.level5ID = 39310876115133;
-BonusRewards.level6ID = 39310879195325;
-BonusRewards.level7ID = 39310912815293;
-BonusRewards.level8ID = 39310917664957;
-BonusRewards.level9ID = 39310919336125;
-BonusRewards.level10ID = 39310922252477;
+BonusRewards.levels = [
+  new BonusReward(150, 39310116454589, 1),
+  new BonusReward(200, 39310858420413, 2),
+  new BonusReward(300, 39310870708413, 3),
+  new BonusReward(400, 39310873297085, 4),
+  new BonusReward(500, 39310876115133, 5),
+  new BonusReward(600, 39310879195325, 6),
+  new BonusReward(750, 39310912815293, 7),
+  new BonusReward(1000, 39310917664957, 8),
+  new BonusReward(1250, 39310919336125, 9),
+  new BonusReward(1500, 39310922252477, 10)
+];
 
 /**
  * Displays messages from Logger in the web browser console.
@@ -643,6 +770,14 @@ class ReleaseInfo {
   }
 }
 
+class DataStore {
+  constructor () {
+    this.cart = null;
+    this.productsInCart = [];
+    this.fireworksTotalInCart = 0;
+  }
+}
+
 /**
  * Main application entry point.
  */
@@ -653,10 +788,12 @@ class RocketTheme {
     RocketTheme.globals.logger = Logger.logger();
     this.consoleLogger = new ConsoleLogger(RocketTheme.globals.logger);
 
+    RocketTheme.globals.dataStore = new DataStore;
+
     // Create Bonus Rewards manager
     this.bonusRewards = new BonusRewards();
 
-    RocketTheme.globals.releaseInfo = new ReleaseInfo('Rocket Dev Theme', '1.1.0', 'Wed May 19 2021 10:55:45 GMT-0400 (Eastern Daylight Time)');
+    RocketTheme.globals.releaseInfo = new ReleaseInfo('Rocket Dev Theme', '1.0.0', 'Wed May 19 2021 19:00:40 GMT-0400 (Eastern Daylight Time)');
 
     log(`RocketTheme ${RocketTheme.globals.releaseInfo.title} ${RocketTheme.globals.releaseInfo.version} boot complete.`);
     log(`Last compiled: ${RocketTheme.globals.releaseInfo.date}`);
@@ -669,4 +806,3 @@ RocketTheme.globals = {};
 // Starts the application by instantiating the main application class...
 const rocketTheme = new RocketTheme();
 rocketTheme.boot();
-//# sourceMappingURL=rocket-js-compiledtheme.js.map

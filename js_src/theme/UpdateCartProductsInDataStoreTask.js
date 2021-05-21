@@ -4,7 +4,7 @@ import { TaskManager } from "../utils/TaskManager";
 import { RocketTheme } from "./RocketTheme";
 
 
-export class GetAllProductsInCartTask extends TaskManager {
+export class UpdateCartProductsInDataStoreTask extends TaskManager {
   
   constructor () {
     super('GET ALL PRODUCTS IN CART');

@@ -1,12 +1,13 @@
 import {log} from '../utils/logfunctions.js';
-import {notNil} from '../utils/utils.js';
 import {COMPLETE, FAIL} from '../utils/constants.js';
 import {TaskManager} from '../utils/TaskManager.js';
 import {ShopifyCart} from '../shopify/ShopifyCart.js';
 import { RocketTheme } from './RocketTheme.js';
 import { GetFireworksInCartTotalTask } from './GetFireworksTotalInCartTask.js';
-import { GetAllProductsInCartTask } from './GetAllProductsInCartTask.js';
+import { UpdateCartProductsInDataStoreTask } from './UpdateCartProductsInDataStoreTask.js';
 import { WaitForSellyTask } from './WaitForSellyTask.js';
+import { UpdateCartInDataStoreTask } from './UpdateCartInDataStoreTask.js';
+import { BonusReward } from './BonusReward.js';
 
 export class BonusRewards {
   constructor () {
@@ -16,17 +17,11 @@ export class BonusRewards {
   }
 
   updateRewards () {
-    // Get Cart
-    let getCartTask = ShopifyCart.getCartTask();
-    getCartTask.on(COMPLETE, () => {
-      RocketTheme.globals.dataStore.cart = getCartTask.json;
-    })
-
     // Create list of tasks
     let tasks = [
-      getCartTask,
-      new WaitForSellyTask,
-      new GetAllProductsInCartTask(),
+      new UpdateCartInDataStoreTask() ,
+      new UpdateCartProductsInDataStoreTask(),
+      new WaitForSellyTask(),
       new GetFireworksInCartTotalTask()
     ];
 
@@ -46,13 +41,15 @@ export class BonusRewards {
   }
 }
 
-BonusRewards.level1ID = 39310116454589;
-BonusRewards.level2ID = 39310858420413;
-BonusRewards.level3ID = 39310870708413;
-BonusRewards.level4ID = 39310873297085;
-BonusRewards.level5ID = 39310876115133;
-BonusRewards.level6ID = 39310879195325;
-BonusRewards.level7ID = 39310912815293;
-BonusRewards.level8ID = 39310917664957;
-BonusRewards.level9ID = 39310919336125;
-BonusRewards.level10ID = 39310922252477;
+BonusRewards.levels = [
+  new BonusReward(150, 39310116454589, 1),
+  new BonusReward(200, 39310858420413, 2),
+  new BonusReward(300, 39310870708413, 3),
+  new BonusReward(400, 39310873297085, 4),
+  new BonusReward(500, 39310876115133, 5),
+  new BonusReward(600, 39310879195325, 6),
+  new BonusReward(750, 39310912815293, 7),
+  new BonusReward(1000, 39310917664957, 8),
+  new BonusReward(1250, 39310919336125, 9),
+  new BonusReward(1500, 39310922252477, 10)
+]
