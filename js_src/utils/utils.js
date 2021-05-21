@@ -54,3 +54,10 @@ export function notEmpty (value) {
 export function isRelativeURL (url) {
   return new URL(document.baseURI).origin === new URL(url, document.baseURI).origin;
 }
+
+export function sumProducts (products) {
+  return products.reduce(function(prev, cur) {
+    let thisVal = parseFloat(cur.product.variants[0].price);
+    return prev + thisVal;
+  }, 0);
+}

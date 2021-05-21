@@ -3,30 +3,43 @@ import {notNil} from '../utils/utils.js';
 import {COMPLETE, FAIL} from '../utils/constants.js';
 import {TaskManager} from '../utils/TaskManager.js';
 import {ShopifyCart} from '../shopify/ShopifyCart.js';
+import { RocketTheme } from './RocketTheme.js';
+import { GetFireworksInCartTotalTask } from './GetFireworksTotalInCartTask.js';
+import { GetAllProductsInCartTask } from './GetAllProductsInCartTask.js';
+import { WaitForSellyTask } from './WaitForSellyTask.js';
 
 export class BonusRewards {
   constructor () {
     log('BonusRewards 4.0 manager ready.')
 
-    this.updateRewards(BonusRewards.level1ID, BonusRewards.level2ID);
+    this.updateRewards();
   }
 
-  updateRewards (removeID, addID) {
-    let tasks = [];
-    if (notNil(removeID)) {
-      tasks.push(ShopifyCart.getRemoveFromCartTask(removeID));
-    }
-    if (notNil(addID)) {
-      tasks.push(ShopifyCart.getAddToCartTask(addID));
-    }
+  updateRewards () {
+    // Get Cart
+    let getCartTask = ShopifyCart.getCartTask();
+    getCartTask.on(COMPLETE, () => {
+      RocketTheme.globals.dataStore.cart = getCartTask.json;
+    })
 
+    // Create list of tasks
+    let tasks = [
+      getCartTask,
+      new WaitForSellyTask,
+      new GetAllProductsInCartTask(),
+      new GetFireworksInCartTotalTask()
+    ];
+
+    // Execute tasks
     this.rewardsManager = new TaskManager('Rewards Manager');
     this.rewardsManager.addTasks(tasks);
     this.rewardsManager.on(COMPLETE, e => {
-      log('RewardsManager finished adding/removing item.');
+      log('RewardsManager finished updating rewards.');
+      log('Current Fireworks total in cart: ');
+      log(RocketTheme.globals.dataStore.fireworksTotalInCart);
     });
     this.rewardsManager.on(FAIL, e => {
-      log('RewardsManager failed to complete tasks.');
+      log('RewardsManager failed to update rewards.');
     });
 
     this.rewardsManager.start();

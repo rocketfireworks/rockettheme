@@ -2,8 +2,21 @@ import {LoadJSONTask} from '../utils/LoadJSONTask.js';
 import {COMPLETE, FAIL, POST} from '../utils/constants.js';
 import {LoadError} from '../utils/LoadError.js';
 import {fatal} from '../utils/logfunctions.js';
+import { notNil } from '../utils/utils.js';
 
 export class ShopifyCart {
+}
+
+ShopifyCart.getCartTask = function () {
+  let getCartTask = ShopifyCart.getLoadJSONTask('/cart.js', 'GET');
+  getCartTask.name = 'GET CART';
+  return getCartTask;
+}
+
+ShopifyCart.getProductTask = function (productURL) {
+  let getProductTask = ShopifyCart.getLoadJSONTask( productURL, 'GET');
+  getProductTask.name = `GET PRODUCT: ${productURL}`;
+  return getProductTask;
 }
 
 ShopifyCart.getAddToCartTask = function (variantID) {
@@ -15,11 +28,13 @@ ShopifyCart.getAddToCartTask = function (variantID) {
   };
   let url = '/cart/add.js';
 
-  return this.getLoadJSONTask(url, bodyData);
+  return ShopifyCart.getLoadJSONTask(url, 'POST', bodyData);
 }
 
 ShopifyCart.getRemoveFromCartTask = function (variantID) {
-  return this.getUpdateCartTask(variantID, 0);
+  let removeFromCartTask = ShopifyCart.getUpdateCartTask(variantID,0);
+  removeFromCartTask.name = 'REMOVE FROM CART';
+  return removeFromCartTask;
 }
 
 ShopifyCart.getUpdateCartTask = function (variantID, quantity) {
@@ -28,21 +43,27 @@ ShopifyCart.getUpdateCartTask = function (variantID, quantity) {
   bodyData.updates[variantID] = quantity;
   let url = '/cart/update.js';
 
-  return this.getLoadJSONTask(url, bodyData);
+  let updateItemTask = ShopifyCart.getLoadJSONTask(url, 'POST', bodyData);
+
+  return updateItemTask;
 }
 
-ShopifyCart.getLoadJSONTask = function (url, bodyData) {
-  let loadJSONTask = new LoadJSONTask(url,
-    {
+ShopifyCart.getLoadJSONTask = function (url, method, bodyData = null) {
+  let loadJSONTaskParams = {
       headersObj: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Accept': 'application/json, text/javascript'
       },
-      method: POST,
-      body: JSON.stringify(bodyData)
-    });
+      method: method
+    };
+  if (notNil(bodyData)) {
+    loadJSONTaskParams.body = JSON.stringify(bodyData);
+  }
+
+  let loadJSONTask = new LoadJSONTask(url, loadJSONTaskParams);
 
   loadJSONTask.on(COMPLETE, () => {
-    console.log('Task complete!');
+    // Task complete
   });
 
   loadJSONTask.on(FAIL, (e) => {

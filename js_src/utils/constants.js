@@ -18,3 +18,7 @@ export const POST = 'POST';
 
 // States
 export const STATE_BOOT = 'state_boot';
+
+// THEME CONSTANTS
+export const TAG_FW = 'FW';
+export const TAG_FWSEQ = 'FWSEQ';
