@@ -55,9 +55,11 @@ export function isRelativeURL (url) {
   return new URL(document.baseURI).origin === new URL(url, document.baseURI).origin;
 }
 
-export function sumProducts (products) {
-  return products.reduce(function(prev, cur) {
-    let thisVal = parseFloat(cur.product.variants[0].price);
-    return prev + thisVal;
+/**
+ * Returns the sum of the objects in the array for the specified prop.
+ */
+export function sumBy (array, prop) {
+  return array.reduce(function(prev, cur) {
+    return prev + cur[prop];
   }, 0);
 }

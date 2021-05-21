@@ -60,7 +60,6 @@
     <!-- Ultilities ======================================================= -->
     {{ 'ultilities.js' | asset_url | script_tag }}
     <script src="{{ 'lazysizes.js' | asset_url }}" async="async"></script>
-    <script src="{{ 'rocket-js-compiledtheme.js' | asset_url }}" type="module"></script>
     
     
     <!-- Theme Global App JS ================================================== -->
@@ -73,10 +72,21 @@
       }
   
     </script>
+
+    <!-- Selly Hook ========================================================== -->
+    <script>
+      window.callbackCustomTheme = data => {
+        window.sellyData = data;
+      }
+    </script>
     {% include "no_script_styles" %}
   </head>
 
   <body id="{{ page_title | handle }}" class="{% if customer %}customer-logged-in {% endif %}template-{{ template | replace: '.', ' ' | truncatewords: 1, '' | handle }}" >
+    
+    
+    <script src="{{ 'rocket-js-compiledtheme.js' | asset_url }}" type="module"></script>
+
     <div class="wsmenucontainer clearfix">
       <div class="overlapblackbg"></div>
       {% if settings.show_entry_popup %}
@@ -86,7 +96,7 @@
       {% section 'header' %}
      
       {{ content_for_layout }}
-	<noscript class="endOfLayoutContentX" type="text/mark"></noscript>{% render 'treedify_script' %}
+	    <noscript class="endOfLayoutContentX" type="text/mark"></noscript>{% render 'treedify_script' %}
       
 	  {% section 'icon-buttons' %}	
       {% section 'footer' %}

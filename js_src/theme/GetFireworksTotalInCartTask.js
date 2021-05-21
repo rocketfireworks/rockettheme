@@ -1,8 +1,8 @@
-import { TAG_FW } from "../utils/constants";
+import { SellyService } from "../appapis/SellyService";
 import { Task } from "../utils/Task";
-import { sumProducts } from "../utils/utils";
+import { sumBy } from "../utils/utils";
+import { ProductService } from "./ProductService";
 import { RocketTheme } from "./RocketTheme";
-
 
 export class GetFireworksInCartTotalTask extends Task {
   
@@ -15,8 +15,23 @@ export class GetFireworksInCartTotalTask extends Task {
   start() {
     super.start();
 
-    let fireworksProducts = RocketTheme.globals.dataStore.productsInCart.filter(element => element.product.tags.includes(TAG_FW))
-    RocketTheme.globals.dataStore.fireworksTotalInCart = sumProducts(fireworksProducts);
+    let fireworksProducts = [];
+    
+    RocketTheme.globals.dataStore.cart.items.forEach(item => {
+      if (ProductService.isFireworkProduct(item.handle)) {
+        fireworksProducts.push({
+          handle: item.handle,
+          product_id: item.product_id,
+          unitFinalPrice: SellyService.getFinalUnitPrice(item.product_id, item.quantity, item.price),
+          lineItemTotalFinalPrice: item.quantity * SellyService.getFinalUnitPrice(item.product_id, item.quantity, item.price)
+        });
+      }
+    });
+
+    console.log('=================');
+    console.log(fireworksProducts);
+
+    RocketTheme.globals.dataStore.fireworksTotalInCart = sumBy(fireworksProducts, 'lineItemTotalFinalPrice');
     this.done();
   }
 }

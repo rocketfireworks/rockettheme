@@ -1,16 +1,19 @@
 import {log} from '../utils/logfunctions.js';
 import {COMPLETE, FAIL} from '../utils/constants.js';
 import {TaskManager} from '../utils/TaskManager.js';
-import {ShopifyCart} from '../shopify/ShopifyCart.js';
 import { RocketTheme } from './RocketTheme.js';
 import { GetFireworksInCartTotalTask } from './GetFireworksTotalInCartTask.js';
 import { UpdateCartProductsInDataStoreTask } from './UpdateCartProductsInDataStoreTask.js';
 import { WaitForSellyTask } from './WaitForSellyTask.js';
 import { UpdateCartInDataStoreTask } from './UpdateCartInDataStoreTask.js';
 import { BonusReward } from './BonusReward.js';
+import { EventDispatcher } from '../utils/EventDispatcher.js';
+import { FIREWORKS_TOTAL_IN_CART_UPDATED } from './Events.js';
 
-export class BonusRewards {
+export class BonusRewards extends EventDispatcher {
   constructor () {
+    super();
+
     log('BonusRewards 4.0 manager ready.')
 
     this.updateRewards();
@@ -19,7 +22,7 @@ export class BonusRewards {
   updateRewards () {
     // Create list of tasks
     let tasks = [
-      new UpdateCartInDataStoreTask() ,
+      new UpdateCartInDataStoreTask(),
       new UpdateCartProductsInDataStoreTask(),
       new WaitForSellyTask(),
       new GetFireworksInCartTotalTask()
@@ -32,6 +35,7 @@ export class BonusRewards {
       log('RewardsManager finished updating rewards.');
       log('Current Fireworks total in cart: ');
       log(RocketTheme.globals.dataStore.fireworksTotalInCart);
+      this.dispatchEvent(FIREWORKS_TOTAL_IN_CART_UPDATED);
     });
     this.rewardsManager.on(FAIL, e => {
       log('RewardsManager failed to update rewards.');

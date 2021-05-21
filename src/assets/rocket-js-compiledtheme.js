@@ -55,10 +55,12 @@ function isRelativeURL (url) {
   return new URL(document.baseURI).origin === new URL(url, document.baseURI).origin;
 }
 
-function sumProducts (products) {
-  return products.reduce(function(prev, cur) {
-    let thisVal = parseFloat(cur.product.variants[0].price);
-    return prev + thisVal;
+/**
+ * Returns the sum of the objects in the array for the specified prop.
+ */
+function sumBy (array, prop) {
+  return array.reduce(function(prev, cur) {
+    return prev + cur[prop];
   }, 0);
 }
 
@@ -97,6 +99,7 @@ const GET = 'GET';
 
 // THEME CONSTANTS
 const TAG_FW = 'FW';
+const TAG_FWSEQ = 'FWSEQ';
 
 class Logger extends EventDispatcher {
   constructor () {
@@ -276,6 +279,77 @@ class TaskManager extends EventDispatcher {
   }
 }
 
+class SellyService {
+}
+
+SellyService.data = {};
+
+SellyService.getFinalUnitPrice = function (productID, quantity, originalPrice) {
+  let activeOffers = SellyService.getActiveOffersForProduct(productID);
+  let finalUnitPrice = originalPrice;
+
+  activeOffers.forEach(offer => {
+    if (offer.offerType === SellyService.OFFER_TYPE_BULK) {
+      let discount = SellyService.getActiveDiscountForQuantity(offer.offerObj, quantity);
+      debugger;
+      if (notNil(discount)){
+        switch (discount.type_id) {
+          case SellyService.DISCOUNT_TYPE_PERCENT:
+            finalUnitPrice = originalPrice - (originalPrice * (discount.value/100));
+            break;
+  
+          case SellyService.DISCOUNT_TYPE_FIXED_AMOUNT_DISCOUNT:
+          case SellyService.DISCOUNT_TYPE_FIXED_PRICE:
+            finalUnitPrice = originalPrice - discount.value;
+            break;
+        }
+      }
+    }
+  });
+
+  return finalUnitPrice;
+};
+
+SellyService.getActiveOffersForProduct = function (productID) {
+  let activeOffers = [];
+  if (notNil(SellyService.data)) {
+    Object.keys(SellyService.data.offers).forEach(offerType => {
+      for (const [offerID, offerObj] of Object.entries(SellyService.data.offers[offerType])) {
+        if (offerObj.product_groups[0].ids.includes(productID)) {
+          activeOffers.push({
+            offerType: offerType,
+            offerObj: offerObj
+          });
+        }
+      }
+    });
+  }
+
+  return activeOffers;
+};
+
+SellyService.getActiveDiscountForQuantity = function (offer, quantity) {
+  let discount = null;
+  offer.discount.value.levels.forEach(level => {
+    if (quantity >= level.quantity) {
+      discount = level.discount;
+    }
+  });
+
+  return discount;
+};
+
+SellyService.getProduct = function (productID) {
+  if (notNil(SellyService.data)) {
+    return SellyService.data.products[productID];
+  }
+};
+
+SellyService.OFFER_TYPE_BULK = '7';
+SellyService.DISCOUNT_TYPE_PERCENT = 1;
+SellyService.DISCOUNT_TYPE_FIXED_AMOUNT_DISCOUNT = 2;
+SellyService.DISCOUNT_TYPE_FIXED_PRICE = 2;
+
 /**
  * An individual task to be executed by a TaskManager or individually by manually invoking start().
  */
@@ -347,6 +421,54 @@ class Task extends EventDispatcher {
     } else {
       throw new Error(`Task [${this.name}] invoked fail() after completion.`);
     }
+  }
+}
+
+class ProductService {
+}
+
+ProductService.getProduct = function (handle) {
+  return RocketTheme.globals.dataStore.productsInCart.find(element => element.product.handle === handle);
+};
+
+ProductService.hasTag = function (handle, tag) {
+  let productObj = ProductService.getProduct(handle);
+  return productObj.product.tags.includes(tag) || productObj.product.tags.includes(tag.toLowerCase());
+};
+
+ProductService.isFireworkProduct = function (handle) {
+  return ProductService.hasTag(handle, TAG_FW) || ProductService.hasTag(handle, TAG_FWSEQ);
+};
+
+class GetFireworksInCartTotalTask extends Task {
+  
+  constructor () {
+    super();
+
+    this.name = 'GET FIREWORKS IN CART TOTAL';
+  }
+
+  start() {
+    super.start();
+
+    let fireworksProducts = [];
+    
+    RocketTheme.globals.dataStore.cart.items.forEach(item => {
+      if (ProductService.isFireworkProduct(item.handle)) {
+        fireworksProducts.push({
+          handle: item.handle,
+          product_id: item.product_id,
+          unitFinalPrice: SellyService.getFinalUnitPrice(item.product_id, item.quantity, item.price),
+          lineItemTotalFinalPrice: item.quantity * SellyService.getFinalUnitPrice(item.product_id, item.quantity, item.price)
+        });
+      }
+    });
+
+    console.log('=================');
+    console.log(fireworksProducts);
+
+    RocketTheme.globals.dataStore.fireworksTotalInCart = sumBy(fireworksProducts, 'lineItemTotalFinalPrice');
+    this.done();
   }
 }
 
@@ -587,23 +709,6 @@ ShopifyCart.getLoadJSONTask = function (url, method, bodyData = null) {
   return loadJSONTask;
 };
 
-class GetFireworksInCartTotalTask extends Task {
-  
-  constructor () {
-    super();
-
-    this.name = 'GET FIREWORKS IN CART TOTAL';
-  }
-
-  start() {
-    super.start();
-
-    let fireworksProducts = RocketTheme.globals.dataStore.productsInCart.filter(element => element.product.tags.includes(TAG_FW));
-    RocketTheme.globals.dataStore.fireworksTotalInCart = sumProducts(fireworksProducts);
-    this.done();
-  }
-}
-
 class UpdateCartProductsInDataStoreTask extends TaskManager {
   
   constructor () {
@@ -645,16 +750,23 @@ class WaitForSellyTask extends Task {
   start () {
     super.start();
 
-    this.checkSellyIntervalID = setInterval(() => {
-      if (this.checkSelly()) {
-        this.done();
-        clearInterval(this.checkSellyIntervalID);
-      }
-    }, 1000);
+    this.checkSelly();
+
+    if (!this.complete) {
+      this.checkSellyIntervalID = setInterval(() => {
+        this.checkSelly();
+        if (this.complete) {
+          clearInterval(this.checkSellyIntervalID);
+        }
+      }, 200);
+    }
   }
 
   checkSelly () {
-    return true;
+    if (notNil(window.sellyData)) {
+      SellyService.data = window.sellyData;
+      this.done();
+    }
   }
 }
 
@@ -687,8 +799,12 @@ class BonusReward {
   
 }
 
-class BonusRewards {
+const FIREWORKS_TOTAL_IN_CART_UPDATED = 'FIREWORKS_TOTAL_IN_CART_UPDATED';
+
+class BonusRewards extends EventDispatcher {
   constructor () {
+    super();
+
     log('BonusRewards 4.0 manager ready.');
 
     this.updateRewards();
@@ -697,7 +813,7 @@ class BonusRewards {
   updateRewards () {
     // Create list of tasks
     let tasks = [
-      new UpdateCartInDataStoreTask() ,
+      new UpdateCartInDataStoreTask(),
       new UpdateCartProductsInDataStoreTask(),
       new WaitForSellyTask(),
       new GetFireworksInCartTotalTask()
@@ -710,6 +826,7 @@ class BonusRewards {
       log('RewardsManager finished updating rewards.');
       log('Current Fireworks total in cart: ');
       log(RocketTheme.globals.dataStore.fireworksTotalInCart);
+      this.dispatchEvent(FIREWORKS_TOTAL_IN_CART_UPDATED);
     });
     this.rewardsManager.on(FAIL, e => {
       log('RewardsManager failed to update rewards.');

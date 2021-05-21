@@ -1,4 +1,6 @@
+import { SellyService } from '../appapis/SellyService.js';
 import {Task} from '../utils/Task.js';
+import { notNil } from '../utils/utils.js';
 
 
 export class WaitForSellyTask extends Task {
@@ -10,15 +12,22 @@ export class WaitForSellyTask extends Task {
   start () {
     super.start();
 
-    this.checkSellyIntervalID = setInterval(() => {
-      if (this.checkSelly()) {
-        this.done();
-        clearInterval(this.checkSellyIntervalID);
-      }
-    }, 1000);
+    this.checkSelly();
+
+    if (!this.complete) {
+      this.checkSellyIntervalID = setInterval(() => {
+        this.checkSelly();
+        if (this.complete) {
+          clearInterval(this.checkSellyIntervalID);
+        }
+      }, 200);
+    }
   }
 
   checkSelly () {
-    return true;
+    if (notNil(window.sellyData)) {
+      SellyService.data = window.sellyData;
+      this.done();
+    }
   }
 }
