@@ -13,7 +13,6 @@ SellyService.getFinalUnitPrice = function (productID, quantity, originalPrice) {
   activeOffers.forEach(offer => {
     if (offer.offerType === SellyService.OFFER_TYPE_BULK) {
       let discount = SellyService.getActiveDiscountForQuantity(offer.offerObj, quantity);
-      debugger;
       if (notNil(discount)){
         switch (discount.type_id) {
           case SellyService.DISCOUNT_TYPE_PERCENT:
@@ -67,7 +66,11 @@ SellyService.getProduct = function (productID) {
   }
 }
 
+SellyService.getMotivationalMessage = function (activeOffer) {
+  return activeOffer.offerObj.mtv_message;
+}
+
 SellyService.OFFER_TYPE_BULK = '7';
 SellyService.DISCOUNT_TYPE_PERCENT = 1;
 SellyService.DISCOUNT_TYPE_FIXED_AMOUNT_DISCOUNT = 2;
-SellyService.DISCOUNT_TYPE_FIXED_PRICE = 2;
+SellyService.DISCOUNT_TYPE_FIXED_PRICE = 3;
