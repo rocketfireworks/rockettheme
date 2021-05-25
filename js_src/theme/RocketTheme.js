@@ -7,6 +7,7 @@ import {Logger} from '../utils/Logger.js';
 import {ConsoleLogger} from '../utils/ConsoleLogger.js';
 import {ReleaseInfo} from '../utils/ReleaseInfo.js';
 import { DataStore } from './DataStore.js';
+import { BonusRewardsProgressBannerView } from './BonusRewardsProgressBannerView.js';
 
 export class RocketTheme {
   boot () {
@@ -18,6 +19,7 @@ export class RocketTheme {
 
     // Create Bonus Rewards manager
     this.bonusRewards = new BonusRewards();
+    this.bonusRewardsProgressBannerView = new BonusRewardsProgressBannerView(this.bonusRewards);
 
     RocketTheme.globals.releaseInfo = new ReleaseInfo('<@APP_TITLE@>', '<@BUILD_VERSION@>', '<@BUILD_DATE@>');
 

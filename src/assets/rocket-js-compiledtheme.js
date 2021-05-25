@@ -291,7 +291,6 @@ SellyService.getFinalUnitPrice = function (productID, quantity, originalPrice) {
   activeOffers.forEach(offer => {
     if (offer.offerType === SellyService.OFFER_TYPE_BULK) {
       let discount = SellyService.getActiveDiscountForQuantity(offer.offerObj, quantity);
-      debugger;
       if (notNil(discount)){
         switch (discount.type_id) {
           case SellyService.DISCOUNT_TYPE_PERCENT:
@@ -345,10 +344,14 @@ SellyService.getProduct = function (productID) {
   }
 };
 
+SellyService.getMotivationalMessage = function (activeOffer) {
+  return activeOffer.offerObj.mtv_message;
+};
+
 SellyService.OFFER_TYPE_BULK = '7';
 SellyService.DISCOUNT_TYPE_PERCENT = 1;
 SellyService.DISCOUNT_TYPE_FIXED_AMOUNT_DISCOUNT = 2;
-SellyService.DISCOUNT_TYPE_FIXED_PRICE = 2;
+SellyService.DISCOUNT_TYPE_FIXED_PRICE = 3;
 
 /**
  * An individual task to be executed by a TaskManager or individually by manually invoking start().
@@ -826,6 +829,11 @@ class BonusRewards extends EventDispatcher {
       log('RewardsManager finished updating rewards.');
       log('Current Fireworks total in cart: ');
       log(RocketTheme.globals.dataStore.fireworksTotalInCart);
+
+      this.updateActiveBonusReward();
+      this.updateNextBonusReward();
+      this.calculateRemainingUntilNextLevel();
+      this.calculateProgressBar();
       this.dispatchEvent(FIREWORKS_TOTAL_IN_CART_UPDATED);
     });
     this.rewardsManager.on(FAIL, e => {
@@ -834,20 +842,59 @@ class BonusRewards extends EventDispatcher {
 
     this.rewardsManager.start();
   }
+
+  updateActiveBonusReward () {
+    let fireworksTotalInCart = RocketTheme.globals.dataStore.fireworksTotalInCart;
+    BonusRewards.levels.forEach(bonus => {
+      if (fireworksTotalInCart > bonus.level) {
+        BonusRewards.activeBonusReward = bonus;
+      }
+    });
+  }
+
+  updateNextBonusReward () {
+    BonusRewards.nextBonusReward = BonusRewards.levels[0];
+    let nextBonusRewardIndex = 1;
+
+    if (Object.keys(BonusRewards.activeBonusReward).length !== 0) {
+      nextBonusRewardIndex = BonusRewards.activeBonusReward.index + 1;
+    }
+    BonusRewards.levels.forEach(bonus => {
+      if (bonus.index === nextBonusRewardIndex) {
+        BonusRewards.nextBonusReward = bonus;
+      }
+    });
+  }
+
+  calculateRemainingUntilNextLevel () {
+    let fireworksTotalInCart = RocketTheme.globals.dataStore.fireworksTotalInCart;
+
+    return BonusRewards.remainingUntilNextLevel = BonusRewards.nextBonusReward.level - fireworksTotalInCart;
+  }
+
+  calculateProgressBar () {
+    return BonusRewards.progress = Math.floor((RocketTheme.globals.dataStore.fireworksTotalInCart * 100) / BonusRewards.nextBonusReward.level);
+  }
 }
 
 BonusRewards.levels = [
-  new BonusReward(150, 39310116454589, 1),
-  new BonusReward(200, 39310858420413, 2),
-  new BonusReward(300, 39310870708413, 3),
-  new BonusReward(400, 39310873297085, 4),
-  new BonusReward(500, 39310876115133, 5),
-  new BonusReward(600, 39310879195325, 6),
-  new BonusReward(750, 39310912815293, 7),
-  new BonusReward(1000, 39310917664957, 8),
-  new BonusReward(1250, 39310919336125, 9),
-  new BonusReward(1500, 39310922252477, 10)
+  new BonusReward(15000, 39310116454589, 1),
+  new BonusReward(20000, 39310858420413, 2),
+  new BonusReward(30000, 39310870708413, 3),
+  new BonusReward(40000, 39310873297085, 4),
+  new BonusReward(50000, 39310876115133, 5),
+  new BonusReward(60000, 39310879195325, 6),
+  new BonusReward(75000, 39310912815293, 7),
+  new BonusReward(100000, 39310917664957, 8),
+  new BonusReward(125000, 39310919336125, 9),
+  new BonusReward(150000, 39310922252477, 10)
 ];
+
+BonusRewards.activeBonusReward = {};
+BonusRewards.nextBonusReward = {};
+
+BonusRewards.remainingUntilNextLevel = 0;
+BonusRewards.progress = 0;
 
 /**
  * Displays messages from Logger in the web browser console.
@@ -895,6 +942,32 @@ class DataStore {
   }
 }
 
+class BonusRewardsProgressBannerView {
+
+  constructor (bonusRewards) {
+    this.bonusRewards = bonusRewards;
+    this.bonusRewards.on(FIREWORKS_TOTAL_IN_CART_UPDATED, this.update.bind(this));
+  }
+
+  update () {
+    let remainingUntilNextLevel = Shopify.formatMoney(BonusRewards.remainingUntilNextLevel);
+    let nextLevelIndex = BonusRewards.nextBonusReward.index;
+
+    // Fade in promo bar
+    document.querySelector('.promo-bar .promo-bar-container').style.opacity = 1;
+
+    document.querySelector('.bonusRewards-message').innerHTML = `<b>${remainingUntilNextLevel}</b> away from <b>Bonus Rewards Level ${nextLevelIndex}</b>! <i class="fas fa-gift"></i>`;
+
+    // Show/Hide progress bar
+    if (RocketTheme.globals.dataStore.fireworksTotalInCart === 0) {
+      $('.bonusRewards-progress').addClass('hidden');
+    } else {
+      $('.bonusRewards-progress').removeClass('hidden');
+    }
+    document.querySelector('.promo-bar .bonusRewards-bar').style.width = BonusRewards.progress + '%';
+  }
+}
+
 /**
  * Main application entry point.
  */
@@ -909,6 +982,7 @@ class RocketTheme {
 
     // Create Bonus Rewards manager
     this.bonusRewards = new BonusRewards();
+    this.bonusRewardsProgressBannerView = new BonusRewardsProgressBannerView(this.bonusRewards);
 
     RocketTheme.globals.releaseInfo = new ReleaseInfo('Rocket Dev Theme', '1.0.0', 'Wed May 19 2021 19:00:40 GMT-0400 (Eastern Daylight Time)');
 

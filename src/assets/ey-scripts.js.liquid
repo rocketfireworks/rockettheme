@@ -29,9 +29,7 @@ function checkCartForBonusReward() {
       let remaining = 150;
       if ($('.template-cart').length !== 0) {
         updateBonusRewardsSection(progressBarWidth_filled, remaining, qualifiedBonusLevel)
-      } else {
-        updatePromoBar(progressBarWidth_filled, remaining, qualifiedBonusLevel)
-      }
+      } 
     }
 
     cart.items.forEach(item => {
@@ -118,9 +116,7 @@ function checkCartForBonusReward() {
 
           if ($('.template-cart').length !== 0) {
             updateBonusRewardsSection(progressBarWidth_filled, rewardResults.remaining, qualifiedBonusLevel)
-          } else {
-            updatePromoBar(progressBarWidth_filled, rewardResults.remaining, qualifiedBonusLevel)
-          }
+          } 
         }
       });
     });
@@ -171,21 +167,6 @@ function calculateBonusReward(fwTotal, levels) {
 
 function calculateProgressBar(low, high) {
   return Math.floor((low * 100) / high);
-}
-
-function updatePromoBar(progressBarWidth_filled, remainingAmount, qualifiedBonusLevel) {
-  // Bonus Rewards message
-  $('.promo-bar .promo-bar-container').css('opacity', 1);
-  $('.promo-bar .bonusRewards-message').html(
-    `<b>$${remainingAmount}</b> away from <b>Bonus Rewards Level ${qualifiedBonusLevel + 1}</b>! <i class="fas fa-gift"></i>`);
-
-  // Show/Hide progress bar
-  if (window.bonusTotal === 0) {
-    $('.bonusRewards-progress').addClass('hidden');
-  } else {
-    $('.bonusRewards-progress').removeClass('hidden');
-  }
-  $('.promo-bar .bonusRewards-bar').css('width', progressBarWidth_filled + '%');
 }
 
 function updateBonusRewardsSection(progressBarWidth_filled, remainingAmount, qualifiedBonusLevel) {
