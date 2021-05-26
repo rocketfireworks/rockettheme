@@ -27,9 +27,6 @@ function checkCartForBonusReward() {
       let qualifiedBonusLevel = 0;
       let progressBarWidth_filled = 0;
       let remaining = 150;
-      if ($('.template-cart').length !== 0) {
-        updateBonusRewardsSection(progressBarWidth_filled, remaining, qualifiedBonusLevel)
-      } 
     }
 
     cart.items.forEach(item => {
@@ -110,13 +107,7 @@ function checkCartForBonusReward() {
             });
           }
           
-          let rewardResults = calculateBonusReward(window.bonusTotal, levels);
-          progressBarWidth = rewardResults.progress.toString();
-          let progressBarWidth_filled = 100 - progressBarWidth;
 
-          if ($('.template-cart').length !== 0) {
-            updateBonusRewardsSection(progressBarWidth_filled, rewardResults.remaining, qualifiedBonusLevel)
-          } 
         }
       });
     });
@@ -151,48 +142,6 @@ function getQualifiedBonusId(qualifiedLevel) {
   return qualifiedBonusId;
 }
 
-function calculateBonusReward(fwTotal, levels) {
-  let untilBonusNum = 0;
-  let progressBarWidth = 0;
-  let nextQualifiedIndex = 0;
-  levels.forEach((level, index) => {
-    if (fwTotal > level) {
-      nextQualifiedIndex = index + 1;
-    }
-  });
-  untilBonusNum = (levels[nextQualifiedIndex] - fwTotal).toFixed(2);
-  progressBarWidth = calculateProgressBar(untilBonusNum, levels[nextQualifiedIndex]);
-  return bonusReward = { "remaining": untilBonusNum, "progress": progressBarWidth};
-}
-
-function calculateProgressBar(low, high) {
-  return Math.floor((low * 100) / high);
-}
-
-function updateBonusRewardsSection(progressBarWidth_filled, remainingAmount, qualifiedBonusLevel) {
-  // Current Rewards 
-  let bonusContainers = document.querySelectorAll('.cartRewardsProgram .bonus-tiered-container');
-  bonusContainers.forEach(bonusContainer => {
-    if (!bonusContainer.classList.contains('hidden')) {
-      bonusContainer.classList.add('hidden');
-    }
-  });
-  $('.cartRewardsProgram .level-' + qualifiedBonusLevel).removeClass('hidden');
-
-  // Show/Hide progress bar
-  if (window.bonusTotal === 0) {
-    $('#cartrewardsProgress').addClass('hidden');
-  } else {
-    $('#cartrewardsProgress').removeClass('hidden');
-  }
-  $("#cartrewardsBar").css('width', progressBarWidth_filled + '%' );
-
-  // Bonus Rewards message
-  let bonusTieredMtv = $('.cartRewardsProgram .bonus-tiered-mtv')[0];
-  bonusTieredMtv.innerHTML = `
-  <b>$${remainingAmount}</b> away from <b>Bonus Rewards Level ${qualifiedBonusLevel + 1}</b>! <i class="fas fa-gift"></i>
-  `;
-}
 
 function addBonus(bonusProductId, callback) {
   let quantity = 1;
