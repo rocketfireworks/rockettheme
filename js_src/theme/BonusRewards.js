@@ -8,18 +8,37 @@ import { WaitForSellyTask } from './WaitForSellyTask.js';
 import { UpdateCartInDataStoreTask } from './UpdateCartInDataStoreTask.js';
 import { BonusReward } from './BonusReward.js';
 import { EventDispatcher } from '../utils/EventDispatcher.js';
-import { FIREWORKS_TOTAL_IN_CART_UPDATED } from './Events.js';
+import { ACTIVE_BONUS_REWARD_CHANGED, BONUS_REWARD_UPDATED, FIREWORKS_TOTAL_IN_CART_UPDATED } from './Events.js';
+import { ShopifyCart } from '../shopify/ShopifyCart.js';
+import { UpdateBonusRewardsInCartTask } from './UpdateBonusRewardsInCartTask.js';
+import { isNil, notNil } from '../utils/utils.js';
 
 export class BonusRewards extends EventDispatcher {
   constructor () {
     super();
 
     log('BonusRewards 4.0 manager ready.')
+    
+    this.activeBonusReward = null;
+    this.nextBonusReward = null;
+    this.newBonusReward = null;
 
-    this.updateRewards();
+    this.remainingUntilNextLevel = 0;
+    this.progressPercentage = 0;
+
+    this.updateBonusRewardsInCartTask = null;
+
+    this.waitForUpdateIntervalId = -1;
+
+    this.updateCartData();
+
+    this.on(FIREWORKS_TOTAL_IN_CART_UPDATED, this.fireworksTotalUpdatedListener.bind(this));
+    this.on(ACTIVE_BONUS_REWARD_CHANGED, this.activeBonusRewardChangedListener.bind(this));
   }
 
-  updateRewards () {
+  updateCartData () {
+    let previousFireworksTotal = RocketTheme.globals.dataStore.fireworksTotalInCart;
+
     // Create list of tasks
     let tasks = [
       new UpdateCartInDataStoreTask(),
@@ -35,12 +54,9 @@ export class BonusRewards extends EventDispatcher {
       log('RewardsManager finished updating rewards.');
       log('Current Fireworks total in cart: ');
       log(RocketTheme.globals.dataStore.fireworksTotalInCart);
-
-      this.updateActiveBonusReward();
-      this.updateNextBonusReward();
-      this.calculateRemainingUntilNextLevel();
-      this.calculateProgressBar();
-      this.dispatchEvent(FIREWORKS_TOTAL_IN_CART_UPDATED);
+      if (previousFireworksTotal !== RocketTheme.globals.dataStore.fireworksTotalInCart) {
+        this.dispatchEvent(FIREWORKS_TOTAL_IN_CART_UPDATED);
+      }
     });
     this.rewardsManager.on(FAIL, e => {
       log('RewardsManager failed to update rewards.');
@@ -49,37 +65,80 @@ export class BonusRewards extends EventDispatcher {
     this.rewardsManager.start();
   }
 
-  updateActiveBonusReward () {
+  fireworksTotalUpdatedListener () {
+    let previousActiveBonusReward = this.activeBonusReward;
+
+    this.activeBonusReward = this.getActiveBonusReward();
+    this.nextBonusReward = this.getNextBonusReward();
+    this.remainingUntilNextLevel = this.getRemainingUntilNextLevel();
+    this.progressPercentage = this.getProgressPercentage();
+
+    if (previousActiveBonusReward !== this.activeBonusReward) {
+      this.dispatchEvent(ACTIVE_BONUS_REWARD_CHANGED);
+    }
+  }
+
+  activeBonusRewardChangedListener () {
+    this.newBonusReward = this.activeBonusReward;
+    if (isNil(this.updateBonusRewardsInCartTask)) {
+      this.updateBonusRewardsInCart(this.newBonusReward);
+    } else {
+      if (this.waitForUpdateIntervalId === -1) {
+        this.waitForUpdateIntervalId = setInterval(() => {
+          if (isNil(this.updateBonusRewardsInCartTask)) {
+            clearInterval(this.waitForUpdateIntervalId);
+            this.waitForUpdateIntervalId = -1;
+            this.updateBonusRewardsInCart(this.newBonusReward);
+          }
+        }, 500);
+      }
+    }
+  }
+
+  updateBonusRewardsInCart (activeBonusReward) {
+    this.updateBonusRewardsInCartTask = new UpdateBonusRewardsInCartTask(activeBonusReward);
+    this.updateBonusRewardsInCartTask.on(COMPLETE, () => {
+      this.updateBonusRewardsInCartTask = null;
+      this.dispatchEvent(BONUS_REWARD_UPDATED);
+    });
+    this.updateBonusRewardsInCartTask.start();
+  }
+
+  getActiveBonusReward () {
+    let activeBonusReward;
     let fireworksTotalInCart = RocketTheme.globals.dataStore.fireworksTotalInCart;
     BonusRewards.levels.forEach(bonus => {
       if (fireworksTotalInCart > bonus.level) {
-        BonusRewards.activeBonusReward = bonus;
+        activeBonusReward = bonus;
       }
     });
+    return activeBonusReward;
   }
 
-  updateNextBonusReward () {
-    BonusRewards.nextBonusReward = BonusRewards.levels[0];
+  getNextBonusReward () {
+    let nextBonusReward;
+    this.nextBonusReward = BonusRewards.levels[0];
     let nextBonusRewardIndex = 1;
 
-    if (Object.keys(BonusRewards.activeBonusReward).length !== 0) {
-      nextBonusRewardIndex = BonusRewards.activeBonusReward.index + 1;
+    if (Object.keys(this.activeBonusReward).length !== 0) {
+      nextBonusRewardIndex = this.activeBonusReward.index + 1;
     }
     BonusRewards.levels.forEach(bonus => {
       if (bonus.index === nextBonusRewardIndex) {
-        BonusRewards.nextBonusReward = bonus;
+        nextBonusReward = bonus;
       }
     });
+    return nextBonusReward;
   }
 
-  calculateRemainingUntilNextLevel () {
+  getRemainingUntilNextLevel () {
     let fireworksTotalInCart = RocketTheme.globals.dataStore.fireworksTotalInCart;
 
-    return BonusRewards.remainingUntilNextLevel = BonusRewards.nextBonusReward.level - fireworksTotalInCart;
+    return this.nextBonusReward.level - fireworksTotalInCart;
   }
 
-  calculateProgressBar () {
-    return BonusRewards.progress = Math.floor((RocketTheme.globals.dataStore.fireworksTotalInCart * 100) / BonusRewards.nextBonusReward.level);
+  getProgressPercentage () {
+    return Math.floor((RocketTheme.globals.dataStore.fireworksTotalInCart * 100) / this.nextBonusReward.level);
   }
 }
 
@@ -95,9 +154,3 @@ BonusRewards.levels = [
   new BonusReward(125000, 39310919336125, 9),
   new BonusReward(150000, 39310922252477, 10)
 ]
-
-BonusRewards.activeBonusReward = {};
-BonusRewards.nextBonusReward = {};
-
-BonusRewards.remainingUntilNextLevel = 0;
-BonusRewards.progress = 0;

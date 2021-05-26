@@ -803,17 +803,71 @@ class BonusReward {
 }
 
 const FIREWORKS_TOTAL_IN_CART_UPDATED = 'FIREWORKS_TOTAL_IN_CART_UPDATED';
+const ACTIVE_BONUS_REWARD_CHANGED = 'ACTIVE_BONUS_REWARD_CHANGED';
+const BONUS_REWARD_UPDATED = 'BONUS_REWARD_UPDATED';
+
+class UpdateBonusRewardsInCartTask extends TaskManager {
+  constructor (bonusRewardToAdd) {
+    super('UPDATE BONUS REWARDS IN CART');
+
+    this.initTasks(bonusRewardToAdd);
+  }
+
+  initTasks (bonusRewardToAdd) {
+    let removeInactiveBonusRewardsTask = this.getRemoveAllBonusRewardsFromCartTasks();
+    let addActiveBonusRewardTask = this.getAddBonusRewardToCartTask(bonusRewardToAdd);
+    let tasks = removeInactiveBonusRewardsTask;
+    tasks.push(addActiveBonusRewardTask);
+    this.addTasks(tasks);
+  }
+
+  start() {
+    super.start();
+  }
+
+  getRemoveAllBonusRewardsFromCartTasks () {
+    let removeTasks = [];
+    RocketTheme.globals.dataStore.productsInCart.forEach(productObj => {
+      BonusRewards.levels.forEach(bonus => {
+        if (productObj.product.variants[0].id === bonus.id) {
+          removeTasks.push(ShopifyCart.getRemoveFromCartTask(productObj.product.variants[0].id));
+        }
+      });
+    });
+    return removeTasks;
+  }
+
+  getAddBonusRewardToCartTask (bonusReward) {
+    return ShopifyCart.getAddToCartTask(bonusReward.id);
+  }
+}
 
 class BonusRewards extends EventDispatcher {
   constructor () {
     super();
 
     log('BonusRewards 4.0 manager ready.');
+    
+    this.activeBonusReward = null;
+    this.nextBonusReward = null;
+    this.newBonusReward = null;
 
-    this.updateRewards();
+    this.remainingUntilNextLevel = 0;
+    this.progressPercentage = 0;
+
+    this.updateBonusRewardsInCartTask = null;
+
+    this.waitForUpdateIntervalId = -1;
+
+    this.updateCartData();
+
+    this.on(FIREWORKS_TOTAL_IN_CART_UPDATED, this.fireworksTotalUpdatedListener.bind(this));
+    this.on(ACTIVE_BONUS_REWARD_CHANGED, this.activeBonusRewardChangedListener.bind(this));
   }
 
-  updateRewards () {
+  updateCartData () {
+    let previousFireworksTotal = RocketTheme.globals.dataStore.fireworksTotalInCart;
+
     // Create list of tasks
     let tasks = [
       new UpdateCartInDataStoreTask(),
@@ -829,12 +883,9 @@ class BonusRewards extends EventDispatcher {
       log('RewardsManager finished updating rewards.');
       log('Current Fireworks total in cart: ');
       log(RocketTheme.globals.dataStore.fireworksTotalInCart);
-
-      this.updateActiveBonusReward();
-      this.updateNextBonusReward();
-      this.calculateRemainingUntilNextLevel();
-      this.calculateProgressBar();
-      this.dispatchEvent(FIREWORKS_TOTAL_IN_CART_UPDATED);
+      if (previousFireworksTotal !== RocketTheme.globals.dataStore.fireworksTotalInCart) {
+        this.dispatchEvent(FIREWORKS_TOTAL_IN_CART_UPDATED);
+      }
     });
     this.rewardsManager.on(FAIL, e => {
       log('RewardsManager failed to update rewards.');
@@ -843,37 +894,80 @@ class BonusRewards extends EventDispatcher {
     this.rewardsManager.start();
   }
 
-  updateActiveBonusReward () {
+  fireworksTotalUpdatedListener () {
+    let previousActiveBonusReward = this.activeBonusReward;
+
+    this.activeBonusReward = this.getActiveBonusReward();
+    this.nextBonusReward = this.getNextBonusReward();
+    this.remainingUntilNextLevel = this.getRemainingUntilNextLevel();
+    this.progressPercentage = this.getProgressPercentage();
+
+    if (previousActiveBonusReward !== this.activeBonusReward) {
+      this.dispatchEvent(ACTIVE_BONUS_REWARD_CHANGED);
+    }
+  }
+
+  activeBonusRewardChangedListener () {
+    this.newBonusReward = this.activeBonusReward;
+    if (isNil(this.updateBonusRewardsInCartTask)) {
+      this.updateBonusRewardsInCart(this.newBonusReward);
+    } else {
+      if (this.waitForUpdateIntervalId === -1) {
+        this.waitForUpdateIntervalId = setInterval(() => {
+          if (isNil(this.updateBonusRewardsInCartTask)) {
+            clearInterval(this.waitForUpdateIntervalId);
+            this.waitForUpdateIntervalId = -1;
+            this.updateBonusRewardsInCart(this.newBonusReward);
+          }
+        }, 500);
+      }
+    }
+  }
+
+  updateBonusRewardsInCart (activeBonusReward) {
+    this.updateBonusRewardsInCartTask = new UpdateBonusRewardsInCartTask(activeBonusReward);
+    this.updateBonusRewardsInCartTask.on(COMPLETE, () => {
+      this.updateBonusRewardsInCartTask = null;
+      this.dispatchEvent(BONUS_REWARD_UPDATED);
+    });
+    this.updateBonusRewardsInCartTask.start();
+  }
+
+  getActiveBonusReward () {
+    let activeBonusReward;
     let fireworksTotalInCart = RocketTheme.globals.dataStore.fireworksTotalInCart;
     BonusRewards.levels.forEach(bonus => {
       if (fireworksTotalInCart > bonus.level) {
-        BonusRewards.activeBonusReward = bonus;
+        activeBonusReward = bonus;
       }
     });
+    return activeBonusReward;
   }
 
-  updateNextBonusReward () {
-    BonusRewards.nextBonusReward = BonusRewards.levels[0];
+  getNextBonusReward () {
+    let nextBonusReward;
+    this.nextBonusReward = BonusRewards.levels[0];
     let nextBonusRewardIndex = 1;
 
-    if (Object.keys(BonusRewards.activeBonusReward).length !== 0) {
-      nextBonusRewardIndex = BonusRewards.activeBonusReward.index + 1;
+    if (Object.keys(this.activeBonusReward).length !== 0) {
+      nextBonusRewardIndex = this.activeBonusReward.index + 1;
     }
     BonusRewards.levels.forEach(bonus => {
       if (bonus.index === nextBonusRewardIndex) {
-        BonusRewards.nextBonusReward = bonus;
+        nextBonusReward = bonus;
       }
     });
+    return nextBonusReward;
   }
 
-  calculateRemainingUntilNextLevel () {
+  getRemainingUntilNextLevel () {
     let fireworksTotalInCart = RocketTheme.globals.dataStore.fireworksTotalInCart;
 
-    return BonusRewards.remainingUntilNextLevel = BonusRewards.nextBonusReward.level - fireworksTotalInCart;
+    return this.nextBonusReward.level - fireworksTotalInCart;
   }
 
-  calculateProgressBar () {
-    return BonusRewards.progress = Math.floor((RocketTheme.globals.dataStore.fireworksTotalInCart * 100) / BonusRewards.nextBonusReward.level);
+  getProgressPercentage () {
+    return Math.floor((RocketTheme.globals.dataStore.fireworksTotalInCart * 100) / this.nextBonusReward.level);
   }
 }
 
@@ -889,12 +983,6 @@ BonusRewards.levels = [
   new BonusReward(125000, 39310919336125, 9),
   new BonusReward(150000, 39310922252477, 10)
 ];
-
-BonusRewards.activeBonusReward = {};
-BonusRewards.nextBonusReward = {};
-
-BonusRewards.remainingUntilNextLevel = 0;
-BonusRewards.progress = 0;
 
 /**
  * Displays messages from Logger in the web browser console.
@@ -946,13 +1034,13 @@ class BonusRewardsProgressBannerView {
 
   constructor (bonusRewards) {
     this.bonusRewards = bonusRewards;
-    this.bonusRewards.on(FIREWORKS_TOTAL_IN_CART_UPDATED, this.update.bind(this));
+    this.bonusRewards.on(BONUS_REWARD_UPDATED, this.update.bind(this));
   }
 
   update () {
     if (isNil(document.querySelector('.template-cart'))) {
-      let remainingUntilNextLevel = Shopify.formatMoney(BonusRewards.remainingUntilNextLevel);
-      let nextLevelIndex = BonusRewards.nextBonusReward.index;
+      let remainingUntilNextLevel = Shopify.formatMoney(this.bonusRewards.remainingUntilNextLevel);
+      let nextLevelIndex = this.bonusRewards.nextBonusReward.index;
 
       // Fade in promo bar
       document.querySelector('.promo-bar .promo-bar-container').style.opacity = 1;
@@ -965,7 +1053,7 @@ class BonusRewardsProgressBannerView {
       } else {
         $('.bonusRewards-progress').removeClass('hidden');
       }
-      document.querySelector('.promo-bar .bonusRewards-bar').style.width = BonusRewards.progress + '%';
+      document.querySelector('.promo-bar .bonusRewards-bar').style.width = this.bonusRewards.progressPercentage + '%';
     }
   }
 }
@@ -973,7 +1061,7 @@ class BonusRewardsProgressBannerView {
 class BonusRewardsProgressInCartView {
   constructor (bonusRewards) {
     this.bonusRewards = bonusRewards;
-    this. bonusRewards.on(FIREWORKS_TOTAL_IN_CART_UPDATED, this.update.bind(this));
+    this.bonusRewards.on(BONUS_REWARD_UPDATED, this.update.bind(this));
   }
 
   update () {
@@ -985,7 +1073,7 @@ class BonusRewardsProgressInCartView {
           bonusContainer.classList.add('hidden');
         }
       });
-      document.querySelector('.cartRewardsProgram .level-' + BonusRewards.activeBonusReward.index).classList.remove('hidden');
+      document.querySelector('.cartRewardsProgram .level-' + this.bonusRewards.activeBonusReward.index).classList.remove('hidden');
 
       // Show/Hide progress bar
       if (RocketTheme.globals.dataStore.fireworksTotalInCart === 0) {
@@ -993,11 +1081,11 @@ class BonusRewardsProgressInCartView {
       } else {
         document.querySelector('#cartrewardsProgress').classList.remove('hidden');
       }
-      document.querySelector("#cartrewardsBar").style.width = BonusRewards.progress + '%';
+      document.querySelector("#cartrewardsBar").style.width = this.bonusRewards.progressPercentage + '%';
 
       // Bonus Rewards message
-      let remainingUntilNextLevel = Shopify.formatMoney(BonusRewards.remainingUntilNextLevel);
-      let nextLevelIndex = BonusRewards.nextBonusReward.index;
+      let remainingUntilNextLevel = Shopify.formatMoney(this.bonusRewards.remainingUntilNextLevel);
+      let nextLevelIndex = this.bonusRewards.nextBonusReward.index;
 
       document.querySelector('.cartRewardsProgram .bonus-tiered-mtv').innerHTML = 
       `<b>${remainingUntilNextLevel}</b> away from <b>Bonus Rewards Level ${nextLevelIndex}</b>! <i class="fas fa-gift"></i>`;

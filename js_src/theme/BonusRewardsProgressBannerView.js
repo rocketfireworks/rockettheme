@@ -1,6 +1,6 @@
 import { isNil } from '../utils/utils.js';
 import { BonusRewards } from './BonusRewards.js';
-import { FIREWORKS_TOTAL_IN_CART_UPDATED } from './Events.js';
+import { BONUS_REWARD_UPDATED } from './Events.js';
 import { RocketTheme } from './RocketTheme.js';
 
 
@@ -8,13 +8,13 @@ export class BonusRewardsProgressBannerView {
 
   constructor (bonusRewards) {
     this.bonusRewards = bonusRewards;
-    this.bonusRewards.on(FIREWORKS_TOTAL_IN_CART_UPDATED, this.update.bind(this));
+    this.bonusRewards.on(BONUS_REWARD_UPDATED, this.update.bind(this));
   }
 
   update () {
     if (isNil(document.querySelector('.template-cart'))) {
-      let remainingUntilNextLevel = Shopify.formatMoney(BonusRewards.remainingUntilNextLevel);
-      let nextLevelIndex = BonusRewards.nextBonusReward.index;
+      let remainingUntilNextLevel = Shopify.formatMoney(this.bonusRewards.remainingUntilNextLevel);
+      let nextLevelIndex = this.bonusRewards.nextBonusReward.index;
 
       // Fade in promo bar
       document.querySelector('.promo-bar .promo-bar-container').style.opacity = 1;
@@ -27,7 +27,7 @@ export class BonusRewardsProgressBannerView {
       } else {
         $('.bonusRewards-progress').removeClass('hidden');
       }
-      document.querySelector('.promo-bar .bonusRewards-bar').style.width = BonusRewards.progress + '%';
+      document.querySelector('.promo-bar .bonusRewards-bar').style.width = this.bonusRewards.progressPercentage + '%';
     }
   }
 }

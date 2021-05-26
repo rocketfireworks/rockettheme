@@ -1,13 +1,13 @@
 import { notNil } from "../utils/utils";
 import { BonusRewards } from "./BonusRewards";
-import { FIREWORKS_TOTAL_IN_CART_UPDATED } from "./Events";
+import { BONUS_REWARD_UPDATED } from "./Events";
 import { RocketTheme } from "./RocketTheme";
 
 
 export class BonusRewardsProgressInCartView {
   constructor (bonusRewards) {
     this.bonusRewards = bonusRewards;
-    this. bonusRewards.on(FIREWORKS_TOTAL_IN_CART_UPDATED, this.update.bind(this));
+    this.bonusRewards.on(BONUS_REWARD_UPDATED, this.update.bind(this));
   }
 
   update () {
@@ -19,7 +19,7 @@ export class BonusRewardsProgressInCartView {
           bonusContainer.classList.add('hidden');
         }
       });
-      document.querySelector('.cartRewardsProgram .level-' + BonusRewards.activeBonusReward.index).classList.remove('hidden');
+      document.querySelector('.cartRewardsProgram .level-' + this.bonusRewards.activeBonusReward.index).classList.remove('hidden');
 
       // Show/Hide progress bar
       if (RocketTheme.globals.dataStore.fireworksTotalInCart === 0) {
@@ -27,11 +27,11 @@ export class BonusRewardsProgressInCartView {
       } else {
         document.querySelector('#cartrewardsProgress').classList.remove('hidden');
       }
-      document.querySelector("#cartrewardsBar").style.width = BonusRewards.progress + '%';
+      document.querySelector("#cartrewardsBar").style.width = this.bonusRewards.progressPercentage + '%';
 
       // Bonus Rewards message
-      let remainingUntilNextLevel = Shopify.formatMoney(BonusRewards.remainingUntilNextLevel);
-      let nextLevelIndex = BonusRewards.nextBonusReward.index;
+      let remainingUntilNextLevel = Shopify.formatMoney(this.bonusRewards.remainingUntilNextLevel);
+      let nextLevelIndex = this.bonusRewards.nextBonusReward.index;
 
       document.querySelector('.cartRewardsProgram .bonus-tiered-mtv').innerHTML = 
       `<b>${remainingUntilNextLevel}</b> away from <b>Bonus Rewards Level ${nextLevelIndex}</b>! <i class="fas fa-gift"></i>`;
