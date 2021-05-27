@@ -1,4 +1,4 @@
-<div class="cartRewardsProgram">
+<div class="bonusRewards-container">
   {% for i in (1..10) %}
     {% assign level_key = "level_" | append: i %}
     {% assign level_class = "level-" | append: i %}
@@ -29,10 +29,10 @@
 
   {% endfor %}
 
-  <p class="bonus-tiered-mtv"></p>
+  <p class="bonusRewards-message"></p>
 
-  <div id="cartrewardsProgress" class="hidden"> 
-    <div id="cartrewardsBar"></div>
+  <div class="bonusRewards-progress hidden"> 
+    <div class="bonusRewards-bar"></div>
   </div>
 
 </div>

@@ -9,9 +9,8 @@ import { UpdateCartInDataStoreTask } from './UpdateCartInDataStoreTask.js';
 import { BonusReward } from './BonusReward.js';
 import { EventDispatcher } from '../utils/EventDispatcher.js';
 import { ACTIVE_BONUS_REWARD_CHANGED, BONUS_REWARD_UPDATED, FIREWORKS_TOTAL_IN_CART_UPDATED } from './Events.js';
-import { ShopifyCart } from '../shopify/ShopifyCart.js';
 import { UpdateBonusRewardsInCartTask } from './UpdateBonusRewardsInCartTask.js';
-import { isNil, notNil } from '../utils/utils.js';
+import { isNil } from '../utils/utils.js';
 
 export class BonusRewards extends EventDispatcher {
   constructor () {

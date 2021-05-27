@@ -1030,65 +1030,50 @@ class DataStore {
   }
 }
 
-class BonusRewardsProgressBannerView {
-
+class BonusRewardsProgressView {
   constructor (bonusRewards) {
     this.bonusRewards = bonusRewards;
-    this.bonusRewards.on(BONUS_REWARD_UPDATED, this.update.bind(this));
+
+    this.bonusRewards.on(FIREWORKS_TOTAL_IN_CART_UPDATED, this.updateProgress.bind(this));
+    this.bonusRewards.on(BONUS_REWARD_UPDATED, this.updateBonus.bind(this));
   }
 
-  update () {
-    if (isNil(document.querySelector('.template-cart'))) {
-      let remainingUntilNextLevel = Shopify.formatMoney(this.bonusRewards.remainingUntilNextLevel);
-      let nextLevelIndex = this.bonusRewards.nextBonusReward.index;
-
-      // Fade in promo bar
-      document.querySelector('.promo-bar .promo-bar-container').style.opacity = 1;
-
-      document.querySelector('.bonusRewards-message').innerHTML = `<b>${remainingUntilNextLevel}</b> away from <b>Bonus Rewards Level ${nextLevelIndex}</b>! <i class="fas fa-gift"></i>`;
-
-      // Show/Hide progress bar
-      if (RocketTheme.globals.dataStore.fireworksTotalInCart === 0) {
-        $('.bonusRewards-progress').addClass('hidden');
-      } else {
-        $('.bonusRewards-progress').removeClass('hidden');
-      }
-      document.querySelector('.promo-bar .bonusRewards-bar').style.width = this.bonusRewards.progressPercentage + '%';
-    }
-  }
-}
-
-class BonusRewardsProgressInCartView {
-  constructor (bonusRewards) {
-    this.bonusRewards = bonusRewards;
-    this.bonusRewards.on(BONUS_REWARD_UPDATED, this.update.bind(this));
-  }
-
-  update () {
-    // Display active BonusReward
+  updateBonus () {
     if (notNil(document.querySelector('.template-cart'))) {
-      let bonusContainers = document.querySelectorAll('.cartRewardsProgram .bonus-tiered-container');
+      let bonusContainers = document.querySelectorAll('.bonusRewards-container .bonus-tiered-container');
       bonusContainers.forEach(bonusContainer => {
         if (!bonusContainer.classList.contains('hidden')) {
           bonusContainer.classList.add('hidden');
         }
       });
-      document.querySelector('.cartRewardsProgram .level-' + this.bonusRewards.activeBonusReward.index).classList.remove('hidden');
+      document.querySelector('.bonusRewards-container .level-' + this.bonusRewards.activeBonusReward.index).classList.remove('hidden');
+    }
 
-      // Show/Hide progress bar
-      if (RocketTheme.globals.dataStore.fireworksTotalInCart === 0) {
-        document.querySelector('#cartrewardsProgress').classList.add('hidden');
-      } else {
-        document.querySelector('#cartrewardsProgress').classList.remove('hidden');
-      }
-      document.querySelector("#cartrewardsBar").style.width = this.bonusRewards.progressPercentage + '%';
+    this.displayBonus();
+  }
 
-      // Bonus Rewards message
-      let remainingUntilNextLevel = Shopify.formatMoney(this.bonusRewards.remainingUntilNextLevel);
-      let nextLevelIndex = this.bonusRewards.nextBonusReward.index;
+  updateProgress () {
+    // Show/Hide progress bar
+    if (RocketTheme.globals.dataStore.fireworksTotalInCart === 0) {
+      document.querySelector('.bonusRewards-progress').classList.add('hidden');
+    } else {
+      document.querySelector('.bonusRewards-progress').classList.remove('hidden');
+    }
+    document.querySelector(".bonusRewards-bar").style.width = this.bonusRewards.progressPercentage + '%';
 
-      document.querySelector('.cartRewardsProgram .bonus-tiered-mtv').innerHTML = 
-      `<b>${remainingUntilNextLevel}</b> away from <b>Bonus Rewards Level ${nextLevelIndex}</b>! <i class="fas fa-gift"></i>`;
+    // Bonus Rewards message
+    let remainingUntilNextLevel = Shopify.formatMoney(this.bonusRewards.remainingUntilNextLevel);
+    let nextLevelIndex = this.bonusRewards.nextBonusReward.index;
+
+    document.querySelector('.bonusRewards-message').innerHTML = 
+    `<b>${remainingUntilNextLevel}</b> away from <b>Bonus Rewards Level ${nextLevelIndex}</b>! <i class="fas fa-gift"></i>`;
+  }
+
+  displayBonus () {
+    if (notNil(document.querySelector('.template-cart'))) {
+      document.querySelector('.bonusRewards-container').style.opacity = 1;
+    } else {
+      document.querySelector('.promo-bar .promo-bar-container').style.opacity = 1;
     }
   }
 }
@@ -1107,8 +1092,7 @@ class RocketTheme {
 
     // Create Bonus Rewards manager
     this.bonusRewards = new BonusRewards();
-    this.bonusRewardsProgressBannerView = new BonusRewardsProgressBannerView(this.bonusRewards);
-    this.bonusRewardsProgressInCartView = new BonusRewardsProgressInCartView(this.bonusRewards);
+    this.bonusRewardsProgressView = new BonusRewardsProgressView(this.bonusRewards);
 
     RocketTheme.globals.releaseInfo = new ReleaseInfo('Rocket Dev Theme', '1.0.0', 'Wed May 19 2021 19:00:40 GMT-0400 (Eastern Daylight Time)');
 
