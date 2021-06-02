@@ -831,6 +831,8 @@ class UpdateBonusRewardsInCartTask extends TaskManager {
       BonusRewards.levels.forEach(bonus => {
         if (productObj.product.variants[0].id === bonus.id) {
           removeTasks.push(ShopifyCart.getRemoveFromCartTask(productObj.product.variants[0].id));
+          console.log('###Bonus removed:');
+          console.log(productObj.product.variants[0]);
         }
       });
     });
@@ -838,6 +840,8 @@ class UpdateBonusRewardsInCartTask extends TaskManager {
   }
 
   getAddBonusRewardToCartTask (bonusReward) {
+    console.log('###Bonus added:');
+    console.log(bonusReward);
     return ShopifyCart.getAddToCartTask(bonusReward.id);
   }
 }
@@ -863,6 +867,7 @@ class BonusRewards extends EventDispatcher {
 
     this.on(FIREWORKS_TOTAL_IN_CART_UPDATED, this.fireworksTotalUpdatedListener.bind(this));
     this.on(ACTIVE_BONUS_REWARD_CHANGED, this.activeBonusRewardChangedListener.bind(this));
+    // this.on(BONUS_REWARD_UPDATED, this.updateCartListener.bind(this));
   }
 
   updateCartData () {
@@ -931,6 +936,10 @@ class BonusRewards extends EventDispatcher {
       this.dispatchEvent(BONUS_REWARD_UPDATED);
     });
     this.updateBonusRewardsInCartTask.start();
+  }
+
+  updateCartListener () {
+    Shopify.getCart(Shopify.updateQuickCart);
   }
 
   getActiveBonusReward () {
@@ -1094,10 +1103,22 @@ class RocketTheme {
     this.bonusRewards = new BonusRewards();
     this.bonusRewardsProgressView = new BonusRewardsProgressView(this.bonusRewards);
 
-    RocketTheme.globals.releaseInfo = new ReleaseInfo('Rocket Dev Theme', '1.0.0', 'Wed May 19 2021 19:00:40 GMT-0400 (Eastern Daylight Time)');
+    RocketTheme.globals.releaseInfo = new ReleaseInfo('Rocket Dev Theme', '1.0.0', 'Wed Jun 02 2021 18:20:02 GMT-0400 (Eastern Daylight Time)');
 
     log(`RocketTheme ${RocketTheme.globals.releaseInfo.title} ${RocketTheme.globals.releaseInfo.version} boot complete.`);
     log(`Last compiled: ${RocketTheme.globals.releaseInfo.date}`);
+    let shopifyIntervalId = setInterval(() => {
+      if (notNil(Shopify)) {
+        if (notNil(Shopify.onCartUpdate)) {
+          clearInterval(shopifyIntervalId);
+          let originalShopifyOnCartUpdate = Shopify.onCartUpdate;
+          Shopify.onCartUpdate = (cart, form) => {
+            originalShopifyOnCartUpdate(cart, form);
+            this.bonusRewards.updateCartData();
+          };
+        }
+      }
+    }, 500);
   }
 }
 

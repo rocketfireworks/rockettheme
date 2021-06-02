@@ -8,6 +8,7 @@ import {ConsoleLogger} from '../utils/ConsoleLogger.js';
 import {ReleaseInfo} from '../utils/ReleaseInfo.js';
 import { DataStore } from './DataStore.js';
 import { BonusRewardsProgressView } from './BonusRewardsProgressView.js';
+import { notNil } from '../utils/utils.js';
 
 export class RocketTheme {
   boot () {
@@ -25,6 +26,18 @@ export class RocketTheme {
 
     log(`RocketTheme ${RocketTheme.globals.releaseInfo.title} ${RocketTheme.globals.releaseInfo.version} boot complete.`);
     log(`Last compiled: ${RocketTheme.globals.releaseInfo.date}`);
+    let shopifyIntervalId = setInterval(() => {
+      if (notNil(Shopify)) {
+        if (notNil(Shopify.onCartUpdate)) {
+          clearInterval(shopifyIntervalId);
+          let originalShopifyOnCartUpdate = Shopify.onCartUpdate;
+          Shopify.onCartUpdate = (cart, form) => {
+            originalShopifyOnCartUpdate(cart, form);
+            this.bonusRewards.updateCartData();
+          }
+        }
+      }
+    }, 500);
   }
 }
 

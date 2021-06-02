@@ -29,6 +29,8 @@ export class UpdateBonusRewardsInCartTask extends TaskManager {
       BonusRewards.levels.forEach(bonus => {
         if (productObj.product.variants[0].id === bonus.id) {
           removeTasks.push(ShopifyCart.getRemoveFromCartTask(productObj.product.variants[0].id));
+          console.log('###Bonus removed:');
+          console.log(productObj.product.variants[0]);
         }
       });
     });
@@ -36,6 +38,8 @@ export class UpdateBonusRewardsInCartTask extends TaskManager {
   }
 
   getAddBonusRewardToCartTask (bonusReward) {
+    console.log('###Bonus added:');
+    console.log(bonusReward);
     return ShopifyCart.getAddToCartTask(bonusReward.id);
   }
 }
