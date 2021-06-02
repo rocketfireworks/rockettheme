@@ -59,9 +59,9 @@ Shopify.onError = function(XMLHttpRequest, textStatus) {
   // Example: {"description":"The product 'Amelia - Small' is already sold out.","status":500,"message":"Cart Error"}
   var data = eval('(' + XMLHttpRequest.responseText + ')');
   if (!!data.message) {
-    console.log(data.message + '(' + data.status  + '): ' + data.description);
+    console.error(data.message + '(' + data.status  + '): ' + data.description);
   } else {
-    console.log('Error : ' + Shopify.fullMessagesFromErrors(data).join('; ') + '.');
+    console.error('Error : ' + Shopify.fullMessagesFromErrors(data).join('; ') + '.');
   }
 };
 
