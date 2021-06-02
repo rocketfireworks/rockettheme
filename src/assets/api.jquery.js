@@ -75,10 +75,6 @@ Shopify.fullMessagesFromErrors = function(errors) {
   return fullMessages
 }
 
-Shopify.onCartUpdate = function(cart) {
-  alert('There are now ' + cart.item_count + ' items in the cart.');
-};  
-
 Shopify.onCartShippingRatesUpdate = function(rates, shipping_address) {
   var readable_address = '';
   if (shipping_address.zip) readable_address += shipping_address.zip + ', ';
