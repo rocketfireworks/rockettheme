@@ -1,5 +1,6 @@
 import { ShopifyCart } from "../shopify/ShopifyCart";
 import { TaskManager } from "../utils/TaskManager";
+import { notNil } from "../utils/utils";
 import { BonusRewards } from "./BonusRewards";
 import { RocketTheme } from "./RocketTheme";
 
@@ -13,9 +14,13 @@ export class UpdateBonusRewardsInCartTask extends TaskManager {
 
   initTasks (bonusRewardToAdd) {
     let removeInactiveBonusRewardsTask = this.getRemoveAllBonusRewardsFromCartTasks();
-    let addActiveBonusRewardTask = this.getAddBonusRewardToCartTask(bonusRewardToAdd);
     let tasks = removeInactiveBonusRewardsTask;
-    tasks.push(addActiveBonusRewardTask);
+
+    if (notNil(bonusRewardToAdd)) {
+      let addActiveBonusRewardTask = this.getAddBonusRewardToCartTask(bonusRewardToAdd);
+      tasks.push(addActiveBonusRewardTask);
+    }
+    
     this.addTasks(tasks);
   }
 
