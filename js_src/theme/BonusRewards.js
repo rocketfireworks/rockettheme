@@ -29,8 +29,6 @@ export class BonusRewards extends EventDispatcher {
 
     this.waitForUpdateIntervalId = -1;
 
-    this.updateCartData();
-
     this.on(FIREWORKS_TOTAL_IN_CART_UPDATED, this.fireworksTotalUpdatedListener.bind(this));
     this.on(ACTIVE_BONUS_REWARD_CHANGED, this.activeBonusRewardChangedListener.bind(this));
     // this.on(BONUS_REWARD_UPDATED, this.updateCartListener.bind(this));
@@ -54,7 +52,8 @@ export class BonusRewards extends EventDispatcher {
       log('RewardsManager finished updating rewards.');
       log('Current Fireworks total in cart: ');
       log(RocketTheme.globals.dataStore.fireworksTotalInCart);
-      if (previousFireworksTotal !== RocketTheme.globals.dataStore.fireworksTotalInCart) {
+      if (previousFireworksTotal !== -1 
+        && previousFireworksTotal !== RocketTheme.globals.dataStore.fireworksTotalInCart) {
         this.dispatchEvent(FIREWORKS_TOTAL_IN_CART_UPDATED);
       }
     });
@@ -73,7 +72,8 @@ export class BonusRewards extends EventDispatcher {
     this.remainingUntilNextLevel = this.getRemainingUntilNextLevel();
     this.progressPercentage = this.getProgressPercentage();
 
-    if (previousActiveBonusReward !== this.activeBonusReward) {
+    if (previousActiveBonusReward !== null
+      && previousActiveBonusReward !== this.activeBonusReward) {
       this.dispatchEvent(ACTIVE_BONUS_REWARD_CHANGED);
     }
   }
