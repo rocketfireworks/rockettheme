@@ -10,7 +10,7 @@ import { BonusReward } from './BonusReward.js';
 import { EventDispatcher } from '../utils/EventDispatcher.js';
 import { ACTIVE_BONUS_REWARD_CHANGED, BONUS_REWARD_UPDATED, FIREWORKS_TOTAL_IN_CART_UPDATED, SHOPIFY_CART_UPDATE } from './Events.js';
 import { UpdateBonusRewardsInCartTask } from './UpdateBonusRewardsInCartTask.js';
-import { isNil } from '../utils/utils.js';
+import { isEmpty, isNil } from '../utils/utils.js';
 
 export class BonusRewards extends EventDispatcher {
   constructor () {
@@ -124,7 +124,7 @@ export class BonusRewards extends EventDispatcher {
     this.nextBonusReward = BonusRewards.levels[0];
     let nextBonusRewardIndex = 1;
 
-    if (Object.keys(this.activeBonusReward).length !== 0) {
+    if (!isEmpty(this.activeBonusReward)) {
       nextBonusRewardIndex = this.activeBonusReward.index + 1;
     }
     BonusRewards.levels.forEach(bonus => {
