@@ -45,6 +45,10 @@ ShopifyCart.getUpdateCartTask = function (variantID, quantity) {
 
   let updateItemTask = ShopifyCart.getLoadJSONTask(url, 'POST', bodyData);
 
+  updateItemTask.on(COMPLETE, () => {
+    return updateItemTask.json;
+  });
+
   return updateItemTask;
 }
 
