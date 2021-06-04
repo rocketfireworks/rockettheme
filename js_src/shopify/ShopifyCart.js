@@ -52,6 +52,26 @@ ShopifyCart.getUpdateCartTask = function (variantID, quantity) {
   return updateItemTask;
 }
 
+ShopifyCart.getChangeCartTask = function (id, quantity, properties, idType = 'id') {
+  let bodyData = {};
+  bodyData[idType] = id;
+  if (notNil(quantity)) {
+    bodyData['quantity'] = quantity;
+  }
+  if (notNil(properties)) {
+    bodyData['properties'] = properties;
+  }
+  let url = '/cart/change.js';
+
+  let changeItemTask = ShopifyCart.getLoadJSONTask(url, 'POST', bodyData);
+
+  changeItemTask.on(COMPLETE, () => {
+    return changeItemTask.json;
+  });
+
+  return changeItemTask;
+}
+
 ShopifyCart.getLoadJSONTask = function (url, method, bodyData = null) {
   let loadJSONTaskParams = {
       headersObj: {
