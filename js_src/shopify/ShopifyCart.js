@@ -32,8 +32,13 @@ ShopifyCart.getAddToCartTask = function (variantID) {
 }
 
 ShopifyCart.getRemoveFromCartTask = function (variantID) {
-  let removeFromCartTask = ShopifyCart.getUpdateCartTask(variantID,0);
+  let removeFromCartTask = ShopifyCart.getUpdateCartTask(variantID, 0);
   removeFromCartTask.name = 'REMOVE FROM CART';
+  
+  removeFromCartTask.on(COMPLETE, () => {
+    return removeFromCartTask.json;
+  });
+
   return removeFromCartTask;
 }
 
