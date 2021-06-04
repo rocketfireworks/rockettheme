@@ -143,7 +143,7 @@ export class BonusRewards extends EventDispatcher {
   }
 
   getActiveBonusReward () {
-    let activeBonusReward;
+    let activeBonusReward = null;
     let fireworksTotalInCart = RocketTheme.globals.dataStore.fireworksTotalInCart;
     BonusRewards.levels.forEach(bonus => {
       if (fireworksTotalInCart > bonus.level) {
