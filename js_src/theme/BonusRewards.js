@@ -35,40 +35,6 @@ export class BonusRewards extends EventDispatcher {
     // this.on(BONUS_REWARD_UPDATED, this.updateCartListener.bind(this));
   }
 
-  initCartBonus () {
-    console.log('* bonusRewards.initCartBonus starting...');
-
-    // Create list of tasks
-    let tasks = [
-      new UpdateCartInDataStoreTask(),
-      new UpdateCartProductsInDataStoreTask(),
-      new WaitForSellyTask(),
-      new GetFireworksInCartTotalTask()
-    ];
-
-    // Execute tasks
-    this.rewardsManager = new TaskManager('Rewards Manager');
-    this.rewardsManager.addTasks(tasks);
-    this.rewardsManager.on(COMPLETE, e => {
-      log('RewardsManager finished updating rewards.');
-      log('Current Fireworks total in cart: ');
-      log(RocketTheme.globals.dataStore.fireworksTotalInCart);
-      
-      this.activeBonusReward = this.getActiveBonusReward();
-      this.nextBonusReward = this.getNextBonusReward();
-      this.remainingUntilNextLevel = this.getRemainingUntilNextLevel();
-      this.progressPercentage = this.getProgressPercentage();
-
-      this.updateBonusRewardsInCart(this.activeBonusReward);
-
-    });
-    this.rewardsManager.on(FAIL, e => {
-      log('RewardsManager failed to init rewards.');
-    });
-
-    this.rewardsManager.start();
-  }
-
   updateCartData () {
     let previousFireworksTotal = RocketTheme.globals.dataStore.fireworksTotalInCart;
 
