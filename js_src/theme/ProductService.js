@@ -18,3 +18,7 @@ ProductService.hasTag = function (handle, tag) {
 ProductService.isFireworkProduct = function (handle) {
   return ProductService.hasTag(handle, TAG_FW) || ProductService.hasTag(handle, TAG_FWSEQ);
 }
+
+ProductService.getVariantID = function (product) {
+  return product.product.variants[0].id;
+}

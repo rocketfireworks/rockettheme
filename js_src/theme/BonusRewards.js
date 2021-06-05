@@ -153,6 +153,18 @@ export class BonusRewards extends EventDispatcher {
     return activeBonusReward;
   }
 
+  getCurrentBonusRewardInCart() {
+    let currentBonusReward = null;
+    RocketTheme.globals.dataStore.productsInCart.forEach(product => {
+      BonusRewards.levels.forEach(bonus => {
+        if (ProductService.getVariantID(product) === bonus.id) {
+          currentBonusReward = bonus;
+        }
+      });
+    });
+    return currentBonusReward;
+  }
+
   getNextBonusReward () {
     let nextBonusReward;
     this.nextBonusReward = BonusRewards.levels[0];

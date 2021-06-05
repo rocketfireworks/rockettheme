@@ -2,6 +2,7 @@ import { ShopifyCart } from "../shopify/ShopifyCart";
 import { TaskManager } from "../utils/TaskManager";
 import { notNil } from "../utils/utils";
 import { BonusRewards } from "./BonusRewards";
+import { ProductService } from "./ProductService";
 import { RocketTheme } from "./RocketTheme";
 
 
@@ -32,10 +33,11 @@ export class UpdateBonusRewardsInCartTask extends TaskManager {
     let removeTasks = [];
     RocketTheme.globals.dataStore.productsInCart.forEach(productObj => {
       BonusRewards.levels.forEach(bonus => {
-        if (productObj.product.variants[0].id === bonus.id) {
-          removeTasks.push(ShopifyCart.getRemoveFromCartTask(productObj.product.variants[0].id));
           console.log('###Bonus removed:');
           console.log(productObj.product.variants[0]);
+        let variantID = ProductService.getVariantID(productObj);
+        if (variantID === bonus.id) {
+          removeTasks.push(ShopifyCart.getRemoveFromCartTask(variantID));
         }
       });
     });
