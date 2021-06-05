@@ -10,7 +10,7 @@ import { BonusReward } from './BonusReward.js';
 import { EventDispatcher } from '../utils/EventDispatcher.js';
 import { ACTIVE_BONUS_REWARD_CHANGED, BONUS_REWARD_UPDATED, FIREWORKS_TOTAL_IN_CART_UPDATED, SHOPIFY_CART_UPDATE } from './Events.js';
 import { UpdateBonusRewardsInCartTask } from './UpdateBonusRewardsInCartTask.js';
-import { isEmpty, isNil } from '../utils/utils.js';
+import { isEmpty, isNil, notNil } from '../utils/utils.js';
 import { ProductService } from './ProductService.js';
 
 export class BonusRewards extends EventDispatcher {
