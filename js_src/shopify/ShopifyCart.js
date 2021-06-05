@@ -28,7 +28,10 @@ ShopifyCart.getAddToCartTask = function (variantID) {
   };
   let url = '/cart/add.js';
 
-  return ShopifyCart.getLoadJSONTask(url, 'POST', bodyData);
+  let addToCartTask = ShopifyCart.getLoadJSONTask(url, 'POST', bodyData);
+  addToCartTask.name = 'ADD TO CART';
+  
+  return addToCartTask;
 }
 
 ShopifyCart.getRemoveFromCartTask = function (variantID) {
@@ -45,6 +48,7 @@ ShopifyCart.getUpdateCartTask = function (variantID, quantity) {
   let url = '/cart/update.js';
 
   let updateItemTask = ShopifyCart.getLoadJSONTask(url, 'POST', bodyData);
+  updateItemTask.name = 'UPDATE CART';
 
   return updateItemTask;
 }
