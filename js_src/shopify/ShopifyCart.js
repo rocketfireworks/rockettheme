@@ -69,6 +69,7 @@ ShopifyCart.getLoadJSONTask = function (url, method, bodyData = null) {
 
   loadJSONTask.on(COMPLETE, () => {
     // Task complete
+    console.log('* Finished task successfully: ', loadJSONTask.name);
   });
 
   loadJSONTask.on(FAIL, (e) => {

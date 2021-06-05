@@ -16,8 +16,10 @@ export class UpdateCartInDataStoreTask extends Task {
     super.start();
     
     let getCartTask = ShopifyCart.getCartTask();
+    console.log('* Retrieving cart from server');
     getCartTask.on(COMPLETE, () => {
       RocketTheme.globals.dataStore.cart = getCartTask.json;
+      console.log('* Received cart from server');
       this.done();
     })
     getCartTask.start();

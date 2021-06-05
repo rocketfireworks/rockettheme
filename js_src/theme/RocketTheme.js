@@ -27,14 +27,18 @@ export class RocketTheme {
     log(`RocketTheme ${RocketTheme.globals.releaseInfo.title} ${RocketTheme.globals.releaseInfo.version} boot complete.`);
     log(`Last compiled: ${RocketTheme.globals.releaseInfo.date}`);
     let shopifyIntervalId = setInterval(() => {
+      console.log("* Waiting for Shopify API");
       if (notNil(Shopify)) {
         if (notNil(Shopify.onCartUpdate)) {
           clearInterval(shopifyIntervalId);
           let originalShopifyOnCartUpdate = Shopify.onCartUpdate;
+          console.log("* Replacing Shopify onCartUpdate function");
           Shopify.onCartUpdate = (cart, form) => {
             originalShopifyOnCartUpdate(cart, form);
+            console.log('* Shopify.onCartUpdate now invoking bonusRewards.updateCartData');
             this.bonusRewards.updateCartData();
           }
+          console.log('* Interval function now invoking bonusRewards.initCartBonus');
           this.bonusRewards.updateCartData();
         }
       }

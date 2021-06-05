@@ -31,11 +31,13 @@ export class UpdateBonusRewardsInCartTask extends TaskManager {
 
   getRemoveAllBonusRewardsFromCartTasks () {
     let removeTasks = [];
+    console.log('* Removing all bonus rewards from cart')
     RocketTheme.globals.dataStore.productsInCart.forEach(productObj => {
       BonusRewards.levels.forEach(bonus => {
         let variantID = ProductService.getVariantID(productObj);
         if (variantID === bonus.id) {
           removeTasks.push(ShopifyCart.getRemoveFromCartTask(variantID));
+          console.log('* Queuing bonus reward for removal:', bonus);
         }
       });
     });
@@ -43,6 +45,7 @@ export class UpdateBonusRewardsInCartTask extends TaskManager {
   }
 
   getAddBonusRewardToCartTask (bonusReward) {
+    console.log('* Queuing bonus reward for addition:', bonusReward);
     return ShopifyCart.getAddToCartTask(bonusReward.id);
   }
 }

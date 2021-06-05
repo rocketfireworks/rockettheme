@@ -15,6 +15,8 @@ export class GetFireworksInCartTotalTask extends Task {
   start() {
     super.start();
 
+    console.log('* Calculating fireworks total');
+
     let fireworksProducts = [];
     
     RocketTheme.globals.dataStore.cart.items.forEach(item => {
@@ -32,6 +34,7 @@ export class GetFireworksInCartTotalTask extends Task {
     console.log(fireworksProducts);
 
     RocketTheme.globals.dataStore.fireworksTotalInCart = sumBy(fireworksProducts, 'lineItemTotalFinalPrice');
+    console.log('* Fireworks total: ' + RocketTheme.globals.dataStore.fireworksTotalInCart);
     this.done();
   }
 }

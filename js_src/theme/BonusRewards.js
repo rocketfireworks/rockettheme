@@ -35,6 +35,7 @@ export class BonusRewards extends EventDispatcher {
   }
 
   updateCartData () {
+    console.log('* bonusRewards.updateCartData starting...');
     let previousFireworksTotal = RocketTheme.globals.dataStore.fireworksTotalInCart;
 
     // Create list of tasks
@@ -64,6 +65,7 @@ export class BonusRewards extends EventDispatcher {
   }
 
   fireworksTotalUpdatedListener () {
+    console.log('* Fireworks Total changed. Running fireworksTotalUpdatedListener...');
 
     let expectedBonusReward = this.getActiveBonusReward();
     let actualBonusRewards = this.getCurrentBonusRewardsInCart();
@@ -73,6 +75,9 @@ export class BonusRewards extends EventDispatcher {
     this.remainingUntilNextLevel = this.getRemainingUntilNextLevel();
     this.progressPercentage = this.getProgressPercentage();
     
+    console.log('* Expected bonus reward: ', expectedBonusReward);
+    console.log('* Actual bonus reward: ', actualBonusRewards);
+
     let rewardChanged = false;
     if (actualBonusRewards.length > 1) {
       console.warn('* MULTIPLE BONUS REWARDS FOUND IN CART');
@@ -93,6 +98,7 @@ export class BonusRewards extends EventDispatcher {
   }
 
   activeBonusRewardChangedListener () {
+    console.log('* Updating bonus rewards in cart');
     if (isNil(this.updateBonusRewardsInCartTask)) {
       this.updateBonusRewardsInCart(this.activeBonusReward);
     } else {

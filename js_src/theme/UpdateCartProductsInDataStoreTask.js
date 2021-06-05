@@ -26,6 +26,7 @@ export class UpdateCartProductsInDataStoreTask extends TaskManager {
   }
 
   start() {
+    console.log('* Retrieving products from server');
     this.clearProductsInCart();
     this.initTasks();
     super.start();
