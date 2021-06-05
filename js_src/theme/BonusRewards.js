@@ -21,7 +21,6 @@ export class BonusRewards extends EventDispatcher {
     
     this.activeBonusReward = null;
     this.nextBonusReward = null;
-    this.newBonusReward = null;
 
     this.remainingUntilNextLevel = 0;
     this.progressPercentage = 0;
@@ -53,8 +52,7 @@ export class BonusRewards extends EventDispatcher {
       log('RewardsManager finished updating rewards.');
       log('Current Fireworks total in cart: ');
       log(RocketTheme.globals.dataStore.fireworksTotalInCart);
-      if (previousFireworksTotal !== -1 
-        && previousFireworksTotal !== RocketTheme.globals.dataStore.fireworksTotalInCart) {
+      if (previousFireworksTotal !== RocketTheme.globals.dataStore.fireworksTotalInCart) {
         this.dispatchEvent(FIREWORKS_TOTAL_IN_CART_UPDATED);
       }
     });
@@ -66,30 +64,44 @@ export class BonusRewards extends EventDispatcher {
   }
 
   fireworksTotalUpdatedListener () {
-    let previousActiveBonusReward = this.activeBonusReward;
 
-    this.activeBonusReward = this.getActiveBonusReward();
+    let expectedBonusReward = this.getActiveBonusReward();
+    let actualBonusRewards = this.getCurrentBonusRewardsInCart();
+
+    this.activeBonusReward = expectedBonusReward;
     this.nextBonusReward = this.getNextBonusReward();
     this.remainingUntilNextLevel = this.getRemainingUntilNextLevel();
     this.progressPercentage = this.getProgressPercentage();
+    
+    let rewardChanged = false;
+    if (actualBonusRewards.length > 1) {
+      console.warn('* MULTIPLE BONUS REWARDS FOUND IN CART');
+      rewardChanged = true;
+    } else if (actualBonusRewards.length === 1
+      && actualBonusRewards[1] !== expectedBonusReward) {
+      console.log('* Existing bonus reward changed');
+      rewardChanged = true;
+    } else if (notNil(expectedBonusReward)) {
+      console.log('* Bonus reward changed (from no prior reward)');
+      rewardChanged = true;
+    }
 
-    if (previousActiveBonusReward !== null
-      && previousActiveBonusReward !== this.activeBonusReward) {
+    if (rewardChanged) {
+      this.activeBonusReward = expectedBonusReward;
       this.dispatchEvent(ACTIVE_BONUS_REWARD_CHANGED);
     }
   }
 
   activeBonusRewardChangedListener () {
-    this.newBonusReward = this.activeBonusReward;
     if (isNil(this.updateBonusRewardsInCartTask)) {
-      this.updateBonusRewardsInCart(this.newBonusReward);
+      this.updateBonusRewardsInCart(this.activeBonusReward);
     } else {
       if (this.waitForUpdateIntervalId === -1) {
         this.waitForUpdateIntervalId = setInterval(() => {
           if (isNil(this.updateBonusRewardsInCartTask)) {
             clearInterval(this.waitForUpdateIntervalId);
             this.waitForUpdateIntervalId = -1;
-            this.updateBonusRewardsInCart(this.newBonusReward);
+            this.updateBonusRewardsInCart(this.activeBonusReward);
           }
         }, 500);
       }
@@ -120,16 +132,16 @@ export class BonusRewards extends EventDispatcher {
     return activeBonusReward;
   }
 
-  getCurrentBonusRewardInCart() {
-    let currentBonusReward = null;
+  getCurrentBonusRewardsInCart() {
+    let currentBonusRewards = [];
     RocketTheme.globals.dataStore.productsInCart.forEach(product => {
       BonusRewards.levels.forEach(bonus => {
         if (ProductService.getVariantID(product) === bonus.id) {
-          currentBonusReward = bonus;
+          currentBonusRewards.push(bonus);
         }
       });
     });
-    return currentBonusReward;
+    return currentBonusRewards;
   }
 
   getNextBonusReward () {
