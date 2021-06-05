@@ -33,8 +33,6 @@ export class UpdateBonusRewardsInCartTask extends TaskManager {
     let removeTasks = [];
     RocketTheme.globals.dataStore.productsInCart.forEach(productObj => {
       BonusRewards.levels.forEach(bonus => {
-          console.log('###Bonus removed:');
-          console.log(productObj.product.variants[0]);
         let variantID = ProductService.getVariantID(productObj);
         if (variantID === bonus.id) {
           removeTasks.push(ShopifyCart.getRemoveFromCartTask(variantID));
@@ -45,8 +43,6 @@ export class UpdateBonusRewardsInCartTask extends TaskManager {
   }
 
   getAddBonusRewardToCartTask (bonusReward) {
-    console.log('###Bonus added:');
-    console.log(bonusReward);
     return ShopifyCart.getAddToCartTask(bonusReward.id);
   }
 }
