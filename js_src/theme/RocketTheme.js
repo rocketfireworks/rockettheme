@@ -35,7 +35,7 @@ export class RocketTheme {
             originalShopifyOnCartUpdate(cart, form);
             this.bonusRewards.updateCartData();
           }
-          this.bonusRewards.initCartBonus();
+          this.bonusRewards.updateCartData();
         }
       }
     }, 500);
