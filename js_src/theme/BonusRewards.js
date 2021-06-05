@@ -119,6 +119,8 @@ export class BonusRewards extends EventDispatcher {
     this.updateBonusRewardsInCartTask.on(COMPLETE, () => {
       this.updateBonusRewardsInCartTask = null;
       this.dispatchEvent(BONUS_REWARD_UPDATED);
+      
+      Shopify.getCart(Shopify.updateQuickCart);
     });
     this.updateBonusRewardsInCartTask.start();
   }
