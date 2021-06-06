@@ -20,13 +20,21 @@ export class BonusRewards extends EventDispatcher {
 
     this.waitForUpdateIntervalId = -1;
 
-    this.on(FIREWORKS_TOTAL_IN_CART_UPDATED, this.fireworksTotalUpdatedListener.bind(this));
     this.on(ACTIVE_BONUS_REWARD_CHANGED, this.activeBonusRewardChangedListener.bind(this));
   }
 
-  updateCartData () {
-    console.log('* bonusRewards.updateCartData starting...');
+  //================================================================================================
+  // DEPENDENCIEES
+  //================================================================================================
+
+  setCartWatcher (cartWatcher) {
+    this.cartWatcher = cartWatcher;
+    this.cartWatcher.on(FIREWORKS_TOTAL_IN_CART_UPDATED, this.fireworksTotalUpdatedListener.bind(this));
   }
+
+  //================================================================================================
+  // BONUS REWARDS MANAGEMENT
+  //================================================================================================
 
   fireworksTotalUpdatedListener () {
     console.log('* Fireworks Total changed. Running fireworksTotalUpdatedListener...');
@@ -101,6 +109,11 @@ export class BonusRewards extends EventDispatcher {
     Shopify.getCart(Shopify.updateQuickCart);
   }
 
+
+  //================================================================================================
+  // REWARDS UTILITIES
+  //================================================================================================
+
   getActiveBonusReward () {
     let activeBonusReward = null;
     let fireworksTotalInCart = RocketTheme.globals.dataStore.fireworksTotalInCart;
@@ -150,6 +163,10 @@ export class BonusRewards extends EventDispatcher {
     return Math.floor((RocketTheme.globals.dataStore.fireworksTotalInCart * 100) / this.nextBonusReward.level);
   }
 }
+
+//==================================================================================================
+// BONUS REWARDS CONSTANTS
+//==================================================================================================
 
 BonusRewards.levels = [
   new BonusReward(15000, 39310116454589, 1),

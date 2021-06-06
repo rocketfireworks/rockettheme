@@ -42,7 +42,11 @@ export class RocketTheme {
     ];
     bootManager.addTasks(bootTasks);
     bootManager.start();
+    bootManager.on(COMPLETE, () => {
+      this.bonusRewards.setCartWatcher(this.cartWatcher);
+    });
   }
+
 }
 
 RocketTheme.globals = {};
