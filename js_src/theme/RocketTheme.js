@@ -11,8 +11,6 @@ import { BonusRewardsProgressView } from './BonusRewardsProgressView.js';
 import {WaitForShopifySDKTask} from './WaitForShopifySDKTask.js';
 import {TaskManager} from '../utils/TaskManager.js';
 import {WaitForSellyTask} from './WaitForSellyTask.js';
-import {COMPLETE} from '../utils/constants.js';
-import {CartWatcher} from './CartWatcher.js';
 import {InitShopifySDKAdapter} from './InitShopifySDKAdapter.js';
 import {InitCartWatcherTask} from './InitCartWatcherTask.js';
 
