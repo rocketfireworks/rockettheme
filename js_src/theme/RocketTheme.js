@@ -44,11 +44,6 @@ export class RocketTheme {
     ];
     bootManager.addTasks(bootTasks);
     bootManager.start();
-
-    bootManager.on(COMPLETE, () => {
-      this.cartWatcher = new CartWatcher(this.shopifySDKAdapter);
-      this.cartWatcher.refresh();
-    });
   }
 }
 

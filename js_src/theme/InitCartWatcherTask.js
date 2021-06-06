@@ -12,6 +12,7 @@ export class InitCartWatcherTask extends Task {
   start () {
     super.start();
     this.rocketTheme.cartWatcher = new CartWatcher(this.rocketTheme.shopifySDKAdapter);
+    this.rocketTheme.cartWatcher.refresh();
     this.done();
   }
 }
