@@ -38,7 +38,6 @@ export class BonusRewards extends EventDispatcher {
     let tasks = [
       new UpdateCartInDataStoreTask(),
       new UpdateCartProductsInDataStoreTask(),
-      new WaitForSellyTask(),
       new GetFireworksInCartTotalTask()
     ];
 
