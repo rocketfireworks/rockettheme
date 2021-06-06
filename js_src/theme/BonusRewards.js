@@ -32,31 +32,6 @@ export class BonusRewards extends EventDispatcher {
 
   updateCartData () {
     console.log('* bonusRewards.updateCartData starting...');
-    let previousFireworksTotal = RocketTheme.globals.dataStore.fireworksTotalInCart;
-
-    // Create list of tasks
-    let tasks = [
-      new UpdateCartInDataStoreTask(),
-      new UpdateCartProductsInDataStoreTask(),
-      new GetFireworksInCartTotalTask()
-    ];
-
-    // Execute tasks
-    this.rewardsManager = new TaskManager('Rewards Manager');
-    this.rewardsManager.addTasks(tasks);
-    this.rewardsManager.on(COMPLETE, e => {
-      log('RewardsManager finished updating rewards.');
-      log('Current Fireworks total in cart: ');
-      log(RocketTheme.globals.dataStore.fireworksTotalInCart);
-      if (previousFireworksTotal !== RocketTheme.globals.dataStore.fireworksTotalInCart) {
-        this.dispatchEvent(FIREWORKS_TOTAL_IN_CART_UPDATED);
-      }
-    });
-    this.rewardsManager.on(FAIL, e => {
-      log('RewardsManager failed to update rewards.');
-    });
-
-    this.rewardsManager.start();
   }
 
   fireworksTotalUpdatedListener () {

@@ -13,6 +13,7 @@ import {TaskManager} from '../utils/TaskManager.js';
 import {WaitForSellyTask} from './WaitForSellyTask.js';
 import {ShopifySDKAdapter} from '../shopify/ShopifySDKAdapter.js';
 import {COMPLETE} from '../utils/constants.js';
+import {CartWatcher} from './CartWatcher.js';
 
 export class RocketTheme {
   boot () {
@@ -38,7 +39,8 @@ export class RocketTheme {
     bootManager.start();
 
     bootManager.on(COMPLETE, () => {
-      this.shopifyAPIAdapter = new ShopifySDKAdapter();
+      this.shopifySDKAdapter = new ShopifySDKAdapter();
+      this.cartWatcher = new CartWatcher(this.shopifySDKAdapter);
     });
   }
 }

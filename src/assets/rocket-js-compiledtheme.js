@@ -443,6 +443,10 @@ ProductService.isFireworkProduct = function (handle) {
   return ProductService.hasTag(handle, TAG_FW) || ProductService.hasTag(handle, TAG_FWSEQ);
 };
 
+ProductService.getVariantID = function (product) {
+  return product.product.variants[0].id;
+};
+
 class GetFireworksInCartTotalTask extends Task {
   
   constructor () {
@@ -453,6 +457,8 @@ class GetFireworksInCartTotalTask extends Task {
 
   start() {
     super.start();
+
+    console.log('* Calculating fireworks total');
 
     let fireworksProducts = [];
     
@@ -471,6 +477,7 @@ class GetFireworksInCartTotalTask extends Task {
     console.log(fireworksProducts);
 
     RocketTheme.globals.dataStore.fireworksTotalInCart = sumBy(fireworksProducts, 'lineItemTotalFinalPrice');
+    console.log('* Fireworks total: ' + RocketTheme.globals.dataStore.fireworksTotalInCart);
     this.done();
   }
 }
@@ -656,12 +663,16 @@ ShopifyCart.getAddToCartTask = function (variantID) {
   };
   let url = '/cart/add.js';
 
-  return ShopifyCart.getLoadJSONTask(url, 'POST', bodyData);
+  let addToCartTask = ShopifyCart.getLoadJSONTask(url, 'POST', bodyData);
+  addToCartTask.name = 'ADD TO CART';
+  
+  return addToCartTask;
 };
 
 ShopifyCart.getRemoveFromCartTask = function (variantID) {
-  let removeFromCartTask = ShopifyCart.getUpdateCartTask(variantID,0);
+  let removeFromCartTask = ShopifyCart.getUpdateCartTask(variantID, 0);
   removeFromCartTask.name = 'REMOVE FROM CART';
+  
   return removeFromCartTask;
 };
 
@@ -672,6 +683,7 @@ ShopifyCart.getUpdateCartTask = function (variantID, quantity) {
   let url = '/cart/update.js';
 
   let updateItemTask = ShopifyCart.getLoadJSONTask(url, 'POST', bodyData);
+  updateItemTask.name = 'UPDATE CART';
 
   return updateItemTask;
 };
@@ -692,6 +704,7 @@ ShopifyCart.getLoadJSONTask = function (url, method, bodyData = null) {
 
   loadJSONTask.on(COMPLETE, () => {
     // Task complete
+    console.log('* Finished task successfully: ', loadJSONTask.name);
   });
 
   loadJSONTask.on(FAIL, (e) => {
@@ -734,6 +747,7 @@ class UpdateCartProductsInDataStoreTask extends TaskManager {
   }
 
   start() {
+    console.log('* Retrieving products from server');
     this.clearProductsInCart();
     this.initTasks();
     super.start();
@@ -784,8 +798,10 @@ class UpdateCartInDataStoreTask extends Task {
     super.start();
     
     let getCartTask = ShopifyCart.getCartTask();
+    console.log('* Retrieving cart from server');
     getCartTask.on(COMPLETE, () => {
       RocketTheme.globals.dataStore.cart = getCartTask.json;
+      console.log('* Received cart from server');
       this.done();
     });
     getCartTask.start();
@@ -802,9 +818,10 @@ class BonusReward {
   
 }
 
-const FIREWORKS_TOTAL_IN_CART_UPDATED = 'FIREWORKS_TOTAL_IN_CART_UPDATED';
+const FIREWORKS_TOTAL_IN_CART_UPDATED$1 = 'FIREWORKS_TOTAL_IN_CART_UPDATED';
 const ACTIVE_BONUS_REWARD_CHANGED = 'ACTIVE_BONUS_REWARD_CHANGED';
 const BONUS_REWARD_UPDATED = 'BONUS_REWARD_UPDATED';
+const SHOPIFY_CART_UPDATE$1 = 'SHOPIFY_CART_UPDATE';
 
 class UpdateBonusRewardsInCartTask extends TaskManager {
   constructor (bonusRewardToAdd) {
@@ -815,9 +832,13 @@ class UpdateBonusRewardsInCartTask extends TaskManager {
 
   initTasks (bonusRewardToAdd) {
     let removeInactiveBonusRewardsTask = this.getRemoveAllBonusRewardsFromCartTasks();
-    let addActiveBonusRewardTask = this.getAddBonusRewardToCartTask(bonusRewardToAdd);
     let tasks = removeInactiveBonusRewardsTask;
-    tasks.push(addActiveBonusRewardTask);
+
+    if (notNil(bonusRewardToAdd)) {
+      let addActiveBonusRewardTask = this.getAddBonusRewardToCartTask(bonusRewardToAdd);
+      tasks.push(addActiveBonusRewardTask);
+    }
+    
     this.addTasks(tasks);
   }
 
@@ -827,12 +848,13 @@ class UpdateBonusRewardsInCartTask extends TaskManager {
 
   getRemoveAllBonusRewardsFromCartTasks () {
     let removeTasks = [];
+    console.log('* Removing all bonus rewards from cart');
     RocketTheme.globals.dataStore.productsInCart.forEach(productObj => {
       BonusRewards.levels.forEach(bonus => {
-        if (productObj.product.variants[0].id === bonus.id) {
-          removeTasks.push(ShopifyCart.getRemoveFromCartTask(productObj.product.variants[0].id));
-          console.log('###Bonus removed:');
-          console.log(productObj.product.variants[0]);
+        let variantID = ProductService.getVariantID(productObj);
+        if (variantID === bonus.id) {
+          removeTasks.push(ShopifyCart.getRemoveFromCartTask(variantID));
+          console.log('* Queuing bonus reward for removal:', bonus);
         }
       });
     });
@@ -840,8 +862,7 @@ class UpdateBonusRewardsInCartTask extends TaskManager {
   }
 
   getAddBonusRewardToCartTask (bonusReward) {
-    console.log('###Bonus added:');
-    console.log(bonusReward);
+    console.log('* Queuing bonus reward for addition:', bonusReward);
     return ShopifyCart.getAddToCartTask(bonusReward.id);
   }
 }
@@ -849,12 +870,8 @@ class UpdateBonusRewardsInCartTask extends TaskManager {
 class BonusRewards extends EventDispatcher {
   constructor () {
     super();
-
-    log('BonusRewards 4.0 manager ready.');
-    
     this.activeBonusReward = null;
     this.nextBonusReward = null;
-    this.newBonusReward = null;
 
     this.remainingUntilNextLevel = 0;
     this.progressPercentage = 0;
@@ -863,66 +880,63 @@ class BonusRewards extends EventDispatcher {
 
     this.waitForUpdateIntervalId = -1;
 
-    this.updateCartData();
-
-    this.on(FIREWORKS_TOTAL_IN_CART_UPDATED, this.fireworksTotalUpdatedListener.bind(this));
+    this.on(FIREWORKS_TOTAL_IN_CART_UPDATED$1, this.fireworksTotalUpdatedListener.bind(this));
     this.on(ACTIVE_BONUS_REWARD_CHANGED, this.activeBonusRewardChangedListener.bind(this));
-    // this.on(BONUS_REWARD_UPDATED, this.updateCartListener.bind(this));
   }
 
   updateCartData () {
-    let previousFireworksTotal = RocketTheme.globals.dataStore.fireworksTotalInCart;
-
-    // Create list of tasks
-    let tasks = [
-      new UpdateCartInDataStoreTask(),
-      new UpdateCartProductsInDataStoreTask(),
-      new WaitForSellyTask(),
-      new GetFireworksInCartTotalTask()
-    ];
-
-    // Execute tasks
-    this.rewardsManager = new TaskManager('Rewards Manager');
-    this.rewardsManager.addTasks(tasks);
-    this.rewardsManager.on(COMPLETE, e => {
-      log('RewardsManager finished updating rewards.');
-      log('Current Fireworks total in cart: ');
-      log(RocketTheme.globals.dataStore.fireworksTotalInCart);
-      if (previousFireworksTotal !== RocketTheme.globals.dataStore.fireworksTotalInCart) {
-        this.dispatchEvent(FIREWORKS_TOTAL_IN_CART_UPDATED);
-      }
-    });
-    this.rewardsManager.on(FAIL, e => {
-      log('RewardsManager failed to update rewards.');
-    });
-
-    this.rewardsManager.start();
+    console.log('* bonusRewards.updateCartData starting...');
   }
 
   fireworksTotalUpdatedListener () {
-    let previousActiveBonusReward = this.activeBonusReward;
+    console.log('* Fireworks Total changed. Running fireworksTotalUpdatedListener...');
 
-    this.activeBonusReward = this.getActiveBonusReward();
+    let expectedBonusReward = this.getActiveBonusReward();
+    let actualBonusRewards = this.getCurrentBonusRewardsInCart();
+
+    this.activeBonusReward = expectedBonusReward;
     this.nextBonusReward = this.getNextBonusReward();
     this.remainingUntilNextLevel = this.getRemainingUntilNextLevel();
     this.progressPercentage = this.getProgressPercentage();
+    
+    console.log('* Expected bonus reward: ', expectedBonusReward);
+    console.log('* Actual bonus reward: ', actualBonusRewards);
 
-    if (previousActiveBonusReward !== this.activeBonusReward) {
+    let rewardChanged = false;
+    if (actualBonusRewards.length > 1) {
+      console.warn('* MULTIPLE BONUS REWARDS FOUND IN CART');
+      rewardChanged = true;
+    } else if (actualBonusRewards.length === 1
+      && actualBonusRewards[1] !== expectedBonusReward) {
+      console.log('* Existing bonus reward changed');
+      rewardChanged = true;
+    } else if (notNil(expectedBonusReward)) {
+      console.log('* Bonus reward changed (from no prior reward)');
+      rewardChanged = true;
+    }
+
+    if (rewardChanged) {
+      this.activeBonusReward = expectedBonusReward;
       this.dispatchEvent(ACTIVE_BONUS_REWARD_CHANGED);
     }
   }
 
   activeBonusRewardChangedListener () {
-    this.newBonusReward = this.activeBonusReward;
+    console.log('* Checking for existing "update rewards in cart" task...');
     if (isNil(this.updateBonusRewardsInCartTask)) {
-      this.updateBonusRewardsInCart(this.newBonusReward);
+      console.log('* No update rewards task in progress. Creating new "update rewards in cart" task...');
+      this.updateBonusRewardsInCart(this.activeBonusReward);
     } else {
+      console.log('* Found existing "update rewards in cart" task. Checking if "update rewards" task is already queued...');
       if (this.waitForUpdateIntervalId === -1) {
+        console.log('* No existing "update rewards" task is queued. Queuing "update rewards" task...');
         this.waitForUpdateIntervalId = setInterval(() => {
+          console.log('* Checking whether existing "update rewards" task has finished...');
           if (isNil(this.updateBonusRewardsInCartTask)) {
+            console.log('* Existing "update rewards" task has finished. Creating new "update rewards in cart" task...');
             clearInterval(this.waitForUpdateIntervalId);
             this.waitForUpdateIntervalId = -1;
-            this.updateBonusRewardsInCart(this.newBonusReward);
+            this.updateBonusRewardsInCart(this.activeBonusReward);
           }
         }, 500);
       }
@@ -933,8 +947,13 @@ class BonusRewards extends EventDispatcher {
     this.updateBonusRewardsInCartTask = new UpdateBonusRewardsInCartTask(activeBonusReward);
     this.updateBonusRewardsInCartTask.on(COMPLETE, () => {
       this.updateBonusRewardsInCartTask = null;
+      console.log('* Finished "update rewards in cart" task...');
       this.dispatchEvent(BONUS_REWARD_UPDATED);
+
+      console.log('* Retrieving cart from /cart.js...');
+      Shopify.getCart(Shopify.updateQuickCart);
     });
+    console.log('* Starting "update rewards in cart" task...');
     this.updateBonusRewardsInCartTask.start();
   }
 
@@ -943,7 +962,7 @@ class BonusRewards extends EventDispatcher {
   }
 
   getActiveBonusReward () {
-    let activeBonusReward;
+    let activeBonusReward = null;
     let fireworksTotalInCart = RocketTheme.globals.dataStore.fireworksTotalInCart;
     BonusRewards.levels.forEach(bonus => {
       if (fireworksTotalInCart > bonus.level) {
@@ -953,12 +972,24 @@ class BonusRewards extends EventDispatcher {
     return activeBonusReward;
   }
 
+  getCurrentBonusRewardsInCart() {
+    let currentBonusRewards = [];
+    RocketTheme.globals.dataStore.productsInCart.forEach(product => {
+      BonusRewards.levels.forEach(bonus => {
+        if (ProductService.getVariantID(product) === bonus.id) {
+          currentBonusRewards.push(bonus);
+        }
+      });
+    });
+    return currentBonusRewards;
+  }
+
   getNextBonusReward () {
     let nextBonusReward;
     this.nextBonusReward = BonusRewards.levels[0];
     let nextBonusRewardIndex = 1;
 
-    if (Object.keys(this.activeBonusReward).length !== 0) {
+    if (!isEmpty(this.activeBonusReward)) {
       nextBonusRewardIndex = this.activeBonusReward.index + 1;
     }
     BonusRewards.levels.forEach(bonus => {
@@ -1035,7 +1066,7 @@ class DataStore {
   constructor () {
     this.cart = null;
     this.productsInCart = [];
-    this.fireworksTotalInCart = 0;
+    this.fireworksTotalInCart = -1;
   }
 }
 
@@ -1043,7 +1074,7 @@ class BonusRewardsProgressView {
   constructor (bonusRewards) {
     this.bonusRewards = bonusRewards;
 
-    this.bonusRewards.on(FIREWORKS_TOTAL_IN_CART_UPDATED, this.updateProgress.bind(this));
+    this.bonusRewards.on(FIREWORKS_TOTAL_IN_CART_UPDATED$1, this.updateProgress.bind(this));
     this.bonusRewards.on(BONUS_REWARD_UPDATED, this.updateBonus.bind(this));
   }
 
@@ -1087,6 +1118,117 @@ class BonusRewardsProgressView {
   }
 }
 
+class WaitForShopifySDKTask extends Task {
+  constructor () {
+    super();
+    this.name = "WAIT FOR SHOPIFY SDK";
+  }
+
+  start () {
+    super.start();
+
+    this.checkShopifySDK();
+
+    if (!this.complete) {
+      this.checkShopifySDKIntervalID = setInterval(() => {
+        this.checkShopifySDK();
+        if (this.complete) {
+          clearInterval(this.checkShopifySDKIntervalID);
+        }
+      }, 200);
+    }
+  }
+
+  checkShopifySDK () {
+    if (notNil(Shopify)) {
+      if (notNil(Shopify.onCartUpdate)) {
+        this.done();
+      }
+    }
+  }
+}
+
+class ShopifySDKAdapter extends EventDispatcher {
+  constructor () {
+    super();
+    this.applyAdapter();
+  }
+
+  applyAdapter () {
+    let originalShopifyOnCartUpdate = Shopify.onCartUpdate;
+    Shopify.onCartUpdate = (cart, form) => {
+      originalShopifyOnCartUpdate(cart, form);
+      this.handleCartUpdate();
+    };
+  }
+
+  handleCartUpdate () {
+    this.dispatchEvent(SHOPIFY_CART_UPDATE$1);
+  }
+}
+
+const FIREWORKS_TOTAL_IN_CART_UPDATED = 'FIREWORKS_TOTAL_IN_CART_UPDATED';
+const SHOPIFY_CART_UPDATE = 'SHOPIFY_CART_UPDATE';
+
+/**
+ * Listens for updates to the cart reported by the Shopify SDK, and updates the RocketTheme
+ * DataStore's local state in response.
+ */
+class CartWatcher extends EventDispatcher {
+
+  constructor (shopifySDKAdapter) {
+    super();
+    this.shopifySDKAdapter = shopifySDKAdapter;
+    this.shopifySDKAdapter.on(SHOPIFY_CART_UPDATE, this.shopifyCartUpdateListener.bind(this));
+  }
+
+  /**
+   * Handles updates to the cart reported by the Shopify SDK (i.e., Shopify.onCartUpdate()).
+   * When the Shopify SDK reports a change in the cart, refresh the local cart (i.e., the DataStore).
+   * retrieve the cart from the server,
+   * then retrieve all products from the server, then update the total price of fireworks
+   * in cart.
+   */
+  shopifyCartUpdateListener () {
+    this.refresh();
+  }
+
+  /**
+   * Handles updates to the cart reported by the Shopify SDK (i.e., Shopify.onCartUpdate()).
+   * When the Shopify SDK reports a change in the cart, refresh the local cart (i.e., the DataStore).
+   * retrieve the cart from the server,
+   * then retrieve all products from the server, then update the total price of fireworks
+   * in cart.
+   */
+  refresh () {
+    let previousFireworksTotal = RocketTheme.globals.dataStore.fireworksTotalInCart;
+
+    // Create list of tasks
+    let tasks = [
+      new UpdateCartInDataStoreTask(),
+      new UpdateCartProductsInDataStoreTask(),
+      new GetFireworksInCartTotalTask()
+    ];
+
+    // Execute tasks
+    this.updateCartTaskManager = new TaskManager('Update Cart Manager');
+    this.updateCartTaskManager.addTasks(tasks);
+    this.updateCartTaskManager.on(COMPLETE, e => {
+      log('Update Cart Manager finished updating the cart.');
+      log('Current Fireworks total in cart: ' + RocketTheme.globals.dataStore.fireworksTotalInCart);
+      if (previousFireworksTotal !== RocketTheme.globals.dataStore.fireworksTotalInCart) {
+        this.dispatchEvent(FIREWORKS_TOTAL_IN_CART_UPDATED);
+      }
+    });
+    this.updateCartTaskManager.on(FAIL, e => {
+      log('Update Cart Manager failed to update cart.');
+    });
+
+    this.updateCartTaskManager.start();
+  }
+
+}
+
 /**
  * Main application entry point.
  */
@@ -1103,22 +1245,21 @@ class RocketTheme {
     this.bonusRewards = new BonusRewards();
     this.bonusRewardsProgressView = new BonusRewardsProgressView(this.bonusRewards);
 
-    RocketTheme.globals.releaseInfo = new ReleaseInfo('Rocket Dev Theme', '1.0.0', 'Wed Jun 02 2021 18:20:02 GMT-0400 (Eastern Daylight Time)');
+    RocketTheme.globals.releaseInfo = new ReleaseInfo('Rocket Dev Theme', '1.0.0', 'Sun Jun 06 2021 13:53:52 GMT-0400 (Eastern Daylight Time)');
 
     log(`RocketTheme ${RocketTheme.globals.releaseInfo.title} ${RocketTheme.globals.releaseInfo.version} boot complete.`);
     log(`Last compiled: ${RocketTheme.globals.releaseInfo.date}`);
-    let shopifyIntervalId = setInterval(() => {
-      if (notNil(Shopify)) {
-        if (notNil(Shopify.onCartUpdate)) {
-          clearInterval(shopifyIntervalId);
-          let originalShopifyOnCartUpdate = Shopify.onCartUpdate;
-          Shopify.onCartUpdate = (cart, form) => {
-            originalShopifyOnCartUpdate(cart, form);
-            this.bonusRewards.updateCartData();
-          };
-        }
-      }
-    }, 500);
+
+    let bootManager = RocketTheme.globals.bootManager = new TaskManager('Boot');
+    let bootTasks = [new WaitForShopifySDKTask,
+      new WaitForSellyTask()];
+    bootManager.addTasks(bootTasks);
+    bootManager.start();
+
+    bootManager.on(COMPLETE, () => {
+      this.shopifySDKAdapter = new ShopifySDKAdapter();
+      this.cartWatcher = new CartWatcher(this.shopifySDKAdapter);
+    });
   }
 }
 
