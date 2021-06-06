@@ -14,8 +14,7 @@ export class UpdateBonusRewardsInCartTask extends TaskManager {
   }
 
   initTasks (bonusRewardToAdd) {
-    let removeInactiveBonusRewardsTask = this.getRemoveAllBonusRewardsFromCartTasks();
-    let tasks = removeInactiveBonusRewardsTask;
+    let tasks = this.getRemoveAllBonusRewardsFromCartTasks();
 
     if (notNil(bonusRewardToAdd)) {
       let addActiveBonusRewardTask = this.getAddBonusRewardToCartTask(bonusRewardToAdd);
