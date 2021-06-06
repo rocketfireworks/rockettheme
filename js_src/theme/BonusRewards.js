@@ -16,9 +16,6 @@ import { ProductService } from './ProductService.js';
 export class BonusRewards extends EventDispatcher {
   constructor () {
     super();
-
-    log('BonusRewards 4.0 manager ready.')
-    
     this.activeBonusReward = null;
     this.nextBonusReward = null;
 
