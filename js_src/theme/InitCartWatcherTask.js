@@ -13,10 +13,14 @@ export class InitCartWatcherTask extends Task {
   start () {
     super.start();
     this.rocketTheme.cartWatcher = new CartWatcher(this.rocketTheme.shopifySDKAdapter);
-    this.rocketTheme.cartWatcher.on(UPDATE, () => {
-      // CartWatcher has been created and finished its first refresh, so the init task is done
-      this.done();
-    });
+    this.boundUpdateListener = this.cartWatcherUpdateListener.bind(this);
+    this.rocketTheme.cartWatcher.on(UPDATE, this.boundUpdateListener);
     this.rocketTheme.cartWatcher.refresh();
+  }
+
+  cartWatcherUpdateListener () {
+    // CartWatcher has been created and finished its first refresh, so the init task is done
+    this.rocketTheme.cartWatcher.off(UPDATE, this.boundUpdateListener);
+    this.done();
   }
 }
