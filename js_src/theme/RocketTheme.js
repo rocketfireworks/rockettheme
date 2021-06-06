@@ -11,9 +11,9 @@ import { BonusRewardsProgressView } from './BonusRewardsProgressView.js';
 import {WaitForShopifySDKTask} from './WaitForShopifySDKTask.js';
 import {TaskManager} from '../utils/TaskManager.js';
 import {WaitForSellyTask} from './WaitForSellyTask.js';
-import {ShopifySDKAdapter} from '../shopify/ShopifySDKAdapter.js';
 import {COMPLETE} from '../utils/constants.js';
 import {CartWatcher} from './CartWatcher.js';
+import {InitShopifySDKAdapter} from './InitShopifySDKAdapter.js';
 
 export class RocketTheme {
   boot () {
@@ -34,13 +34,14 @@ export class RocketTheme {
 
     let bootManager = RocketTheme.globals.bootManager = new TaskManager('Boot');
     let bootTasks = [new WaitForShopifySDKTask,
-      new WaitForSellyTask()];
+      new WaitForSellyTask(),
+      new InitShopifySDKAdapter(this)];
     bootManager.addTasks(bootTasks);
     bootManager.start();
 
     bootManager.on(COMPLETE, () => {
-      this.shopifySDKAdapter = new ShopifySDKAdapter();
       this.cartWatcher = new CartWatcher(this.shopifySDKAdapter);
+      this.cartWatcher.refresh();
     });
   }
 }
