@@ -1,11 +1,5 @@
-import {log} from '../utils/logfunctions.js';
 import {COMPLETE, FAIL} from '../utils/constants.js';
-import {TaskManager} from '../utils/TaskManager.js';
 import { RocketTheme } from './RocketTheme.js';
-import { GetFireworksInCartTotalTask } from './GetFireworksTotalInCartTask.js';
-import { UpdateCartProductsInDataStoreTask } from './UpdateCartProductsInDataStoreTask.js';
-import { WaitForSellyTask } from './WaitForSellyTask.js';
-import { UpdateCartInDataStoreTask } from './UpdateCartInDataStoreTask.js';
 import { BonusReward } from './BonusReward.js';
 import { EventDispatcher } from '../utils/EventDispatcher.js';
 import { ACTIVE_BONUS_REWARD_CHANGED, BONUS_REWARD_UPDATED, FIREWORKS_TOTAL_IN_CART_UPDATED } from './Events.js';
@@ -68,13 +62,18 @@ export class BonusRewards extends EventDispatcher {
   }
 
   activeBonusRewardChangedListener () {
-    console.log('* Updating bonus rewards in cart');
+    console.log('* Checking for existing "update rewards in cart" task...');
     if (isNil(this.updateBonusRewardsInCartTask)) {
+      console.log('* No update rewards task in progress. Creating new "update rewards in cart" task...');
       this.updateBonusRewardsInCart(this.activeBonusReward);
     } else {
+      console.log('* Found existing "update rewards in cart" task. Checking if "update rewards" task is already queued...');
       if (this.waitForUpdateIntervalId === -1) {
+        console.log('* No existing "update rewards" task is queued. Queuing "update rewards" task...');
         this.waitForUpdateIntervalId = setInterval(() => {
+          console.log('* Checking whether existing "update rewards" task has finished...');
           if (isNil(this.updateBonusRewardsInCartTask)) {
+            console.log('* Existing "update rewards" task has finished. Creating new "update rewards in cart" task...');
             clearInterval(this.waitForUpdateIntervalId);
             this.waitForUpdateIntervalId = -1;
             this.updateBonusRewardsInCart(this.activeBonusReward);
@@ -88,10 +87,13 @@ export class BonusRewards extends EventDispatcher {
     this.updateBonusRewardsInCartTask = new UpdateBonusRewardsInCartTask(activeBonusReward);
     this.updateBonusRewardsInCartTask.on(COMPLETE, () => {
       this.updateBonusRewardsInCartTask = null;
+      console.log('* Finished "update rewards in cart" task...')
       this.dispatchEvent(BONUS_REWARD_UPDATED);
-      
+
+      console.log('* Retrieving cart from /cart.js...');
       Shopify.getCart(Shopify.updateQuickCart);
     });
+    console.log('* Starting "update rewards in cart" task...')
     this.updateBonusRewardsInCartTask.start();
   }
 
