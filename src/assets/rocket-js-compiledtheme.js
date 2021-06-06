@@ -112,7 +112,6 @@ class EventDispatcher {
 }
 
 const FIREWORKS_TOTAL_IN_CART_UPDATED$1 = 'FIREWORKS_TOTAL_IN_CART_UPDATED';
-const ACTIVE_BONUS_REWARD_CHANGED = 'ACTIVE_BONUS_REWARD_CHANGED';
 const BONUS_REWARD_UPDATED = 'BONUS_REWARD_UPDATED';
 const SHOPIFY_CART_UPDATE$1 = 'SHOPIFY_CART_UPDATE';
 
@@ -687,8 +686,6 @@ class BonusRewards extends EventDispatcher {
     this.updateBonusRewardsInCartTask = null;
 
     this.waitForUpdateIntervalId = -1;
-
-    this.on(ACTIVE_BONUS_REWARD_CHANGED, this.activeBonusRewardChangedListener.bind(this));
   }
 
   //================================================================================================
@@ -735,7 +732,7 @@ class BonusRewards extends EventDispatcher {
 
     if (rewardChanged) {
       this.activeBonusReward = expectedBonusReward;
-      this.dispatchEvent(ACTIVE_BONUS_REWARD_CHANGED);
+      this.handleActiveBonusRewardChange();
     }
   }
 
@@ -745,7 +742,7 @@ class BonusRewards extends EventDispatcher {
     this.refresh();
   }
 
-  activeBonusRewardChangedListener () {
+  handleActiveBonusRewardChange () {
     console.log('* Checking for existing "update rewards in cart" task...');
     if (isNil(this.updateBonusRewardsInCartTask)) {
       console.log('* No update rewards task in progress. Creating new "update rewards in cart" task...');
@@ -780,11 +777,6 @@ class BonusRewards extends EventDispatcher {
     console.log('* Starting "update rewards in cart" task...');
     this.updateBonusRewardsInCartTask.start();
   }
-
-  updateCartListener () {
-    Shopify.getCart(Shopify.updateQuickCart);
-  }
-
 
   //================================================================================================
   // REWARDS UTILITIES

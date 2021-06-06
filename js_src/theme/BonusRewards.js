@@ -2,7 +2,7 @@ import {COMPLETE, FAIL} from '../utils/constants.js';
 import { RocketTheme } from './RocketTheme.js';
 import { BonusReward } from './BonusReward.js';
 import { EventDispatcher } from '../utils/EventDispatcher.js';
-import { ACTIVE_BONUS_REWARD_CHANGED, BONUS_REWARD_UPDATED, FIREWORKS_TOTAL_IN_CART_UPDATED } from './Events.js';
+import { BONUS_REWARD_UPDATED, FIREWORKS_TOTAL_IN_CART_UPDATED } from './Events.js';
 import { UpdateBonusRewardsInCartTask } from './UpdateBonusRewardsInCartTask.js';
 import { isEmpty, isNil, notNil } from '../utils/utils.js';
 import { ProductService } from './ProductService.js';
@@ -19,8 +19,6 @@ export class BonusRewards extends EventDispatcher {
     this.updateBonusRewardsInCartTask = null;
 
     this.waitForUpdateIntervalId = -1;
-
-    this.on(ACTIVE_BONUS_REWARD_CHANGED, this.activeBonusRewardChangedListener.bind(this));
   }
 
   //================================================================================================
@@ -67,7 +65,7 @@ export class BonusRewards extends EventDispatcher {
 
     if (rewardChanged) {
       this.activeBonusReward = expectedBonusReward;
-      this.dispatchEvent(ACTIVE_BONUS_REWARD_CHANGED);
+      this.handleActiveBonusRewardChange();
     }
   }
 
@@ -77,7 +75,7 @@ export class BonusRewards extends EventDispatcher {
     this.refresh();
   }
 
-  activeBonusRewardChangedListener () {
+  handleActiveBonusRewardChange () {
     console.log('* Checking for existing "update rewards in cart" task...');
     if (isNil(this.updateBonusRewardsInCartTask)) {
       console.log('* No update rewards task in progress. Creating new "update rewards in cart" task...');
