@@ -5,7 +5,7 @@ import {UpdateFireworksTotalInDataStoreTask} from './UpdateFireworksTotalInDataS
 import {TaskManager} from '../utils/TaskManager.js';
 import {COMPLETE, FAIL} from '../utils/constants.js';
 import {log} from '../utils/logfunctions.js';
-import {FIREWORKS_TOTAL_IN_CART_UPDATED, SHOPIFY_CART_UPDATE} from './events.js';
+import {FIREWORKS_TOTAL_IN_CART_UPDATED, SHOPIFY_CART_UPDATE, UPDATE} from './events.js';
 import {EventDispatcher} from '../utils/EventDispatcher.js';
 
 /**
@@ -57,6 +57,7 @@ export class CartWatcher extends EventDispatcher {
       if (previousFireworksTotal !== RocketTheme.globals.dataStore.fireworksTotalInCart) {
         this.dispatchEvent(FIREWORKS_TOTAL_IN_CART_UPDATED);
       }
+      this.dispatchEvent(UPDATE);
     });
     this.updateCartTaskManager.on(FAIL, e => {
       log('Update Cart Manager failed to update cart.');
