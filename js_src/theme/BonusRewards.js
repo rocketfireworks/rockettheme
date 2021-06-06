@@ -113,11 +113,6 @@ export class BonusRewards extends EventDispatcher {
     this.updateBonusRewardsInCartTask.start();
   }
 
-  updateCartListener () {
-    Shopify.getCart(Shopify.updateQuickCart);
-  }
-
-
   //================================================================================================
   // REWARDS UTILITIES
   //================================================================================================
