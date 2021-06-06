@@ -28,6 +28,7 @@ export class CartWatcher extends EventDispatcher {
    * in cart.
    */
   shopifyCartUpdateListener () {
+    console.log('CartWatcher detected cart change (from Shopify SDK\'s Shopify.onCartUpdate())');
     this.refresh();
   }
 
@@ -56,6 +57,8 @@ export class CartWatcher extends EventDispatcher {
       log('Current Fireworks total in cart: ' + RocketTheme.globals.dataStore.fireworksTotalInCart);
       if (previousFireworksTotal !== RocketTheme.globals.dataStore.fireworksTotalInCart) {
         this.dispatchEvent(FIREWORKS_TOTAL_IN_CART_UPDATED);
+      } else {
+        console.log('Fireworks total in cart has not changed.');
       }
       this.dispatchEvent(UPDATE);
     });
