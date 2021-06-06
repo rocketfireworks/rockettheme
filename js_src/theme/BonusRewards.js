@@ -28,7 +28,6 @@ export class BonusRewards extends EventDispatcher {
 
     this.on(FIREWORKS_TOTAL_IN_CART_UPDATED, this.fireworksTotalUpdatedListener.bind(this));
     this.on(ACTIVE_BONUS_REWARD_CHANGED, this.activeBonusRewardChangedListener.bind(this));
-    // this.on(BONUS_REWARD_UPDATED, this.updateCartListener.bind(this));
   }
 
   updateCartData () {
