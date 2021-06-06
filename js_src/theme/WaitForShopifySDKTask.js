@@ -2,7 +2,7 @@ import { Task } from "../utils/Task";
 import { notNil } from "../utils/utils";
 
 
-export class WaitForShopifySDK extends Task {
+export class WaitForShopifySDKTask extends Task {
   constructor () {
     super();
     this.name = "WAIT FOR SHOPIFY SDK";
