@@ -36,9 +36,8 @@ export class BonusRewards extends EventDispatcher {
   // BONUS REWARDS MANAGEMENT
   //================================================================================================
 
-  fireworksTotalUpdatedListener () {
-    console.log('* Fireworks Total changed. Running fireworksTotalUpdatedListener...');
-
+  refresh () {
+    console.log("REFRESHING")
     let expectedBonusReward = this.getActiveBonusReward();
     let actualBonusRewards = this.getCurrentBonusRewardsInCart();
 
@@ -46,7 +45,7 @@ export class BonusRewards extends EventDispatcher {
     this.nextBonusReward = this.getNextBonusReward();
     this.remainingUntilNextLevel = this.getRemainingUntilNextLevel();
     this.progressPercentage = this.getProgressPercentage();
-    
+
     console.log('* Expected bonus reward: ', expectedBonusReward);
     console.log('* Actual bonus reward: ', actualBonusRewards);
 
@@ -67,6 +66,12 @@ export class BonusRewards extends EventDispatcher {
       this.activeBonusReward = expectedBonusReward;
       this.dispatchEvent(ACTIVE_BONUS_REWARD_CHANGED);
     }
+  }
+
+  fireworksTotalUpdatedListener () {
+    console.log('* Fireworks Total changed. Running fireworksTotalUpdatedListener...');
+
+    this.refresh();
   }
 
   activeBonusRewardChangedListener () {

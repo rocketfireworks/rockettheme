@@ -13,6 +13,7 @@ import {TaskManager} from '../utils/TaskManager.js';
 import {WaitForSellyTask} from './WaitForSellyTask.js';
 import {InitShopifySDKAdapter} from './InitShopifySDKAdapter.js';
 import {InitCartWatcherTask} from './InitCartWatcherTask.js';
+import {COMPLETE} from '../utils/constants.js';
 
 export class RocketTheme {
   boot () {
@@ -41,10 +42,12 @@ export class RocketTheme {
       new InitCartWatcherTask(this)
     ];
     bootManager.addTasks(bootTasks);
-    bootManager.start();
     bootManager.on(COMPLETE, () => {
+      console.log('######################### BOOT DONE')
       this.bonusRewards.setCartWatcher(this.cartWatcher);
+      this.bonusRewards.refresh();
     });
+    bootManager.start();
   }
 
 }

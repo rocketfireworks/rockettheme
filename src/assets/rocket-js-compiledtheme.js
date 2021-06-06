@@ -688,17 +688,24 @@ class BonusRewards extends EventDispatcher {
 
     this.waitForUpdateIntervalId = -1;
 
-    this.on(FIREWORKS_TOTAL_IN_CART_UPDATED$1, this.fireworksTotalUpdatedListener.bind(this));
     this.on(ACTIVE_BONUS_REWARD_CHANGED, this.activeBonusRewardChangedListener.bind(this));
   }
 
-  updateCartData () {
-    console.log('* bonusRewards.updateCartData starting...');
+  //================================================================================================
+  // DEPENDENCIEES
+  //================================================================================================
+
+  setCartWatcher (cartWatcher) {
+    this.cartWatcher = cartWatcher;
+    this.cartWatcher.on(FIREWORKS_TOTAL_IN_CART_UPDATED$1, this.fireworksTotalUpdatedListener.bind(this));
   }
 
-  fireworksTotalUpdatedListener () {
-    console.log('* Fireworks Total changed. Running fireworksTotalUpdatedListener...');
+  //================================================================================================
+  // BONUS REWARDS MANAGEMENT
+  //================================================================================================
 
+  refresh () {
+    console.log("REFRESHING");
     let expectedBonusReward = this.getActiveBonusReward();
     let actualBonusRewards = this.getCurrentBonusRewardsInCart();
 
@@ -706,7 +713,7 @@ class BonusRewards extends EventDispatcher {
     this.nextBonusReward = this.getNextBonusReward();
     this.remainingUntilNextLevel = this.getRemainingUntilNextLevel();
     this.progressPercentage = this.getProgressPercentage();
-    
+
     console.log('* Expected bonus reward: ', expectedBonusReward);
     console.log('* Actual bonus reward: ', actualBonusRewards);
 
@@ -727,6 +734,12 @@ class BonusRewards extends EventDispatcher {
       this.activeBonusReward = expectedBonusReward;
       this.dispatchEvent(ACTIVE_BONUS_REWARD_CHANGED);
     }
+  }
+
+  fireworksTotalUpdatedListener () {
+    console.log('* Fireworks Total changed. Running fireworksTotalUpdatedListener...');
+
+    this.refresh();
   }
 
   activeBonusRewardChangedListener () {
@@ -768,6 +781,11 @@ class BonusRewards extends EventDispatcher {
   updateCartListener () {
     Shopify.getCart(Shopify.updateQuickCart);
   }
+
+
+  //================================================================================================
+  // REWARDS UTILITIES
+  //================================================================================================
 
   getActiveBonusReward () {
     let activeBonusReward = null;
@@ -818,6 +836,10 @@ class BonusRewards extends EventDispatcher {
     return Math.floor((RocketTheme.globals.dataStore.fireworksTotalInCart * 100) / this.nextBonusReward.level);
   }
 }
+
+//==================================================================================================
+// BONUS REWARDS CONSTANTS
+//==================================================================================================
 
 BonusRewards.levels = [
   new BonusReward(15000, 39310116454589, 1),
@@ -1059,6 +1081,39 @@ class WaitForSellyTask extends Task {
   }
 }
 
+class ShopifySDKAdapter extends EventDispatcher {
+  constructor () {
+    super();
+    this.applyAdapter();
+  }
+
+  applyAdapter () {
+    let originalShopifyOnCartUpdate = Shopify.onCartUpdate;
+    Shopify.onCartUpdate = (cart, form) => {
+      originalShopifyOnCartUpdate(cart, form);
+      this.handleCartUpdate();
+    };
+  }
+
+  handleCartUpdate () {
+    this.dispatchEvent(SHOPIFY_CART_UPDATE$1);
+  }
+}
+
+class InitShopifySDKAdapter extends Task {
+  constructor (rocketTheme) {
+    super();
+    this.name = 'INIT SHOPIFY SDK ADAPTER';
+    this.rocketTheme = rocketTheme;
+  }
+
+  start () {
+    super.start();
+    this.rocketTheme.shopifySDKAdapter = new ShopifySDKAdapter();
+    this.done();
+  }
+}
+
 class UpdateCartInDataStoreTask extends Task {
 
   constructor () {
@@ -1150,6 +1205,7 @@ class UpdateFireworksTotalInDataStoreTask extends Task {
 
 const FIREWORKS_TOTAL_IN_CART_UPDATED = 'FIREWORKS_TOTAL_IN_CART_UPDATED';
 const SHOPIFY_CART_UPDATE = 'SHOPIFY_CART_UPDATE';
+const UPDATE = 'UPDATE';
 
 /**
  * Listens for updates to the cart reported by the Shopify SDK, and updates the RocketTheme
@@ -1200,6 +1256,7 @@ class CartWatcher extends EventDispatcher {
       if (previousFireworksTotal !== RocketTheme.globals.dataStore.fireworksTotalInCart) {
         this.dispatchEvent(FIREWORKS_TOTAL_IN_CART_UPDATED);
       }
+      this.dispatchEvent(UPDATE);
     });
     this.updateCartTaskManager.on(FAIL, e => {
       log('Update Cart Manager failed to update cart.');
@@ -1208,39 +1265,6 @@ class CartWatcher extends EventDispatcher {
     this.updateCartTaskManager.start();
   }
 
-}
-
-class ShopifySDKAdapter extends EventDispatcher {
-  constructor () {
-    super();
-    this.applyAdapter();
-  }
-
-  applyAdapter () {
-    let originalShopifyOnCartUpdate = Shopify.onCartUpdate;
-    Shopify.onCartUpdate = (cart, form) => {
-      originalShopifyOnCartUpdate(cart, form);
-      this.handleCartUpdate();
-    };
-  }
-
-  handleCartUpdate () {
-    this.dispatchEvent(SHOPIFY_CART_UPDATE$1);
-  }
-}
-
-class InitShopifySDKAdapter extends Task {
-  constructor (rocketTheme) {
-    super();
-    this.name = 'INIT SHOPIFY SDK ADAPTER';
-    this.rocketTheme = rocketTheme;
-  }
-
-  start () {
-    super.start();
-    this.rocketTheme.shopifySDKAdapter = new ShopifySDKAdapter();
-    this.done();
-  }
 }
 
 class InitCartWatcherTask extends Task {
@@ -1253,7 +1277,11 @@ class InitCartWatcherTask extends Task {
   start () {
     super.start();
     this.rocketTheme.cartWatcher = new CartWatcher(this.rocketTheme.shopifySDKAdapter);
-    this.done();
+    this.rocketTheme.cartWatcher.on(UPDATE, () => {
+      // CartWatcher has been created and finished its first refresh, so the init task is done
+      this.done();
+    });
+    this.rocketTheme.cartWatcher.refresh();
   }
 }
 
@@ -1288,13 +1316,14 @@ class RocketTheme {
       new InitCartWatcherTask(this)
     ];
     bootManager.addTasks(bootTasks);
-    bootManager.start();
-
     bootManager.on(COMPLETE, () => {
-      this.cartWatcher = new CartWatcher(this.shopifySDKAdapter);
-      this.cartWatcher.refresh();
+      console.log('######################### BOOT DONE');
+      this.bonusRewards.setCartWatcher(this.cartWatcher);
+      this.bonusRewards.refresh();
     });
+    bootManager.start();
   }
+
 }
 
 RocketTheme.globals = {};
