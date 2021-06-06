@@ -5,15 +5,18 @@ import { EventDispatcher } from "../utils/EventDispatcher";
 export class ShopifySDKAdapter extends EventDispatcher {
   constructor () {
     super();
-    
-    this.onCartUpdate();
+    this.applyAdapter();
   }
 
-  onCartUpdate () {
+  applyAdapter () {
     let originalShopifyOnCartUpdate = Shopify.onCartUpdate;
     Shopify.onCartUpdate = (cart, form) => {
       originalShopifyOnCartUpdate(cart, form);
-      this.dispatchEvent(SHOPIFY_CART_UPDATE);
+      this.handleCartUpdate();
     }
+  }
+
+  handleCartUpdate () {
+    this.dispatchEvent(SHOPIFY_CART_UPDATE);
   }
 }
