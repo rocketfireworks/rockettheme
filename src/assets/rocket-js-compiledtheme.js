@@ -721,10 +721,13 @@ class BonusRewards extends EventDispatcher {
     if (actualBonusRewards.length > 1) {
       console.warn('* MULTIPLE BONUS REWARDS FOUND IN CART');
       rewardChanged = true;
-    } else if (actualBonusRewards.length === 1
-      && actualBonusRewards[1] !== expectedBonusReward) {
-      console.log('* Existing bonus reward changed');
-      rewardChanged = true;
+    } else if (actualBonusRewards.length === 1) {
+      if (actualBonusRewards[0] !== expectedBonusReward) {
+        console.log('* Existing bonus reward changed');
+        rewardChanged = true;
+      } else {
+        console.log('* Bonus reward has not changed');
+      }
     } else if (notNil(expectedBonusReward)) {
       console.log('* Bonus reward changed (from no prior reward)');
       rewardChanged = true;
@@ -903,12 +906,40 @@ class DataStore {
 class BonusRewardsProgressView {
   constructor (bonusRewards) {
     this.bonusRewards = bonusRewards;
-
-    this.bonusRewards.on(FIREWORKS_TOTAL_IN_CART_UPDATED$1, this.updateProgress.bind(this));
-    this.bonusRewards.on(BONUS_REWARD_UPDATED, this.updateBonus.bind(this));
+    this.bonusRewards.on(BONUS_REWARD_UPDATED, this.bonusRewardUpdatedListener.bind(this));
   }
 
-  updateBonus () {
+  //================================================================================================
+  // DEPENDENCIEES
+  //================================================================================================
+  setCartWatcher (cartWatcher) {
+    this.cartWatcher = cartWatcher;
+    this.cartWatcher.on(FIREWORKS_TOTAL_IN_CART_UPDATED$1, this.fireworksTotalInCartUpdatedListener.bind(this));
+    this.refresh();
+  }
+
+  //================================================================================================
+  // LISTENERS
+  //================================================================================================
+
+  fireworksTotalInCartUpdatedListener () {
+    this.updateProgressBar();
+  }
+
+  bonusRewardUpdatedListener () {
+    this.showActiveBonusContainer();
+  }
+
+  //================================================================================================
+  // RENDERING
+  //================================================================================================
+
+  refresh () {
+    this.showActiveBonusContainer();
+    this.updateProgressBar();
+  }
+
+  showActiveBonusContainer () {
     if (notNil(document.querySelector('.template-cart'))) {
       let bonusContainers = document.querySelectorAll('.bonusRewards-container .bonus-tiered-container');
       bonusContainers.forEach(bonusContainer => {
@@ -919,10 +950,18 @@ class BonusRewardsProgressView {
       document.querySelector('.bonusRewards-container .level-' + this.bonusRewards.activeBonusReward.index).classList.remove('hidden');
     }
 
-    this.displayBonus();
+    this.fadeInBonusContainer();
   }
 
-  updateProgress () {
+  fadeInBonusContainer () {
+    if (notNil(document.querySelector('.template-cart'))) {
+      document.querySelector('.bonusRewards-container').style.opacity = 1;
+    } else {
+      document.querySelector('.promo-bar .promo-bar-container').style.opacity = 1;
+    }
+  }
+
+  updateProgressBar () {
     // Show/Hide progress bar
     if (RocketTheme.globals.dataStore.fireworksTotalInCart === 0) {
       document.querySelector('.bonusRewards-progress').classList.add('hidden');
@@ -937,14 +976,6 @@ class BonusRewardsProgressView {
 
     document.querySelector('.bonusRewards-message').innerHTML = 
     `<b>${remainingUntilNextLevel}</b> away from <b>Bonus Rewards Level ${nextLevelIndex}</b>! <i class="fas fa-gift"></i>`;
-  }
-
-  displayBonus () {
-    if (notNil(document.querySelector('.template-cart'))) {
-      document.querySelector('.bonusRewards-container').style.opacity = 1;
-    } else {
-      document.querySelector('.promo-bar .promo-bar-container').style.opacity = 1;
-    }
   }
 }
 
@@ -1227,6 +1258,7 @@ class CartWatcher extends EventDispatcher {
    * in cart.
    */
   shopifyCartUpdateListener () {
+    console.log('CartWatcher detected cart change (from Shopify SDK\'s Shopify.onCartUpdate())');
     this.refresh();
   }
 
@@ -1255,6 +1287,8 @@ class CartWatcher extends EventDispatcher {
       log('Current Fireworks total in cart: ' + RocketTheme.globals.dataStore.fireworksTotalInCart);
       if (previousFireworksTotal !== RocketTheme.globals.dataStore.fireworksTotalInCart) {
         this.dispatchEvent(FIREWORKS_TOTAL_IN_CART_UPDATED);
+      } else {
+        console.log('Fireworks total in cart has not changed.');
       }
       this.dispatchEvent(UPDATE);
     });
@@ -1277,11 +1311,15 @@ class InitCartWatcherTask extends Task {
   start () {
     super.start();
     this.rocketTheme.cartWatcher = new CartWatcher(this.rocketTheme.shopifySDKAdapter);
-    this.rocketTheme.cartWatcher.on(UPDATE, () => {
-      // CartWatcher has been created and finished its first refresh, so the init task is done
-      this.done();
-    });
+    this.boundUpdateListener = this.cartWatcherUpdateListener.bind(this);
+    this.rocketTheme.cartWatcher.on(UPDATE, this.boundUpdateListener);
     this.rocketTheme.cartWatcher.refresh();
+  }
+
+  cartWatcherUpdateListener () {
+    // CartWatcher has been created and finished its first refresh, so the init task is done
+    this.rocketTheme.cartWatcher.off(UPDATE, this.boundUpdateListener);
+    this.done();
   }
 }
 
@@ -1320,6 +1358,7 @@ class RocketTheme {
       console.log('######################### BOOT DONE');
       this.bonusRewards.setCartWatcher(this.cartWatcher);
       this.bonusRewards.refresh();
+      this.bonusRewardsProgressView.setCartWatcher(this.cartWatcher);
     });
     bootManager.start();
   }

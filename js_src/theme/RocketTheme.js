@@ -46,6 +46,7 @@ export class RocketTheme {
       console.log('######################### BOOT DONE')
       this.bonusRewards.setCartWatcher(this.cartWatcher);
       this.bonusRewards.refresh();
+      this.bonusRewardsProgressView.setCartWatcher(this.cartWatcher);
     });
     bootManager.start();
   }
