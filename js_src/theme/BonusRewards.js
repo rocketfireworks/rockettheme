@@ -53,10 +53,13 @@ export class BonusRewards extends EventDispatcher {
     if (actualBonusRewards.length > 1) {
       console.warn('* MULTIPLE BONUS REWARDS FOUND IN CART');
       rewardChanged = true;
-    } else if (actualBonusRewards.length === 1
-      && actualBonusRewards[0] !== expectedBonusReward) {
-      console.log('* Existing bonus reward changed');
-      rewardChanged = true;
+    } else if (actualBonusRewards.length === 1) {
+      if (actualBonusRewards[0] !== expectedBonusReward) {
+        console.log('* Existing bonus reward changed');
+        rewardChanged = true;
+      } else {
+        console.log('* Bonus reward has not changed');
+      }
     } else if (notNil(expectedBonusReward)) {
       console.log('* Bonus reward changed (from no prior reward)');
       rewardChanged = true;
