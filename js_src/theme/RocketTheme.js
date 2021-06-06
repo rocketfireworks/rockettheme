@@ -14,6 +14,7 @@ import {WaitForSellyTask} from './WaitForSellyTask.js';
 import {COMPLETE} from '../utils/constants.js';
 import {CartWatcher} from './CartWatcher.js';
 import {InitShopifySDKAdapter} from './InitShopifySDKAdapter.js';
+import {InitCartWatcherTask} from './InitCartWatcherTask.js';
 
 export class RocketTheme {
   boot () {
@@ -22,6 +23,9 @@ export class RocketTheme {
     this.consoleLogger = new ConsoleLogger(RocketTheme.globals.logger);
 
     RocketTheme.globals.dataStore = new DataStore;
+
+    this.shopifySDKAdapter = null;
+    this.cartWatcher = null;
 
     // Create Bonus Rewards manager
     this.bonusRewards = new BonusRewards();
@@ -35,7 +39,9 @@ export class RocketTheme {
     let bootManager = RocketTheme.globals.bootManager = new TaskManager('Boot');
     let bootTasks = [new WaitForShopifySDKTask,
       new WaitForSellyTask(),
-      new InitShopifySDKAdapter(this)];
+      new InitShopifySDKAdapter(this),
+      new InitCartWatcherTask(this)
+    ];
     bootManager.addTasks(bootTasks);
     bootManager.start();
 

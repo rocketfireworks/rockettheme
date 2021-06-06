@@ -1,3 +1,27 @@
+const START = 'start';
+const COMPLETE = 'complete';
+const CHANGE = 'change';
+const FAIL = 'FAIL';
+const TASK_START = 'task_start';
+const TASK_END = 'task_end';
+
+// HTTP Methods
+const GET = 'GET';
+
+// THEME CONSTANTS
+const TAG_FW = 'FW';
+const TAG_FWSEQ = 'FWSEQ';
+
+class BonusReward {
+
+  constructor (level, id, index) {
+    this.level = level;
+    this.id = id;
+    this.index = index;
+  }
+  
+}
+
 /**
  * Indicates whether a value exists and can be operated on. This function is provides a standardized
  * mechanism for writing code that avoids triggering reference errors.
@@ -87,19 +111,10 @@ class EventDispatcher {
   }
 }
 
-const START = 'start';
-const COMPLETE = 'complete';
-const CHANGE = 'change';
-const FAIL = 'FAIL';
-const TASK_START = 'task_start';
-const TASK_END = 'task_end';
-
-// HTTP Methods
-const GET = 'GET';
-
-// THEME CONSTANTS
-const TAG_FW = 'FW';
-const TAG_FWSEQ = 'FWSEQ';
+const FIREWORKS_TOTAL_IN_CART_UPDATED$1 = 'FIREWORKS_TOTAL_IN_CART_UPDATED';
+const ACTIVE_BONUS_REWARD_CHANGED = 'ACTIVE_BONUS_REWARD_CHANGED';
+const BONUS_REWARD_UPDATED = 'BONUS_REWARD_UPDATED';
+const SHOPIFY_CART_UPDATE$1 = 'SHOPIFY_CART_UPDATE';
 
 class Logger extends EventDispatcher {
   constructor () {
@@ -161,197 +176,6 @@ function fatal (value) {
 function announce (value) {
   Logger.logger().announce(value);
 }
-
-/**
- * A generic task manager for executing a ordered list of tasks, such as a boot sequence. Each
- * task in the sequence is a Task object, or a nested TaskManager instance. When a given task is
- * a TaskManager instance, all subtasks are executed before the parent task list resumes.
- *
- * Example (showing nested tasks):
- *
- * let connectionTasks = [
- *   new GetRequiredURLParamsTask(),
- *   new GetMRTSRouteTask(),
- *   new StartMRTSEndpointMonitorTask(),
- *   new MRTSConnectionTask()
- * ];
- * let contentTasks = [
- *   new LoadDeploymentCSSTask(),
- *   new LoadMediaTask(),
- *   new LoadThemesTask(),
- *   new CreateRunViewsTask(),
- *   new ApplyDeploymentSettingsTask()
- * ];
- *
- * let contentTaskManager = new TaskManager('ContentManager');
- * contentTaskManager.addTasks(contentTasks);
- *
- * // Configure boot sequence
- * bootManager.on(COMPLETE, e => {
- *   // App is ready...
- * });
- * bootManager.on(FAIL, e => {
- *  console.log(`Boot failed at task: ${e.detail.name}.`));
- * });
- *
- * // Add an array of Tasks to the boot sequence
- * bootManager.addTasks(connectionTasks);
- *
- * // Add an entire TaskManager to the boot sequence
- * bootManager.addTasks(contentTaskManager);
- *
- * // Boot application (begin list of tasks)
- * bootManager.start();
- *
- */
-class TaskManager extends EventDispatcher {
-  constructor (name) {
-    super();
-    this.name = name;
-    this.tasks = [];
-    this.complete = false;
-    this.startTime = 0;
-    this.executionDuration = 0;
-    this.currentTaskIndex = -1;
-    // Retrieve and store a reference to each task listener with the "this" object bound to
-    // TaskManager. These references are used to register for task events without the risk of
-    // registering multiple anonymous listener functions for the same event. Ideally, it would
-    // be preferred to just register the listener functions directly, but doing so would lose the
-    // 'this' within those functions. This is a known general risk to be managed when registering
-    // event listeners in JavaScript.
-    this.boundCompleteListener = this.taskCompleteListener.bind(this);
-    this.boundFailedListener = this.taskFailedListener.bind(this);
-  }
-
-  /**
-   * Adds one or more tasks to the list of tasks to be performed.
-   *
-   * @param tasks An array of tasks or an individual task.
-   */
-  addTasks (tasks) {
-    if (notNil(tasks)) {
-      this.tasks = this.tasks.concat(tasks);
-      this.tasks.forEach((task) => {
-        task.on(COMPLETE, this.boundCompleteListener);
-        task.on(FAIL, this.boundFailedListener);
-      });
-    }
-  }
-
-  start () {
-    announce(`${this.name} tasks starting.`);
-    this.complete = false;
-    this.startTime = new Date();
-    this.dispatchEvent(START);
-    this.currentTaskIndex = -1;
-    this.nextTask();
-  }
-
-  nextTask () {
-    this.currentTaskIndex++;
-    if (this.currentTaskIndex < this.tasks.length) {
-      let currentTask = this.tasks[this.currentTaskIndex];
-      this.dispatchEvent(TASK_START, currentTask);
-      currentTask.start();
-    } else {
-      let now = new Date();
-      this.executionDuration = now.getTime() - this.startTime.getTime();
-      this.complete = true;
-      // Log completion here so complete listeners don't log "post complete" messages before
-      // the "complete" message.
-      announce(`${this.name} tasks complete. Total time to complete all tasks: ${this.executionDuration/1000}s`);
-      this.dispatchEvent(COMPLETE, {executionDuration: this.executionDuration});
-    }
-  }
-
-  taskCompleteListener (e) {
-    this.dispatchEvent(TASK_END, e.detail.target);
-    this.nextTask();
-  }
-
-  taskFailedListener (e) {
-    this.dispatchEvent(FAIL, {name: e.detail.target.name, error: e.detail.error});
-  }
-
-  getTaskByName (name) {
-    let taskIndex = this.tasks.findIndex(task => task.name === name);
-    return taskIndex === -1 ? null : this.tasks[taskIndex];
-  }
-}
-
-class SellyService {
-}
-
-SellyService.data = {};
-
-SellyService.getFinalUnitPrice = function (productID, quantity, originalPrice) {
-  let activeOffers = SellyService.getActiveOffersForProduct(productID);
-  let finalUnitPrice = originalPrice;
-
-  activeOffers.forEach(offer => {
-    if (offer.offerType === SellyService.OFFER_TYPE_BULK) {
-      let discount = SellyService.getActiveDiscountForQuantity(offer.offerObj, quantity);
-      if (notNil(discount)){
-        switch (discount.type_id) {
-          case SellyService.DISCOUNT_TYPE_PERCENT:
-            finalUnitPrice = originalPrice - (originalPrice * (discount.value/100));
-            break;
-  
-          case SellyService.DISCOUNT_TYPE_FIXED_AMOUNT_DISCOUNT:
-          case SellyService.DISCOUNT_TYPE_FIXED_PRICE:
-            finalUnitPrice = originalPrice - discount.value;
-            break;
-        }
-      }
-    }
-  });
-
-  return finalUnitPrice;
-};
-
-SellyService.getActiveOffersForProduct = function (productID) {
-  let activeOffers = [];
-  if (notNil(SellyService.data)) {
-    Object.keys(SellyService.data.offers).forEach(offerType => {
-      for (const [offerID, offerObj] of Object.entries(SellyService.data.offers[offerType])) {
-        if (offerObj.product_groups[0].ids.includes(productID)) {
-          activeOffers.push({
-            offerType: offerType,
-            offerObj: offerObj
-          });
-        }
-      }
-    });
-  }
-
-  return activeOffers;
-};
-
-SellyService.getActiveDiscountForQuantity = function (offer, quantity) {
-  let discount = null;
-  offer.discount.value.levels.forEach(level => {
-    if (quantity >= level.quantity) {
-      discount = level.discount;
-    }
-  });
-
-  return discount;
-};
-
-SellyService.getProduct = function (productID) {
-  if (notNil(SellyService.data)) {
-    return SellyService.data.products[productID];
-  }
-};
-
-SellyService.getMotivationalMessage = function (activeOffer) {
-  return activeOffer.offerObj.mtv_message;
-};
-
-SellyService.OFFER_TYPE_BULK = '7';
-SellyService.DISCOUNT_TYPE_PERCENT = 1;
-SellyService.DISCOUNT_TYPE_FIXED_AMOUNT_DISCOUNT = 2;
-SellyService.DISCOUNT_TYPE_FIXED_PRICE = 3;
 
 /**
  * An individual task to be executed by a TaskManager or individually by manually invoking start().
@@ -424,61 +248,6 @@ class Task extends EventDispatcher {
     } else {
       throw new Error(`Task [${this.name}] invoked fail() after completion.`);
     }
-  }
-}
-
-class ProductService {
-}
-
-ProductService.getProduct = function (handle) {
-  return RocketTheme.globals.dataStore.productsInCart.find(element => element.product.handle === handle);
-};
-
-ProductService.hasTag = function (handle, tag) {
-  let productObj = ProductService.getProduct(handle);
-  return productObj.product.tags.includes(tag) || productObj.product.tags.includes(tag.toLowerCase());
-};
-
-ProductService.isFireworkProduct = function (handle) {
-  return ProductService.hasTag(handle, TAG_FW) || ProductService.hasTag(handle, TAG_FWSEQ);
-};
-
-ProductService.getVariantID = function (product) {
-  return product.product.variants[0].id;
-};
-
-class GetFireworksInCartTotalTask extends Task {
-  
-  constructor () {
-    super();
-
-    this.name = 'GET FIREWORKS IN CART TOTAL';
-  }
-
-  start() {
-    super.start();
-
-    console.log('* Calculating fireworks total');
-
-    let fireworksProducts = [];
-    
-    RocketTheme.globals.dataStore.cart.items.forEach(item => {
-      if (ProductService.isFireworkProduct(item.handle)) {
-        fireworksProducts.push({
-          handle: item.handle,
-          product_id: item.product_id,
-          unitFinalPrice: SellyService.getFinalUnitPrice(item.product_id, item.quantity, item.price),
-          lineItemTotalFinalPrice: item.quantity * SellyService.getFinalUnitPrice(item.product_id, item.quantity, item.price)
-        });
-      }
-    });
-
-    console.log('=================');
-    console.log(fireworksProducts);
-
-    RocketTheme.globals.dataStore.fireworksTotalInCart = sumBy(fireworksProducts, 'lineItemTotalFinalPrice');
-    console.log('* Fireworks total: ' + RocketTheme.globals.dataStore.fireworksTotalInCart);
-    this.done();
   }
 }
 
@@ -725,103 +494,142 @@ ShopifyCart.getLoadJSONTask = function (url, method, bodyData = null) {
   return loadJSONTask;
 };
 
-class UpdateCartProductsInDataStoreTask extends TaskManager {
-  
-  constructor () {
-    super('GET ALL PRODUCTS IN CART');
-  }
-
-  initTasks () {
+/**
+ * A generic task manager for executing a ordered list of tasks, such as a boot sequence. Each
+ * task in the sequence is a Task object, or a nested TaskManager instance. When a given task is
+ * a TaskManager instance, all subtasks are executed before the parent task list resumes.
+ *
+ * Example (showing nested tasks):
+ *
+ * let connectionTasks = [
+ *   new GetRequiredURLParamsTask(),
+ *   new GetMRTSRouteTask(),
+ *   new StartMRTSEndpointMonitorTask(),
+ *   new MRTSConnectionTask()
+ * ];
+ * let contentTasks = [
+ *   new LoadDeploymentCSSTask(),
+ *   new LoadMediaTask(),
+ *   new LoadThemesTask(),
+ *   new CreateRunViewsTask(),
+ *   new ApplyDeploymentSettingsTask()
+ * ];
+ *
+ * let contentTaskManager = new TaskManager('ContentManager');
+ * contentTaskManager.addTasks(contentTasks);
+ *
+ * // Configure boot sequence
+ * bootManager.on(COMPLETE, e => {
+ *   // App is ready...
+ * });
+ * bootManager.on(FAIL, e => {
+ *  console.log(`Boot failed at task: ${e.detail.name}.`));
+ * });
+ *
+ * // Add an array of Tasks to the boot sequence
+ * bootManager.addTasks(connectionTasks);
+ *
+ * // Add an entire TaskManager to the boot sequence
+ * bootManager.addTasks(contentTaskManager);
+ *
+ * // Boot application (begin list of tasks)
+ * bootManager.start();
+ *
+ */
+class TaskManager extends EventDispatcher {
+  constructor (name) {
+    super();
+    this.name = name;
     this.tasks = [];
-    let cart = RocketTheme.globals.dataStore.cart;
-    let newTasks = [];
+    this.complete = false;
+    this.startTime = 0;
+    this.executionDuration = 0;
+    this.currentTaskIndex = -1;
+    // Retrieve and store a reference to each task listener with the "this" object bound to
+    // TaskManager. These references are used to register for task events without the risk of
+    // registering multiple anonymous listener functions for the same event. Ideally, it would
+    // be preferred to just register the listener functions directly, but doing so would lose the
+    // 'this' within those functions. This is a known general risk to be managed when registering
+    // event listeners in JavaScript.
+    this.boundCompleteListener = this.taskCompleteListener.bind(this);
+    this.boundFailedListener = this.taskFailedListener.bind(this);
+  }
 
-    cart.items.forEach(item => {
-      let getProductTask = ShopifyCart.getProductTask(item.url + '.js');
-      getProductTask.on(COMPLETE, () => {
-        RocketTheme.globals.dataStore.productsInCart.push(getProductTask.json);
+  /**
+   * Adds one or more tasks to the list of tasks to be performed.
+   *
+   * @param tasks An array of tasks or an individual task.
+   */
+  addTasks (tasks) {
+    if (notNil(tasks)) {
+      this.tasks = this.tasks.concat(tasks);
+      this.tasks.forEach((task) => {
+        task.on(COMPLETE, this.boundCompleteListener);
+        task.on(FAIL, this.boundFailedListener);
       });
-      newTasks.push(getProductTask);
-    });
-    this.addTasks(newTasks);
-  }
-
-  start() {
-    console.log('* Retrieving products from server');
-    this.clearProductsInCart();
-    this.initTasks();
-    super.start();
-  }
-
-  clearProductsInCart () {
-    RocketTheme.globals.dataStore.productsInCart = [];
-  }
-}
-
-class WaitForSellyTask extends Task {
-  constructor () {
-    super();
-    this.name = "WAIT FOR SELLY";
-  }
-
-  start () {
-    super.start();
-
-    this.checkSelly();
-
-    if (!this.complete) {
-      this.checkSellyIntervalID = setInterval(() => {
-        this.checkSelly();
-        if (this.complete) {
-          clearInterval(this.checkSellyIntervalID);
-        }
-      }, 200);
     }
   }
 
-  checkSelly () {
-    if (notNil(window.sellyData)) {
-      SellyService.data = window.sellyData;
-      this.done();
+  start () {
+    announce(`${this.name} tasks starting.`);
+    this.complete = false;
+    this.startTime = new Date();
+    this.dispatchEvent(START);
+    this.currentTaskIndex = -1;
+    this.nextTask();
+  }
+
+  nextTask () {
+    this.currentTaskIndex++;
+    if (this.currentTaskIndex < this.tasks.length) {
+      let currentTask = this.tasks[this.currentTaskIndex];
+      this.dispatchEvent(TASK_START, currentTask);
+      currentTask.start();
+    } else {
+      let now = new Date();
+      this.executionDuration = now.getTime() - this.startTime.getTime();
+      this.complete = true;
+      // Log completion here so complete listeners don't log "post complete" messages before
+      // the "complete" message.
+      announce(`${this.name} tasks complete. Total time to complete all tasks: ${this.executionDuration/1000}s`);
+      this.dispatchEvent(COMPLETE, {executionDuration: this.executionDuration});
     }
   }
-}
 
-class UpdateCartInDataStoreTask extends Task {
-
-  constructor () {
-    super();
-    this.name = "UpdateCartInDataStore";
+  taskCompleteListener (e) {
+    this.dispatchEvent(TASK_END, e.detail.target);
+    this.nextTask();
   }
 
-  start () {
-    super.start();
-    
-    let getCartTask = ShopifyCart.getCartTask();
-    console.log('* Retrieving cart from server');
-    getCartTask.on(COMPLETE, () => {
-      RocketTheme.globals.dataStore.cart = getCartTask.json;
-      console.log('* Received cart from server');
-      this.done();
-    });
-    getCartTask.start();
+  taskFailedListener (e) {
+    this.dispatchEvent(FAIL, {name: e.detail.target.name, error: e.detail.error});
+  }
+
+  getTaskByName (name) {
+    let taskIndex = this.tasks.findIndex(task => task.name === name);
+    return taskIndex === -1 ? null : this.tasks[taskIndex];
   }
 }
 
-class BonusReward {
-
-  constructor (level, id, index) {
-    this.level = level;
-    this.id = id;
-    this.index = index;
-  }
-  
+class ProductService {
 }
 
-const FIREWORKS_TOTAL_IN_CART_UPDATED$1 = 'FIREWORKS_TOTAL_IN_CART_UPDATED';
-const ACTIVE_BONUS_REWARD_CHANGED = 'ACTIVE_BONUS_REWARD_CHANGED';
-const BONUS_REWARD_UPDATED = 'BONUS_REWARD_UPDATED';
-const SHOPIFY_CART_UPDATE$1 = 'SHOPIFY_CART_UPDATE';
+ProductService.getProduct = function (handle) {
+  return RocketTheme.globals.dataStore.productsInCart.find(element => element.product.handle === handle);
+};
+
+ProductService.hasTag = function (handle, tag) {
+  let productObj = ProductService.getProduct(handle);
+  return productObj.product.tags.includes(tag) || productObj.product.tags.includes(tag.toLowerCase());
+};
+
+ProductService.isFireworkProduct = function (handle) {
+  return ProductService.hasTag(handle, TAG_FW) || ProductService.hasTag(handle, TAG_FWSEQ);
+};
+
+ProductService.getVariantID = function (product) {
+  return product.product.variants[0].id;
+};
 
 class UpdateBonusRewardsInCartTask extends TaskManager {
   constructor (bonusRewardToAdd) {
@@ -1148,22 +956,195 @@ class WaitForShopifySDKTask extends Task {
   }
 }
 
-class ShopifySDKAdapter extends EventDispatcher {
+class SellyService {
+}
+
+SellyService.data = {};
+
+SellyService.getFinalUnitPrice = function (productID, quantity, originalPrice) {
+  let activeOffers = SellyService.getActiveOffersForProduct(productID);
+  let finalUnitPrice = originalPrice;
+
+  activeOffers.forEach(offer => {
+    if (offer.offerType === SellyService.OFFER_TYPE_BULK) {
+      let discount = SellyService.getActiveDiscountForQuantity(offer.offerObj, quantity);
+      if (notNil(discount)){
+        switch (discount.type_id) {
+          case SellyService.DISCOUNT_TYPE_PERCENT:
+            finalUnitPrice = originalPrice - (originalPrice * (discount.value/100));
+            break;
+  
+          case SellyService.DISCOUNT_TYPE_FIXED_AMOUNT_DISCOUNT:
+          case SellyService.DISCOUNT_TYPE_FIXED_PRICE:
+            finalUnitPrice = originalPrice - discount.value;
+            break;
+        }
+      }
+    }
+  });
+
+  return finalUnitPrice;
+};
+
+SellyService.getActiveOffersForProduct = function (productID) {
+  let activeOffers = [];
+  if (notNil(SellyService.data)) {
+    Object.keys(SellyService.data.offers).forEach(offerType => {
+      for (const [offerID, offerObj] of Object.entries(SellyService.data.offers[offerType])) {
+        if (offerObj.product_groups[0].ids.includes(productID)) {
+          activeOffers.push({
+            offerType: offerType,
+            offerObj: offerObj
+          });
+        }
+      }
+    });
+  }
+
+  return activeOffers;
+};
+
+SellyService.getActiveDiscountForQuantity = function (offer, quantity) {
+  let discount = null;
+  offer.discount.value.levels.forEach(level => {
+    if (quantity >= level.quantity) {
+      discount = level.discount;
+    }
+  });
+
+  return discount;
+};
+
+SellyService.getProduct = function (productID) {
+  if (notNil(SellyService.data)) {
+    return SellyService.data.products[productID];
+  }
+};
+
+SellyService.getMotivationalMessage = function (activeOffer) {
+  return activeOffer.offerObj.mtv_message;
+};
+
+SellyService.OFFER_TYPE_BULK = '7';
+SellyService.DISCOUNT_TYPE_PERCENT = 1;
+SellyService.DISCOUNT_TYPE_FIXED_AMOUNT_DISCOUNT = 2;
+SellyService.DISCOUNT_TYPE_FIXED_PRICE = 3;
+
+class WaitForSellyTask extends Task {
   constructor () {
     super();
-    this.applyAdapter();
+    this.name = "WAIT FOR SELLY";
   }
 
-  applyAdapter () {
-    let originalShopifyOnCartUpdate = Shopify.onCartUpdate;
-    Shopify.onCartUpdate = (cart, form) => {
-      originalShopifyOnCartUpdate(cart, form);
-      this.handleCartUpdate();
-    };
+  start () {
+    super.start();
+
+    this.checkSelly();
+
+    if (!this.complete) {
+      this.checkSellyIntervalID = setInterval(() => {
+        this.checkSelly();
+        if (this.complete) {
+          clearInterval(this.checkSellyIntervalID);
+        }
+      }, 200);
+    }
   }
 
-  handleCartUpdate () {
-    this.dispatchEvent(SHOPIFY_CART_UPDATE$1);
+  checkSelly () {
+    if (notNil(window.sellyData)) {
+      SellyService.data = window.sellyData;
+      this.done();
+    }
+  }
+}
+
+class UpdateCartInDataStoreTask extends Task {
+
+  constructor () {
+    super();
+    this.name = "UpdateCartInDataStore";
+  }
+
+  start () {
+    super.start();
+    
+    let getCartTask = ShopifyCart.getCartTask();
+    console.log('* Retrieving cart from server');
+    getCartTask.on(COMPLETE, () => {
+      RocketTheme.globals.dataStore.cart = getCartTask.json;
+      console.log('* Received cart from server');
+      this.done();
+    });
+    getCartTask.start();
+  }
+}
+
+class UpdateCartProductsInDataStoreTask extends TaskManager {
+  
+  constructor () {
+    super('GET ALL PRODUCTS IN CART');
+  }
+
+  initTasks () {
+    this.tasks = [];
+    let cart = RocketTheme.globals.dataStore.cart;
+    let newTasks = [];
+
+    cart.items.forEach(item => {
+      let getProductTask = ShopifyCart.getProductTask(item.url + '.js');
+      getProductTask.on(COMPLETE, () => {
+        RocketTheme.globals.dataStore.productsInCart.push(getProductTask.json);
+      });
+      newTasks.push(getProductTask);
+    });
+    this.addTasks(newTasks);
+  }
+
+  start() {
+    console.log('* Retrieving products from server');
+    this.clearProductsInCart();
+    this.initTasks();
+    super.start();
+  }
+
+  clearProductsInCart () {
+    RocketTheme.globals.dataStore.productsInCart = [];
+  }
+}
+
+class UpdateFireworksTotalInDataStoreTask extends Task {
+  
+  constructor () {
+    super();
+
+    this.name = 'GET FIREWORKS IN CART TOTAL';
+  }
+
+  start() {
+    super.start();
+
+    console.log('* Calculating fireworks total');
+
+    let fireworksProducts = [];
+    
+    RocketTheme.globals.dataStore.cart.items.forEach(item => {
+      if (ProductService.isFireworkProduct(item.handle)) {
+        fireworksProducts.push({
+          handle: item.handle,
+          product_id: item.product_id,
+          unitFinalPrice: SellyService.getFinalUnitPrice(item.product_id, item.quantity, item.price),
+          lineItemTotalFinalPrice: item.quantity * SellyService.getFinalUnitPrice(item.product_id, item.quantity, item.price)
+        });
+      }
+    });
+
+    console.log('=================');
+    console.log(fireworksProducts);
+
+    RocketTheme.globals.dataStore.fireworksTotalInCart = sumBy(fireworksProducts, 'lineItemTotalFinalPrice');
+    console.log('* Fireworks total: ' + RocketTheme.globals.dataStore.fireworksTotalInCart);
+    this.done();
   }
 }
 
@@ -1207,7 +1188,7 @@ class CartWatcher extends EventDispatcher {
     let tasks = [
       new UpdateCartInDataStoreTask(),
       new UpdateCartProductsInDataStoreTask(),
-      new GetFireworksInCartTotalTask()
+      new UpdateFireworksTotalInDataStoreTask()
     ];
 
     // Execute tasks
@@ -1229,6 +1210,53 @@ class CartWatcher extends EventDispatcher {
 
 }
 
+class ShopifySDKAdapter extends EventDispatcher {
+  constructor () {
+    super();
+    this.applyAdapter();
+  }
+
+  applyAdapter () {
+    let originalShopifyOnCartUpdate = Shopify.onCartUpdate;
+    Shopify.onCartUpdate = (cart, form) => {
+      originalShopifyOnCartUpdate(cart, form);
+      this.handleCartUpdate();
+    };
+  }
+
+  handleCartUpdate () {
+    this.dispatchEvent(SHOPIFY_CART_UPDATE$1);
+  }
+}
+
+class InitShopifySDKAdapter extends Task {
+  constructor (rocketTheme) {
+    super();
+    this.name = 'INIT SHOPIFY SDK ADAPTER';
+    this.rocketTheme = rocketTheme;
+  }
+
+  start () {
+    super.start();
+    this.rocketTheme.shopifySDKAdapter = new ShopifySDKAdapter();
+    this.done();
+  }
+}
+
+class InitCartWatcherTask extends Task {
+  constructor (rocketTheme) {
+    super();
+    this.name = 'INIT CART WATCHER';
+    this.rocketTheme = rocketTheme;
+  }
+
+  start () {
+    super.start();
+    this.rocketTheme.cartWatcher = new CartWatcher(this.rocketTheme.shopifySDKAdapter);
+    this.done();
+  }
+}
+
 /**
  * Main application entry point.
  */
@@ -1241,6 +1269,9 @@ class RocketTheme {
 
     RocketTheme.globals.dataStore = new DataStore;
 
+    this.shopifySDKAdapter = null;
+    this.cartWatcher = null;
+
     // Create Bonus Rewards manager
     this.bonusRewards = new BonusRewards();
     this.bonusRewardsProgressView = new BonusRewardsProgressView(this.bonusRewards);
@@ -1252,13 +1283,16 @@ class RocketTheme {
 
     let bootManager = RocketTheme.globals.bootManager = new TaskManager('Boot');
     let bootTasks = [new WaitForShopifySDKTask,
-      new WaitForSellyTask()];
+      new WaitForSellyTask(),
+      new InitShopifySDKAdapter(this),
+      new InitCartWatcherTask(this)
+    ];
     bootManager.addTasks(bootTasks);
     bootManager.start();
 
     bootManager.on(COMPLETE, () => {
-      this.shopifySDKAdapter = new ShopifySDKAdapter();
       this.cartWatcher = new CartWatcher(this.shopifySDKAdapter);
+      this.cartWatcher.refresh();
     });
   }
 }
