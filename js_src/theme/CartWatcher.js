@@ -1,7 +1,7 @@
 import {RocketTheme} from './RocketTheme.js';
 import {UpdateCartInDataStoreTask} from './UpdateCartInDataStoreTask.js';
 import {UpdateCartProductsInDataStoreTask} from './UpdateCartProductsInDataStoreTask.js';
-import {GetFireworksInCartTotalTask} from './GetFireworksTotalInCartTask.js';
+import {UpdateFireworksTotalInDataStoreTask} from './UpdateFireworksTotalInDataStoreTask.js';
 import {TaskManager} from '../utils/TaskManager.js';
 import {COMPLETE, FAIL} from '../utils/constants.js';
 import {log} from '../utils/logfunctions.js';
@@ -45,7 +45,7 @@ export class CartWatcher extends EventDispatcher {
     let tasks = [
       new UpdateCartInDataStoreTask(),
       new UpdateCartProductsInDataStoreTask(),
-      new GetFireworksInCartTotalTask()
+      new UpdateFireworksTotalInDataStoreTask()
     ];
 
     // Execute tasks

@@ -4,7 +4,7 @@ import { sumBy } from "../utils/utils";
 import { ProductService } from "./ProductService";
 import { RocketTheme } from "./RocketTheme";
 
-export class GetFireworksInCartTotalTask extends Task {
+export class UpdateFireworksTotalInDataStoreTask extends Task {
   
   constructor () {
     super();
