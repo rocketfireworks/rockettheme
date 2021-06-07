@@ -963,11 +963,17 @@ class BonusRewardsProgressView {
     document.querySelector(".bonusRewards-bar").style.width = this.bonusRewards.progressPercentage + '%';
 
     // Bonus Rewards message
-    let remainingUntilNextLevel = Shopify.formatMoney(this.bonusRewards.remainingUntilNextLevel);
-    let nextLevelIndex = this.bonusRewards.nextBonusReward.index;
-
-    document.querySelector('.bonusRewards-message').innerHTML = 
-    `<b>${remainingUntilNextLevel}</b> away from <b>Bonus Rewards Level ${nextLevelIndex}</b>! <i class="fas fa-gift"></i>`;
+    if (notNil(this.bonusRewards.nextBonusReward)) {
+      let remainingUntilNextLevel = Shopify.formatMoney(this.bonusRewards.remainingUntilNextLevel);
+      let nextLevelIndex = this.bonusRewards.nextBonusReward.index;
+  
+      document.querySelector('.bonusRewards-message').innerHTML = 
+      `<b>${remainingUntilNextLevel}</b> away from <b>Bonus Rewards Level ${nextLevelIndex}</b>! <i class="fas fa-gift"></i>`;
+    } else {
+      document.querySelector('.bonusRewards-progress').classList.add('hidden');
+      document.querySelector('.promo-bar-container .bonusRewards-message').innerHTML = 
+      `You've earned the <b>highest Bonus Rewards</b>! <i class="fas fa-gift"></i>`;
+    }
   }
 }
 
