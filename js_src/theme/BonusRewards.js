@@ -208,11 +208,19 @@ export class BonusRewards extends EventDispatcher {
   getRemainingUntilNextLevel () {
     let fireworksTotalInCart = RocketTheme.globals.dataStore.fireworksTotalInCart;
 
-    return this.nextBonusReward.level - fireworksTotalInCart;
+    if (isNil(this.nextBonusReward)) {
+      return 0;
+    } else {
+      return this.nextBonusReward.level - fireworksTotalInCart;
+    }
   }
 
   getProgressPercentage () {
-    return Math.floor((RocketTheme.globals.dataStore.fireworksTotalInCart * 100) / this.nextBonusReward.level);
+    if (isNil(this.nextBonusReward)) {
+      return 0;
+    } else {
+      return Math.floor((RocketTheme.globals.dataStore.fireworksTotalInCart * 100) / this.nextBonusReward.level);
+    }
   }
 }
 
