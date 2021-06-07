@@ -21,8 +21,11 @@ export class UpdateBonusRewardsInCartTask extends TaskManager {
       tasks.push(addActiveBonusRewardTask);
     }
 
+    // IMPORTANT:
     // After the bonus rewards have been removed from and added to the server-side cart, retrieve
     // the cart's state again so the local cart reflects the changed bonus rewards.
+    // Without this refresh, the on-screen cart would appear out of date (i.e., would not correctly
+    // show the current bonus reward).
     tasks.push(new RefreshCartWatcherTask(RocketTheme.globals.cartWatcher));
     
     this.addTasks(tasks);
