@@ -16,6 +16,8 @@ export class UpdateFireworksTotalInDataStoreTask extends Task {
     super.start();
 
     console.log('* Calculating fireworks total');
+    console.log('datastore.cart.items: ', RocketTheme.globals.dataStore.cart.items);
+    console.log('datastore.productsInCart: ', RocketTheme.globals.dataStore.productsInCart)
 
     let fireworksProducts = [];
     
