@@ -7,6 +7,7 @@ import {COMPLETE, FAIL} from '../utils/constants.js';
 import {log} from '../utils/logfunctions.js';
 import {FIREWORKS_TOTAL_IN_CART_UPDATED, SHOPIFY_CART_UPDATE, UPDATE} from './events.js';
 import {EventDispatcher} from '../utils/EventDispatcher.js';
+import {LocalCartRefresher} from './LocalCartRefresher.js';
 
 /**
  * Listens for updates to the cart reported by the Shopify SDK, and updates the RocketTheme
@@ -42,16 +43,8 @@ export class CartWatcher extends EventDispatcher {
   refresh () {
     let previousFireworksTotal = RocketTheme.globals.dataStore.fireworksTotalInCart;
 
-    // Create list of tasks
-    let tasks = [
-      new UpdateCartInDataStoreTask(),
-      new UpdateCartProductsInDataStoreTask(),
-      new UpdateFireworksTotalInDataStoreTask()
-    ];
-
     // Execute tasks
-    this.updateCartTaskManager = new TaskManager('Update Cart Manager');
-    this.updateCartTaskManager.addTasks(tasks);
+    this.updateCartTaskManager = new LocalCartRefresher();
     this.updateCartTaskManager.on(COMPLETE, e => {
       log('Update Cart Manager finished updating the cart.');
       log('Current Fireworks total in cart: ' + RocketTheme.globals.dataStore.fireworksTotalInCart);
