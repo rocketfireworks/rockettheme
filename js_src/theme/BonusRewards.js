@@ -2,7 +2,7 @@ import {COMPLETE, FAIL} from '../utils/constants.js';
 import { RocketTheme } from './RocketTheme.js';
 import { BonusReward } from './BonusReward.js';
 import { EventDispatcher } from '../utils/EventDispatcher.js';
-import { BONUS_REWARD_UPDATED, FIREWORKS_TOTAL_IN_CART_UPDATED } from './Events.js';
+import {BONUS_REWARD_UPDATED, FIREWORKS_TOTAL_IN_CART_UPDATED, UPDATE} from './Events.js';
 import { UpdateBonusRewardsInCartTask } from './UpdateBonusRewardsInCartTask.js';
 import { isEmpty, isNil, notNil } from '../utils/utils.js';
 import { ProductService } from './ProductService.js';
@@ -16,9 +16,8 @@ export class BonusRewards extends EventDispatcher {
     this.remainingUntilNextLevel = 0;
     this.progressPercentage = 0;
 
-    this.updateBonusRewardsInCartTask = null;
-
-    this.waitForUpdateIntervalId = -1;
+    this.updateBonusRewardInProgress = false;
+    this.updateBonusRewardCheckBuffered = false;
   }
 
   //================================================================================================
@@ -28,6 +27,7 @@ export class BonusRewards extends EventDispatcher {
   setCartWatcher (cartWatcher) {
     this.cartWatcher = cartWatcher;
     this.cartWatcher.on(FIREWORKS_TOTAL_IN_CART_UPDATED, this.fireworksTotalUpdatedListener.bind(this));
+    this.cartWatcher.on(UPDATE, this.cartWatcherUpdatedListener.bind(this));
   }
 
   //================================================================================================
@@ -35,80 +35,105 @@ export class BonusRewards extends EventDispatcher {
   //================================================================================================
 
   refresh () {
-    console.log("REFRESHING")
-    let expectedBonusReward = this.getActiveBonusReward();
-    let actualBonusRewards = this.getCurrentBonusRewardsInCart();
-
-    this.activeBonusReward = expectedBonusReward;
+    this.activeBonusReward = this.getActiveBonusReward();
     this.nextBonusReward = this.getNextBonusReward();
     this.remainingUntilNextLevel = this.getRemainingUntilNextLevel();
     this.progressPercentage = this.getProgressPercentage();
-
-    console.log('* Expected bonus reward: ', expectedBonusReward);
-    console.log('* Actual bonus reward: ', actualBonusRewards);
-
-    let rewardChanged = false;
-    if (actualBonusRewards.length > 1) {
-      console.warn('* MULTIPLE BONUS REWARDS FOUND IN CART');
-      rewardChanged = true;
-    } else if (actualBonusRewards.length === 1) {
-      if (actualBonusRewards[0] !== expectedBonusReward) {
-        console.log('* Existing bonus reward changed');
-        rewardChanged = true;
-      } else {
-        console.log('* Bonus reward has not changed');
-      }
-    } else if (notNil(expectedBonusReward)) {
-      console.log('* Bonus reward changed (from no prior reward)');
-      rewardChanged = true;
-    }
-
-    if (rewardChanged) {
-      this.activeBonusReward = expectedBonusReward;
+    if (this.getActiveBonusRewardHasChanged()) {
       this.handleActiveBonusRewardChange();
     }
   }
 
   fireworksTotalUpdatedListener () {
-    console.log('* Fireworks Total changed. Running fireworksTotalUpdatedListener...');
+    console.log('* BonusRewards caught CartWatcher FIREWORKS_TOTAL_IN_CART_UPDATED event. Running fireworksTotalUpdatedListener...');
+
+    this.refresh();
+  }
+
+  /**
+   * This separate listener is required due to the client-side implementation of the Bonus Rewards
+   * system. It would not be required if the Bonus Rewards were implemented server side, where they
+   * should be. Listening for the end of the latest CartWatcher UPDATE handles the following scenario:
+   * 1) User has Level 1 in cart.
+   * 2) User adds a fireworks product to cart, triggering what should be the addition of Level 2.
+   * 3) User quickly removes the same fireworks product from cart, returning the cart total to Level 1.
+   *
+   * In the above scenario, the temporary change to Level 2 can result in the Level 2 product being
+   * added but the fireworks total appears to have remained unchanged (because it returns to the
+   * Level 1 value). This desynchronization happens because CartWatcher buffers refresh requests,
+   * so the client can fall out of sync with the server if updates happen often enough.
+   *
+   * The cartWatcherUpdatedListener() function acts as a last resort, in that it always checks the
+   * most recent state of the cart reported by CartWatcher, so if the rewards products in the cart
+   * do not match the expected reward, the mismatch will be caught and corrected. This workaround
+   * causes a high number of HTTP requests, resulting in jittery behaviour in the UI when rewards
+   * are added or removed due to rapid use of the Quantity button. Better implementations would be:
+   *
+   * 1) Upgrade to Shopify Plus and use Shopify Scripts to implement Bonus Rewards server side.
+   * 2) Rewrite the cart's quantity selector to integrate it into the Bonus Rewards system, with
+   *    a loading state that disables the UI until the rewards have been syncronized.
+   */
+  cartWatcherUpdatedListener () {
+    console.log('* BonusRewards caught CartWatcher UPDATE event. Running cartWatcherUpdatedListener...');
 
     this.refresh();
   }
 
   handleActiveBonusRewardChange () {
     console.log('* Checking for existing "update rewards in cart" task...');
-    if (isNil(this.updateBonusRewardsInCartTask)) {
-      console.log('* No update rewards task in progress. Creating new "update rewards in cart" task...');
-      this.updateBonusRewardsInCart(this.activeBonusReward);
-    } else {
-      console.log('* Found existing "update rewards in cart" task. Checking if "update rewards" task is already queued...');
-      if (this.waitForUpdateIntervalId === -1) {
-        console.log('* No existing "update rewards" task is queued. Queuing "update rewards" task...');
-        this.waitForUpdateIntervalId = setInterval(() => {
-          console.log('* Checking whether existing "update rewards" task has finished...');
-          if (isNil(this.updateBonusRewardsInCartTask)) {
-            console.log('* Existing "update rewards" task has finished. Creating new "update rewards in cart" task...');
-            clearInterval(this.waitForUpdateIntervalId);
-            this.waitForUpdateIntervalId = -1;
-            this.updateBonusRewardsInCart(this.activeBonusReward);
-          }
-        }, 500);
-      }
+    if (this.updateBonusRewardInProgress) {
+      console.log('* Found existing UpdateBonusRewardsInCartTask in progress. Will check bonus reward state again when task completes.');
+      this.updateBonusRewardCheckBuffered = true;
+      return;
     }
+
+    console.log('* No UpdateBonusRewardsInCartTask in progress. Creating new UpdateBonusRewardsInCartTask...');
+    this.updateBonusRewardInProgress = true;
+    this.updateBonusRewardsInCart(this.activeBonusReward);
   }
 
   updateBonusRewardsInCart (activeBonusReward) {
     this.updateBonusRewardsInCartTask = new UpdateBonusRewardsInCartTask(activeBonusReward);
     this.updateBonusRewardsInCartTask.on(COMPLETE, () => {
-      this.updateBonusRewardsInCartTask = null;
-      console.log('* Finished "update rewards in cart" task...')
-      this.dispatchEvent(BONUS_REWARD_UPDATED);
-
-      console.log('* Retrieving cart from /cart.js...');
-      Shopify.getCart(Shopify.updateQuickCart);
+      console.log('>>> Finished "update rewards in cart" task.')
+      this.doPostUpdateActions();
     });
+
+    this.updateBonusRewardsInCartTask.on(FAIL, () => {
+      console.log('>>> Failed "update rewards in cart" task.')
+      this.doPostUpdateActions();
+    });
+
     console.log('* Starting "update rewards in cart" task...')
     this.updateBonusRewardsInCartTask.start();
+  }
+
+  doPostUpdateActions () {
+    this.dispatchEvent(BONUS_REWARD_UPDATED);
+    this.updateBonusRewardInProgress = false;
+    let noRemainingUpdates = false;
+
+    if (this.updateBonusRewardCheckBuffered) {
+      console.log('>>> Processing buffered rewards check... ')
+      this.updateBonusRewardCheckBuffered = false;
+      if (this.getActiveBonusRewardHasChanged()) {
+        console.log('>>> Buffered rewards check result: reward has changed.')
+        this.handleActiveBonusRewardChange();
+      } else {
+        console.log('>>> Buffered rewards check result: reward has NOT changed. Update task not required.')
+        noRemainingUpdates = true;
+      }
+    } else {
+      noRemainingUpdates = true;
+    }
+
+    if (noRemainingUpdates) {
+      // Now that all bonus rewards updates have been processed, call getCart() so the
+      // theme's JavaScript-based cart presentation layer updates to reflect the new cart contents.
+      // Without this code, on screen, the user would see the old contents of the cart.
+      console.log('* Retrieving cart from /cart.js...');
+      Shopify.getCart(Shopify.updateQuickCart);
+    }
   }
 
   //================================================================================================
@@ -136,6 +161,32 @@ export class BonusRewards extends EventDispatcher {
       });
     });
     return currentBonusRewards;
+  }
+
+  getActiveBonusRewardHasChanged () {
+    let rewardChanged = false;
+    let expectedBonusReward = this.getActiveBonusReward();
+    let actualBonusRewards = this.getCurrentBonusRewardsInCart();
+
+    console.log('* Expected bonus reward: ', expectedBonusReward);
+    console.log('* Actual bonus rewards: ', actualBonusRewards);
+    console.log('* Products in datastore: ', RocketTheme.globals.dataStore.productsInCart);
+
+    if (actualBonusRewards.length > 1) {
+      console.warn('* MULTIPLE BONUS REWARDS FOUND IN CART');
+      rewardChanged = true;
+    } else if (actualBonusRewards.length === 1) {
+      if (actualBonusRewards[0] !== expectedBonusReward) {
+        console.log('* Existing bonus reward changed');
+        rewardChanged = true;
+      } else {
+        console.log('* Bonus reward has not changed');
+      }
+    } else if (notNil(expectedBonusReward)) {
+      console.log('* Bonus reward changed (from no prior reward)');
+      rewardChanged = true;
+    }
+    return rewardChanged;
   }
 
   getNextBonusReward () {

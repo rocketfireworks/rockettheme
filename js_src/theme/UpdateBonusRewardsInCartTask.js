@@ -4,7 +4,7 @@ import { notNil } from "../utils/utils";
 import { BonusRewards } from "./BonusRewards";
 import { ProductService } from "./ProductService";
 import { RocketTheme } from "./RocketTheme";
-
+import {RefreshCartWatcherTask} from './RefreshCartWatcherTask.js';
 
 export class UpdateBonusRewardsInCartTask extends TaskManager {
   constructor (bonusRewardToAdd) {
@@ -20,6 +20,10 @@ export class UpdateBonusRewardsInCartTask extends TaskManager {
       let addActiveBonusRewardTask = this.getAddBonusRewardToCartTask(bonusRewardToAdd);
       tasks.push(addActiveBonusRewardTask);
     }
+
+    // After the bonus rewards have been removed from and added to the server-side cart, retrieve
+    // the cart's state again so the local cart reflects the changed bonus rewards.
+    tasks.push(new RefreshCartWatcherTask(RocketTheme.globals.cartWatcher));
     
     this.addTasks(tasks);
   }
