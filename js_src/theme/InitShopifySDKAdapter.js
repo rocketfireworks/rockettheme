@@ -1,17 +1,17 @@
 import {Task} from '../utils/Task.js';
 import {ShopifySDKAdapter} from '../shopify/ShopifySDKAdapter.js';
+import {RocketTheme} from './RocketTheme.js';
 
 
 export class InitShopifySDKAdapter extends Task {
-  constructor (rocketTheme) {
+  constructor () {
     super();
     this.name = 'INIT SHOPIFY SDK ADAPTER';
-    this.rocketTheme = rocketTheme;
   }
 
   start () {
     super.start();
-    this.rocketTheme.shopifySDKAdapter = new ShopifySDKAdapter();
+    RocketTheme.globals.shopifySDKAdapter = new ShopifySDKAdapter();
     this.done();
   }
 }

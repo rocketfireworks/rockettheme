@@ -22,9 +22,8 @@ export class RocketTheme {
     this.consoleLogger = new ConsoleLogger(RocketTheme.globals.logger);
 
     RocketTheme.globals.dataStore = new DataStore;
-
-    this.shopifySDKAdapter = null;
-    this.cartWatcher = null;
+    RocketTheme.globals.cartWatcher = null;
+    RocketTheme.globals.shopifySDKAdapter = null;
 
     // Create Bonus Rewards manager
     this.bonusRewards = new BonusRewards();
@@ -38,15 +37,15 @@ export class RocketTheme {
     let bootManager = RocketTheme.globals.bootManager = new TaskManager('Boot');
     let bootTasks = [new WaitForShopifySDKTask,
       new WaitForSellyTask(),
-      new InitShopifySDKAdapter(this),
-      new InitCartWatcherTask(this)
+      new InitShopifySDKAdapter(),
+      new InitCartWatcherTask()
     ];
     bootManager.addTasks(bootTasks);
     bootManager.on(COMPLETE, () => {
       console.log('######################### BOOT DONE')
-      this.bonusRewards.setCartWatcher(this.cartWatcher);
+      this.bonusRewards.setCartWatcher(RocketTheme.globals.cartWatcher);
       this.bonusRewards.refresh();
-      this.bonusRewardsProgressView.setCartWatcher(this.cartWatcher);
+      this.bonusRewardsProgressView.setCartWatcher(RocketTheme.globals.cartWatcher);
     });
     bootManager.start();
   }
