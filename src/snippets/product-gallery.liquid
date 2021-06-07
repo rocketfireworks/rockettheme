@@ -54,9 +54,10 @@
           
         {% if firstLi == true %}
           {% assign firstSlideClass = "product-active-slide" %}
-          {% assign firstLi = false %}  
+        {% else %}
+          {% assign firstSlideClass = "" %}
         {% endif %}
-
+        <!-- {% if firstLi == true %} {{firstSlideClass}}{% endif %} -->
         {% if media.media_type == 'external_video' %}
         <li data-thumb="{{ media | img_url: '150x' }}" data-title="{{ product.title | escape }}" class="video_slide {{firstSlideClass}}">
         {% assign video = media.alt | split: 'src="' %}
@@ -120,6 +121,8 @@
           {% endif %}
         </li>
         {% endif %}
+        
+        {% assign firstLi = false %}  
         {% endfor %}
       </ul>
     </div>
