@@ -17,6 +17,7 @@ export class CartWatcher extends EventDispatcher {
 
   constructor (shopifySDKAdapter) {
     super();
+    this.refreshInProgress = false;
     this.shopifySDKAdapter = shopifySDKAdapter;
     this.shopifySDKAdapter.on(SHOPIFY_CART_UPDATE, this.shopifyCartUpdateListener.bind(this));
   }
@@ -41,11 +42,31 @@ export class CartWatcher extends EventDispatcher {
    * in cart.
    */
   refresh () {
+    if (this.refreshInProgress) {
+      console.error('############################################################################')
+      console.error('############################################################################')
+      console.error('############################################################################')
+      console.error('##########################  REFRESH ALREADY IN PROGRESS ####################')
+      console.error('############################################################################')
+      console.error('############################################################################')
+      console.error('############################################################################')
+      console.error('================ BUFFERING REFRESH REQUEST... =============');
+      // A refresh is already in progress, so a new refresh can't be executed yet. Wait for the
+      // current refresh to complete, then execute the requested refresh. (Executing more than one
+      // refresh at a time would cause the cart's local state to become scrambled, with the
+      // potential for dataStore.fireworksTotalInCart to contain a different set of products than
+      // those in dataStore.productsInCart.
+      this.refreshBuffered = true;
+      return;
+    }
+    this.refreshInProgress = true;
+
     let previousFireworksTotal = RocketTheme.globals.dataStore.fireworksTotalInCart;
 
     // Execute tasks
     this.updateCartTaskManager = new LocalCartRefresher();
     this.updateCartTaskManager.on(COMPLETE, e => {
+      this.refreshInProgress = false;
       log('Update Cart Manager finished updating the cart.');
       log('Current Fireworks total in cart: ' + RocketTheme.globals.dataStore.fireworksTotalInCart);
       if (previousFireworksTotal !== RocketTheme.globals.dataStore.fireworksTotalInCart) {
@@ -54,8 +75,17 @@ export class CartWatcher extends EventDispatcher {
         console.log('Fireworks total in cart has not changed.');
       }
       this.dispatchEvent(UPDATE);
+      if (this.refreshBuffered) {
+        console.error('================ EXECUTING BUFFERED REFRESH NOW... =============');
+        // A refresh was requested while the current refresh was already in progress. Now that the
+        // current refresh has been allowed to complete, execute the refresh that was previously
+        // requested.
+        this.refreshBuffered = false;
+        this.refresh();
+      }
     });
     this.updateCartTaskManager.on(FAIL, e => {
+      this.refreshInProgress = false;
       log('Update Cart Manager failed to update cart.');
     });
 
