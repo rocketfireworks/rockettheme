@@ -40,6 +40,10 @@ export class BonusRewardsProgressView {
   }
 
   showActiveBonusContainer () {
+    let activeBonusRewardIndex = 1;
+    if (notNil(this.bonusRewards.activeBonusReward)) {
+      activeBonusRewardIndex = this.bonusRewards.activeBonusReward.index;
+    }
     if (notNil(document.querySelector('.template-cart'))) {
       let bonusContainers = document.querySelectorAll('.bonusRewards-container .bonus-tiered-container');
       bonusContainers.forEach(bonusContainer => {
@@ -47,7 +51,7 @@ export class BonusRewardsProgressView {
           bonusContainer.classList.add('hidden');
         }
       });
-      document.querySelector('.bonusRewards-container .level-' + this.bonusRewards.activeBonusReward.index).classList.remove('hidden');
+      document.querySelector('.bonusRewards-container .level-' + activeBonusRewardIndex).classList.remove('hidden');
     }
 
     this.fadeInBonusContainer();
@@ -79,7 +83,7 @@ export class BonusRewardsProgressView {
       `<b>${remainingUntilNextLevel}</b> away from <b>Bonus Rewards Level ${nextLevelIndex}</b>! <i class="fas fa-gift"></i>`;
     } else {
       document.querySelector('.bonusRewards-progress').classList.add('hidden');
-      document.querySelector('.promo-bar-container .bonusRewards-message').innerHTML = 
+      document.querySelector('.bonusRewards-message').innerHTML = 
       `You've earned the <b>highest Bonus Rewards</b>! <i class="fas fa-gift"></i>`;
     }
   }
