@@ -216,11 +216,16 @@ export class BonusRewards extends EventDispatcher {
   }
 
   getProgressPercentage () {
+    let fireworksTotalInCart = RocketTheme.globals.dataStore.fireworksTotalInCart;
+    
     if (isNil(this.nextBonusReward)) {
       return 0;
-    } else {
-      return Math.floor((RocketTheme.globals.dataStore.fireworksTotalInCart * 100) / this.nextBonusReward.level);
+    } 
+
+    if (isNil(this.activeBonusReward)) {
+      return Math.floor(fireworksTotalInCart / this.nextBonusReward.level * 100);
     }
+    return Math.floor((fireworksTotalInCart - this.activeBonusReward.level) / (this.nextBonusReward.level - this.activeBonusReward.level) * 100);
   }
 }
 
