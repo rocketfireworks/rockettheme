@@ -1,1 +1,27 @@
-{% section "page-weeklydeal" %}
+<div id="content">
+  <div class="custom-container weeklydeal">
+    <div class="custom-title container-narrow">
+      <h1>{{ page.title | escape }}</h1>
+    </div>
+    <div class="page_content">
+      <div class="row">
+        <div class="{% if section.settings.page_link_list != blank or section.settings.show_sidebar_page_collections or section.settings.show_page_sidebar_sale %}col-md-9 col-md-push-3 col-sm-8 col-sm-push-4{% else %}col-sm-12{% endif %}">
+          {% include 'page-banner' with page.custom_fields %}
+          <div class="container-narrow">
+            <div class="deal-container">
+              {% section 'page-weeklydeal' %}
+              {% section 'featured-special' %}
+              {% section 'featured-bundle' %}
+              {% section 'featured-package' %}
+              {% section 'product-recommendations' %}
+            </div>
+          </div>
+        </div>
+        {% if section.settings.page_link_list != blank or section.settings.show_sidebar_page_collections or section.settings.show_page_sidebar_sale %}
+          {% include 'sidebar-page' %}
+        {% endif %}
+      </div>
+    </div>
+    {% include 'attraction-panel' with shop.custom_fields %}
+  </div>
+</div>
