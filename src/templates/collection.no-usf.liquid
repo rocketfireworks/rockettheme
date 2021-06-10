@@ -1,0 +1,10 @@
+{% capture collection-no-usf_featured_product %}{% section "collection-no-usf-featured-product" %}{% endcapture %}
+{% assign collection-no-usf_featured_product = collection-no-usf_featured_product | replace: 'data-shopify-editor-section', '' %}
+
+{% capture collection-no-usf_template_content %}
+  {% section 'collection-no-usf' %}
+{% endcapture %}
+
+{% assign collection-no-usf_template_content = collection-no-usf_template_content | replace: "%%collection-no-usf-featured-product%%", collection-no-usf_featured_product %}
+
+{{ collection-no-usf_template_content }}
