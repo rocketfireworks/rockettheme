@@ -14,6 +14,8 @@ import {WaitForSellyTask} from './WaitForSellyTask.js';
 import {InitShopifySDKAdapter} from './InitShopifySDKAdapter.js';
 import {InitCartWatcherTask} from './InitCartWatcherTask.js';
 import {COMPLETE} from '../utils/constants.js';
+import { CartTotalManager } from './CartTotalManager.js';
+import { QuickCartSubtotalVerifier } from './QuickCartSubtotalVerifier.js';
 
 export class RocketTheme {
   boot () {
@@ -46,6 +48,9 @@ export class RocketTheme {
       this.bonusRewards.setCartWatcher(RocketTheme.globals.cartWatcher);
       this.bonusRewards.refresh();
       this.bonusRewardsProgressView.setCartWatcher(RocketTheme.globals.cartWatcher);
+
+      this.cartTotalManager = new CartTotalManager(RocketTheme.globals.dataStore);
+      this.quickCartSubtotalVerifier = new QuickCartSubtotalVerifier(this.cartTotalManager);
     });
     bootManager.start();
   }
