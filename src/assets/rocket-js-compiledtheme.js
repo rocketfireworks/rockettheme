@@ -114,6 +114,7 @@ class EventDispatcher {
 const FIREWORKS_TOTAL_IN_CART_UPDATED$1 = 'FIREWORKS_TOTAL_IN_CART_UPDATED';
 const BONUS_REWARD_UPDATED = 'BONUS_REWARD_UPDATED';
 const SHOPIFY_CART_UPDATE$1 = 'SHOPIFY_CART_UPDATE';
+const UPDATE$1 = 'UPDATE';
 
 class Logger extends EventDispatcher {
   constructor () {
@@ -619,7 +620,12 @@ ProductService.getProduct = function (handle) {
 
 ProductService.hasTag = function (handle, tag) {
   let productObj = ProductService.getProduct(handle);
-  return productObj.product.tags.includes(tag) || productObj.product.tags.includes(tag.toLowerCase());
+  if (isNil(productObj)) {
+    console.warn(`ProductService.hasTag() could not find a product with the requested handle: [${handle}] (tag: [${tag}])`);
+    return false;
+  } else {
+    return productObj.product.tags.includes(tag) || productObj.product.tags.includes(tag.toLowerCase());
+  }
 };
 
 ProductService.isFireworkProduct = function (handle) {
@@ -630,6 +636,47 @@ ProductService.getVariantID = function (product) {
   return product.product.variants[0].id;
 };
 
+const FIREWORKS_TOTAL_IN_CART_UPDATED = 'FIREWORKS_TOTAL_IN_CART_UPDATED';
+const SHOPIFY_CART_UPDATE = 'SHOPIFY_CART_UPDATE';
+const UPDATE = 'UPDATE';
+
+class RefreshCartWatcherTask extends Task {
+  constructor (cartWatcher) {
+    super();
+    this.name = 'REFRESH CART WATCHER';
+    this.cartWatcher = cartWatcher;
+    this.waitForCartWatcherIntervalID = -1;
+  }
+
+  start () {
+    super.start();
+    // If there's a refresh() in progress, wait for that to complete before requesting a new one.
+    if (this.cartWatcher.refreshInProgress) {
+      this.waitForCartWatcherIntervalID = setInterval(() => {
+        if (!this.cartWatcher.refreshInProgress) {
+          clearInterval(this.waitForCartWatcherIntervalID);
+          this.waitForCartWatcherIntervalID = -1;
+          this.requestRefresh();
+        }
+      }, 500);
+    } else {
+      this.requestRefresh();
+    }
+  }
+
+  requestRefresh () {
+    this.boundUpdateListener = this.cartWatcherUpdateListener.bind(this);
+    this.cartWatcher.on(UPDATE, this.boundUpdateListener);
+    this.cartWatcher.refresh();
+  }
+
+  cartWatcherUpdateListener () {
+    // CartWatcher has been created and finished its first refresh, so the init task is done
+    this.cartWatcher.off(UPDATE, this.boundUpdateListener);
+    this.done();
+  }
+}
+
 class UpdateBonusRewardsInCartTask extends TaskManager {
   constructor (bonusRewardToAdd) {
     super('UPDATE BONUS REWARDS IN CART');
@@ -638,13 +685,19 @@ class UpdateBonusRewardsInCartTask extends TaskManager {
   }
 
   initTasks (bonusRewardToAdd) {
-    let removeInactiveBonusRewardsTask = this.getRemoveAllBonusRewardsFromCartTasks();
-    let tasks = removeInactiveBonusRewardsTask;
+    let tasks = this.getRemoveAllBonusRewardsFromCartTasks();
 
     if (notNil(bonusRewardToAdd)) {
       let addActiveBonusRewardTask = this.getAddBonusRewardToCartTask(bonusRewardToAdd);
       tasks.push(addActiveBonusRewardTask);
     }
+
+    // IMPORTANT:
+    // After the bonus rewards have been removed from and added to the server-side cart, retrieve
+    // the cart's state again so the local cart reflects the changed bonus rewards.
+    // Without this refresh, the on-screen cart would appear out of date (i.e., would not correctly
+    // show the current bonus reward).
+    tasks.push(new RefreshCartWatcherTask(RocketTheme.globals.cartWatcher));
     
     this.addTasks(tasks);
   }
@@ -683,9 +736,8 @@ class BonusRewards extends EventDispatcher {
     this.remainingUntilNextLevel = 0;
     this.progressPercentage = 0;
 
-    this.updateBonusRewardsInCartTask = null;
-
-    this.waitForUpdateIntervalId = -1;
+    this.updateBonusRewardInProgress = false;
+    this.updateBonusRewardCheckBuffered = false;
   }
 
   //================================================================================================
@@ -695,6 +747,7 @@ class BonusRewards extends EventDispatcher {
   setCartWatcher (cartWatcher) {
     this.cartWatcher = cartWatcher;
     this.cartWatcher.on(FIREWORKS_TOTAL_IN_CART_UPDATED$1, this.fireworksTotalUpdatedListener.bind(this));
+    this.cartWatcher.on(UPDATE$1, this.cartWatcherUpdatedListener.bind(this));
   }
 
   //================================================================================================
@@ -702,80 +755,105 @@ class BonusRewards extends EventDispatcher {
   //================================================================================================
 
   refresh () {
-    console.log("REFRESHING");
-    let expectedBonusReward = this.getActiveBonusReward();
-    let actualBonusRewards = this.getCurrentBonusRewardsInCart();
-
-    this.activeBonusReward = expectedBonusReward;
+    this.activeBonusReward = this.getActiveBonusReward();
     this.nextBonusReward = this.getNextBonusReward();
     this.remainingUntilNextLevel = this.getRemainingUntilNextLevel();
     this.progressPercentage = this.getProgressPercentage();
-
-    console.log('* Expected bonus reward: ', expectedBonusReward);
-    console.log('* Actual bonus reward: ', actualBonusRewards);
-
-    let rewardChanged = false;
-    if (actualBonusRewards.length > 1) {
-      console.warn('* MULTIPLE BONUS REWARDS FOUND IN CART');
-      rewardChanged = true;
-    } else if (actualBonusRewards.length === 1) {
-      if (actualBonusRewards[0] !== expectedBonusReward) {
-        console.log('* Existing bonus reward changed');
-        rewardChanged = true;
-      } else {
-        console.log('* Bonus reward has not changed');
-      }
-    } else if (notNil(expectedBonusReward)) {
-      console.log('* Bonus reward changed (from no prior reward)');
-      rewardChanged = true;
-    }
-
-    if (rewardChanged) {
-      this.activeBonusReward = expectedBonusReward;
+    if (this.getActiveBonusRewardHasChanged()) {
       this.handleActiveBonusRewardChange();
     }
   }
 
   fireworksTotalUpdatedListener () {
-    console.log('* Fireworks Total changed. Running fireworksTotalUpdatedListener...');
+    console.log('* BonusRewards caught CartWatcher FIREWORKS_TOTAL_IN_CART_UPDATED event. Running fireworksTotalUpdatedListener...');
+
+    this.refresh();
+  }
+
+  /**
+   * This separate listener is required due to the client-side implementation of the Bonus Rewards
+   * system. It would not be required if the Bonus Rewards were implemented server side, where they
+   * should be. Listening for the end of the latest CartWatcher UPDATE handles the following scenario:
+   * 1) User has Level 1 in cart.
+   * 2) User adds a fireworks product to cart, triggering what should be the addition of Level 2.
+   * 3) User quickly removes the same fireworks product from cart, returning the cart total to Level 1.
+   *
+   * In the above scenario, the temporary change to Level 2 can result in the Level 2 product being
+   * added but the fireworks total appears to have remained unchanged (because it returns to the
+   * Level 1 value). This desynchronization happens because CartWatcher buffers refresh requests,
+   * so the client can fall out of sync with the server if updates happen often enough.
+   *
+   * The cartWatcherUpdatedListener() function acts as a last resort, in that it always checks the
+   * most recent state of the cart reported by CartWatcher, so if the rewards products in the cart
+   * do not match the expected reward, the mismatch will be caught and corrected. This workaround
+   * causes a high number of HTTP requests, resulting in jittery behaviour in the UI when rewards
+   * are added or removed due to rapid use of the Quantity button. Better implementations would be:
+   *
+   * 1) Upgrade to Shopify Plus and use Shopify Scripts to implement Bonus Rewards server side.
+   * 2) Rewrite the cart's quantity selector to integrate it into the Bonus Rewards system, with
+   *    a loading state that disables the UI until the rewards have been syncronized.
+   */
+  cartWatcherUpdatedListener () {
+    console.log('* BonusRewards caught CartWatcher UPDATE event. Running cartWatcherUpdatedListener...');
 
     this.refresh();
   }
 
   handleActiveBonusRewardChange () {
     console.log('* Checking for existing "update rewards in cart" task...');
-    if (isNil(this.updateBonusRewardsInCartTask)) {
-      console.log('* No update rewards task in progress. Creating new "update rewards in cart" task...');
-      this.updateBonusRewardsInCart(this.activeBonusReward);
-    } else {
-      console.log('* Found existing "update rewards in cart" task. Checking if "update rewards" task is already queued...');
-      if (this.waitForUpdateIntervalId === -1) {
-        console.log('* No existing "update rewards" task is queued. Queuing "update rewards" task...');
-        this.waitForUpdateIntervalId = setInterval(() => {
-          console.log('* Checking whether existing "update rewards" task has finished...');
-          if (isNil(this.updateBonusRewardsInCartTask)) {
-            console.log('* Existing "update rewards" task has finished. Creating new "update rewards in cart" task...');
-            clearInterval(this.waitForUpdateIntervalId);
-            this.waitForUpdateIntervalId = -1;
-            this.updateBonusRewardsInCart(this.activeBonusReward);
-          }
-        }, 500);
-      }
+    if (this.updateBonusRewardInProgress) {
+      console.log('* Found existing UpdateBonusRewardsInCartTask in progress. Will check bonus reward state again when task completes.');
+      this.updateBonusRewardCheckBuffered = true;
+      return;
     }
+
+    console.log('* No UpdateBonusRewardsInCartTask in progress. Creating new UpdateBonusRewardsInCartTask...');
+    this.updateBonusRewardInProgress = true;
+    this.updateBonusRewardsInCart(this.activeBonusReward);
   }
 
   updateBonusRewardsInCart (activeBonusReward) {
     this.updateBonusRewardsInCartTask = new UpdateBonusRewardsInCartTask(activeBonusReward);
     this.updateBonusRewardsInCartTask.on(COMPLETE, () => {
-      this.updateBonusRewardsInCartTask = null;
-      console.log('* Finished "update rewards in cart" task...');
-      this.dispatchEvent(BONUS_REWARD_UPDATED);
-
-      console.log('* Retrieving cart from /cart.js...');
-      Shopify.getCart(Shopify.updateQuickCart);
+      console.log('>>> Finished "update rewards in cart" task.');
+      this.doPostUpdateActions();
     });
+
+    this.updateBonusRewardsInCartTask.on(FAIL, () => {
+      console.log('>>> Failed "update rewards in cart" task.');
+      this.doPostUpdateActions();
+    });
+
     console.log('* Starting "update rewards in cart" task...');
     this.updateBonusRewardsInCartTask.start();
+  }
+
+  doPostUpdateActions () {
+    this.dispatchEvent(BONUS_REWARD_UPDATED);
+    this.updateBonusRewardInProgress = false;
+    let noRemainingUpdates = false;
+
+    if (this.updateBonusRewardCheckBuffered) {
+      console.log('>>> Processing buffered rewards check... ');
+      this.updateBonusRewardCheckBuffered = false;
+      if (this.getActiveBonusRewardHasChanged()) {
+        console.log('>>> Buffered rewards check result: reward has changed.');
+        this.handleActiveBonusRewardChange();
+      } else {
+        console.log('>>> Buffered rewards check result: reward has NOT changed. Update task not required.');
+        noRemainingUpdates = true;
+      }
+    } else {
+      noRemainingUpdates = true;
+    }
+
+    if (noRemainingUpdates) {
+      // Now that all bonus rewards updates have been processed, call getCart() so the
+      // theme's JavaScript-based cart presentation layer updates to reflect the new cart contents.
+      // Without this code, on screen, the user would see the old contents of the cart.
+      console.log('* Retrieving cart from /cart.js...');
+      Shopify.getCart(Shopify.updateQuickCart);
+    }
   }
 
   //================================================================================================
@@ -805,6 +883,32 @@ class BonusRewards extends EventDispatcher {
     return currentBonusRewards;
   }
 
+  getActiveBonusRewardHasChanged () {
+    let rewardChanged = false;
+    let expectedBonusReward = this.getActiveBonusReward();
+    let actualBonusRewards = this.getCurrentBonusRewardsInCart();
+
+    console.log('* Expected bonus reward: ', expectedBonusReward);
+    console.log('* Actual bonus rewards: ', actualBonusRewards);
+    console.log('* Products in datastore: ', RocketTheme.globals.dataStore.productsInCart);
+
+    if (actualBonusRewards.length > 1) {
+      console.warn('* MULTIPLE BONUS REWARDS FOUND IN CART');
+      rewardChanged = true;
+    } else if (actualBonusRewards.length === 1) {
+      if (actualBonusRewards[0] !== expectedBonusReward) {
+        console.log('* Existing bonus reward changed');
+        rewardChanged = true;
+      } else {
+        console.log('* Bonus reward has not changed');
+      }
+    } else if (notNil(expectedBonusReward)) {
+      console.log('* Bonus reward changed (from no prior reward)');
+      rewardChanged = true;
+    }
+    return rewardChanged;
+  }
+
   getNextBonusReward () {
     let nextBonusReward;
     this.nextBonusReward = BonusRewards.levels[0];
@@ -824,7 +928,11 @@ class BonusRewards extends EventDispatcher {
   getRemainingUntilNextLevel () {
     let fireworksTotalInCart = RocketTheme.globals.dataStore.fireworksTotalInCart;
 
-    return this.nextBonusReward.level - fireworksTotalInCart;
+    if (isNil(this.nextBonusReward)) {
+      return 0;
+    } else {
+      return this.nextBonusReward.level - fireworksTotalInCart;
+    }
   }
 
   getProgressPercentage () {
@@ -901,6 +1009,7 @@ class DataStore {
     this.cart = null;
     this.productsInCart = [];
     this.fireworksTotalInCart = -1;
+    this.totalInCart = -1;
   }
 }
 
@@ -941,6 +1050,10 @@ class BonusRewardsProgressView {
   }
 
   showActiveBonusContainer () {
+    let activeBonusRewardIndex = 1;
+    if (notNil(this.bonusRewards.activeBonusReward)) {
+      activeBonusRewardIndex = this.bonusRewards.activeBonusReward.index;
+    }
     if (notNil(document.querySelector('.template-cart'))) {
       let bonusContainers = document.querySelectorAll('.bonusRewards-container .bonus-tiered-container');
       bonusContainers.forEach(bonusContainer => {
@@ -948,7 +1061,7 @@ class BonusRewardsProgressView {
           bonusContainer.classList.add('hidden');
         }
       });
-      document.querySelector('.bonusRewards-container .level-' + this.bonusRewards.activeBonusReward.index).classList.remove('hidden');
+      document.querySelector('.bonusRewards-container .level-' + activeBonusRewardIndex).classList.remove('hidden');
     }
 
     this.fadeInBonusContainer();
@@ -980,7 +1093,7 @@ class BonusRewardsProgressView {
       `<b>${remainingUntilNextLevel}</b> away from <b>Bonus Rewards Level ${nextLevelIndex}</b>! <i class="fas fa-gift"></i>`;
     } else {
       document.querySelector('.bonusRewards-progress').classList.add('hidden');
-      document.querySelector('.promo-bar-container .bonusRewards-message').innerHTML = 
+      document.querySelector('.bonusRewards-message').innerHTML = 
       `You've earned the <b>highest Bonus Rewards</b>! <i class="fas fa-gift"></i>`;
     }
   }
@@ -1139,15 +1252,14 @@ class ShopifySDKAdapter extends EventDispatcher {
 }
 
 class InitShopifySDKAdapter extends Task {
-  constructor (rocketTheme) {
+  constructor () {
     super();
     this.name = 'INIT SHOPIFY SDK ADAPTER';
-    this.rocketTheme = rocketTheme;
   }
 
   start () {
     super.start();
-    this.rocketTheme.shopifySDKAdapter = new ShopifySDKAdapter();
+    RocketTheme.globals.shopifySDKAdapter = new ShopifySDKAdapter();
     this.done();
   }
 }
@@ -1177,6 +1289,18 @@ class UpdateCartProductsInDataStoreTask extends TaskManager {
   
   constructor () {
     super('GET ALL PRODUCTS IN CART');
+
+    // DEBUGGING CODE:
+    // If productsInCart and the cart.items ever have different lengths, something has gone wrong,
+    // and the cause should be investigated.
+    this.on(COMPLETE, () => {
+      if (RocketTheme.globals.dataStore.productsInCart.length
+        !== RocketTheme.globals.dataStore.cart.items.length) {
+        console.warn('cart.items and productsInCart MISMATCH');
+        console.log('datastore.cart.items: ', RocketTheme.globals.dataStore.cart.items);
+        console.log('datastore.productsInCart: ', RocketTheme.globals.dataStore.productsInCart);
+      }
+    });
   }
 
   initTasks () {
@@ -1218,6 +1342,8 @@ class UpdateFireworksTotalInDataStoreTask extends Task {
     super.start();
 
     console.log('* Calculating fireworks total');
+    console.log('datastore.cart.items: ', RocketTheme.globals.dataStore.cart.items);
+    console.log('datastore.productsInCart: ', RocketTheme.globals.dataStore.productsInCart);
 
     let fireworksProducts = [];
     
@@ -1241,9 +1367,22 @@ class UpdateFireworksTotalInDataStoreTask extends Task {
   }
 }
 
-const FIREWORKS_TOTAL_IN_CART_UPDATED = 'FIREWORKS_TOTAL_IN_CART_UPDATED';
-const SHOPIFY_CART_UPDATE = 'SHOPIFY_CART_UPDATE';
-const UPDATE = 'UPDATE';
+class LocalCartRefresher extends TaskManager {
+  constructor () {
+    super('LOCAL CART REFRESHER');
+    this.init();
+  }
+
+  init () {
+    let tasks = [
+      new UpdateCartInDataStoreTask(),
+      new UpdateCartProductsInDataStoreTask(),
+      new UpdateFireworksTotalInDataStoreTask()
+    ];
+
+    this.addTasks(tasks);
+  }
+}
 
 /**
  * Listens for updates to the cart reported by the Shopify SDK, and updates the RocketTheme
@@ -1253,6 +1392,7 @@ class CartWatcher extends EventDispatcher {
 
   constructor (shopifySDKAdapter) {
     super();
+    this.refreshInProgress = false;
     this.shopifySDKAdapter = shopifySDKAdapter;
     this.shopifySDKAdapter.on(SHOPIFY_CART_UPDATE, this.shopifyCartUpdateListener.bind(this));
   }
@@ -1277,19 +1417,31 @@ class CartWatcher extends EventDispatcher {
    * in cart.
    */
   refresh () {
+    if (this.refreshInProgress) {
+      console.error('############################################################################');
+      console.error('############################################################################');
+      console.error('############################################################################');
+      console.error('##########################  REFRESH ALREADY IN PROGRESS ####################');
+      console.error('############################################################################');
+      console.error('############################################################################');
+      console.error('############################################################################');
+      console.error('================ BUFFERING REFRESH REQUEST... =============');
+      // A refresh is already in progress, so a new refresh can't be executed yet. Wait for the
+      // current refresh to complete, then execute the requested refresh. (Executing more than one
+      // refresh at a time would cause the cart's local state to become scrambled, with the
+      // potential for dataStore.fireworksTotalInCart to contain a different set of products than
+      // those in dataStore.productsInCart.
+      this.refreshBuffered = true;
+      return;
+    }
+    this.refreshInProgress = true;
+
     let previousFireworksTotal = RocketTheme.globals.dataStore.fireworksTotalInCart;
 
-    // Create list of tasks
-    let tasks = [
-      new UpdateCartInDataStoreTask(),
-      new UpdateCartProductsInDataStoreTask(),
-      new UpdateFireworksTotalInDataStoreTask()
-    ];
-
     // Execute tasks
-    this.updateCartTaskManager = new TaskManager('Update Cart Manager');
-    this.updateCartTaskManager.addTasks(tasks);
+    this.updateCartTaskManager = new LocalCartRefresher();
     this.updateCartTaskManager.on(COMPLETE, e => {
+      this.refreshInProgress = false;
       log('Update Cart Manager finished updating the cart.');
       log('Current Fireworks total in cart: ' + RocketTheme.globals.dataStore.fireworksTotalInCart);
       if (previousFireworksTotal !== RocketTheme.globals.dataStore.fireworksTotalInCart) {
@@ -1298,8 +1450,17 @@ class CartWatcher extends EventDispatcher {
         console.log('Fireworks total in cart has not changed.');
       }
       this.dispatchEvent(UPDATE);
+      if (this.refreshBuffered) {
+        console.error('================ EXECUTING BUFFERED REFRESH NOW... =============');
+        // A refresh was requested while the current refresh was already in progress. Now that the
+        // current refresh has been allowed to complete, execute the refresh that was previously
+        // requested.
+        this.refreshBuffered = false;
+        this.refresh();
+      }
     });
     this.updateCartTaskManager.on(FAIL, e => {
+      this.refreshInProgress = false;
       log('Update Cart Manager failed to update cart.');
     });
 
@@ -1309,24 +1470,85 @@ class CartWatcher extends EventDispatcher {
 }
 
 class InitCartWatcherTask extends Task {
-  constructor (rocketTheme) {
+  constructor () {
     super();
     this.name = 'INIT CART WATCHER';
-    this.rocketTheme = rocketTheme;
   }
 
   start () {
     super.start();
-    this.rocketTheme.cartWatcher = new CartWatcher(this.rocketTheme.shopifySDKAdapter);
+    RocketTheme.globals.cartWatcher = new CartWatcher(RocketTheme.globals.shopifySDKAdapter);
+
     this.boundUpdateListener = this.cartWatcherUpdateListener.bind(this);
-    this.rocketTheme.cartWatcher.on(UPDATE, this.boundUpdateListener);
-    this.rocketTheme.cartWatcher.refresh();
+    RocketTheme.globals.cartWatcher.on(UPDATE, this.boundUpdateListener);
+    RocketTheme.globals.cartWatcher.refresh();
   }
 
   cartWatcherUpdateListener () {
     // CartWatcher has been created and finished its first refresh, so the init task is done
-    this.rocketTheme.cartWatcher.off(UPDATE, this.boundUpdateListener);
+    RocketTheme.globals.cartWatcher.off(UPDATE, this.boundUpdateListener);
     this.done();
+  }
+}
+
+class CartTotalManager extends EventDispatcher {
+  constructor (datastore) {
+    super();
+    this.datastore = datastore;
+
+    RocketTheme.globals.cartWatcher.on(UPDATE$1, this.cartUpdateListener.bind(this));
+    this.setCartTotalInDataStore();
+  }
+
+  cartUpdateListener () {
+    console.log('%%CART TOTAL MANAGER RECEIVE UPDATE');
+    this.setCartTotalInDataStore();
+  }
+
+  setCartTotalInDataStore () {
+    console.log('%%', RocketTheme.globals.dataStore.productsInCart);
+    let products = [];
+
+    RocketTheme.globals.dataStore.cart.items.forEach(item => {
+      products.push({
+        handle: item.handle,
+        product_id: item.product_id,
+        unitFinalPrice: SellyService.getFinalUnitPrice(item.product_id, item.quantity, item.price),
+        lineItemTotalFinalPrice: item.quantity * SellyService.getFinalUnitPrice(item.product_id, item.quantity, item.price)
+      });
+    });
+
+    RocketTheme.globals.dataStore.totalInCart = sumBy(products, 'lineItemTotalFinalPrice');
+    console.log('%%Local cart total: ' + RocketTheme.globals.dataStore.totalInCart);
+    this.dispatchEvent(UPDATE$1);
+  }
+}
+
+class QuickCartSubtotalVerifier {
+  constructor (cartTotalManager) {
+    this.cartTotalManager = cartTotalManager;
+    this.cartTotalManager.on(UPDATE$1, this.cartTotalUpdateListener.bind(this));
+  }
+
+  cartTotalUpdateListener () {
+    setTimeout(() => {
+      let renderedPrice;
+      let normalPriceSpan = document.querySelector('.tdf_price_normal .tdf_money.money');
+      let floorLocalCartTotal = Math.floor(RocketTheme.globals.dataStore.totalInCart);
+      if (notNil(normalPriceSpan)) {
+        renderedPrice = parseFloat(normalPriceSpan.textContent.substr(1)) * 100;
+        console.log('%% Rendered price: ', renderedPrice);
+        console.log('%% Floor cart total: ', floorLocalCartTotal);
+      }
+      console.log('%% Normal price span: ', normalPriceSpan);
+  
+      if (Math.abs(floorLocalCartTotal - renderedPrice) > 1) {
+        console.log('%%%Subtotal are different!!!');
+        
+      } else {
+        console.log('%%Subtotal check okay');
+      }
+    }, 2000);
   }
 }
 
@@ -1341,15 +1563,14 @@ class RocketTheme {
     this.consoleLogger = new ConsoleLogger(RocketTheme.globals.logger);
 
     RocketTheme.globals.dataStore = new DataStore;
-
-    this.shopifySDKAdapter = null;
-    this.cartWatcher = null;
+    RocketTheme.globals.cartWatcher = null;
+    RocketTheme.globals.shopifySDKAdapter = null;
 
     // Create Bonus Rewards manager
     this.bonusRewards = new BonusRewards();
     this.bonusRewardsProgressView = new BonusRewardsProgressView(this.bonusRewards);
 
-    RocketTheme.globals.releaseInfo = new ReleaseInfo('Rocket Dev Theme', '1.0.0', 'Sun Jun 06 2021 13:53:52 GMT-0400 (Eastern Daylight Time)');
+    RocketTheme.globals.releaseInfo = new ReleaseInfo('Rocket Dev Theme', '1.0.0', 'Thu Jun 10 2021 15:58:08 GMT-0400 (Eastern Daylight Time)');
 
     log(`RocketTheme ${RocketTheme.globals.releaseInfo.title} ${RocketTheme.globals.releaseInfo.version} boot complete.`);
     log(`Last compiled: ${RocketTheme.globals.releaseInfo.date}`);
@@ -1357,15 +1578,18 @@ class RocketTheme {
     let bootManager = RocketTheme.globals.bootManager = new TaskManager('Boot');
     let bootTasks = [new WaitForShopifySDKTask,
       new WaitForSellyTask(),
-      new InitShopifySDKAdapter(this),
-      new InitCartWatcherTask(this)
+      new InitShopifySDKAdapter(),
+      new InitCartWatcherTask()
     ];
     bootManager.addTasks(bootTasks);
     bootManager.on(COMPLETE, () => {
       console.log('######################### BOOT DONE');
-      this.bonusRewards.setCartWatcher(this.cartWatcher);
+      this.bonusRewards.setCartWatcher(RocketTheme.globals.cartWatcher);
       this.bonusRewards.refresh();
-      this.bonusRewardsProgressView.setCartWatcher(this.cartWatcher);
+      this.bonusRewardsProgressView.setCartWatcher(RocketTheme.globals.cartWatcher);
+
+      this.cartTotalManager = new CartTotalManager(RocketTheme.globals.dataStore);
+      this.quickCartSubtotalVerifier = new QuickCartSubtotalVerifier(this.cartTotalManager);
     });
     bootManager.start();
   }
