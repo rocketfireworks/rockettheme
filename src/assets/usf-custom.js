@@ -885,23 +885,23 @@ function _usfPlayVideoInit() {
     var mediaWidth;
     var mediaHeight;
 
-    setMediaSize(windowWidth, windowHeight)
+    setMediaSize(windowWidth, windowHeight);
 
     window.addEventListener('resize', function (e) {
-        mediaWidth = e.target.innerWidth;
-        mediaHeight = e.target.innerHeight;
-        setMediaSize(mediaWidth, mediaHeight);
+        windowWidth = e.target.innerWidth;
+        windowHeight = e.target.innerHeight;
+        setMediaSize(windowWidth, windowHeight);
     });
 
-    function setMediaSize(mediaWidth, mediaHeight) {
-        if (mediaWidth >= mediaHeight) {
-            mediaHeight = '60vh';
-            mediaWidth = 60 / 9 * 16 + 'vh';
+    function setMediaSize(windowWidth, windowHeight) {{
+        if (windowWidth > windowHeight) {
+            mediaWidth = '60vw';
+            mediaHeight = 60/16*9 + 'vw';
             $('.video_lightbox .media').css('width', mediaWidth);
             $('.video_lightbox .media').css('height', mediaHeight);
         } else {
             mediaWidth = '80vw';
-            mediaHeight = 80 / 16 * 9 + 'vw';
+            mediaHeight = 80/16*9 + 'vw';
             $('.video_lightbox .media').css('width', mediaWidth);
             $('.video_lightbox .media').css('height', mediaHeight);
         }
