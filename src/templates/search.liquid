@@ -8,39 +8,22 @@
 {% endif%}
 
 <div id="content">
+  {% include 'product-confirm-popup' %}
   <div class="container search-page">
-    {% include 'breadcrumb' %}
 
 	<style>
-        .usf-dropdown{
-          padding: 10px 15px;
-        }
-    </style>
+    .usf-dropdown{
+      padding: 10px 15px;
+    }
+  </style>
 	<div class="row">
-       <div class="col-sm-12">
-         <div class="title clearfix">
-           <h1>{{ 'general.search.search_heading' | t }}</h1>
-         </div>
-		<div class="page_content search_page_content">
-        <div class="row">
-          <div class="col-sm-8 col-sm-offset-2">
-            <div class="sfbox box-search">
-                <form action="/search" method="get" role="search">
-                  {% if product_only_search == "search_products_only" %}
-                  <input type="hidden" name="type" value="product">
-                  {% endif %}
-                  <div class="frm row">
-                    <div class="col-sm-9 col-xs-8"><input type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.submit' | t }}" class="txtbox" aria-label="{{ 'general.search.submit' | t }}"></div>
-                    <div class="col-sm-3 col-xs-4"><button class="btn_c" type="submit" value="{{ 'general.search.submit' | t }}">{{ 'general.search.submit' | t }}</button></div>
-                  </div>
-                </form> 
-            </div>
-          </div>
-        </div>
+    <div class="col-sm-12">
+      <div class="title">
+        <h1>{{ 'general.search.search_heading' | t }}: <span class="search-term">"{{ search.terms }}"</span></h1>
       </div>
-       </div>
     </div>
-    <div id="usf_container"></div>
+  </div>
+  <div id="usf_container"></div>
   </div>
 </div>
 <!-- END USF -->
