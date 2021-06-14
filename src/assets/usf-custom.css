@@ -110,3 +110,11 @@ body:not(.usf-collections-page) .usf-sr-inputbox {
 #usf_container .bulk-pricing{
     text-align: center
 }
+
+.usf-sr-config {
+    border-bottom: none;
+}
+
+.usf-mobile .usf-sr-config {
+    padding: 0;
+}
