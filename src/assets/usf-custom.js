@@ -880,6 +880,29 @@ usf.event.add('init', function () {
 
 function _usfPlayVideoInit() {
 
+    /* ADD YOUTUBE IFRAME API */
+    var tag = document.createElement('script');
+    tag.id = 'iframe-api';
+    tag.src = 'https://www.youtube.com/iframe_api';
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    var player;
+    window.onYouTubeIframeAPIReady = function () {
+        player = new YT.Player('14711891460285');
+    }
+
+    function videoPlayer(iframe, func, args) {
+        if (iframe) {
+        // Frame exists, 
+        iframe.contentWindow.postMessage(JSON.stringify({
+            "event": "command",
+            "func": func,
+            "args": args || [],
+        }), "*");
+        }
+    }
+
     var windowWidth = window.innerWidth;
     var windowHeight = window.innerHeight;
     var mediaWidth;
@@ -893,7 +916,7 @@ function _usfPlayVideoInit() {
         setMediaSize(windowWidth, windowHeight);
     });
 
-    function setMediaSize(windowWidth, windowHeight) {{
+    function setMediaSize(windowWidth, windowHeight) {
         if (windowWidth > windowHeight) {
             mediaWidth = '60vw';
             mediaHeight = 60/16*9 + 'vw';
@@ -912,10 +935,13 @@ function _usfPlayVideoInit() {
     });
     $(".video_lightbox").on("click", function (e) {
         $(this).addClass("hidden");
+        videoPlayer($(this).find('#player')[0], "pauseVideo");
     });
     $("body").on("keyup", function (e) {
+    var currentLightbox = $(".video_lightbox").not(".hidden");
         if (e.key == "Escape" && $(".video_lightbox").not(".hidden")) {
             $(".video_lightbox").addClass("hidden");
+            videoPlayer(currentLightbox.find('#player')[0], "pauseVideo");
         }
     });
 }
