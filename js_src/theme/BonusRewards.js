@@ -234,14 +234,14 @@ export class BonusRewards extends EventDispatcher {
 //==================================================================================================
 
 BonusRewards.levels = [
-  new BonusReward(15000, 39310116454589, 1),
-  new BonusReward(20000, 39310858420413, 2),
-  new BonusReward(30000, 39310870708413, 3),
-  new BonusReward(40000, 39310873297085, 4),
-  new BonusReward(50000, 39310876115133, 5),
-  new BonusReward(60000, 39310879195325, 6),
-  new BonusReward(75000, 39310912815293, 7),
-  new BonusReward(100000, 39310917664957, 8),
-  new BonusReward(125000, 39310919336125, 9),
-  new BonusReward(150000, 39310922252477, 10)
+  new BonusReward(15000, 40058814464189, 1),
+  new BonusReward(20000, 40058815086781, 2),
+  new BonusReward(30000, 40058815709373, 3),
+  new BonusReward(40000, 40058816037053, 4),
+  new BonusReward(50000, 40058816528573, 5),
+  new BonusReward(60000, 40058817806525, 6),
+  new BonusReward(75000, 40058819150013, 7),
+  new BonusReward(100000, 40058819510461, 8),
+  new BonusReward(125000, 40058819838141, 9),
+  new BonusReward(150000, 40058820526269, 10)
 ]
