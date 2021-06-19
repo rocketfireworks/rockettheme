@@ -144,7 +144,7 @@
         <div><span class="data-title">Noise:</span> {{ product.metafields.details.noise }}</div>
       {% endif %}
       {% if product.metafields.details.color %}
-        <div><span class="data-title">Color:</span> 
+        <div class="data-case-capitalize"><span class="data-title">Color:</span> 
           {% for value in product.metafields.details.color %}
             {% if forloop.last == true %}
               {{ value }}
