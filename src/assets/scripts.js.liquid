@@ -765,23 +765,23 @@ window.displayDiscountBadge = () => {
           let formattedDiscountPrice = Shopify.formatMoney(discountPrice, app.data.money_format);
 
           if (highestDiscountType == 1) {
-            productD.innerHTML = `<a href="${productUrl}" class="bulk-pricing">Bulk Deal: ${formattedDiscountPrice}...</a>`;
+            productD.innerHTML = `<a href="/products/${productUrl}" class="bulk-pricing">Bulk Deal: ${formattedDiscountPrice}...</a>`;
           }
     
           if (highestDiscountType == 2) {
-            productD.innerHTML = `<a href="${productUrl}" class="bulk-pricing">Bulk Deal: ${formattedDiscountPrice}...</a>`;
+            productD.innerHTML = `<a href="/products/${productUrl}" class="bulk-pricing">Bulk Deal: ${formattedDiscountPrice}...</a>`;
           }
     
           if (highestDiscountType == 3) {
-            productD.innerHTML = `<a href="${productUrl}" class="bulk-pricing">Off...${formattedDiscountPrice}...</a>`;
+            productD.innerHTML = `<a href="/products/${productUrl}" class="bulk-pricing">Off...${formattedDiscountPrice}...</a>`;
           }
     
           if (highestDiscountType == 4) {
-            productD.innerHTML = `<a href="${productUrl}" class="bulk-pricing">Bulk buy for Free Gift...</a>`;
+            productD.innerHTML = `<a href="/products/${productUrl}" class="bulk-pricing">Bulk buy for Free Gift...</a>`;
           }
     
           if (highestDiscountType == 5) {
-            productD.innerHTML = `<a href="${productUrl}" class="bulk-pricing">Bulk buy for Free Shipping...</a>`;
+            productD.innerHTML = `<a href="/products/${productUrl}" class="bulk-pricing">Bulk buy for Free Shipping...</a>`;
           }
         }
       }
