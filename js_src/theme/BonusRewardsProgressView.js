@@ -40,7 +40,7 @@ export class BonusRewardsProgressView {
   }
 
   showActiveBonusContainer () {
-    let activeBonusRewardIndex = 1;
+    let activeBonusRewardIndex;
     if (notNil(this.bonusRewards.activeBonusReward)) {
       activeBonusRewardIndex = this.bonusRewards.activeBonusReward.index;
     }
@@ -51,7 +51,9 @@ export class BonusRewardsProgressView {
           bonusContainer.classList.add('hidden');
         }
       });
-      document.querySelector('.bonusRewards-container .level-' + activeBonusRewardIndex).classList.remove('hidden');
+      if (notNil(activeBonusRewardIndex)) {
+        document.querySelector('.bonusRewards-container .level-' + activeBonusRewardIndex).classList.remove('hidden');
+      }
     }
 
     this.fadeInBonusContainer();
