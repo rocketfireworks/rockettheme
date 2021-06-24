@@ -755,14 +755,14 @@ window.displayDiscountBadge = () => {
       if (productD) {
         let productId = productD.getAttribute('data-product-id');
         let productUrl = productD.getAttribute('data-product-url');
-        let productPrice = productD.getAttribute('data-product-price');
+        let productPrice = productD.getAttribute('data-product-price') / 100;
         const discount = getProductDiscount(productId, offers);
         if (Object.keys(discount).length !== 0) {
           let highestDiscountLevel = discount.levels.length - 1;
           let highestDiscountValue = discount.levels[highestDiscountLevel].value;
           let highestDiscountType = discount.levels[highestDiscountLevel].typeId;
           let discountPrice = window.calculateFinalItemPrice(highestDiscountType, highestDiscountValue, productPrice);
-          let formattedDiscountPrice = Shopify.formatMoney(discountPrice, app.data.money_format);
+          let formattedDiscountPrice = '$' + discountPrice.toFixed(2);
 
           if (highestDiscountType == 1) {
             productD.innerHTML = `<a href="/products/${productUrl}" class="bulk-pricing">Bulk Deal: ${formattedDiscountPrice}...</a>`;
@@ -773,15 +773,15 @@ window.displayDiscountBadge = () => {
           }
     
           if (highestDiscountType == 3) {
-            productD.innerHTML = `<a href="/products/${productUrl}" class="bulk-pricing">Off...${formattedDiscountPrice}...</a>`;
-          }
-    
-          if (highestDiscountType == 4) {
             productD.innerHTML = `<a href="/products/${productUrl}" class="bulk-pricing">Bulk buy for Free Gift...</a>`;
           }
     
-          if (highestDiscountType == 5) {
+          if (highestDiscountType == 4) {
             productD.innerHTML = `<a href="/products/${productUrl}" class="bulk-pricing">Bulk buy for Free Shipping...</a>`;
+          }
+
+          if (highestDiscountType == 7) {
+            productD.innerHTML = `<a href="/products/${productUrl}" class="bulk-pricing">Bulk Deal: ${formattedDiscountPrice}...</a>`;
           }
         }
       }
@@ -858,15 +858,14 @@ function updateDiscountMessage(newPrice, discountType) {
   let formattedPrice = Shopify.formatMoney(newPrice, app.data.money_format);
   let price = $('.price-wholesale');
   let existingPrice = $('#productPrice');
-  
   if (discountType) {
-    // If discount type is Free shipping
-    if (discountType == 4) {
+    // If discount type is Free gift
+    if (discountType == 3) {
       formattedPrice = formattedPrice + ' + Free gift';
     }
 
     // If discount type is Free shipping
-    if (discountType == 5) {
+    if (discountType == 4) {
       formattedPrice = formattedPrice + ' + Free shipping';
     }
     existingPrice.addClass('linethrough');
@@ -888,20 +887,20 @@ window.outputMtvMessage = (discountType, nextDiscountValue, mtvMessage) => {
   if (discountType == 2) {
     mtvMessage = mtvMessage.replace('{discount}', '$' + nextDiscountValue + ' Off');
   }
-  
-  // If discount type is Fixed price
-  if (discountType == 3) {
-    mtvMessage = mtvMessage.replace('{discount}', '$' + nextDiscountValue + ' Off');
-  }
 
   // If discount type is Free gift
-  if (discountType == 4) {
+  if (discountType == 3) {
     mtvMessage = mtvMessage.replace('{discount}', '1 Free Gift');
   }
 
   // If discount type is Free shipping
-  if (discountType == 5) {
+  if (discountType == 4) {
     mtvMessage = mtvMessage.replace('{discount}', 'Free shipping');
+  }
+
+  // If discount type is Fixed price
+  if (discountType == 7) {
+    mtvMessage = mtvMessage.replace('{discount}', '$' + nextDiscountValue + ' Off');
   }
   return mtvMessage;
 }
@@ -916,20 +915,20 @@ window.outputDiscountValue = (discountType, currentDiscountValue) => {
   if (discountType == 2) {
     discountValueOutput = '$' + currentDiscountValue + ' Off';
   }
-  
-  // If discount type is Fixed price
-  if (discountType == 3) {
-    discountValueOutput = '$' + currentDiscountValue + ' Off';
-  }
 
   // If discount type is Free gift
-  if (discountType == 4) {
+  if (discountType == 3) {
     discountValueOutput = 'Free Gift'
   }
 
   // If discount type is Free shipping
-  if (discountType == 5) {
+  if (discountType == 4) {
     discountValueOutput = 'Free Shipping'
+  }
+
+  // If discount type is Fixed Price
+  if (discountType == 7) {
+    discountValueOutput = '$' + currentDiscountValue + ' Off';
   }
   return discountValueOutput;
 }
@@ -942,22 +941,22 @@ window.calculateFinalItemPrice = (discountType, currentDiscountValue, itemPrice)
 
   // If discount type is Fixed amount discount
   if (discountType == 2) {
-    finalItemPrice = itemPrice - ((currentDiscountValue / 100) * itemPrice);
-  }
-  
-  // If discount type is Fixed price
-  if (discountType == 3) {
-    finalItemPrice = itemPrice - (currentDiscountValue * 100);
+    finalItemPrice = itemPrice - currentDiscountValue;
   }
 
   // If discount type is Free gift
-  if (discountType == 4) {
+  if (discountType == 3) {
     finalItemPrice = itemPrice;
   }
 
   // If discount type is Free shipping
-  if (discountType == 5) {
+  if (discountType == 4) {
     finalItemPrice = itemPrice;
+  }
+
+  // If discount type is Fixed Price
+  if (discountType == 7) {
+    finalItemPrice = currentDiscountValue;
   }
   return finalItemPrice;
 }
@@ -987,24 +986,24 @@ window.getCurrentQualifiedDiscountOnCart = () => {
           discountValueOutput = currentDiscountValue + '% Off';
         }
   
-        // If discount type is Fixed amount discount
+        // If discount type is Fixed amount discount or Fixed price
         if (discount.levels[currentDiscountLevel].typeId == 2) {
           discountValueOutput = '$' + currentDiscountValue + ' Off';
         }
-        
-        // If discount type is Fixed price
-        if (discount.levels[currentDiscountLevel].typeId == 3) {
-          discountValueOutput = '$' + currentDiscountValue + ' Off';
-        }
-  
+
         // If discount type is Free gift
-        if (discount.levels[currentDiscountLevel].typeId == 4) {
-          discountValueOutput = 'Free Gift'
+        if (discount.levels[currentDiscountLevel].typeId == 3) {
+          discountValueOutput = 'Free Gift';
         }
   
         // If discount type is Free shipping
-        if (discount.levels[currentDiscountLevel].typeId == 5) {
-          discountValueOutput = 'Free Shipping'
+        if (discount.levels[currentDiscountLevel].typeId == 4) {
+          discountValueOutput = 'Free Shipping';
+        }
+  
+        // If discount type is Fixed price
+        if (discount.levels[currentDiscountLevel].typeId == 7) {
+          discountValueOutput = '$' + currentDiscountValue + ' Off';
         }
         item.querySelector('.currentDiscount').innerHTML = discountValueOutput;
         item.querySelector('.currentDiscount').classList.remove('hidden');
