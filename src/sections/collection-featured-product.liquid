@@ -125,34 +125,14 @@
                     <div class="main-product-description-{{ section.id }}" >
                       
                     <!-- Product's metafield data -->
-                    {% if product.metafields.details.effect %}
-                      <div><span class="data-title">Effect:</span> {{ product.metafields.details.effect }}</div>
-                    {% endif %}
-                    {% if product.metafields.details.duration %}
-                      <div><span class="data-title">Duration:</span> {{ product.metafields.details.duration }} seconds</div>
-                    {% endif %}
-                    {% if product.metafields.details.height %}
-                      <div><span class="data-title">Height:</span> {{ product.metafields.details.height }} meters</div>
-                    {% endif %}
-                    {% if product.metafields.details.shots %}
-                      <div><span class="data-title">Shots:</span> {{ product.metafields.details.shots }}</div>
-                    {% endif %}
-                    {% if product.metafields.details.noise %}
-                      <div class="data-case-capitalize"><span class="data-title">Noise:</span> {{ product.metafields.details.noise }}</div>
-                    {% endif %}
-                    {% if product.metafields.details.color %}
-                      <div class="data-case-capitalize"><span class="data-title">Color:</span> 
-                        {% for value in product.metafields.details.color %}
-                          {% if forloop.last == true %}
-                            {{ value }}
-                          {% else %}
-                            {{ value }}, 
-                          {% endif %}
-                        {% endfor %}
-                      </div>
+                    {% if product.description != "" %}
+                      {{ product.description | remove: "<!-- TABS -->" | remove: "<!-- /TABS -->" }}
+                    {% else %}
+                      {% if product.metafields.details.effect %}
+                      <div>{{ product.metafields.details.effect }}</div>
+                      {% endif %}
                     {% endif %}
 
-                    {{ product.description | remove: "<!-- TABS -->" | remove: "<!-- /TABS -->" }}
                     </div>
                   {% endif %}
                 {% endif %}
