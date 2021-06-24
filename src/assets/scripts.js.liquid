@@ -2681,6 +2681,12 @@ theme.ProductPageSection = (function() {
       }
     }
 
+    $('.product_nav li').on('mouseover', function() {
+      setActiveSlide($(this));
+    });
+
+    initFirstSlide();
+
     function videoPlayer(iframe, func, args) {
       if (iframe) {
         // Frame exists, 
@@ -2692,12 +2698,6 @@ theme.ProductPageSection = (function() {
       }
     }
 
-    initFirstSlide();
-
-    $('.product_nav li').on('mouseover', function() {
-      setActiveSlide($(this));
-    });
-    
     $('.product_nav li').on('click', function(e) {
       e.preventDefault();
       var selectedVideoId = getSelectedThumbId($(this));

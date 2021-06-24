@@ -889,7 +889,7 @@ function _usfPlayVideoInit() {
 
     var player;
     window.onYouTubeIframeAPIReady = function () {
-        player = new YT.Player('14711891460285');
+        player = new YT.Player('player');
     }
 
     function videoPlayer(iframe, func, args) {
