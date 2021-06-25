@@ -115,8 +115,9 @@ body:not(.usf-collections-page) .usf-sr-inputbox {
   text-align: center;
 }
 
+/* Mobile Filter */
 .usf-sr-config {
-  border-bottom: none;
+  border-top: none;
 }
 
 .usf-mobile .usf-sr-config {
