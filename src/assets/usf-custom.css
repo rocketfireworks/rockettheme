@@ -255,3 +255,26 @@ body:not(.usf-collections-page) .usf-sr-inputbox {
     width: 45%;
   }
 }
+
+/* Mobile Search Sidebar */
+.usf-is__viewall {
+  background-color: #16142c;
+}
+
+.usf-is__viewall span {
+    cursor: pointer;
+    line-height: normal;
+    color: #fff;
+}
+
+.usf-is__products {
+  padding: 5px 1em;
+}
+
+.usf-is__product {
+  padding: 10px 0;
+}
+
+.usf-is__matches .usf-img-wrapper {
+  width: 55px;
+}
