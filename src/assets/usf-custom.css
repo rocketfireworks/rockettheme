@@ -115,6 +115,11 @@ body:not(.usf-collections-page) .usf-sr-inputbox {
   text-align: center;
 }
 
+.usf-hidden {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
 /* Mobile Filter Sidebar */
 .usf-sr-config {
   border-top: none;
@@ -277,4 +282,10 @@ body:not(.usf-collections-page) .usf-sr-inputbox {
 
 .usf-is__matches .usf-img-wrapper {
   width: 55px;
+}
+
+.usf-mobile .usf-is.usf-popup {
+  opacity: 1;
+  visibility: visible;
+  transition: all 0.3s;
 }

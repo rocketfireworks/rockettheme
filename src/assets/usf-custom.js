@@ -551,7 +551,7 @@ usf.templates = {
 
     // Instant search popup
     instantSearch: /*inc_begin_instantsearch*/
-        `<div :class="'usf-popup usf-zone usf-is usf-is--' + position + (shouldShow ? '' : ' usf-hide') + (isEmpty ? ' usf-empty' : '') + (firstLoader ? ' usf-is--first-loader': '')"  :style="usf.isMobile ? null : {left: this.left + 'px',top: this.top + 'px',width: this.width + 'px'}">
+        `<div :class="'usf-popup usf-zone usf-is usf-is--' + position + (shouldShow ? '' : ' usf-hidden') + (isEmpty ? ' usf-empty' : '') + (firstLoader ? ' usf-is--first-loader': '')"  :style="usf.isMobile ? null : {left: this.left + 'px',top: this.top + 'px',width: this.width + 'px'}">
     <!-- Mobile search box -->
     <div v-if="usf.isMobile">
         <form class="usf-is__inputbox" :action="searchUrl" method="get" role="search">
