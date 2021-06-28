@@ -147,8 +147,9 @@ body:not(.usf-collections-page) .usf-sr-inputbox {
 .priceFilterContainer .usf-slider-inputs {
   display: flex;
 }
-
-.usf-slider-inputs {
+.usf-slider-inputs.Height,
+.usf-slider-inputs.Duration,
+.usf-slider-inputs.Shots {
   display: none;
 }
 
