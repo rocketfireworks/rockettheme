@@ -20,6 +20,9 @@ SellyService.getFinalUnitPrice = function (productID, quantity, originalPrice) {
             break;
   
           case SellyService.DISCOUNT_TYPE_FIXED_AMOUNT_DISCOUNT:
+            finalUnitPrice = originalPrice - (discount.value * 100);
+            break;
+
           case SellyService.DISCOUNT_TYPE_FIXED_PRICE:
             finalUnitPrice = originalPrice - discount.value;
             break;
