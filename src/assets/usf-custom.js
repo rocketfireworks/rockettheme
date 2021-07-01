@@ -42,7 +42,7 @@ var _usfFilterBodyTemplate = /*inc_begin_filter-body*/
     `<!-- Range filter -->
 <div v-if="isRange" class="usf-facet-values usf-facet-range">
     <!-- Range inputs -->
-    <div class="usf-slider-inputs usf-clear">
+    <div class="usf-slider-inputs usf-clear" :class="facet.title">
         <span class="usf-slider-input__from">
             <span class="usf-slider-input__prefix" v-html="facet.sliderPrefix" v-if="facet.showSliderInputPrefixSuffix"></span>
             <input :readonly="!hasRangeInputs" :value="rangeConverter(range[0]).toFixed(rangeDecimals)" @change="e => onRangeInput(e, range[0], 0)">
