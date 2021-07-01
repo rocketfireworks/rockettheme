@@ -136,6 +136,9 @@ usf.templates = {
         <span v-if="termModel" class="usf-remove" @click="clearSearch"></span>
     </form>
 
+    <usf-sr-banner v-if="result && result.extra && result.extra.banner && !result.extra.banner.isBottom" :banner="result.extra.banner"></usf-sr-banner>
+    <div v-if="window._usf_featured_product" v-html="_usf_featured_product"></div>
+    
     <div class="usf-sr-config" v-if="usf.isMobile">
         <div class="usf-sr-config__mobile-filters-wrapper">
             ` + _usfSearchResultsSortByTpl + `
@@ -148,9 +151,6 @@ usf.templates = {
         ` + _usfSearchResultsSummaryTpl + _usfSearchResultsViewsTpl + `
     </div>
     
-
-    <usf-sr-banner v-if="result && result.extra && result.extra.banner && !result.extra.banner.isBottom" :banner="result.extra.banner"></usf-sr-banner>
-    <div v-if="window._usf_featured_product" v-html="_usf_featured_product"></div>
     <div class="usf-sr-config" v-if="!usf.isMobile">
         ` + _usfSearchResultsSummaryTpl + _usfSearchResultsSortByTpl + _usfSearchResultsViewsTpl + `
     </div>
