@@ -326,8 +326,8 @@ usf.templates = {
     <div class="product-description">
         <!-- Product's metafield data -->
         <div v-if="(_effect = usf.utils.getMetafield(product,'details','effect')) != ''"><span class="data-title">Effect:</span> {{ _effect }}</div>
-        <div v-if="(_duration = usf.utils.getMetafield(product,'details','duration')) != ''"><span class="data-title">Duration:</span> {{ _duration }}</div>
-        <div v-if="(_height = usf.utils.getMetafield(product,'details','height')) != ''"><span class="data-title">Height:</span> {{ _height }}</div>
+        <div v-if="(_duration = usf.utils.getMetafield(product,'details','duration')) != ''"><span class="data-title">Duration:</span> {{ _duration }} seconds</div>
+        <div v-if="(_height = usf.utils.getMetafield(product,'details','height')) != ''"><span class="data-title">Height:</span> {{ _height }} meters</div>
         <p v-if="product.description" class="product-desc" v-html="_usfTruncateWords(product.description,25)"></p>
         <div>
             <div v-if="product.tags.includes('bulk_deals')" class="bulkDeals"><i class="fa fa-dollar-sign"></i> Bulk Deals</div>
