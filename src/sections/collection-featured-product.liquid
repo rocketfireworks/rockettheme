@@ -1,12 +1,19 @@
 <div class="shopify-section" data-section-id="{{ section.id }}" data-section-type="collection-featured-product-section">
   
   {% if section.settings.enable_featured_product %}
-    {% if section.settings.featured_product %}
 
-      {% assign collection_link = collection.url %}
-      {% assign product = all_products[section.settings.featured_product] %}
+  {% assign collection_link = collection.url %}
+  {% assign product = all_products[collection.metafields.featured.product_handle] %}
+
+    {% if product != empty %}
       {% assign productDescriptionContent = product.description %}	
-    {% assign productDescriptionContent = product.description %}	
+      {% assign productDescriptionContent = product.description %}	
+      {% assign productDescriptionContent = product.description %}	
+      {% assign productDescriptionContent = product.description %}	
+      {% assign productDescriptionContent = product.description %}	
+      {% assign productDescriptionContent = product.description %}	
+      {% assign productDescriptionContent = product.description %}	
+      {% assign productDescriptionContent = product.description %}	
       {% assign productDescriptionContent = product.description %}	
       {% assign descriptionParts = product.description | split: "<!-- split -->" %}
       {% if descriptionParts.size > 1%}
@@ -315,11 +322,6 @@
       "type": "checkbox",
       "id": "enable_featured_product",
       "label": "Enable Featured Product"
-    },
-    {
-      "type": "product",
-      "id": "featured_product",
-      "label": "Product"
     }
   ]
 }
