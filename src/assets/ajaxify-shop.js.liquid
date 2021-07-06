@@ -363,7 +363,7 @@ jQuery(document).ready(function() {
               let currentDiscountType = discount.levels[currentDiscountLevel].typeId;
               currentDiscountValue = discount.levels[currentDiscountLevel].value;
               discountValueOutput = window.outputDiscountValue(currentDiscountType, currentDiscountValue)
-              finalItemPrice = window.calculateFinalItemPrice(currentDiscountType, currentDiscountValue, itemPrice);
+              finalItemPrice = window.calculateFinalItemPrice(currentDiscountType, currentDiscountValue, itemPrice / 100) * 100;
               finalLinePrice = finalItemPrice * productRowQuantity;
             } else {
               currentDiscountClass = 'hidden';

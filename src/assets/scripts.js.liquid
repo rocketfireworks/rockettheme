@@ -677,8 +677,7 @@ window.calculateCurrentDiscountPrice = () => {
           if (currentDiscountLevel >= 0) {
             let currentDiscountType = discount.levels[currentDiscountLevel].typeId;
             let currentDiscountValue = discount.levels[currentDiscountLevel].value;
-
-            let finalItemPrice = window.calculateFinalItemPrice(currentDiscountType, currentDiscountValue, originalPrice);
+            let finalItemPrice = window.calculateFinalItemPrice(currentDiscountType, currentDiscountValue, originalPrice/100) * 100;
             updateDiscountMessage(finalItemPrice, currentDiscountType);
 
           } else {
