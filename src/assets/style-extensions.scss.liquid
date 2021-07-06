@@ -4231,17 +4231,38 @@ FEATURED PRODUCTS
         color: #16142c;
       }
     }
-    #image-block .product_gallery .product_slides li a {
-      height: 200px;
-      @media (max-width: 991px) { 
-        height: 150px;
+    #image-block .product_gallery .product_slides li {
+      a {
+        height: 200px;
+        @media (max-width: 991px) { 
+          height: 180px;
+        }
       }
-      @media (max-width: 560px) { 
-        height: 110px;
+      .video-container {
+        height: 200px;
+        &.youtube {
+          max-width: calc(200/9*16px);
+        }
+        @media (max-width: 991px) { 
+          height: 180px;
+          &.youtube {
+            max-width: calc(180/9*16px);
+          }
+        }
       }
     }
     .product-summary-container {
       position: initial;
+    }
+    // Reset featured product video position
+    .video_slide {
+      position: initial;
+      width: initial;
+      height: initial;
+      background-color: transparent;
+      top: initial;
+      left: initial;
+      z-index: initial;
     }
   }
   .product-summary-container input#addToCart.btn_c {

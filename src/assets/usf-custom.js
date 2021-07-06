@@ -878,30 +878,7 @@ usf.event.add('init', function () {
 
 });
 
-function _usfPlayVideoInit() {
-
-    /* ADD YOUTUBE IFRAME API */
-    var tag = document.createElement('script');
-    tag.id = 'iframe-api';
-    tag.src = 'https://www.youtube.com/iframe_api';
-    var firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-    var player;
-    window.onYouTubeIframeAPIReady = function () {
-        player = new YT.Player('player');
-    }
-
-    function videoPlayer(iframe, func, args) {
-        if (iframe) {
-        // Frame exists, 
-        iframe.contentWindow.postMessage(JSON.stringify({
-            "event": "command",
-            "func": func,
-            "args": args || [],
-        }), "*");
-        }
-    }
+function _usfSetVideoSize() {
 
     var windowWidth = window.innerWidth;
     var windowHeight = window.innerHeight;
@@ -929,6 +906,35 @@ function _usfPlayVideoInit() {
             $('.video_lightbox .media').css('height', mediaHeight);
         }
     }
+}
+
+function _usfPlayVideoInit() {
+    /* ADD YOUTUBE IFRAME API */
+    var tag = document.createElement('script');
+    tag.id = 'iframe-api';
+    tag.src = 'https://www.youtube.com/iframe_api';
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    var player;
+    window.onYouTubeIframeAPIReady = function () {
+        player = new YT.Player('player', {
+            events: {
+              'onStateChange': onPlayerStateChange
+            }
+        });
+    }
+
+    function videoPlayer(iframe, func, args) {
+        if (iframe) {
+        // Frame exists, 
+        iframe.contentWindow.postMessage(JSON.stringify({
+            "event": "command",
+            "func": func,
+            "args": args || [],
+        }), "*");
+        }
+    }
 
     $(".play-video").on("click", function (e) {
         $(this).parent().find(".video_lightbox").removeClass("hidden");
@@ -944,6 +950,112 @@ function _usfPlayVideoInit() {
             videoPlayer(currentLightbox.find('#player')[0], "pauseVideo");
         }
     });
+    
+    // Featured product on Collection Page
+    function onPlayerStateChange(e) {
+        updatePlayerIcon(e.data);
+      }
+  
+      function updatePlayerIcon(playerState) {
+        /* Player Status
+        * -1 – unstarted
+        * 0 – ended
+        * 1 – playing
+        * 2 – paused
+        * 3 – buffering
+        * 5 – video cued
+        */
+        var icon = $('.product_nav').find('i');
+        if (playerState == 1 || playerState == 3) {
+          icon.removeClass('fa-play');
+          icon.addClass('fa-pause');
+        } else {
+          icon.removeClass('fa-pause');
+          icon.addClass('fa-play');
+        }
+      }
+    /* END YOUTUBE IFRAME API */
+  
+    /*PRODUCT SLIDER*/
+    function initFirstSlide() {
+    var firstSlideNav = $('.product_nav li').first();
+    firstSlideNav.addClass('product-active-nav');
+    }
+
+    function getSelectedThumbId (thumb) {
+    return thumb.find('img').data('id-for');
+    }
+
+    function getSelectedMediaLi (id) {
+        var selectedMediaLi;
+        $('.product_slides li').each(function() {
+            var mediaId = $(this).find('.media').data('media-id');
+            if (mediaId === id) {
+            selectedMediaLi = $(this);
+            }
+        })
+        return selectedMediaLi;
+        }
+
+        function setSelectedMediaLi (id) {
+            getSelectedMediaLi(id).addClass('product-active-slide');
+        }
+
+        function setActiveSlide(thumb) {
+        // Remove current active class
+            $('.product_nav li').removeClass('product-active-nav');
+            $('.product_slides li').removeClass('product-active-slide');
+
+            // Set active thumbnail
+            thumb.addClass('product-active-nav');
+
+            // Set active image
+            var selectedThumbId = getSelectedThumbId(thumb);
+            setSelectedMediaLi(selectedThumbId);
+
+            // Pause video if not active
+            var selectedMedia = getSelectedMediaLi(selectedThumbId).find('#player');
+            if (selectedMedia.length === 0) {
+                videoPlayer($('.product_slides').find('#player')[0], "pauseVideo");
+                $('.product_slides').find('#player').removeClass('playing');
+            }
+            }
+
+            $('.product_nav li').on('mouseover', function() {
+            setActiveSlide($(this));
+        });
+
+        initFirstSlide();
+
+        function videoPlayer(iframe, func, args) {
+            if (iframe) {
+                // Frame exists, 
+                iframe.contentWindow.postMessage(JSON.stringify({
+                "event": "command",
+                "func": func,
+                "args": args || [],
+                }), "*");
+            }
+        }
+
+        $('.product_nav li').on('click', function(e) {
+            e.preventDefault();
+            var selectedVideoId = getSelectedThumbId($(this));
+            var selectedVideo = getSelectedMediaLi(selectedVideoId).find('#player');
+            if (selectedVideo.hasClass('playing')) {
+                videoPlayer(selectedVideo[0], "pauseVideo");
+                selectedVideo.removeClass('playing');
+            } else {
+                videoPlayer(selectedVideo[0], "playVideo");
+                selectedVideo.addClass('playing');
+            }
+        });
+
+        media = $('.media');
+        media.on('click', function(e) {
+        e.preventDefault();
+    })
+    /* END PRODUCT SLIDER*/
 }
 
 function getVariantOption(options, p, title) {
@@ -966,6 +1078,7 @@ function _getTemplateHtml(el) {
     if (_usfTemplates[handle]) {
         el.innerHTML = _usfTemplates[handle];
         el.removeAttribute('data-usf-template');
+        _usfSetVideoSize();
         _usfPlayVideoInit();
         return;
     }
@@ -980,6 +1093,7 @@ function _getTemplateHtml(el) {
                 _usfTemplates[handle] = this.responseText;
                 el.innerHTML = this.responseText;
                 el.removeAttribute('data-usf-template');
+                _usfSetVideoSize();
                 _usfPlayVideoInit();
             } else {
                 console.log(this.status, this.statusText);
