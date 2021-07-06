@@ -224,6 +224,11 @@
 
             {% endif %}
                       
+            <div class="product-wholesale-discount">
+              <div class="motivational-message"></div>
+              <noscript type="text/flag" class="tdfPlaceWholesale"></noscript>
+            </div>
+
             <div class="desc_blk_bot product-summary-container">
               <div class="product-summary">
                 <div class="product-title-container">
@@ -246,10 +251,7 @@
                   </div>                    
                 {% endunless %}
               </div>
-              <div class="product-wholesale-discount">
-                <div class="motivational-message"></div>
-                <noscript type="text/flag" class="tdfPlaceWholesale"></noscript>
-              </div>
+              
               {% unless product.price_max == 0 and settings.hide_price0_box_and_button %} 
                 {% if section.settings.show_smart_checkout%}
                 <div class="product_payments_btns">

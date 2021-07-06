@@ -1921,6 +1921,8 @@ PRODUCT
     grid-column: 2 / 3;
     grid-row: 1 / 2;
     padding: 10px 0 0 15px;
+    grid-template-columns: minmax(auto, max-content) min-content;
+    justify-content: space-between;
     .product-title-inventory {
       h1 {
         padding-right: 10px;
@@ -2344,6 +2346,7 @@ PRODUCT
     }
     input#addToCart.btn_c {
       max-width: initial;
+      margin-top: 0;
     }
   }
 }
@@ -3774,7 +3777,7 @@ TREEDIFY
   #tdf_wholesale {
     &.tdf_container {
       padding: 10px 15px;
-      margin: 10px 0 15px;
+      margin: 0;
       background-color: #eae8e8;
       box-shadow: 2px 2px 4px lightgrey;
       .tdf_nonpopup .tdf_normal_btn {
