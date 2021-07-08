@@ -24,7 +24,7 @@ SellyService.getFinalUnitPrice = function (productID, quantity, originalPrice) {
             break;
 
           case SellyService.DISCOUNT_TYPE_FIXED_PRICE:
-            finalUnitPrice = originalPrice - discount.value;
+            finalUnitPrice = discount.value;
             break;
         }
       }
@@ -76,4 +76,4 @@ SellyService.getMotivationalMessage = function (activeOffer) {
 SellyService.OFFER_TYPE_BULK = '7';
 SellyService.DISCOUNT_TYPE_PERCENT = 1;
 SellyService.DISCOUNT_TYPE_FIXED_AMOUNT_DISCOUNT = 2;
-SellyService.DISCOUNT_TYPE_FIXED_PRICE = 3;
+SellyService.DISCOUNT_TYPE_FIXED_PRICE = 7;
