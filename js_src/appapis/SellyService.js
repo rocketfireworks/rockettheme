@@ -65,16 +65,24 @@ SellyService.getActiveDiscountForQuantity = function (offer, quantity) {
 
 SellyService.getNextLevelDiscountForQuantity = function (offer, quantity) {
   let nextLevelDiscount = null;
-  offer.discount.value.levels.forEach((level, index) => {
+  let offerLevels = offer.discount.value.levels;
+  
+  offerLevels.forEach((level, index) => {
     if (quantity >= level.quantity) {
-      let nextLevel = offer.discount.value.levels[index + 1];
+      let nextLevel = offerLevels[index + 1];
       if (notNil(nextLevel)) {
-        nextLevelDiscount = nextLevel;
-      } else {
-        nextLevelDiscount = null;
+        return nextLevelDiscount = nextLevel;
       }
     }
   });
+  
+  if (quantity < offerLevels[0].quantity) {
+    nextLevelDiscount = offerLevels[0];
+  } 
+  
+  if (quantity === 0) {
+    nextLevelDiscount = null;
+  }
 
   return nextLevelDiscount;
 }

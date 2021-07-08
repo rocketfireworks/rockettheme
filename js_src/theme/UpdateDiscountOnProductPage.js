@@ -1,6 +1,6 @@
 import { SellyService } from "../appapis/SellyService";
 import { EventDispatcher } from "../utils/EventDispatcher";
-import { notNil } from "../utils/utils";
+import { isNil, notNil } from "../utils/utils";
 import { UPDATE } from "./Events";
 import { RocketTheme } from "./RocketTheme";
 
@@ -95,6 +95,9 @@ export class UpdateDiscountOnProductPage extends EventDispatcher {
         currentProductData.price = item.original_price;
       }
     });
+    if (isNil(currentProductData.quantity)) {
+      currentProductData.quantity = 0;
+    }
     return currentProductData;
   }
 
