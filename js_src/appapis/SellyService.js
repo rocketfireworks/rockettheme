@@ -1,4 +1,4 @@
-import { notNil } from "../utils/utils";
+import { isNil, notNil } from "../utils/utils";
 
 
 export class SellyService {
@@ -63,16 +63,76 @@ SellyService.getActiveDiscountForQuantity = function (offer, quantity) {
   return discount;
 }
 
+SellyService.getNextLevelDiscountForQuantity = function (offer, quantity) {
+  let nextLevelDiscount = null;
+  offer.discount.value.levels.forEach((level, index) => {
+    if (quantity >= level.quantity) {
+      let nextLevel = offer.discount.value.levels[index + 1];
+      if (notNil(nextLevel)) {
+        nextLevelDiscount = nextLevel;
+      } else {
+        nextLevelDiscount = null;
+      }
+    }
+  });
+
+  return nextLevelDiscount;
+}
+
 SellyService.getProduct = function (productID) {
   if (notNil(SellyService.data)) {
     return SellyService.data.products[productID];
   }
 }
 
-SellyService.getMotivationalMessage = function (activeOffer) {
-  return activeOffer.offerObj.mtv_message;
+SellyService.getAllProducts = function () {
+  let allProducts = [];
+  if (notNil(SellyService.data)) {
+    for (const [productID, product] of Object.entries(SellyService.data.products)) {
+      allProducts.push(product);
+    }
+  }
+  return allProducts;
 }
 
+SellyService.getMotivationalMessage = function (offer) {
+  return offer.mtv_message;
+}
+
+SellyService.updateMotivationalMessage = function (productID, quantity, originalPrice) {
+  let activeOffers = SellyService.getActiveOffersForProduct(productID);
+  let motivationalMessage = '';
+
+  activeOffers.forEach(offer => {
+    if (offer.offerType === SellyService.OFFER_TYPE_BULK) {
+      let nextLevelDiscount = SellyService.getNextLevelDiscountForQuantity(offer.offerObj, quantity);
+      if (notNil(nextLevelDiscount)) {
+        let remainingQuantity = nextLevelDiscount.quantity - quantity;
+        motivationalMessage = SellyService.getMotivationalMessage(offer.offerObj);
+        motivationalMessage = motivationalMessage.replace('{quantity}', remainingQuantity);
+
+        switch (nextLevelDiscount.discount.type_id) {
+          case SellyService.DISCOUNT_TYPE_PERCENT:
+            motivationalMessage = motivationalMessage.replace('{discount}', nextLevelDiscount.discount.value + '% Off');
+            break;
+  
+          case SellyService.DISCOUNT_TYPE_FIXED_AMOUNT_DISCOUNT:
+            motivationalMessage = motivationalMessage.replace('{discount}', '$' + nextLevelDiscount.discount.value + ' Off');
+            break;
+
+          case SellyService.DISCOUNT_TYPE_FIXED_PRICE:
+            let valueOff = ((originalPrice / 100 * nextLevelDiscount.quantity) - nextLevelDiscount.discount.value).toFixed(2);
+            motivationalMessage = motivationalMessage.replace('{discount}', '$' + valueOff + ' Off');
+            break;
+        }
+
+      } else if (isNil(nextLevelDiscount)) {
+        motivationalMessage = '';
+      }
+    }
+  });
+  return motivationalMessage;
+}
 SellyService.OFFER_TYPE_BULK = '7';
 SellyService.DISCOUNT_TYPE_PERCENT = 1;
 SellyService.DISCOUNT_TYPE_FIXED_AMOUNT_DISCOUNT = 2;
