@@ -16,7 +16,7 @@ import {InitCartWatcherTask} from './InitCartWatcherTask.js';
 import {COMPLETE} from '../utils/constants.js';
 import { CartTotalManager } from './CartTotalManager.js';
 import { QuickCartSubtotalVerifier } from './QuickCartSubtotalVerifier.js';
-import { UpdateMotivationalMessageOnProductPage } from './UpdateMotivationalMessageOnProductPage.js';
+import { UpdateDiscountOnProductPage } from './UpdateDiscountOnProductPage.js';
 
 export class RocketTheme {
   boot () {
@@ -54,8 +54,8 @@ export class RocketTheme {
       this.quickCartSubtotalVerifier = new QuickCartSubtotalVerifier(this.cartTotalManager);
 
       // Output Selly discount
-      this.updateMotivationalMessageOnProductPage = new UpdateMotivationalMessageOnProductPage();
-      this.updateMotivationalMessageOnProductPage.setCartWatcher(RocketTheme.globals.cartWatcher);
+      this.updateDiscountOnProductPage = new UpdateDiscountOnProductPage();
+      this.updateDiscountOnProductPage.setCartWatcher(RocketTheme.globals.cartWatcher);
       
     });
     bootManager.start();
