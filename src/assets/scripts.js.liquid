@@ -744,50 +744,6 @@ window.getNextQualifiedDiscountOnCart = () => {
   });
 }
 
-// Collection Page
-window.displayDiscountBadge = () => {
-  const offers = window.sellyData.offers;
-  let products = document.querySelectorAll('.add-to-cart-form');
-  products.forEach(product => {
-    let productData = product.querySelectorAll('.product-data');
-    productData.forEach(productD => {
-      if (productD) {
-        let productId = productD.getAttribute('data-product-id');
-        let productUrl = productD.getAttribute('data-product-url');
-        let productPrice = productD.getAttribute('data-product-price') / 100;
-        const discount = getProductDiscount(productId, offers);
-        if (Object.keys(discount).length !== 0) {
-          let highestDiscountLevel = discount.levels.length - 1;
-          let highestDiscountValue = discount.levels[highestDiscountLevel].value;
-          let highestDiscountType = discount.levels[highestDiscountLevel].typeId;
-          let discountPrice = window.calculateFinalItemPrice(highestDiscountType, highestDiscountValue, productPrice);
-          let formattedDiscountPrice = '$' + discountPrice.toFixed(2);
-
-          if (highestDiscountType == 1) {
-            productD.innerHTML = `<a href="/products/${productUrl}" class="bulk-pricing">Bulk Deal: ${formattedDiscountPrice}...</a>`;
-          }
-    
-          if (highestDiscountType == 2) {
-            productD.innerHTML = `<a href="/products/${productUrl}" class="bulk-pricing">Bulk Deal: ${formattedDiscountPrice}...</a>`;
-          }
-    
-          if (highestDiscountType == 3) {
-            productD.innerHTML = `<a href="/products/${productUrl}" class="bulk-pricing">Bulk buy for Free Gift...</a>`;
-          }
-    
-          if (highestDiscountType == 4) {
-            productD.innerHTML = `<a href="/products/${productUrl}" class="bulk-pricing">Bulk buy for Free Shipping...</a>`;
-          }
-
-          if (highestDiscountType == 7) {
-            productD.innerHTML = `<a href="/products/${productUrl}" class="bulk-pricing">Bulk Deal: ${formattedDiscountPrice}...</a>`;
-          }
-        }
-      }
-    });
-  });
-}
-
 function getProductCurrentDiscountLevel(productQuantity, productDiscount) {
   let qualifiedLevels = [];
   productDiscount.levels.forEach((level, index) => {
@@ -2481,7 +2437,6 @@ theme.CollectionPageSection = (function() {
         $(".video_lightbox").addClass("hidden");
       }
     });
-    window.invokeAfterSellyDataLoads(window.displayDiscountBadge);
   }
   return CollectionPageSection; 
 })();
@@ -2546,8 +2501,6 @@ theme.CollectionGridPageSection = (function() {
     window.initAddToCartForms();
     window.swatchSelection();
   }
-
-  window.invokeAfterSellyDataLoads(window.displayDiscountBadge);
 
   return CollectionGridPageSection;
 })();
