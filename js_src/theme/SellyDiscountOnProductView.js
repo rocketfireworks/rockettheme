@@ -4,11 +4,11 @@ import { isNil, notNil } from "../utils/utils";
 import { UPDATE } from "./Events";
 import { RocketTheme } from "./RocketTheme";
 
-export class UpdateDiscountOnProductPage extends EventDispatcher {
+export class SellyDiscountOnProductView extends EventDispatcher {
   constructor () {
     super();
 
-    this.updateDiscountOnProductPage();
+    this.update();
   }
 
   //================================================================================================
@@ -26,7 +26,7 @@ export class UpdateDiscountOnProductPage extends EventDispatcher {
 
   cartUpdatedListener () {
     console.log('~~~Update motivational message on product page');
-    this.updateDiscountOnProductPage();
+    this.update();
   }
 
   //================================================================================================
@@ -45,7 +45,7 @@ export class UpdateDiscountOnProductPage extends EventDispatcher {
   // RENDERING
   //================================================================================================
 
-  updateDiscountOnProductPage () {
+  update () {
     let currentProduct = this.getCurrentProductData();
     
     if (notNil(currentProduct.id)) {
