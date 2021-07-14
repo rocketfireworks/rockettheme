@@ -39,6 +39,9 @@ SellyService.getActiveOffersForProduct = function (productID) {
   if (notNil(SellyService.data)) {
     Object.keys(SellyService.data.offers).forEach(offerType => {
       for (const [offerID, offerObj] of Object.entries(SellyService.data.offers[offerType])) {
+        if (!isNaN(productID)) {
+          productID = parseInt(productID);
+        }
         if (offerObj.product_groups[0].ids.includes(productID)) {
           activeOffers.push({
             offerType: offerType,
