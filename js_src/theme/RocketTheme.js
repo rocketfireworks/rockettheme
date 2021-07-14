@@ -16,6 +16,7 @@ import {InitCartWatcherTask} from './InitCartWatcherTask.js';
 import {COMPLETE} from '../utils/constants.js';
 import { CartTotalManager } from './CartTotalManager.js';
 import { QuickCartSubtotalVerifier } from './QuickCartSubtotalVerifier.js';
+import { SellyAdapter } from '../appapis/SellyAdapter.js';
 import { SellyDiscountOnProductView } from './SellyDiscountOnProductView.js';
 
 export class RocketTheme {
@@ -40,6 +41,7 @@ export class RocketTheme {
     let bootManager = RocketTheme.globals.bootManager = new TaskManager('Boot');
     let bootTasks = [new WaitForShopifySDKTask,
       new WaitForSellyTask(),
+      new SellyAdapter(),
       new InitShopifySDKAdapter(),
       new InitCartWatcherTask()
     ];

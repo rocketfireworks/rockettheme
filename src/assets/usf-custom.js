@@ -1119,7 +1119,7 @@ usf.event.add('init', function () {
     usf.event.add(['sr_updated', 'sr_viewChanged', 'rerender'], function () {
         setTimeout(function () {
             _getTemplates();
-            window.displayDiscountBadge();
+            window.updateDiscountOnCollectionPage();
         }, 1000);
     });
 });
