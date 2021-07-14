@@ -74,7 +74,9 @@ SellyService.getNextLevelDiscountForQuantity = function (offer, quantity) {
     if (quantity >= level.quantity) {
       let nextLevel = offerLevels[index + 1];
       if (notNil(nextLevel)) {
-        return nextLevelDiscount = nextLevel;
+        nextLevelDiscount = nextLevel;
+      } else {
+        nextLevelDiscount =  null;
       }
     }
   });
