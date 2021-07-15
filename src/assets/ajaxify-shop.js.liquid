@@ -335,42 +335,15 @@ jQuery(document).ready(function() {
           var productRowQuantity = cart.items[i].quantity;
 
           // Check for Selly discount 
-          const offers = window.sellyData.offers;
-          let discount = getProductDiscount(itemId, offers);
-          let mtvMessage = '';
-          let discountValueOutput = '';
+          let motivationalMessage = window.updateSellyMotivationalMessage(itemId, productRowQuantity, linePrice);
+          let currentDiscountMessage = window.updateSellyCurrentDiscountMessage(itemId, productRowQuantity, linePrice);
           let currentDiscountClass = '';
-
-          if (Object.keys(discount).length !== 0) {
-            mtvMessage = discount.mtv_message;
-
-            let nextDiscountLevel = getProductNextDiscountLevel(productRowQuantity, discount);
-
-            if (nextDiscountLevel >= 0) {
-              let nextDiscountType = discount.levels[nextDiscountLevel].typeId;
-              let nextDiscountValue = discount.levels[nextDiscountLevel].value;
-              let neededQuantity = discount.levels[nextDiscountLevel].quantity - productRowQuantity;
-              mtvMessage = mtvMessage.replace('{quantity}', neededQuantity);
-              mtvMessage = window.outputMtvMessage(nextDiscountType, nextDiscountValue, mtvMessage);
-            } else {
-              mtvMessage = '';
-            }
-
-            let currentDiscountLevel = getProductCurrentDiscountLevel(productRowQuantity, discount);
-            let currentDiscountValue = '';
-
-            if (currentDiscountLevel >= 0) {
-              let currentDiscountType = discount.levels[currentDiscountLevel].typeId;
-              currentDiscountValue = discount.levels[currentDiscountLevel].value;
-              discountValueOutput = window.outputDiscountValue(currentDiscountType, currentDiscountValue)
-              finalItemPrice = window.calculateFinalItemPrice(currentDiscountType, currentDiscountValue, itemPrice / 100) * 100;
-              finalLinePrice = finalItemPrice * productRowQuantity;
-            } else {
-              currentDiscountClass = 'hidden';
-            }
-          } else {
+          if (currentDiscountMessage === '') {
             currentDiscountClass = 'hidden';
           }
+
+          finalItemPrice = window.getFinalUnitPrice(itemId, productRowQuantity, itemPrice);
+          finalLinePrice = finalItemPrice * productRowQuantity;
 
           finalTotalPrice += finalLinePrice;
 
@@ -463,10 +436,10 @@ jQuery(document).ready(function() {
               </h5>
               <p class="product-type">${title}</p>
               <p>${propertiesText}</p>
-              <div class="discount-wholesale-motivation">${mtvMessage}</div>
+              <div class="discount-wholesale-motivation">${motivationalMessage}</div>
             </li>
             <li class="productRowPrice">
-              <p class="mobile-label-price">{{ 'cart.general.price' | t }}</p>${itemPriceContent} ${item_discounts_html}<span class="currentDiscount ${currentDiscountClass}">${discountValueOutput}</span>
+              <p class="mobile-label-price">{{ 'cart.general.price' | t }}</p>${itemPriceContent} ${item_discounts_html}<span class="currentDiscount ${currentDiscountClass}">${currentDiscountMessage}</span>
             </li>
             <li class="productRowQty">`;
 
@@ -639,8 +612,6 @@ jQuery(document).ready(function() {
     } else {
       jQ(selectors.TOTAL_ITEMS).text('').addClass('hidden');
     }
-    
-    window.invokeAfterSellyDataLoads(window.calculateCurrentDiscountPrice);
   }
 
   $(".cart_tbl").on("focusout", "textarea", function () {

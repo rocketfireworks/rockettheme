@@ -46,4 +46,16 @@ export class SellyDiscountOnCartView {
       this.update();
     }
   }
+
+  updateMotivationalMessage (productID, quantity, originalPrice) {
+    return SellyService.updateMotivationalMessage(productID, quantity, originalPrice);
+  }
+
+  updateCurrentDiscount (productID, quantity, originalPrice) {
+    return SellyService.updateCurrentDiscount(productID, quantity, originalPrice);
+  }
+
+  getFinalUnitPrice (productID, quantity, originalPrice) {
+    return SellyService.getFinalUnitPrice(productID, quantity, originalPrice);
+  }
 }
