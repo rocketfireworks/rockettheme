@@ -1,3 +1,4 @@
+import { SellyDiscountOnCartView } from "../theme/SellyDiscountOnCartView";
 import { SellyDiscountOnCollectionView } from "../theme/SellyDiscountOnCollectionView";
 import { Task } from "../utils/Task";
 
@@ -17,5 +18,8 @@ export class SellyAdapter extends Task {
   applyAdapter () {
     this.sellyDiscountOnCollectionView = new SellyDiscountOnCollectionView();
     window.updateDiscountOnCollectionPage = this.sellyDiscountOnCollectionView.update;
+
+    this.sellyDiscountOnCartView = new SellyDiscountOnCartView();
+    window.updateSellyDiscountOnCart = this.sellyDiscountOnCartView.update;
   }
 }

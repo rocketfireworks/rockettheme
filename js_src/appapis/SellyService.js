@@ -146,6 +146,36 @@ SellyService.updateMotivationalMessage = function (productID, quantity, original
   });
   return motivationalMessage;
 }
+
+SellyService.updateCurrentDiscount = function (productID, quantity, originalPrice) {
+  let activeOffers = SellyService.getActiveOffersForProduct(productID);
+  let discountMessage = '';
+
+  activeOffers.forEach(offer => {
+    if (offer.offerType === SellyService.OFFER_TYPE_BULK) {
+      let discount = SellyService.getActiveDiscountForQuantity(offer.offerObj, quantity);
+      if (notNil(discount)) {
+        let discountValue = discount.value;
+        switch (discount.type_id) {
+          case SellyService.DISCOUNT_TYPE_PERCENT:
+            discountMessage = discountValue + '% Off';
+            break;
+  
+          case SellyService.DISCOUNT_TYPE_FIXED_AMOUNT_DISCOUNT:
+            discountMessage = '$' + discountValue + ' Off';
+            break;
+
+          case SellyService.DISCOUNT_TYPE_FIXED_PRICE:
+            discountMessage = '$' + discountValue + ' Off';
+            break;
+        }
+      }
+    }
+  })
+
+  return discountMessage;
+}
+
 SellyService.OFFER_TYPE_BULK = '7';
 SellyService.DISCOUNT_TYPE_PERCENT = 1;
 SellyService.DISCOUNT_TYPE_FIXED_AMOUNT_DISCOUNT = 2;
