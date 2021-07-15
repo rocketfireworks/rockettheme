@@ -27,11 +27,11 @@ export class SellyDiscountOnCartView {
         }
 
         // Update motivational message
-        let motivationalMessage = SellyService.updateMotivationalMessage(item.id, item.quantity, item.originalPrice);
+        let motivationalMessage = SellyService.getMotivationalMessage(item.id, item.quantity, item.originalPrice);
         lineItem.querySelector('.discount-wholesale-motivation').innerHTML = motivationalMessage;
 
         // Update discount message
-        let discountMessage = SellyService.updateCurrentDiscount(item.id, item.quantity, item.originalPrice);
+        let discountMessage = SellyService.getCurrentDiscount(item.id, item.quantity);
         if (notEmpty(discountMessage)) {
           lineItem.querySelector('.currentDiscount').innerHTML = discountMessage;
           lineItem.querySelector('.currentDiscount').classList.remove('hidden');
@@ -47,12 +47,12 @@ export class SellyDiscountOnCartView {
     }
   }
 
-  updateMotivationalMessage (productID, quantity, originalPrice) {
-    return SellyService.updateMotivationalMessage(productID, quantity, originalPrice);
+  getMotivationalMessage (productID, quantity, originalPrice) {
+    return SellyService.getMotivationalMessage(productID, quantity, originalPrice);
   }
 
-  updateCurrentDiscount (productID, quantity, originalPrice) {
-    return SellyService.updateCurrentDiscount(productID, quantity, originalPrice);
+  getCurrentDiscount (productID, quantity) {
+    return SellyService.getCurrentDiscount(productID, quantity);
   }
 
   getFinalUnitPrice (productID, quantity, originalPrice) {

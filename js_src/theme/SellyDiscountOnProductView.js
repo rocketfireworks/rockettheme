@@ -59,7 +59,7 @@ export class SellyDiscountOnProductView extends EventDispatcher {
             this.updateProductPrice(finalUnitPrice, false);
           }
 
-          let motivationalMessage = SellyService.updateMotivationalMessage(currentProduct.id, currentProduct.quantity, currentProduct.price);
+          let motivationalMessage = SellyService.getMotivationalMessage(currentProduct.id, currentProduct.quantity, currentProduct.price);
 
           if (notNil(motivationalMessage)) {
             this.setMotivationalMessage(motivationalMessage);

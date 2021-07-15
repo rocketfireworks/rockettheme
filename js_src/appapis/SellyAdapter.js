@@ -22,8 +22,8 @@ export class SellyAdapter extends Task {
     this.sellyDiscountOnCartView = new SellyDiscountOnCartView();
     window.updateSellyDiscountOnCart = this.sellyDiscountOnCartView.update;
 
-    window.updateSellyMotivationalMessage = this.sellyDiscountOnCartView.updateMotivationalMessage;
-    window.updateSellyCurrentDiscountMessage = this.sellyDiscountOnCartView.updateCurrentDiscount;
+    window.updateSellyMotivationalMessage = this.sellyDiscountOnCartView.getMotivationalMessage;
+    window.updateSellyCurrentDiscountMessage = this.sellyDiscountOnCartView.getCurrentDiscount;
     window.getFinalUnitPrice = this.sellyDiscountOnCartView.getFinalUnitPrice;
   }
 }

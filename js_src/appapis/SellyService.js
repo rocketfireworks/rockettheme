@@ -108,11 +108,11 @@ SellyService.getAllProducts = function () {
   return allProducts;
 }
 
-SellyService.getMotivationalMessage = function (offer) {
+SellyService.getMotivationalMessageTemplate = function (offer) {
   return offer.mtv_message;
 }
 
-SellyService.updateMotivationalMessage = function (productID, quantity, originalPrice) {
+SellyService.getMotivationalMessage = function (productID, quantity, originalPrice) {
   let activeOffers = SellyService.getActiveOffersForProduct(productID);
   let motivationalMessage = '';
 
@@ -121,7 +121,7 @@ SellyService.updateMotivationalMessage = function (productID, quantity, original
       let nextLevelDiscount = SellyService.getNextLevelDiscountForQuantity(offer.offerObj, quantity);
       if (notNil(nextLevelDiscount)) {
         let remainingQuantity = nextLevelDiscount.quantity - quantity;
-        motivationalMessage = SellyService.getMotivationalMessage(offer.offerObj);
+        motivationalMessage = SellyService.getMotivationalMessageTemplate(offer.offerObj);
         motivationalMessage = motivationalMessage.replace('{quantity}', remainingQuantity);
 
         switch (nextLevelDiscount.discount.type_id) {
@@ -147,7 +147,7 @@ SellyService.updateMotivationalMessage = function (productID, quantity, original
   return motivationalMessage;
 }
 
-SellyService.updateCurrentDiscount = function (productID, quantity, originalPrice) {
+SellyService.getCurrentDiscount = function (productID, quantity) {
   let activeOffers = SellyService.getActiveOffersForProduct(productID);
   let discountMessage = '';
 
