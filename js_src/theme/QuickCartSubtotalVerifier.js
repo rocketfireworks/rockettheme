@@ -1,16 +1,31 @@
 import { notNil } from "../utils/utils";
-import { UPDATE } from "./Events";
+import { SHOPIFY_CHANGE_ITEM_BY_LINE_REQUESTED, UPDATE } from "./Events";
 import { RocketTheme } from "./RocketTheme";
 
 
 export class QuickCartSubtotalVerifier {
   constructor (cartTotalManager) {
+    this.firstVerificationTimeoutID;
+    this.secondVerificationTimeoutID;
+
     this.cartTotalManager = cartTotalManager;
     this.cartTotalManager.on(UPDATE, this.cartTotalUpdateListener.bind(this));
+
+    RocketTheme.globals.shopifySDKAdapter.on(SHOPIFY_CHANGE_ITEM_BY_LINE_REQUESTED, this.shopifyChangeItemByLineRequestedListener.bind(this));
   }
 
   cartTotalUpdateListener () {
-    setTimeout(() => {
+    this.scheduleSubtotalVerification();
+  }
+
+  shopifyChangeItemByLineRequestedListener () {
+    this.cancelSubtotalVerification();
+  }
+
+  scheduleSubtotalVerification () {
+    this.cancelSubtotalVerification();
+
+    this.firstVerificationTimeoutID = setTimeout(() => {
       let renderedPrice = this.getRenderedPrice();
       let flooredLocalCartTotal = this.getFlooredLocalCartTotal();
       if (notNil(renderedPrice)) {
@@ -25,7 +40,7 @@ export class QuickCartSubtotalVerifier {
           // removed from the cart in quick succession. It does not occur for products without a Selly discount. 
           // But when a Selly discount is applied, the quantity of items in the cart as reported by the Shopify 
           // AJAX API sometimes falls out of synchronization with the actual correct server-side quantity 
-           setTimeout(() => {
+          this.secondVerificationTimeoutID = setTimeout(() => {
             // Get updated prices
             renderedPrice = this.getRenderedPrice();
             flooredLocalCartTotal = this.getFlooredLocalCartTotal();
@@ -40,6 +55,11 @@ export class QuickCartSubtotalVerifier {
         }
       }
     }, 2000);
+  }
+
+  cancelSubtotalVerification () {
+    clearTimeout(this.firstVerificationTimeoutID);
+    clearTimeout(this.secondVerificationTimeoutID);
   }
 
   getFlooredLocalCartTotal () {
