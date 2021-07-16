@@ -25,7 +25,6 @@ export class SellyDiscountOnProductView extends EventDispatcher {
   //================================================================================================
 
   cartUpdatedListener () {
-    console.log('~~~Update motivational message on product page');
     this.update();
   }
 
