@@ -11,14 +11,11 @@ export class QuickCartSubtotalVerifier {
 
   cartTotalUpdateListener () {
     setTimeout(() => {
-      let renderedPrice;
-      let normalPriceSpan = document.querySelector('.tdf_price_normal .tdf_money.money');
-      let flooredLocalCartTotal = Math.floor(RocketTheme.globals.dataStore.totalInCart);
-      if (notNil(normalPriceSpan)) {
-        renderedPrice = parseFloat(normalPriceSpan.textContent.substr(1)) * 100;
+      let renderedPrice = this.getRenderedPrice();
+      let flooredLocalCartTotal = this.getFlooredLocalCartTotal();
+      if (notNil(renderedPrice)) {
         console.log('%% Rendered price: ', renderedPrice);
         console.log('%% Floored cart total: ', flooredLocalCartTotal);
-        console.log('%% Normal price span: ', normalPriceSpan);
   
         if (Math.abs(flooredLocalCartTotal - renderedPrice) > 1) {
           console.log('~~~Subtotal are different!!! Floored Local Cart Total: ', flooredLocalCartTotal, 'Rendered subtotal: ', renderedPrice);
@@ -30,14 +27,12 @@ export class QuickCartSubtotalVerifier {
           // AJAX API sometimes falls out of synchronization with the actual correct server-side quantity 
            setTimeout(() => {
             // Get updated prices
-            normalPriceSpan = document.querySelector('.tdf_price_normal .tdf_money.money');
-            flooredLocalCartTotal = Math.floor(RocketTheme.globals.dataStore.totalInCart);
-            if (notNil(normalPriceSpan)) {
-                renderedPrice = parseFloat(normalPriceSpan.textContent.substr(1)) * 100;
-            }
-            debugger;
-            if (Math.abs(flooredLocalCartTotal - renderedPrice) > 1) {
-              location.reload();
+            renderedPrice = this.getRenderedPrice();
+            flooredLocalCartTotal = this.getFlooredLocalCartTotal();
+            if (notNil(renderedPrice)) {
+              if (Math.abs(flooredLocalCartTotal - renderedPrice) > 1) {
+                location.reload();
+              }
             }
           }, 5000);
         } else {
@@ -45,5 +40,18 @@ export class QuickCartSubtotalVerifier {
         }
       }
     }, 2000);
+  }
+
+  getFlooredLocalCartTotal () {
+    return Math.floor(RocketTheme.globals.dataStore.totalInCart);
+  }
+
+  getRenderedPrice () {
+    let renderedPrice;
+    let normalPriceSpan = document.querySelector('.tdf_price_normal .tdf_money.money');
+    if (notNil(normalPriceSpan)) {
+      renderedPrice = parseFloat(normalPriceSpan.textContent.substr(1)) * 100;
+    }
+    return renderedPrice;
   }
 }
