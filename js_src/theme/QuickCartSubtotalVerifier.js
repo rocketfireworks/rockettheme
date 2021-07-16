@@ -48,7 +48,7 @@ export class QuickCartSubtotalVerifier {
 
   getRenderedPrice () {
     let renderedPrice;
-    let normalPriceSpan = document.querySelector('.tdf_price_normal .tdf_money.money');
+    let normalPriceSpan = document.querySelector('.total_row .tdf_price_normal .tdf_money.money');
     if (notNil(normalPriceSpan)) {
       renderedPrice = parseFloat(normalPriceSpan.textContent.substr(1)) * 100;
     }
